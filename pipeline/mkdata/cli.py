@@ -38,6 +38,9 @@ ROOT = Path(__file__).resolve().parents[1]
 VAR = ROOT / "var"
 REGISTRY_DIR = ROOT / "registry"
 DEFAULT_SEASONS = {"split": ["2023-24", "2024-25", "2025-26", "2026-27"], "calendar": ["2023", "2024", "2025", "2026"]}
+# everything the models train on (Step 3 backfilled from 2019-20)
+BACKFILL_SEASONS = {"split": ["2019-20", "2020-21", "2021-22", "2022-23"] + DEFAULT_SEASONS["split"],
+                    "calendar": ["2019", "2020", "2021", "2022"] + DEFAULT_SEASONS["calendar"]}
 RESULT_SOURCES = ["football_data_org", "footballdata_uk", "openfootball", "balldontlie"]
 ODDS_SOURCES = ["the_odds_api", "footballdata_uk"]
 log = logging.getLogger("mkdata")
@@ -74,6 +77,8 @@ def cmd_sync(args) -> int:
         style = comps[comp_id]["seasons"]
         if args.current:
             seasons = [season_of(datetime.now(timezone.utc).date(), style)]
+        elif args.backfill:
+            seasons = BACKFILL_SEASONS[style]
         else:
             seasons = args.seasons.split(",") if args.seasons else DEFAULT_SEASONS[style]
         cover = [a for a in adapters if a.covers(comp_id)]
@@ -232,6 +237,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--comps")
     s.add_argument("--seasons")
     s.add_argument("--current", action="store_true", help="only each competition's current season (daily job)")
+    s.add_argument("--backfill", action="store_true", help="every season the models use (first run on a new machine)")
     sub.add_parser("upcoming")
     s = sub.add_parser("link")
     s.add_argument("--comps")

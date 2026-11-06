@@ -38,6 +38,7 @@ import type { Injury, SEvent, TeamInfo } from './espn';
 import { historyVersion, sportMatches } from './history';
 import { readKV, writeKV } from './kv';
 import { MATCH_LEAGUES, SportSlug, sportOf } from './leagues';
+import { remoteFile, remoteFor, RemoteMatch } from './remote';
 
 const MODEL_VERSION = '2.1.0';
 export const PREDICTED_SPORTS: SportSlug[] = ['football', 'basketball', 'american-football', 'ice-hockey', 'baseball'];
@@ -205,7 +206,69 @@ function toAbsences(list: Injury[] | undefined) {
 
 export type PredictOptions = { injuries?: { home: Injury[]; away: Injury[] } | null; espnPredictor?: Probs | null; before?: number };
 
+/** A published MK Sports pipeline prediction as the app's prediction object (no on-device computation). */
+export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
+  const probs: Probs = { home: r.p.home, draw: r.p.draw, away: r.p.away };
+  const [lh, la] = r.expected_goals;
+  const total = lh !== null && la !== null ? lh + la : 2.6;
+  const sc = footballScoreFor(probs, total);
+  const fav = argmax(probs);
+  const name = (o: Outcome) => (o === 'home' ? ev.home.short : o === 'away' ? ev.away.short : 'a draw');
+  const factors: KeyFactor[] = [];
+  const [eh, ea] = r.elo;
+  if (eh !== null && ea !== null && Math.abs(eh - ea) >= 25)
+    factors.push({ text: `${eh > ea ? ev.home.short : ev.away.short} rated higher (Elo ${Math.round(Math.max(eh, ea))} vs ${Math.round(Math.min(eh, ea))})`, impact: Math.min(1, Math.abs(eh - ea) / 200), favours: eh > ea ? 'home' : 'away', category: 'form' });
+  if (lh !== null && la !== null)
+    factors.push({ text: `Goals model expects ${lh.toFixed(1)}-${la.toFixed(1)}`, impact: Math.min(1, Math.abs(lh - la)), favours: Math.abs(lh - la) < 0.15 ? 'neutral' : lh > la ? 'home' : 'away', category: 'attack' });
+  const mk = r.components.market;
+  if (r.variant === 'with odds' && mk[0] !== null) {
+    const mo: Outcome = mk[0]! >= mk[2]! && mk[0]! >= mk[1]! ? 'home' : mk[2]! >= mk[1]! ? 'away' : 'draw';
+    factors.push({ text: `The betting market also leans ${mo === fav ? 'the same way' : `towards ${name(mo)}`}`, impact: 0.5, favours: mo === 'draw' ? 'neutral' : mo, category: 'sources' });
+  } else factors.push({ text: 'Bookmaker odds not published yet: this forecast will update when they are', impact: 0.2, favours: 'neutral', category: 'sources' });
+  const top = probs[fav] ?? 0;
+  const head = fav === 'draw' ? `A draw is the single most likely result (${pct(top)})` : `${name(fav)} are favourites (${pct(top)})`;
+  const comp = (k: keyof RemoteMatch['components'], label: string) => {
+    const v = r.components[k];
+    return v[0] === null ? null : `${label}: ${ev.home.short} ${pct(v[0]!)} · draw ${pct(v[1]!)} · ${ev.away.short} ${pct(v[2]!)}`;
+  };
+  const fileInfo = remoteFile();
+  return {
+    version: r.versions ?? 1,
+    created_at: r.made_at,
+    trigger: r.last_change,
+    model: 'mksports-pipeline',
+    model_version: r.model_version ?? fileInfo?.model_version ?? 'unknown',
+    probabilities: probs,
+    predicted_score: sc.score,
+    expected: [Math.round((lh ?? sc.lambdas[0]) * 100) / 100, Math.round((la ?? sc.lambdas[1]) * 100) / 100],
+    confidence: r.confidence_label,
+    key_factors: factors.slice(0, 5),
+    explanation: {
+      method: 'MK Sports model: Elo + Dixon-Coles (goals and shots) + boosted trees, blended and calibrated; bookmaker odds included once published',
+      summary: `${head}. Most likely score ${sc.score[0]}-${sc.score[1]}.`,
+      steps: [
+        ...[comp('elo', 'Elo ratings'), comp('dc', 'Goals model'), comp('dcx', 'Shots model'), comp('gbm_nomkt', 'Boosted trees'), comp('market', 'Betting market')]
+          .filter((x): x is string => !!x)
+          .map((d) => ({ title: d.split(':')[0], detail: d.split(': ')[1] })),
+        { title: 'Final forecast', detail: `${ev.home.short} ${pct(probs.home)} · draw ${pct(probs.draw)} · ${ev.away.short} ${pct(probs.away)}` },
+        { title: 'Confidence', detail: `${r.confidence_label}${r.confidence_reasons.length ? `: ${r.confidence_reasons.join('; ')}` : ''}` },
+        { title: 'Last update', detail: `${new Date(r.made_at).toUTCString()} (${r.last_change})` },
+        { title: 'Data', detail: fileInfo?.attribution ?? 'football-data.co.uk, openfootball' },
+      ],
+      inputs: { model_version: r.model_version ?? fileInfo?.model_version, data_version: fileInfo?.data_version, variant: r.variant, confidence_score: r.confidence },
+    },
+    versions: r.versions ?? 1,
+    correct: null,
+    sources: [{ source: 'model', label: 'MK Sports model', description: 'Published daily by the MK Sports data pipeline', probs, weight: 1 }],
+  };
+}
+
 export function predictEvent(ev: SEvent, opts: PredictOptions = {}): FullPrediction | null {
+  // covered football competitions: the published pipeline prediction (falls back below only if missing)
+  if (ev.sport === 'football') {
+    const r = remoteFor(ev);
+    if (r) return fromRemote(ev, r);
+  }
   const entry = bookFor(ev.sport, opts.before);
   if (!entry) return null;
   const { model, book } = entry;

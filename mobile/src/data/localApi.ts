@@ -15,6 +15,7 @@ import { SourceError } from './http';
 import * as centreApi from './centre';
 import { LEAGUE_BY_SLUG, LEAGUES, LeagueDef, MATCH_LEAGUES, SportSlug, SPORTS, sportOf } from './leagues';
 import * as more from './more';
+import { onRemoteChange, refreshRemote } from './remote';
 import { backtest, bookFor, clearPredictionStores, getBacktest, onPredictionDataChange, PREDICTED_SPORTS, scheduleBacktest, FullPrediction, liveEvaluations, mini, predictEvent, preMatchSnapshot, registerTeams, scoreFinished, scorePrediction, snapshot, sourceStats, storesReady } from './predict';
 
 const DAY = 86_400_000;
@@ -37,6 +38,7 @@ function notify() {
 }
 onHistoryChange(notify);
 onPredictionDataChange(notify);
+onRemoteChange(notify); // a newer published predictions file refreshes open screens
 
 // ------------------------------------------------------------------ fetching
 const events = new Map<string, SEvent>(); // everything seen recently, by id
@@ -749,11 +751,12 @@ async function teamHub(id: string, q: URLSearchParams) {
 export async function handleLocal(method: string, fullPath: string, body: any): Promise<unknown> {
   await Promise.all([game.loadGame(), storesReady()]);
   clubEloFixtures().catch(() => undefined); // best effort, refreshes hourly
+  refreshRemote().catch(() => undefined); // published football predictions, best effort, every 15 min
   const [path, q] = parseQuery(fullPath);
   const seg = path.split('/').filter(Boolean);
 
   if (method === 'GET') {
-    if (path === '/meta') return { app: 'MK Sports', mode: 'device', disclaimer: DISCLAIMER, free_to_play: true, shows_odds: false, age_gate_required: false, sources: ['ESPN'] };
+    if (path === '/meta') return { app: 'MK Sports', mode: 'device', disclaimer: DISCLAIMER, free_to_play: true, shows_odds: false, age_gate_required: false, sources: ['MK Sports model (football: football-data.co.uk, openfootball)', 'ESPN (fixtures, scores, other sports)'] };
     if (path === '/sports') return SPORTS.filter((s) => q.get('include_inactive') === 'true' || s.active).map(sportOut);
     if (path === '/leagues') return LEAGUES.filter((l) => (!q.get('sport') || l.sport === q.get('sport')) && (q.get('format') !== 'match' || l.format === 'match')).map(leagueOut);
     if (seg[0] === 'leagues' && seg.length === 2) {

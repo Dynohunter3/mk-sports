@@ -277,7 +277,7 @@ def _reason(old: dict | None, new: dict) -> str:
     return "; ".join(out) or "inputs changed"
 
 
-def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horizon_days: float = 10.0,
+def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horizon_days: float = 21.0,
             publish: Path | None = PUBLISH, app_comps=None, lower=None) -> dict:
     bundle = bundle or current_bundle()
     if bundle is None:
@@ -291,6 +291,7 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
     ensure_log_columns(db)
     summary = {"model": bundle.version, "now": now, "considered": len(idx), "new": 0, "unchanged": 0, "reasons": {}}
     if not idx:
+        db.commit()
         return summary
     Xu = X[idx]
     comps = base_predictions(Xu, bundle.learn)
@@ -328,15 +329,51 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
                         round(score, 4), label(score), json.dumps(why), variant))
             summary["new"] += 1
             summary["reasons"][reason] = summary["reasons"].get(reason, 0) + 1
+        rnd = lambda v: None if not np.isfinite(v) else round(float(v), 4)  # noqa: E731
         published.append({"match_id": m.id, "competition": m.comp, "kickoff": datetime.fromtimestamp(m.t, timezone.utc).isoformat(),
                           "home_id": m.h, "away_id": m.a, "p": {"home": round(p[0], 4), "draw": round(p[1], 4), "away": round(p[2], 4)},
+                          "expected_goals": [rnd(Xu[j, COL["dc_lh"]]), rnd(Xu[j, COL["dc_la"]])],
+                          "elo": [rnd(Xu[j, COL["elo_h"]]), rnd(Xu[j, COL["elo_a"]])],
+                          "components": {k: [rnd(v) for v in comps[k][j]] for k in ("elo", "dc", "dcx", "gbm_nomkt", "market")},
                           "variant": variant, "confidence": round(score, 3), "confidence_label": label(score), "confidence_reasons": why})
     db.commit()
+    # names and aliases (every source's spelling) so clients can match their own fixture lists
+    names = {r["id"]: r["name"] for r in db.execute("SELECT id, name FROM entities")}
+    aliases: dict[str, set] = {}
+    for r in db.execute("SELECT entity_id, raw FROM aliases"):
+        aliases.setdefault(r["entity_id"], set()).add(r["raw"])
+    for e in published:
+        hist = db.execute("SELECT made_at, reason FROM predictions WHERE match_id=? ORDER BY made_at DESC, rowid DESC", (e["match_id"],)).fetchall()
+        e["made_at"] = datetime.fromtimestamp(hist[0]["made_at"], timezone.utc).isoformat(timespec="seconds")
+        e["last_change"] = hist[0]["reason"]
+        e["versions"] = len(hist)
+        for side in ("home", "away"):
+            tid = e[f"{side}_id"]
+            e[side] = {"id": tid, "name": names.get(tid, tid), "aliases": sorted(aliases.get(tid, set()) | {names.get(tid, tid)})}
+    # the last pre-kick-off prediction for matches started in the past 7 days (graded once results are in)
+    recent = []
+    for r in db.execute("""SELECT p.*, m.competition_id, m.kickoff_utc, m.home_id, m.away_id, m.status, m.home_score, m.away_score
+                           FROM predictions p JOIN matches m USING (match_id)
+                           WHERE m.kickoff_utc < ? AND m.kickoff_utc >= ? AND p.prediction_id = (
+                             SELECT q.prediction_id FROM predictions q WHERE q.match_id=p.match_id AND q.made_at < m.kickoff_utc
+                             ORDER BY q.made_at DESC, q.rowid DESC LIMIT 1)""", (now, now - 7 * DAY)):
+        e = {"match_id": r["match_id"], "competition": r["competition_id"], "kickoff": datetime.fromtimestamp(r["kickoff_utc"], timezone.utc).isoformat(),
+             "home_id": r["home_id"], "away_id": r["away_id"], "p": {"home": round(r["p_home"], 4), "draw": round(r["p_draw"], 4), "away": round(r["p_away"], 4)},
+             "variant": r["variant"], "confidence": r["confidence"], "confidence_label": r["confidence_label"],
+             "confidence_reasons": json.loads(r["confidence_reasons"] or "[]"), "model_version": r["model_version"],
+             "made_at": datetime.fromtimestamp(r["made_at"], timezone.utc).isoformat(timespec="seconds"), "last_change": r["reason"],
+             "result": [r["home_score"], r["away_score"]] if r["status"] == "final" else None, "log_loss": r["log_loss"]}
+        for side in ("home", "away"):
+            tid = e[f"{side}_id"]
+            e[side] = {"id": tid, "name": names.get(tid, tid), "aliases": sorted(aliases.get(tid, set()) | {names.get(tid, tid)})}
+        recent.append(e)
     if publish is not None:
         publish.mkdir(parents=True, exist_ok=True)
-        doc = {"generated_at": datetime.fromtimestamp(now, timezone.utc).isoformat(timespec="seconds"), "model_version": bundle.version,
-               "data_version": bundle.manifest["data_version"], "attribution": ATTRIBUTION,
-               "notice": "Predictions are for information and entertainment only, not betting advice.", "matches": published}
+        doc = {"schema": 1, "generated_at": datetime.fromtimestamp(now, timezone.utc).isoformat(timespec="seconds"), "model_version": bundle.version,
+               "data_version": bundle.manifest["data_version"], "attribution": ATTRIBUTION, "horizon_days": horizon_days,
+               "competitions": sorted(app_comps),
+               "notice": "Predictions are for information and entertainment only, not betting advice.", "matches": published,
+               "recent": recent}
         (publish / "football_predictions.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False))
     return summary
 
@@ -380,7 +417,7 @@ def main(argv=None) -> int:
     r.add_argument("--if-due", action="store_true", help="skip if this month's bundle already exists")
     q = sub.add_parser("predict")
     q.add_argument("--now")
-    q.add_argument("--horizon", type=float, default=10.0)
+    q.add_argument("--horizon", type=float, default=21.0)
     g = sub.add_parser("grade")
     g.add_argument("--now")
     a = p.parse_args(argv)

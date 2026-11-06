@@ -1,16 +1,21 @@
-# Daily multi-source data job (Step 2). Runs on GitHub's free minutes; no server needed.
-# Keys live in the repository's Actions secrets (Settings > Secrets and variables > Actions) and
-# reach the job only as environment variables. A source without a key is skipped automatically.
-# If the health check finds a critical problem the job fails, and GitHub emails the repository owner.
+# Daily multi-source data job: fetch -> link -> retrain (monthly) -> predict -> grade -> publish.
+# Runs on GitHub's free minutes (unlimited for public repositories); no server needed.
+# Optional keys live in the repository's Actions secrets (Settings > Secrets and variables > Actions)
+# and reach the job only as environment variables; a source without a key is skipped automatically.
+# Published for the app: GitHub Pages (primary) and the `predictions` branch (mirror).
+# If the health check finds a critical problem the job fails and GitHub emails the repository owner.
 name: data-pipeline
 
 on:
   schedule:
     - cron: "17 4 * * *" # 04:17 UTC daily
+    - cron: "17 18 * * 2,5" # Tue/Fri 18:17 UTC, after football-data.co.uk collects odds
   workflow_dispatch: {}
 
 permissions:
-  contents: read
+  contents: write # push the predictions mirror branch
+  pages: write
+  id-token: write
 
 concurrency:
   group: data-pipeline
@@ -19,7 +24,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: pipeline
@@ -32,15 +37,18 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Restore store and HTTP cache
+          python-version: "3.13" # same as the machine the models were built and verified on
+      - name: Restore store, models and HTTP cache
         uses: actions/cache@v4
         with:
           path: pipeline/var
           key: mkdata-${{ github.run_id }}
           restore-keys: mkdata-
-      - name: Tests
+      - name: Install and test
         run: python -m pip install --quiet pytest -r requirements-model.txt && python -m pytest -q
+      - name: First run on this machine - backfill every season the models use
+        run: |
+          if [ ! -f var/mkdata.sqlite ]; then python -m mkdata sync --backfill; fi
       - name: Fetch current season from every usable source
         run: python -m mkdata sync --current
       - name: Upcoming fixtures and current odds
@@ -51,7 +59,7 @@ jobs:
         run: python -m mkdata elo
       - name: Retrain the model (1st of the month only; otherwise skipped)
         run: python -m mkmodel.production retrain --if-due
-      - name: Predict the next 10 days (writes only predictions whose inputs changed)
+      - name: Predict the next 21 days (writes only predictions whose inputs changed)
         run: python -m mkmodel.production predict
       - name: Grade finished matches
         run: python -m mkmodel.production grade
@@ -59,6 +67,24 @@ jobs:
         run: |
           python -m mkdata crosscheck --out var/crosscheck.json > /dev/null
           python -m mkdata snapshot > var/snapshot.json
+      - name: Prepare the public site
+        run: |
+          rm -rf ../site && mkdir -p ../site
+          cp var/publish/*.json ../site/
+          cp var/models/current.json ../site/model.json
+          echo "MK Sports published predictions. Data: football-data.co.uk, openfootball. Information and entertainment only." > ../site/index.html
+      - name: Publish mirror (predictions branch)
+        working-directory: site
+        run: |
+          git init -q -b predictions
+          git config user.name "mk-sports-pipeline"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A && git commit -q -m "Predictions $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:predictions
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
       - name: Health (fails the job on critical alerts)
         run: python -m mkdata health --status var/status.json --baselines config/baselines.json
       - name: Keep reports
@@ -74,3 +100,14 @@ jobs:
             pipeline/var/models/current.json
             pipeline/registry/
           retention-days: 30
+
+  pages:
+    needs: sync
+    if: ${{ !cancelled() }} # publish even when the health check flagged a problem
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

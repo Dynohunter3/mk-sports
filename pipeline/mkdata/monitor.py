@@ -17,6 +17,7 @@ from .sources import REGISTRY
 from .store import Store
 
 STALE_RESULT_S = 36 * 3600  # a match that kicked off this long ago should have a result
+CRITICAL_RESULT_S = 96 * 3600
 SOURCE_SILENT_S = 3 * 86400  # a usable source with no successful run for this long
 ACCURACY_WINDOW = 200
 
@@ -53,14 +54,16 @@ def source_health(store: Store, now: float) -> tuple[dict, list[Alert]]:
 
 
 def stale_results(store: Store, now: float) -> tuple[dict, list[Alert]]:
+    """Warning: results missing 36 h after kick-off. Critical: 5+ missing after 96 h. football-data.co.uk
+    updates about twice a week, so 36-96 h gaps are normal without a faster (keyed) results source."""
     rows = store.q(
-        """SELECT competition_id, COUNT(*) n, MIN(kickoff_utc) oldest FROM matches
+        """SELECT competition_id, COUNT(*) n, SUM(kickoff_utc < ?) old, MIN(kickoff_utc) oldest FROM matches
            WHERE status IN ('scheduled','live') AND kickoff_utc < ? AND kickoff_utc > ? GROUP BY competition_id""",
-        now - STALE_RESULT_S, now - 30 * 86400,
+        now - CRITICAL_RESULT_S, now - STALE_RESULT_S, now - 30 * 86400,
     )
-    out = {r["competition_id"]: {"missing_results": r["n"], "oldest_kickoff": r["oldest"]} for r in rows}
-    alerts = [Alert("stale_data", c, "critical" if v["missing_results"] >= 5 else "warning",
-                    f"{v['missing_results']} matches that kicked off over 36 h ago still have no result")
+    out = {r["competition_id"]: {"missing_results": r["n"], "missing_over_96h": r["old"], "oldest_kickoff": r["oldest"]} for r in rows}
+    alerts = [Alert("stale_data", c, "critical" if v["missing_over_96h"] >= 5 else "warning",
+                    f"{v['missing_results']} matches that kicked off over 36 h ago still have no result ({v['missing_over_96h']} over 96 h)")
               for c, v in out.items()]
     return out, alerts
 

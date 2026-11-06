@@ -60,25 +60,8 @@ export function readFootballData(dir: string): Record<string, FdRow[]> {
   return out;
 }
 
-const STOP = new Set(['fc', 'cf', 'afc', 'sc', 'ac', 'as', 'cd', 'ud', 'rc', 'rcd', 'sd', 'club', 'calcio', 'fk', 'sk', 'bk', 'sv', 'vfb', 'vfl', 'tsg', 'de', 'la', 'the', 'and', 'ssc', 'us', 'ca', 'ogc', 'stade', 'real', 'sporting', 'cp', 'sl', 'krc', 'bsc']);
-export function normName(s: string): string[] {
-  return s
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/&/g, ' and ')
-    .replace(/[^a-z0-9 ]/g, ' ')
-    .split(/\s+/)
-    .filter((w) => w && !STOP.has(w) && !/^\d+$/.test(w));
-}
-export function nameSim(a: string, b: string): number {
-  const x = normName(a);
-  const y = normName(b);
-  if (!x.length || !y.length) return 0;
-  let hits = 0;
-  for (const w of x) if (y.some((v) => v === w || (w.length >= 4 && v.startsWith(w.slice(0, 4))) || (v.length >= 4 && w.startsWith(v.slice(0, 4))))) hits++;
-  return hits / Math.max(x.length, y.length);
-}
+export { nameSim, normName } from '../../src/data/names';
+import { nameSim } from '../../src/data/names';
 
 type EspnRow = { id: string; t: number; hn: string; an: string; hs: number; as: number };
 export type FdMatch = { p: Probs; src: string };
