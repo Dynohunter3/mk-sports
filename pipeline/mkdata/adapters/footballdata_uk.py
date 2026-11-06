@@ -59,7 +59,7 @@ class FootballDataUK(Adapter):
         if self.comps[comp_id].get("footballdata_uk_extra"):
             league = self.comps[comp_id]["name"]
             rows = [x for x in rows if x.get("League") == league and x.get("Season", "").split("/")[0] == season]
-        return self.parse_rows(comp_id, rows, r.fetched_at)
+        return self.parse_rows(comp_id, rows, r.fetched_at, season=season)
 
     def fetch_upcoming(self, comp_ids: list[str]) -> FetchResult:
         r = self._get(f"{BASE}/fixtures.csv", max_age=3 * 3600)
@@ -71,7 +71,8 @@ class FootballDataUK(Adapter):
             out.extend(self.parse_rows(comp_id, mine, r.fetched_at, live=True))
         return out
 
-    def parse_rows(self, comp_id: str, rows: list[dict], fetched_at: float, live: bool = False) -> FetchResult:
+    def parse_rows(self, comp_id: str, rows: list[dict], fetched_at: float, live: bool = False, season: str | None = None) -> FetchResult:
+        """``season``: the season of the file the rows came from (a season can run past 1 July, e.g. 2019-20)."""
         comp = self.comps[comp_id]
         sport = comp["sport"]
         out = FetchResult()
@@ -83,10 +84,10 @@ class FootballDataUK(Adapter):
             kick, exact = local_kickoff(d, x.get("Time") or None, "Europe/London")
             hg, ag = x.get("FTHG", x.get("HG", "")), x.get("FTAG", x.get("AG", ""))
             final = hg.strip() != "" and ag.strip() != ""
-            season = season_of(d, comp["seasons"])
+            row_season = season or season_of(d, comp["seasons"])
             skey = f"{self.code(comp_id)}:{d.isoformat()}:{home}:{away}"
             out.matches.append({
-                "source": self.name, "source_key": skey, "competition_id": comp_id, "season": season,
+                "source": self.name, "source_key": skey, "competition_id": comp_id, "season": row_season,
                 "kickoff_utc": kick, "kickoff_exact": int(exact), "local_date": d.isoformat(),
                 "home_raw": home, "away_raw": away, "status": "final" if final else "scheduled",
                 "home_score": int(float(hg)) if final else None, "away_score": int(float(ag)) if final else None,

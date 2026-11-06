@@ -40,7 +40,7 @@ jobs:
           key: mkdata-${{ github.run_id }}
           restore-keys: mkdata-
       - name: Tests
-        run: python -m pip install --quiet pytest && python -m pytest -q
+        run: python -m pip install --quiet pytest -r requirements-model.txt && python -m pytest -q
       - name: Fetch current season from every usable source
         run: python -m mkdata sync --current
       - name: Upcoming fixtures and current odds

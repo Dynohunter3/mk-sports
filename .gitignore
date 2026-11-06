@@ -25,3 +25,4 @@ mobile/android/
 # Downloaded audit data (re-fetchable)
 audit/data/
 audit/results/*.records.json
+audit/results/*.preds.json

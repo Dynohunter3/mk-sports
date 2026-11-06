@@ -46,33 +46,34 @@ def test_every_name_gets_one_id_and_matches_merge(store, ids, comps):
     assert rep.unresolved == 0
     assert rep.canonical == len(GAMES)
     assert store.q("SELECT COUNT(*) n FROM entities WHERE kind='team'")[0]["n"] == 4
-    methods = {r["raw"]: r["method"] for r in store.q("SELECT raw, method FROM aliases WHERE source='footballdata_uk'")}
-    assert methods["Arsenal"] == "normalised-name"
-    assert methods["Spurs"] in ("normalised-name", "fixture-anchored")  # 'spurs' expands to 'tottenham'
-    assert methods["Wolves"] in ("normalised-name", "fixture-anchored")
+    # football-data.co.uk is the naming authority; openfootball's full names are resolved to its IDs
+    methods = {r["raw"]: r["method"] for r in store.q("SELECT raw, method FROM aliases WHERE source='openfootball'")}
+    assert methods["Arsenal FC"] == "normalised-name"
+    assert methods["Tottenham Hotspur FC"] == "fixture-anchored"  # 'Spurs' vs 'Tottenham Hotspur'
+    assert methods["Wolverhampton Wanderers FC"] == "fixture-anchored"
     assert store.q("SELECT COUNT(*) n FROM conflicts")[0]["n"] == 0
     assert all(r["agreement"] == 1.0 for r in store.q("SELECT agreement FROM matches"))
 
 
 def _gunners(games):
-    return {i: row("footballdata_uk", d, "Gunners" if h == "Arsenal" else h, "Gunners" if a == "Arsenal" else a, hs, as_)
-            for i, (d, h, a, hs, as_) in enumerate(games)}
+    g = lambda t: "The Gunners" if t == "Arsenal" else FULL[t]  # noqa: E731
+    return {i: row("openfootball", d, g(h), g(a), hs, as_) for i, (d, h, a, hs, as_) in enumerate(games)}
 
 
 def test_fixture_anchoring_links_unrelated_names(store, ids, comps):
     """A name with no textual overlap ('Gunners') is linked purely by date + score evidence (12 games)."""
-    league(store, fd_overrides=_gunners(GAMES))
+    league(store, of_overrides=_gunners(GAMES))
     Linker(store, ids, comps, now=T0 + 400 * DAY).run()
-    al = store.q("SELECT entity_id, method FROM aliases WHERE source='footballdata_uk' AND raw='Gunners'")
+    al = store.q("SELECT entity_id, method FROM aliases WHERE source='openfootball' AND raw='The Gunners'")
     assert al and al[0]["entity_id"] == "fb-eng-arsenal" and al[0]["method"] == "fixture-anchored"
 
 
 def test_too_little_evidence_is_not_linked(store, ids, comps):
     """With only 4 games and no name overlap the safety rule refuses to link; the name waits for review."""
-    league(store, fd_overrides=_gunners(BASE), games=BASE)
+    league(store, of_overrides=_gunners(BASE), games=BASE)
     Linker(store, ids, comps, now=T0 + 400 * DAY).run()
-    assert "Gunners" in [r["raw"] for r in store.q("SELECT raw FROM unresolved")]
-    assert not store.q("SELECT 1 FROM aliases WHERE raw='Gunners'")
+    assert "The Gunners" in [r["raw"] for r in store.q("SELECT raw FROM unresolved")]
+    assert not store.q("SELECT 1 FROM aliases WHERE raw='The Gunners'")
 
 
 def test_score_disagreement_is_major_logged_and_alerted(store, ids, comps):
@@ -93,17 +94,17 @@ def test_kickoff_rules(store, ids, comps):
     })
     Linker(store, ids, comps, now=T0 + 400 * DAY).run()
     sev = {r["match_id"].split("/")[-1]: r["severity"] for r in store.q("SELECT match_id, severity FROM conflicts WHERE field='kickoff'")}
-    assert sev == {"fb-eng-wolverhampton-wanderers~fb-eng-tottenham-hotspur": "minor",
-                   "fb-eng-manchester-united~fb-eng-wolverhampton-wanderers": "major"}
+    assert sev == {"fb-eng-wolverhampton~fb-eng-tottenham": "minor",
+                   "fb-eng-manchester-united~fb-eng-wolverhampton": "major"}
     # football-data.co.uk outranks openfootball for kick-off times
-    k = store.q("SELECT kickoff_utc FROM matches WHERE match_id LIKE '%wolverhampton-wanderers~fb-eng-tottenham-hotspur'")[0][0]
+    k = store.q("SELECT kickoff_utc FROM matches WHERE match_id LIKE '%fb-eng-wolverhampton~fb-eng-tottenham'")[0][0]
     assert k == T0
 
 
 def test_stale_scheduled_row_is_staleness_not_a_clash(store, ids, comps):
     league(store, of_overrides={3: row("openfootball", 7, "Tottenham Hotspur FC", "Arsenal FC")})  # not updated
     Linker(store, ids, comps, now=T0 + 400 * DAY).run()
-    m = store.q("SELECT status, home_score FROM matches WHERE match_id LIKE '%tottenham-hotspur~fb-eng-arsenal'")[0]
+    m = store.q("SELECT status, home_score FROM matches WHERE match_id LIKE '%fb-eng-tottenham~fb-eng-arsenal'")[0]
     assert (m["status"], m["home_score"]) == ("final", 1)
     c = store.q("SELECT severity, rule FROM conflicts WHERE field='status'")[0]
     assert c["severity"] == "minor"
@@ -115,13 +116,13 @@ def test_postponed_game_merges_with_its_new_date(store, ids, comps):
            fd_overrides={7: row("footballdata_uk", 61, "Spurs", "Wolves", 3, 1)})
     rep = Linker(store, ids, comps, now=T0 + 400 * DAY).run()
     assert rep.canonical == len(GAMES)
-    srcs = json.loads(store.q("SELECT sources FROM matches WHERE match_id LIKE '%tottenham-hotspur~fb-eng-wolverhampton-wanderers'")[0][0])
+    srcs = json.loads(store.q("SELECT sources FROM matches WHERE match_id LIKE '%fb-eng-tottenham~fb-eng-wolverhampton'")[0][0])
     assert srcs == ["footballdata_uk", "openfootball"]
 
 
 def test_unrecognisable_name_goes_to_review_queue(store, ids, comps):
     league(store)
-    store.upsert_source_matches([row("footballdata_uk", 90, "Mystery Town", "Arsenal")])  # no finals, no name match
+    store.upsert_source_matches([row("openfootball", 90, "Mystery Town", "Arsenal FC")])  # no finals, no name match
     Linker(store, ids, comps, now=T0 + 400 * DAY).run()
     q = store.q("SELECT raw FROM unresolved")
     assert [r["raw"] for r in q] == ["Mystery Town"]
@@ -168,6 +169,6 @@ def test_wrong_early_kickoff_in_one_source_cannot_leak_the_result(store, ids, co
     # openfootball says the game started a day earlier (it was moved); its 'available_at' is therefore early
     league(store, of_overrides={4: row("openfootball", 13, "Arsenal FC", "Wolverhampton Wanderers FC", 4, 0)})
     Linker(store, ids, comps, now=T0 + 400 * DAY).run()
-    m = store.q("SELECT kickoff_utc, result_available_at FROM matches WHERE match_id LIKE '%arsenal~fb-eng-wolverhampton-wanderers'")[0]
+    m = store.q("SELECT kickoff_utc, result_available_at FROM matches WHERE match_id LIKE '%fb-eng-arsenal~fb-eng-wolverhampton'")[0]
     assert m["kickoff_utc"] == T0 + 14 * DAY  # football-data.co.uk's time wins
     assert m["result_available_at"] >= m["kickoff_utc"] + 2 * 3600

@@ -108,7 +108,7 @@ class Store:
                    VALUES (:source,:source_key,:competition_id,:season,:kickoff_utc,:kickoff_exact,:local_date,
                      :home_raw,:away_raw,:status,:home_score,:away_score,:fetched_at,:available_at,:mkey)
                    ON CONFLICT(source, source_key) DO UPDATE SET
-                     kickoff_utc=excluded.kickoff_utc, kickoff_exact=excluded.kickoff_exact, local_date=excluded.local_date,
+                     season=excluded.season, kickoff_utc=excluded.kickoff_utc, kickoff_exact=excluded.kickoff_exact, local_date=excluded.local_date,
                      status=excluded.status, home_score=excluded.home_score, away_score=excluded.away_score,
                      fetched_at=excluded.fetched_at,
                      available_at=CASE WHEN source_matches.status=excluded.status

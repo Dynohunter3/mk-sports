@@ -25,7 +25,9 @@ from .timeutil import result_available_at
 
 DEMOTE_RATE = 0.02  # a source that disagrees with the chosen score on >2% of shared finals is demoted there
 DEMOTE_MIN = 30
-AUTHORITY = ["openfootball", "football_data_org", "footballdata_uk", "balldontlie", "the_odds_api"]
+# Naming authority = first source present for a competition. football-data.co.uk first: its names are
+# stable across seasons and it covers the most seasons; openfootball renames clubs between seasons.
+AUTHORITY = ["footballdata_uk", "football_data_org", "openfootball", "balldontlie", "the_odds_api"]
 _CC = re.compile(r"^(.*\S)\s*\(([A-Z]{3})\)$")
 FIFA_TO_SCOPE = {"ENG": "eng", "ESP": "esp", "ITA": "ita", "GER": "ger", "FRA": "fra", "NED": "ned", "POR": "por", "TUR": "tur", "USA": "usa"}
 
@@ -101,6 +103,10 @@ class Linker:
                 self._adopt_provisional(src, by_src, order, m, names, sport, scope)
                 for raw in names:
                     if raw not in m:
+                        eid = self.ids.resolve(src, "team", raw, sport, scope)  # a spelling created a moment ago
+                        if eid:
+                            m[raw] = eid
+                            continue
                         base, cc = split_country(raw) if not scope else (raw, None)
                         m[raw] = self.ids.new_team(base, sport, scope or cc, created_by=src)
                         self.ids.add_alias(src, "team", raw, scope, m[raw], "created")
@@ -162,9 +168,16 @@ class Linker:
             if r["status"] == "final" and r["home_raw"] in auth_map and r["away_raw"] in auth_map:
                 by_day[_d(r["local_date"])].append(r)
         finals = [r for r in mine if r["status"] == "final"]
+        seasons_of: dict[str, set] = defaultdict(set)
+        for r in mine:
+            seasons_of[r["home_raw"]].add(r["season"])
+            seasons_of[r["away_raw"]].add(r["season"])
         for _round in range(4):
             progress = False
-            claimed = set(m.values())
+            # an ID may take a second spelling only if the two spellings never appear in the same season
+            claimed: dict[str, set] = defaultdict(set)
+            for n, e in m.items():
+                claimed[e] |= seasons_of.get(n, set())
             for raw in sorted({r["home_raw"] for r in mine} | {r["away_raw"] for r in mine}):
                 if raw in m:
                     continue
@@ -190,9 +203,9 @@ class Linker:
                 sim = similarity(raw, self.ids.name(best) or "")
                 # only games on days the authority has results for can line up (it may be stale or partial)
                 overlap = sum(1 for r in games if any(by_day.get(_d(r["local_date"]) + timedelta(days=k)) for k in (-1, 0, 1)))
-                if v1 >= max(3.0, 0.4 * overlap) and v1 >= 2 * v2 and (sim >= 0.2 or v1 >= 8) and best not in claimed:
+                if v1 >= max(3.0, 0.4 * overlap) and v1 >= 2 * v2 and (sim >= 0.2 or v1 >= 8) and not (claimed[best] & seasons_of[raw]):
                     m[raw] = best
-                    claimed.add(best)
+                    claimed[best] |= seasons_of[raw]
                     self.ids.add_alias(src, "team", raw, scope, best, "fixture-anchored",
                                        f"votes={v1:g} of {len(games)} finals, runner-up={v2:g}, name_sim={sim:.2f}")
                     progress = True
