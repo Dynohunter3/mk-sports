@@ -13,11 +13,24 @@ Every competition is shown in its own brand colours, and every team with its rea
 
 > Predictions are for information and entertainment only and are **not betting advice**. The pick game has no real-money stakes.
 
-**The app works on its own with real data.** The phone fetches everything from public sports feeds and computes every prediction and xG value itself. No server, account or API key is needed. An optional server mode (`backend/`) adds accounts and global leaderboards.
+**Football predictions come from the MK Sports data pipeline** (`pipeline/`). Once a day a GitHub Actions job:
+1. fetches results, odds and shot data from sources whose terms permit it (football-data.co.uk, openfootball);
+2. cross-checks the sources and gives every team one internal ID;
+3. retrains the model monthly;
+4. predicts the next 21 days and grades finished matches;
+5. publishes `football_predictions.json` and `accuracy.json` to GitHub Pages, with a mirror on the `predictions` branch.
+
+The app downloads that file and shows those predictions for the Premier League, Championship, LaLiga, Serie A, Bundesliga, Ligue 1, Eredivisie, Liga Portugal, Süper Lig, MLS and the Champions League. It computes predictions on the phone only for other competitions and sports, or as a fallback when the file is unavailable.
+
+How the model was audited, rebuilt and measured: [Step 1](docs/audit/STEP1_AUDIT.md), [Step 2](docs/audit/STEP2_DATA_LAYER.md), [Step 3](docs/audit/STEP3_MODELS.md), [Step 4](docs/audit/STEP4_CONSISTENCY.md), [Step 5](docs/audit/STEP5_RESULTS.md). The data sources and their terms are in [docs/SOURCE_REGISTRY.md](docs/SOURCE_REGISTRY.md).
+
+Fixtures, live scores, line-ups, stats and news still come from public sports feeds fetched by the phone. No server, account or API key is needed. An optional server mode (`backend/`) adds accounts and global leaderboards.
 
 ```
 predictpro/
-├── mobile/      React Native app (Expo SDK 58): on-device data layer, models, pick game, all screens
+├── mobile/      React Native app (Expo SDK 58): data layer, published-prediction client, pick game, all screens
+├── pipeline/    Data pipeline + football models (mkdata: sources, IDs, store; mkmodel: training, predictions, grading)
+├── audit/       Measured results of the engine audit and rebuild (Steps 1-5)
 ├── engine/      Reference prediction engine (Python) + scripts that fit the xG model
 ├── backend/     Optional server: FastAPI API, PostgreSQL schema, provider adapters, jobs (server mode)
 ├── db/          schema.sql for the server database
@@ -27,7 +40,7 @@ predictpro/
 
 ## Install on Android (APK)
 
-Build the release-signed APK with `mobile/scripts/build-apk.sh` (see [Building the APK](#building-the-apk)). Copy `MKSports-1.4.1.apk` to the phone, open it, and allow "install from this source" when Android asks. It runs on Android 7.0+ on 32- and 64-bit ARM phones.
+Build the release-signed APK with `mobile/scripts/build-apk.sh` (see [Building the APK](#building-the-apk)). Copy `MKSports-1.5.0.apk` to the phone, open it, and allow "install from this source" when Android asks. It runs on Android 7.0+ on 32- and 64-bit ARM phones.
 
 Versions 1.1 and later keep the package id of the 1.0 build (`app.predictpro.mobile`) and the same signing key. They install as updates, so existing picks and points are kept.
 
