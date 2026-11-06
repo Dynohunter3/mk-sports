@@ -1,4 +1,4 @@
-"""Render audit/results/step3.json as markdown tables.
+"""Render audit/results/$MK_RUN.json (default step3) as markdown tables.
 
     python -m mkmodel.report > ../audit/results/step3_tables.md
 """
@@ -9,7 +9,9 @@ from pathlib import Path
 NAMES = {"eng.1": "Premier League", "eng.2": "Championship", "esp.1": "LaLiga", "ita.1": "Serie A", "ger.1": "Bundesliga",
          "fra.1": "Ligue 1", "ned.1": "Eredivisie", "por.1": "Liga Portugal", "tur.1": "Süper Lig", "usa.1": "MLS",
          "uefa.champions": "Champions League", "all": "All leagues"}
-RES = Path(__file__).resolve().parents[2] / "audit" / "results" / "step3.json"
+import os
+
+RES = Path(__file__).resolve().parents[2] / "audit" / "results" / f"{os.environ.get('MK_RUN', 'step3')}.json"
 
 
 def f(x, d=4):

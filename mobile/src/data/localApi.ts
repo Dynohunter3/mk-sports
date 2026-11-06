@@ -15,7 +15,7 @@ import { SourceError } from './http';
 import * as centreApi from './centre';
 import { LEAGUE_BY_SLUG, LEAGUES, LeagueDef, MATCH_LEAGUES, SportSlug, SPORTS, sportOf } from './leagues';
 import * as more from './more';
-import { onRemoteChange, refreshRemote } from './remote';
+import { AccAgg, onRemoteChange, refreshRemote, remoteAccuracy } from './remote';
 import { backtest, bookFor, clearPredictionStores, getBacktest, onPredictionDataChange, PREDICTED_SPORTS, scheduleBacktest, FullPrediction, liveEvaluations, mini, predictEvent, preMatchSnapshot, registerTeams, scoreFinished, scorePrediction, snapshot, sourceStats, storesReady } from './predict';
 
 const DAY = 86_400_000;
@@ -518,7 +518,11 @@ async function accuracy(q: URLSearchParams) {
     a.ll += r.logLoss;
   };
   const sports = PREDICTED_SPORTS.filter((s) => (!sportFilter || s === sportFilter) && (sportFilter || s === 'football' || s === 'basketball' || sportReady(s)));
+  // football: the published tracker (every pipeline prediction graded + its backtest) replaces on-device numbers
+  const ra = remoteAccuracy();
+  const fbRemote = !!ra && sports.includes('football');
   for (const sp of sports) {
+    if (fbRemote && sp === 'football') continue;
     if (!sportReady(sp)) await ensureSport(sp);
     if (source !== 'live') {
       for (const r of (getBacktest(sp) ?? backtest(sp)).records) {
@@ -529,7 +533,7 @@ async function accuracy(q: URLSearchParams) {
       }
     }
   }
-  const live = liveEvaluations().filter((e) => sports.includes(e.sport));
+  const live = liveEvaluations().filter((e) => sports.includes(e.sport) && !(fbRemote && e.sport === 'football'));
   if (source !== 'backtest') {
     for (const e of live) {
       const s = scorePrediction(e.blended, e.outcome === 'home' ? 1 : 0, e.outcome === 'away' ? 1 : 0);
@@ -557,19 +561,69 @@ async function accuracy(q: URLSearchParams) {
       by_confidence: conf,
     };
   };
-  const weights = Object.fromEntries(sports.map((sp) => [sp, sourceStats(sp)]));
+  const weights = Object.fromEntries(sports.filter((sp) => !(fbRemote && sp === 'football')).map((sp) => [sp, sourceStats(sp)]));
+  type Row = ReturnType<typeof row>;
+  const fromAgg = (key: string, name: string, sport: string, a: Partial<AccAgg> & { n: number }): Row => ({
+    key, name, sport, n: a.n, correct: a.correct ?? Math.round((a.hit_rate ?? 0) * a.n), hit_rate: a.hit_rate ?? null, brier: a.brier ?? null, log_loss: a.log_loss ?? null,
+    by_confidence: (a.by_confidence ?? {}) as Row['by_confidence'],
+  });
+  const combine = (key: string, name: string, sport: string, rows: Row[]): Row => {
+    const rs = rows.filter((r) => r.n);
+    const n = rs.reduce((x, r) => x + r.n, 0);
+    const w = (f: (r: Row) => number | null) => (n ? rs.reduce((x, r) => x + (f(r) ?? 0) * r.n, 0) / n : null);
+    const conf: Row['by_confidence'] = {};
+    for (const c of ['high', 'medium', 'low'] as const) {
+      const parts = rs.map((r) => r.by_confidence[c]).filter((b): b is { n: number; hit_rate: number } => !!b);
+      const m = parts.reduce((x, b) => x + b.n, 0);
+      if (m) conf[c] = { n: m, hit_rate: parts.reduce((x, b) => x + b.hit_rate * b.n, 0) / m };
+    }
+    return { key, name, sport, n, correct: rs.reduce((x, r) => x + r.correct, 0), hit_rate: w((r) => r.hit_rate), brier: w((r) => r.brier), log_loss: w((r) => r.log_loss), by_confidence: conf };
+  };
+  const fbLeagues: Row[] = [];
+  if (fbRemote) {
+    for (const l of MATCH_LEAGUES.filter((x) => x.sport === 'football')) {
+      const lv = ra!.live.competitions[l.slug];
+      const bt = ra!.backtest?.competitions[l.slug];
+      const liveRow = lv && lv.n ? fromAgg(l.slug, l.name, 'football', lv) : null;
+      const btRow = bt ? fromAgg(l.slug, l.name, 'football', { n: bt.n, hit_rate: bt.new.accuracy, log_loss: bt.new.log_loss, brier: bt.new.brier }) : null;
+      const pick = source === 'live' ? [liveRow] : source === 'backtest' ? [btRow] : [liveRow, btRow];
+      const r = combine(l.slug, l.name, 'football', pick.filter((x): x is Row => !!x));
+      if (r.n) fbLeagues.push(r);
+    }
+  }
+  const deviceSports = sports.filter((sp) => !(fbRemote && sp === 'football')).map((sp) => row(sp, sportOf(sp)!.name, sp, items.filter((i) => i.sport === sp)));
+  const sportRows = [...(fbRemote ? [combine('football', sportOf('football')!.name, 'football', fbLeagues)] : []), ...deviceSports].filter((r) => r.n);
+  const fbRecent = fbRemote && source !== 'backtest'
+    ? ra!.live.recent.map((g) => ({ match_id: g.match_id, home: g.home, away: g.away, score: g.score, predicted: g.pick, probability: g.probability, correct: !!g.correct, confidence: g.confidence_label }))
+    : [];
+  const btAll = ra?.backtest?.competitions['all'];
+  const fbSources = fbRemote && btAll && source !== 'live'
+    ? [
+        { source: 'model', kind: 'backtest', label: 'MK Sports model (football)', n: btAll.n, hit_rate: btAll.new.accuracy, brier: btAll.new.brier, log_loss: btAll.new.log_loss },
+        ...(btAll.previous ? [{ source: 'previous', kind: 'backtest', label: 'Previous engine (football)', n: btAll.n, hit_rate: btAll.previous.accuracy, brier: btAll.previous.brier, log_loss: btAll.previous.log_loss }] : []),
+        ...(btAll.bookmaker ? [{ source: 'market', kind: 'backtest', label: 'Bookmaker closing odds (football)', n: btAll.n, hit_rate: btAll.bookmaker.accuracy, brier: btAll.bookmaker.brier, log_loss: btAll.bookmaker.log_loss }] : []),
+      ]
+    : [];
+  const footballBacktest = fbRemote && ra!.backtest
+    ? MATCH_LEAGUES.filter((l) => ra!.backtest!.competitions[l.slug]).map((l) => {
+        const c = ra!.backtest!.competitions[l.slug];
+        return { key: l.slug, name: l.name, n: c.n, new_log_loss: c.new.log_loss, previous_log_loss: c.previous?.log_loss ?? null, bookmaker_log_loss: c.bookmaker?.log_loss ?? null };
+      })
+    : [];
   return {
     source,
     updated_at: new Date().toISOString(),
-    overall: row('all', 'All sports', 'all', items),
-    sports: sports.map((sp) => row(sp, sportOf(sp)!.name, sp, items.filter((i) => i.sport === sp))).filter((r) => r.n),
-    leagues: MATCH_LEAGUES.map((l) => row(l.slug, l.name, l.sport, items.filter((i) => i.league === l.slug))).filter((r) => r.n),
-    recent: live.slice(0, 10).map((e) => ({ match_id: e.id, home: e.home, away: e.away, score: e.score, predicted: argmax(e.blended), probability: Math.max(...Object.values(e.blended).map(Number)), correct: argmax(e.blended) === e.outcome, confidence: e.confidence })),
-    by_source: Object.entries(perSource).map(([k, v]) => {
+    overall: combine('all', 'All sports', 'all', [row('all', 'All sports', 'all', items), ...fbLeagues]),
+    sports: sportRows,
+    leagues: [...fbLeagues, ...MATCH_LEAGUES.filter((l) => !(fbRemote && l.sport === 'football')).map((l) => row(l.slug, l.name, l.sport, items.filter((i) => i.league === l.slug))).filter((r) => r.n)],
+    football_backtest: footballBacktest,
+    football_note: fbRemote ? ra!.note : null,
+    recent: [...fbRecent, ...live.slice(0, 10).map((e) => ({ match_id: e.id, home: e.home, away: e.away, score: e.score, predicted: argmax(e.blended), probability: Math.max(...Object.values(e.blended).map(Number)), correct: argmax(e.blended) === e.outcome, confidence: e.confidence }))].slice(0, 20),
+    by_source: [...fbSources, ...Object.entries(perSource).map(([k, v]) => {
       const [src, kind] = k.split(':');
       const info = (SOURCE_INFO as Record<string, { label: string }>)[src];
       return { source: src, kind: kind ?? 'backtest', label: src === 'blended' ? 'MK Sports (blended)' : info?.label ?? src, n: v.n, hit_rate: v.correct / v.n, brier: v.brier / v.n, log_loss: v.ll / v.n };
-    }),
+    })],
     source_evidence: weights,
     baseline_note:
       'Backtest = every match of the last 12 months predicted only from results before it (cold starts skipped). Live = forecasts this phone saved before kick-off, scored after the final whistle. Hit rate = share of matches where the most likely outcome happened; Brier score and log loss measure probability quality (lower is better).',

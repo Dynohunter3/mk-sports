@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 import numpy as np
 
 from .data import APP_LEAGUES, LOWER, load
-from .experiment import CACHE, RESULTS, metrics
+from .experiment import CACHE, RESULTS, RUN, metrics
 from .features import Config, EloParams, build
 from .production import COL, FEATURE_START, confidence, label
 
@@ -60,7 +60,8 @@ def main() -> None:
                                         "log_loss": float(ll[sel].mean()), "excess_loss": float((ll - entropy)[sel].mean()),
                                         "gap_to_closing": float((ll - ll_close)[wc].mean()) if wc.any() else None,
                                         "accuracy": metrics(final[sel], y[sel])["accuracy"]}
-    (RESULTS / "step4_confidence.json").write_text(json.dumps(out, indent=1))
+    name = "step4_confidence.json" if RUN == "step3" else f"{RUN}_confidence.json"
+    (RESULTS / name).write_text(json.dumps(out, indent=1))
     for split, bands in out["bands"].items():
         for lab, v in bands.items():
             g = "–" if v["gap_to_closing"] is None else f"{v['gap_to_closing']:+.4f}"

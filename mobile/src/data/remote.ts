@@ -56,6 +56,25 @@ export type RemoteFile = {
   recent?: RemoteMatch[];
 };
 
+export type AccAgg = { n: number; correct: number; hit_rate: number | null; log_loss: number | null; brier: number | null; by_confidence: Partial<Record<'high' | 'medium' | 'low', { n: number; hit_rate: number }>> };
+type Trio = { accuracy: number; log_loss: number; brier: number };
+export type RemoteAccuracy = {
+  schema: number;
+  generated_at: string;
+  model_version: string | null;
+  live: {
+    overall: AccAgg;
+    competitions: Record<string, AccAgg>;
+    recent: { match_id: string; competition: string; kickoff: string; home: string; away: string; score: string; pick: 'home' | 'draw' | 'away'; probability: number; correct: number; confidence_label: 'high' | 'medium' | 'low' }[];
+  };
+  backtest: { source: string; period: string; competitions: Record<string, { n: number; new: Trio; previous: Trio | null; bookmaker: Trio | null }> } | null;
+  note: string;
+};
+const ACC_KEY = 'remote:accuracy:v1';
+let accuracyDoc: RemoteAccuracy | null = null;
+export const remoteAccuracy = () => accuracyDoc;
+const accValid = (a: unknown): a is RemoteAccuracy => !!a && (a as RemoteAccuracy).schema === 1 && !!(a as RemoteAccuracy).live;
+
 let file: RemoteFile | null = null;
 let byComp = new Map<string, RemoteMatch[]>();
 let lastTry = 0;
@@ -86,25 +105,46 @@ export async function refreshRemote(force = false): Promise<boolean> {
   if (loading) return loading;
   if (!force && Date.now() - lastTry < REFRESH_MS) return !!file;
   lastTry = Date.now();
+  const bucket = Math.floor(Date.now() / REFRESH_MS);
   loading = (async () => {
     if (!file) {
       const saved = await readKV<RemoteFile>(KV_KEY);
       if (valid(saved) && Date.now() - Date.parse(saved.generated_at) < MAX_AGE_MS) install(saved, 'saved');
     }
+    if (!accuracyDoc) {
+      const savedAcc = await readKV<RemoteAccuracy>(ACC_KEY);
+      if (accValid(savedAcc)) accuracyDoc = savedAcc;
+    }
+    // 1. predictions (Pages, then the mirror); a failure keeps the last good copy
+    let ok = false;
     for (const url of REMOTE_URLS) {
       try {
-        const f = await get<unknown>(`${url}?t=${Math.floor(Date.now() / REFRESH_MS)}`, { ttl: 600, timeoutMs: 12000, retries: 1 });
+        const f = await get<unknown>(`${url}?t=${bucket}`, { ttl: 600, timeoutMs: 12000, retries: 1 });
         if (!valid(f)) continue;
         if (!file || f.generated_at !== file.generated_at || f.model_version !== file.model_version) {
           install(f, 'network');
           await writeKV(KV_KEY, f);
         }
-        return true;
+        ok = true;
+        break;
       } catch {
-        // try the mirror, then keep what we have
+        // try the mirror
       }
     }
-    return !!file;
+    // 2. the accuracy file next to it: best effort, never blocks predictions
+    for (const url of REMOTE_URLS) {
+      try {
+        const a = await get<unknown>(`${url.replace('football_predictions.json', 'accuracy.json')}?t=${bucket}`, { ttl: 600, timeoutMs: 12000, retries: 1 });
+        if (accValid(a)) {
+          accuracyDoc = a;
+          await writeKV(ACC_KEY, a);
+          break;
+        }
+      } catch {
+        // mirror next
+      }
+    }
+    return ok || !!file;
   })().finally(() => {
     loading = null;
   });
@@ -142,8 +182,9 @@ export function remoteFor(ev: SEvent): RemoteMatch | null {
 }
 
 /** Tests only. */
-export function setRemoteForTests(f: RemoteFile | null) {
+export function setRemoteForTests(f: RemoteFile | null, acc: RemoteAccuracy | null = null) {
   file = null;
+  accuracyDoc = acc;
   byComp = new Map();
   if (f) install(f, 'network');
   lastTry = Date.now();

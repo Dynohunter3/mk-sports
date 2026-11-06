@@ -151,6 +151,49 @@ export default function AccuracyScreen() {
               </Row>
             ))}
           </Card>
+          {source !== 'live' && d.football_backtest?.length ? (
+            <>
+              <SectionHeader title="Football: new model vs previous engine" />
+              <Card>
+                <Row style={{ minHeight: 28 }}>
+                  <Text v="tiny" muted style={{ flex: 1 }}>
+                    Log loss (lower is better)
+                  </Text>
+                  <Text v="tiny" muted style={{ width: 58, textAlign: 'right' }}>
+                    Before
+                  </Text>
+                  <Text v="tiny" muted style={{ width: 58, textAlign: 'right' }}>
+                    Now
+                  </Text>
+                  <Text v="tiny" muted style={{ width: 66, textAlign: 'right' }}>
+                    Bookmaker
+                  </Text>
+                </Row>
+                {d.football_backtest.map((r) => {
+                  const better = r.previous_log_loss !== null && r.new_log_loss < r.previous_log_loss;
+                  return (
+                    <Row key={r.key} style={{ minHeight: 34 }}>
+                      <Text v="small" style={{ flex: 1 }} numberOfLines={1}>
+                        {r.name} <Text v="tiny" muted>{r.n}</Text>
+                      </Text>
+                      <Text v="small" dim style={{ width: 58, textAlign: 'right' }}>
+                        {r.previous_log_loss?.toFixed(3) ?? '–'}
+                      </Text>
+                      <Text v="small" color={better ? t.win : t.loss} style={{ width: 58, textAlign: 'right' }}>
+                        {r.new_log_loss.toFixed(3)}
+                      </Text>
+                      <Text v="small" dim style={{ width: 66, textAlign: 'right' }}>
+                        {r.bookmaker_log_loss?.toFixed(3) ?? '–'}
+                      </Text>
+                    </Row>
+                  );
+                })}
+                <Text v="tiny" muted style={{ marginTop: space.sm }}>
+                  Same matches, two full seasons, every match predicted only from earlier data. Green = the new model is better than the previous engine there.
+                </Text>
+              </Card>
+            </>
+          ) : null}
           <SectionHeader title="Latest results vs prediction" />
           <Card>
             {d.recent.map((r) => (
@@ -166,6 +209,7 @@ export default function AccuracyScreen() {
             ))}
           </Card>
           <Text v="small" dim style={{ marginTop: space.lg }}>
+            {d.football_note ? `Football: ${d.football_note} ` : ''}
             {d.baseline_note}
           </Text>
         </>

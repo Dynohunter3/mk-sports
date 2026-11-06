@@ -16,7 +16,7 @@ from __future__ import annotations
 import heapq
 import math
 from collections import defaultdict, deque
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 from scipy.optimize import minimize
@@ -29,12 +29,19 @@ _G = np.arange(MAXG + 1)
 
 
 # ----------------------------------------------------------------------------------- Elo
+# Per-league settings, tuned only on seasons before evaluation (audit/results/step5_mls_tuning.json):
+# MLS 2022+2023 log loss 1.0504 -> 1.0494 with stronger season regression and faster DC decay.
+LEAGUE_ELO_REGRESS = {"usa.1": 0.7}
+LEAGUE_XI = {"usa.1": 0.003}
+
+
 @dataclass
 class EloParams:
     k: float = 20.0
     hfa: float = 60.0
     regress: float = 0.15  # pull toward the league mean at a team's first match of a new season
     promoted_offset: float = -60.0  # unseen team starts this far below its league's mean
+    regress_by_comp: dict = field(default_factory=lambda: dict(LEAGUE_ELO_REGRESS))  # per-competition override of `regress`
 
 
 class Elo:
@@ -52,7 +59,8 @@ class Elo:
         if team not in self.r:
             self.r[team] = self._league_mean(comp, t) + (self.p.promoted_offset if domestic else 0.0)
         elif domestic and self.season_seen.get(team) != season:
-            self.r[team] += self.p.regress * (self._league_mean(comp, t) - self.r[team])
+            k = self.p.regress_by_comp.get(comp, self.p.regress)
+            self.r[team] += k * (self._league_mean(comp, t) - self.r[team])
         if domestic:
             self.season_seen[team] = season
         return self.r[team]
@@ -210,6 +218,7 @@ class Config:
     start: float = 0.0  # first kick-off for which features are produced
     use_comps: tuple = ()  # competitions whose results feed the state (default: all loaded)
     as_of: float | None = None  # production / replays: the moment the prediction is made
+    xi_by_comp: dict = field(default_factory=lambda: dict(LEAGUE_XI))  # per-competition override of the DC time decay
 
 
 def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
@@ -281,9 +290,10 @@ def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
         comp = m.comp
         if comp not in last_fit or m.t - last_fit[comp] >= cfg.refit_days * DAY:
             rows = league_rows.get(comp, [])
-            dc_state[comp] = fit_league(rows, m.t, cfg.xi, "goals")
+            xi = cfg.xi_by_comp.get(comp, cfg.xi)
+            dc_state[comp] = fit_league(rows, m.t, xi, "goals")
             has_x = sum(1 for r in rows[-400:] if r[5] is not None) > 200
-            dcx_state[comp] = fit_league(rows, m.t, cfg.xi, "xg") if has_x else None
+            dcx_state[comp] = fit_league(rows, m.t, xi, "xg") if has_x else None
             last_fit[comp] = m.t
         f = dict.fromkeys(FEATURES, np.nan)
         f.update(elo_diff=rh + cfg.elo.hfa - ra, elo_h=rh, elo_a=ra)

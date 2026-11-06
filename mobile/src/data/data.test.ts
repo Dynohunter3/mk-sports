@@ -133,3 +133,24 @@ test('the client never sends day ranges (the real source rejects them)', () => {
   const bad = requests.find((r) => /dates=\d{8}-/.test(r));
   assert.equal(bad, undefined);
 });
+
+test('accuracy: football comes from the published tracker when available', async () => {
+  const { setRemoteForTests } = await import('./remote');
+  const agg = { n: 10, correct: 6, hit_rate: 0.6, log_loss: 0.95, brier: 0.56, by_confidence: { high: { n: 8, hit_rate: 0.625 } } };
+  const trio = (ll: number) => ({ accuracy: 0.5, log_loss: ll, brier: 0.6 });
+  setRemoteForTests(null, {
+    schema: 1, generated_at: new Date().toISOString(), model_version: 'fb-test', note: 'published',
+    live: { overall: agg, competitions: { 'eng.1': agg }, recent: [{ match_id: 'm1', competition: 'eng.1', kickoff: '2026-11-01T15:00:00Z', home: 'Arsenal', away: 'Chelsea', score: '2-1', pick: 'home', probability: 0.5, correct: 1, confidence_label: 'high' }] },
+    backtest: { source: 'step5.json', period: 'p', competitions: { 'eng.1': { n: 760, new: trio(0.995), previous: trio(1.023), bookmaker: trio(0.99) }, all: { n: 760, new: trio(0.995), previous: trio(1.023), bookmaker: trio(0.99) } } },
+  });
+  const live: any = await handleLocal('GET', '/accuracy?source=live&sport=football', null);
+  const epl = live.leagues.find((l: any) => l.key === 'eng.1');
+  assert.equal(epl.n, 10);
+  assert.equal(epl.hit_rate, 0.6);
+  assert.equal(live.recent[0].home, 'Arsenal');
+  const bt: any = await handleLocal('GET', '/accuracy?source=backtest&sport=football', null);
+  assert.equal(bt.leagues.find((l: any) => l.key === 'eng.1').n, 760);
+  assert.deepEqual(bt.football_backtest.map((r: any) => [r.key, r.previous_log_loss, r.new_log_loss]), [['eng.1', 1.023, 0.995]]);
+  assert.ok(bt.by_source.some((s: any) => s.label === 'Previous engine (football)'));
+  setRemoteForTests(null, null);
+});

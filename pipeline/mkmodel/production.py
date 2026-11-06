@@ -432,8 +432,76 @@ def main(argv=None) -> int:
     elif a.cmd == "predict":
         print(json.dumps(predict(_ts(a.now), horizon_days=a.horizon), indent=1))
     else:
-        print(json.dumps(grade(_ts(a.now)), indent=1))
+        out = grade(_ts(a.now))
+        out["accuracy_file"] = publish_accuracy(now=_ts(a.now))
+        print(json.dumps(out, indent=1))
     return 0
+
+
+
+# ----------------------------------------------------------------------------------- accuracy (in-app tracker)
+AUDIT = PIPE.parent / "audit" / "results"
+
+
+def _agg(rows: list[dict]) -> dict:
+    n = len(rows)
+    out = {"n": n, "correct": sum(r["correct"] for r in rows)}
+    out["hit_rate"] = out["correct"] / n if n else None
+    out["log_loss"] = sum(r["log_loss"] for r in rows) / n if n else None
+    out["brier"] = sum(r["brier"] for r in rows) / n if n else None
+    out["by_confidence"] = {}
+    for c in ("high", "medium", "low"):
+        sub = [r for r in rows if r["confidence_label"] == c]
+        if sub:
+            out["by_confidence"][c] = {"n": len(sub), "hit_rate": sum(r["correct"] for r in sub) / len(sub)}
+    return out
+
+
+def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | None = None) -> dict:
+    """Every graded (official) prediction, plus the backtest before/after, for the app's accuracy screen."""
+    db = sqlite3.connect(store)
+    db.row_factory = sqlite3.Row
+    ensure_log_columns(db)
+    names = {r["id"]: r["name"] for r in db.execute("SELECT id, name FROM entities")}
+    graded = []
+    for r in db.execute("""SELECT p.*, m.competition_id, m.kickoff_utc, m.home_id, m.away_id, m.home_score, m.away_score
+                           FROM predictions p JOIN matches m USING (match_id) WHERE p.official=1 ORDER BY m.kickoff_utc DESC"""):
+        probs = {"home": r["p_home"], "draw": r["p_draw"], "away": r["p_away"]}
+        pick = max(probs, key=probs.get)
+        graded.append({"match_id": r["match_id"], "competition": r["competition_id"], "kickoff": datetime.fromtimestamp(r["kickoff_utc"], timezone.utc).isoformat(),
+                       "home": names.get(r["home_id"], r["home_id"]), "away": names.get(r["away_id"], r["away_id"]),
+                       "score": f"{r['home_score']}-{r['away_score']}", "pick": pick, "probability": round(probs[pick], 4),
+                       "correct": int(pick == r["outcome"]), "log_loss": r["log_loss"], "brier": r["brier"],
+                       "confidence_label": r["confidence_label"], "model_version": r["model_version"]})
+    comps = sorted({g["competition"] for g in graded})
+    live = {"overall": _agg(graded), "competitions": {c: _agg([g for g in graded if g["competition"] == c]) for c in comps},
+            "recent": [{k: g[k] for k in ("match_id", "competition", "kickoff", "home", "away", "score", "pick", "probability", "correct", "confidence_label")}
+                       for g in graded[:30]]}
+    backtest = None
+    for name in ("step5.json", "step3.json"):
+        f = AUDIT / name
+        if f.exists():
+            r = json.loads(f.read_text())
+            res, final = r["results"], r["final_rule"]
+            both = lambda model: res[model]["both"]  # noqa: E731
+            backtest = {"source": name, "period": "2024-25 and 2025-26 seasons (MLS 2024 and 2025), every match predicted only from earlier data",
+                        "competitions": {}}
+            for lg, v in both(final).items():
+                old = both("current engine v2").get(lg)
+                close = both("bookmaker closing").get(lg)
+                backtest["competitions"][lg] = {
+                    "n": v["n"], "new": {k: v[k] for k in ("accuracy", "log_loss", "brier")},
+                    "previous": {k: old[k] for k in ("accuracy", "log_loss", "brier")} if old else None,
+                    "bookmaker": {k: close[k] for k in ("accuracy", "log_loss", "brier")} if close else None}
+            break
+    doc = {"schema": 1, "generated_at": datetime.fromtimestamp(now or time.time(), timezone.utc).isoformat(timespec="seconds"),
+           "model_version": (current_bundle().version if current_bundle() else None), "live": live, "backtest": backtest,
+           "note": "Live = every prediction this service published, graded on its last version before kick-off. "
+                   "Backtest = the same model replayed on two past seasons. Hit rate = share where the most likely outcome happened; "
+                   "log loss and Brier score measure probability quality (lower is better)."}
+    publish.mkdir(parents=True, exist_ok=True)
+    (publish / "accuracy.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False))
+    return {"graded": len(graded), "backtest": backtest["source"] if backtest else None}
 
 
 if __name__ == "__main__":

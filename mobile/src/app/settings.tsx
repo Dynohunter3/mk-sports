@@ -149,7 +149,7 @@ export default function Settings() {
       <SectionHeader title="Data sources" />
       <Card style={{ gap: space.sm }}>
         <Text v="small" dim>
-          Fixtures, live scores, line-ups, match and player stats, tables, team news and headlines come from ESPN's public sports feed; crests and photos from its image service. Forecasts blend the MK Sports model with ESPN Analytics' matchup predictor and betting-market consensus where available, weighted by how accurate each has been on past matches. xG is MK Sports' own estimate from shot positions.
+          Football forecasts for the Premier League, Championship, LaLiga, Serie A, Bundesliga, Ligue 1, Eredivisie, Liga Portugal, Süper Lig, MLS and the Champions League come from the MK Sports model, published daily and graded after every match. Football data: football-data.co.uk and openfootball (public domain). Fixtures, live scores, line-ups, match and player stats, tables, team news and headlines still come from ESPN's public sports feed, as do forecasts for other competitions and sports, and crests and photos. xG in the match centre is MK Sports' own estimate from shot positions.
         </Text>
         <Item
           icon="scale-balance"

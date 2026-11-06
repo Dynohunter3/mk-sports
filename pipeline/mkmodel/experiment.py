@@ -31,7 +31,10 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "audit" / "results"
 EPS = 1e-12
 TRAIN_FROM = datetime(2020, 8, 1, tzinfo=timezone.utc).timestamp()
-CACHE = ROOT / "pipeline" / "var" / "step3_preds.npz"
+import os
+
+RUN = os.environ.get("MK_RUN", "step3")  # step5 = the Step 5 re-run (writes step5.json, its own cache)
+CACHE = ROOT / "pipeline" / "var" / f"{RUN}_preds.npz"
 
 GROUPS = {
     "elo+context": ["elo_diff", "elo_h", "elo_a", "rest_h", "rest_a", "busy_h", "busy_a", "games_h", "games_a", "lg_home", "lg_draw", "lg_goals"],
@@ -270,7 +273,7 @@ def finalize() -> None:
     out = {"generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "seed": SEED, "features": FEATURES, **meta,
            "final_rule": FINAL, "results": rep, "calibration": calib, "prediction_hash": h.hexdigest()[:16],
            "eval_matches": int(mask.sum()), "common_matches": int(common.sum())}
-    (RESULTS / "step3.json").write_text(json.dumps(out, indent=1))
+    (RESULTS / f"{RUN}.json").write_text(json.dumps(out, indent=1))
     print("hash", out["prediction_hash"])
 
 

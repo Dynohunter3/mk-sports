@@ -217,6 +217,8 @@ export type Accuracy = {
   recent: { match_id: string; home: string; away: string; score: string; predicted: Outcome; probability: number; correct: boolean; confidence: Confidence }[];
   baseline_note: string;
   by_source?: { source: string; kind: string; label: string; n: number; hit_rate: number; brier: number; log_loss: number }[];
+  football_backtest?: { key: string; name: string; n: number; new_log_loss: number; previous_log_loss: number | null; bookmaker_log_loss: number | null }[];
+  football_note?: string | null;
   source_evidence?: Record<string, Record<string, { n: number; delta: number }>>;
 };
 
