@@ -1,0 +1,367 @@
+id,kind,sport,name,country,created_by
+fb-aut-red-bull-salzburg,team,football,FC Red Bull Salzburg,aut,openfootball
+fb-aut-sturm-graz,team,football,SK Sturm Graz,aut,openfootball
+fb-bel-brugge-kv,team,football,Club Brugge KV,bel,openfootball
+fb-cro-gnk-dinamo-zagreb,team,football,GNK Dinamo Zagreb,cro,openfootball
+fb-cze-sparta-praha,team,football,AC Sparta Praha,cze,openfootball
+fb-eng-accrington-stanley,team,football,Accrington Stanley,eng,openfootball
+fb-eng-arsenal,team,football,Arsenal FC,eng,openfootball
+fb-eng-aston-villa,team,football,Aston Villa FC,eng,openfootball
+fb-eng-barnet,team,football,Barnet FC,eng,openfootball
+fb-eng-barnsley,team,football,Barnsley FC,eng,openfootball
+fb-eng-barrow,team,football,Barrow AFC,eng,openfootball
+fb-eng-birmingham-city,team,football,Birmingham City FC,eng,openfootball
+fb-eng-blackburn-rovers,team,football,Blackburn Rovers FC,eng,openfootball
+fb-eng-blackpool,team,football,Blackpool FC,eng,openfootball
+fb-eng-bolton-wanderers,team,football,Bolton Wanderers FC,eng,openfootball
+fb-eng-bournemouth,team,football,AFC Bournemouth,eng,openfootball
+fb-eng-bradford-city,team,football,Bradford City,eng,openfootball
+fb-eng-brentford,team,football,Brentford FC,eng,openfootball
+fb-eng-brighton-hove-albion,team,football,Brighton & Hove Albion FC,eng,openfootball
+fb-eng-bristol-city,team,football,Bristol City FC,eng,openfootball
+fb-eng-bristol-rovers,team,football,Bristol Rovers,eng,openfootball
+fb-eng-bromley,team,football,Bromley,eng,footballdata_uk
+fb-eng-burnley,team,football,Burnley FC,eng,openfootball
+fb-eng-burton-albion,team,football,Burton Albion,eng,openfootball
+fb-eng-cambridge-united,team,football,Cambridge United,eng,openfootball
+fb-eng-cardiff-city,team,football,Cardiff City FC,eng,openfootball
+fb-eng-carlisle,team,football,Carlisle,eng,footballdata_uk
+fb-eng-charlton-athletic,team,football,Charlton Athletic FC,eng,openfootball
+fb-eng-chelsea,team,football,Chelsea FC,eng,openfootball
+fb-eng-cheltenham,team,football,Cheltenham,eng,footballdata_uk
+fb-eng-chesterfield,team,football,Chesterfield FC,eng,openfootball
+fb-eng-colchester-united,team,football,Colchester United,eng,openfootball
+fb-eng-coventry-city,team,football,Coventry City FC,eng,openfootball
+fb-eng-crawley-town,team,football,Crawley Town,eng,openfootball
+fb-eng-crewe-alexandra,team,football,Crewe Alexandra,eng,openfootball
+fb-eng-crystal-palace,team,football,Crystal Palace FC,eng,openfootball
+fb-eng-derby-county,team,football,Derby County FC,eng,openfootball
+fb-eng-doncaster-rovers,team,football,Doncaster Rovers,eng,openfootball
+fb-eng-everton,team,football,Everton FC,eng,openfootball
+fb-eng-exeter-city,team,football,Exeter City,eng,openfootball
+fb-eng-fleetwood-town,team,football,Fleetwood Town,eng,footballdata_uk
+fb-eng-forest-green,team,football,Forest Green,eng,footballdata_uk
+fb-eng-fulham,team,football,Fulham FC,eng,openfootball
+fb-eng-gillingham,team,football,Gillingham FC,eng,openfootball
+fb-eng-grimsby-town,team,football,Grimsby Town,eng,openfootball
+fb-eng-harrogate-town,team,football,Harrogate Town,eng,openfootball
+fb-eng-huddersfield-town,team,football,Huddersfield Town AFC,eng,openfootball
+fb-eng-hull-city,team,football,Hull City AFC,eng,openfootball
+fb-eng-ipswich-town,team,football,Ipswich Town FC,eng,openfootball
+fb-eng-leeds-united,team,football,Leeds United FC,eng,openfootball
+fb-eng-leicester-city,team,football,Leicester City FC,eng,openfootball
+fb-eng-leyton-orient,team,football,Leyton Orient,eng,openfootball
+fb-eng-lincoln-city,team,football,Lincoln City FC,eng,openfootball
+fb-eng-liverpool,team,football,Liverpool FC,eng,openfootball
+fb-eng-luton-town,team,football,Luton Town FC,eng,openfootball
+fb-eng-manchester-city,team,football,Manchester City FC,eng,openfootball
+fb-eng-manchester-united,team,football,Manchester United FC,eng,openfootball
+fb-eng-mansfield-town,team,football,Mansfield Town,eng,openfootball
+fb-eng-middlesbrough,team,football,Middlesbrough FC,eng,openfootball
+fb-eng-millwall,team,football,Millwall FC,eng,openfootball
+fb-eng-milton-keynes-dons,team,football,Milton Keynes Dons,eng,footballdata_uk
+fb-eng-morecambe,team,football,Morecambe FC,eng,openfootball
+fb-eng-newcastle-united,team,football,Newcastle United FC,eng,openfootball
+fb-eng-newport-county,team,football,Newport County,eng,openfootball
+fb-eng-northampton-town,team,football,Northampton Town,eng,openfootball
+fb-eng-norwich-city,team,football,Norwich City FC,eng,openfootball
+fb-eng-nottingham-forest,team,football,Nottingham Forest FC,eng,openfootball
+fb-eng-notts-county,team,football,Notts County,eng,footballdata_uk
+fb-eng-oldham-athletic,team,football,Oldham Athletic,eng,openfootball
+fb-eng-oxford-united,team,football,Oxford United FC,eng,openfootball
+fb-eng-peterborough-united,team,football,Peterborough United,eng,openfootball
+fb-eng-plymouth-argyle,team,football,Plymouth Argyle FC,eng,openfootball
+fb-eng-port-vale,team,football,Port Vale FC,eng,openfootball
+fb-eng-portsmouth,team,football,Portsmouth FC,eng,openfootball
+fb-eng-preston-north-end,team,football,Preston North End FC,eng,openfootball
+fb-eng-queens-park-rangers,team,football,Queens Park Rangers FC,eng,openfootball
+fb-eng-reading,team,football,Reading FC,eng,openfootball
+fb-eng-rochdale,team,football,Rochdale,eng,footballdata_uk
+fb-eng-rotherham-united,team,football,Rotherham United FC,eng,openfootball
+fb-eng-salford-city,team,football,Salford City,eng,openfootball
+fb-eng-sheffield-united,team,football,Sheffield United FC,eng,openfootball
+fb-eng-sheffield-wednesday,team,football,Sheffield Wednesday FC,eng,openfootball
+fb-eng-shrewsbury-town,team,football,Shrewsbury Town,eng,openfootball
+fb-eng-southampton,team,football,Southampton FC,eng,openfootball
+fb-eng-stevenage,team,football,Stevenage FC,eng,openfootball
+fb-eng-stockport-county,team,football,Stockport County,eng,openfootball
+fb-eng-stoke-city,team,football,Stoke City FC,eng,openfootball
+fb-eng-sunderland,team,football,Sunderland AFC,eng,openfootball
+fb-eng-sutton,team,football,Sutton,eng,footballdata_uk
+fb-eng-swansea-city,team,football,Swansea City AFC,eng,openfootball
+fb-eng-swindon-town,team,football,Swindon Town,eng,openfootball
+fb-eng-tottenham-hotspur,team,football,Tottenham Hotspur FC,eng,openfootball
+fb-eng-tranmere-rovers,team,football,Tranmere Rovers,eng,openfootball
+fb-eng-walsall,team,football,Walsall FC,eng,openfootball
+fb-eng-watford,team,football,Watford FC,eng,openfootball
+fb-eng-west-bromwich-albion,team,football,West Bromwich Albion FC,eng,openfootball
+fb-eng-west-ham-united,team,football,West Ham United FC,eng,openfootball
+fb-eng-wigan-athletic,team,football,Wigan Athletic,eng,openfootball
+fb-eng-wimbledon,team,football,AFC Wimbledon,eng,openfootball
+fb-eng-wolverhampton-wanderers,team,football,Wolverhampton Wanderers FC,eng,openfootball
+fb-eng-wrexham,team,football,Wrexham AFC,eng,openfootball
+fb-eng-wycombe-wanderers,team,football,Wycombe Wanderers,eng,openfootball
+fb-eng-york,team,football,York,eng,footballdata_uk
+fb-esp-almeria,team,football,UD Almería,esp,openfootball
+fb-esp-athletic,team,football,Athletic Club,esp,openfootball
+fb-esp-atletico-madrid,team,football,Club Atlético de Madrid,esp,openfootball
+fb-esp-barcelona,team,football,FC Barcelona,esp,openfootball
+fb-esp-cadiz,team,football,Cádiz CF,esp,openfootball
+fb-esp-celta-vigo,team,football,RC Celta de Vigo,esp,openfootball
+fb-esp-deportivo-alaves,team,football,Deportivo Alavés,esp,openfootball
+fb-esp-deportivo-coruna,team,football,RC Deportivo La Coruña,esp,openfootball
+fb-esp-elche,team,football,Elche CF,esp,openfootball
+fb-esp-espanyol-barcelona,team,football,RCD Espanyol de Barcelona,esp,openfootball
+fb-esp-getafe,team,football,Getafe CF,esp,openfootball
+fb-esp-girona,team,football,Girona FC,esp,openfootball
+fb-esp-granada,team,football,Granada CF,esp,openfootball
+fb-esp-las-palmas,team,football,UD Las Palmas,esp,openfootball
+fb-esp-leganes,team,football,CD Leganés,esp,openfootball
+fb-esp-levante,team,football,Levante UD,esp,openfootball
+fb-esp-malaga,team,football,Málaga CF,esp,openfootball
+fb-esp-mallorca,team,football,RCD Mallorca,esp,openfootball
+fb-esp-osasuna,team,football,CA Osasuna,esp,openfootball
+fb-esp-rayo-vallecano-madrid,team,football,Rayo Vallecano de Madrid,esp,openfootball
+fb-esp-real-betis-balompie,team,football,Real Betis Balompié,esp,openfootball
+fb-esp-real-madrid,team,football,Real Madrid CF,esp,openfootball
+fb-esp-real-oviedo,team,football,Real Oviedo,esp,openfootball
+fb-esp-real-racing-santander,team,football,Real Racing Club de Santander,esp,openfootball
+fb-esp-real-sociedad-futbol,team,football,Real Sociedad de Fútbol,esp,openfootball
+fb-esp-real-valladolid,team,football,Real Valladolid CF,esp,openfootball
+fb-esp-sevilla,team,football,Sevilla FC,esp,openfootball
+fb-esp-valencia,team,football,Valencia CF,esp,openfootball
+fb-esp-villarreal,team,football,Villarreal CF,esp,openfootball
+fb-fra-aj-auxerre,team,football,AJ Auxerre,fra,openfootball
+fb-fra-angers-sco,team,football,Angers SCO,fra,openfootball
+fb-fra-brestois,team,football,Stade Brestois 29,fra,openfootball
+fb-fra-clermont-foot,team,football,Clermont Foot 63,fra,openfootball
+fb-fra-es-troyes,team,football,ES Troyes AC,fra,openfootball
+fb-fra-le-havre,team,football,Le Havre AC,fra,openfootball
+fb-fra-le-mans,team,football,Le Mans FC,fra,openfootball
+fb-fra-lille-osc,team,football,Lille OSC,fra,openfootball
+fb-fra-lorient,team,football,FC Lorient,fra,openfootball
+fb-fra-metz,team,football,FC Metz,fra,openfootball
+fb-fra-monaco,team,football,AS Monaco FC,fra,openfootball
+fb-fra-montpellier-hsc,team,football,Montpellier HSC,fra,openfootball
+fb-fra-nantes,team,football,FC Nantes,fra,openfootball
+fb-fra-nice,team,football,OGC Nice,fra,openfootball
+fb-fra-olympique-lyonnais,team,football,Olympique Lyonnais,fra,openfootball
+fb-fra-olympique-marseille,team,football,Olympique de Marseille,fra,openfootball
+fb-fra-paris,team,football,Paris FC,fra,openfootball
+fb-fra-paris-saint-germain,team,football,Paris Saint-Germain FC,fra,openfootball
+fb-fra-racing-lens,team,football,Racing Club de Lens,fra,openfootball
+fb-fra-reims,team,football,Stade de Reims,fra,openfootball
+fb-fra-rennais,team,football,Stade Rennais FC 1901,fra,openfootball
+fb-fra-saint-etienne,team,football,AS Saint-Étienne,fra,openfootball
+fb-fra-strasbourg-alsace,team,football,RC Strasbourg Alsace,fra,openfootball
+fb-fra-toulouse,team,football,Toulouse FC,fra,openfootball
+fb-ger-augsburg,team,football,FC Augsburg,ger,openfootball
+fb-ger-bayer-leverkusen,team,football,Bayer 04 Leverkusen,ger,openfootball
+fb-ger-bayern-munchen,team,football,FC Bayern München,ger,openfootball
+fb-ger-bochum,team,football,VfL Bochum 1848,ger,openfootball
+fb-ger-borussia-dortmund,team,football,Borussia Dortmund,ger,openfootball
+fb-ger-borussia-monchengladbach,team,football,Borussia Mönchengladbach,ger,openfootball
+fb-ger-darmstadt,team,football,SV Darmstadt 98,ger,openfootball
+fb-ger-eintracht-frankfurt,team,football,Eintracht Frankfurt,ger,openfootball
+fb-ger-elversberg,team,football,SV 07 Elversberg,ger,openfootball
+fb-ger-freiburg,team,football,SC Freiburg,ger,openfootball
+fb-ger-fsv-mainz,team,football,1. FSV Mainz 05,ger,openfootball
+fb-ger-hamburger,team,football,Hamburger SV,ger,openfootball
+fb-ger-heidenheim,team,football,1. FC Heidenheim 1846,ger,openfootball
+fb-ger-hoffenheim,team,football,TSG 1899 Hoffenheim,ger,openfootball
+fb-ger-holstein-kiel,team,football,Holstein Kiel,ger,openfootball
+fb-ger-koln,team,football,1. FC Köln,ger,openfootball
+fb-ger-paderborn,team,football,SC Paderborn 07,ger,openfootball
+fb-ger-rb-leipzig,team,football,RB Leipzig,ger,openfootball
+fb-ger-saint-pauli,team,football,FC St. Pauli 1910,ger,openfootball
+fb-ger-schalke,team,football,FC Schalke 04,ger,openfootball
+fb-ger-stuttgart,team,football,VfB Stuttgart,ger,openfootball
+fb-ger-union-berlin,team,football,1. FC Union Berlin,ger,openfootball
+fb-ger-werder-bremen,team,football,SV Werder Bremen,ger,openfootball
+fb-ger-wolfsburg,team,football,VfL Wolfsburg,ger,openfootball
+fb-int-algeria,team,football,Algeria,,openfootball
+fb-int-argentina,team,football,Argentina,,openfootball
+fb-int-australia,team,football,Australia,,openfootball
+fb-int-austria,team,football,Austria,,openfootball
+fb-int-belgium,team,football,Belgium,,openfootball
+fb-int-bosnia-herzegovina,team,football,Bosnia & Herzegovina,,openfootball
+fb-int-brazil,team,football,Brazil,,openfootball
+fb-int-canada,team,football,Canada,,openfootball
+fb-int-cape-verde,team,football,Cape Verde,,openfootball
+fb-int-colombia,team,football,Colombia,,openfootball
+fb-int-croatia,team,football,Croatia,,openfootball
+fb-int-curacao,team,football,Curaçao,,openfootball
+fb-int-czech-republic,team,football,Czech Republic,,openfootball
+fb-int-dr-congo,team,football,DR Congo,,openfootball
+fb-int-ecuador,team,football,Ecuador,,openfootball
+fb-int-egypt,team,football,Egypt,,openfootball
+fb-int-england,team,football,England,,openfootball
+fb-int-france,team,football,France,,openfootball
+fb-int-germany,team,football,Germany,,openfootball
+fb-int-ghana,team,football,Ghana,,openfootball
+fb-int-haiti,team,football,Haiti,,openfootball
+fb-int-iran,team,football,Iran,,openfootball
+fb-int-iraq,team,football,Iraq,,openfootball
+fb-int-ivory-coast,team,football,Ivory Coast,,openfootball
+fb-int-japan,team,football,Japan,,openfootball
+fb-int-jordan,team,football,Jordan,,openfootball
+fb-int-mexico,team,football,Mexico,,openfootball
+fb-int-morocco,team,football,Morocco,,openfootball
+fb-int-netherlands,team,football,Netherlands,,openfootball
+fb-int-new-zealand,team,football,New Zealand,,openfootball
+fb-int-norway,team,football,Norway,,openfootball
+fb-int-panama,team,football,Panama,,openfootball
+fb-int-paraguay,team,football,Paraguay,,openfootball
+fb-int-portugal,team,football,Portugal,,openfootball
+fb-int-qatar,team,football,Qatar,,openfootball
+fb-int-saudi-arabia,team,football,Saudi Arabia,,openfootball
+fb-int-scotland,team,football,Scotland,,openfootball
+fb-int-senegal,team,football,Senegal,,openfootball
+fb-int-south-africa,team,football,South Africa,,openfootball
+fb-int-south-korea,team,football,South Korea,,openfootball
+fb-int-spain,team,football,Spain,,openfootball
+fb-int-sweden,team,football,Sweden,,openfootball
+fb-int-switzerland,team,football,Switzerland,,openfootball
+fb-int-tunisia,team,football,Tunisia,,openfootball
+fb-int-turkey,team,football,Turkey,,openfootball
+fb-int-uruguay,team,football,Uruguay,,openfootball
+fb-int-usa,team,football,USA,,openfootball
+fb-int-uzbekistan,team,football,Uzbekistan,,openfootball
+fb-ita-acf-fiorentina,team,football,ACF Fiorentina,ita,openfootball
+fb-ita-atalanta-bc,team,football,Atalanta BC,ita,openfootball
+fb-ita-bologna,team,football,Bologna FC 1909,ita,openfootball
+fb-ita-cagliari,team,football,Cagliari Calcio,ita,openfootball
+fb-ita-como,team,football,Como 1907,ita,openfootball
+fb-ita-cremonese,team,football,US Cremonese,ita,openfootball
+fb-ita-empoli,team,football,Empoli FC,ita,openfootball
+fb-ita-frosinone,team,football,Frosinone Calcio,ita,openfootball
+fb-ita-genoa-cfc,team,football,Genoa CFC,ita,openfootball
+fb-ita-hellas-verona,team,football,Hellas Verona FC,ita,openfootball
+fb-ita-internazionale-milano,team,football,FC Internazionale Milano,ita,openfootball
+fb-ita-juventus,team,football,Juventus FC,ita,openfootball
+fb-ita-lecce,team,football,US Lecce,ita,openfootball
+fb-ita-milan,team,football,AC Milan,ita,openfootball
+fb-ita-monza,team,football,AC Monza,ita,openfootball
+fb-ita-napoli,team,football,SSC Napoli,ita,openfootball
+fb-ita-parma,team,football,Parma Calcio 1913,ita,openfootball
+fb-ita-pisa,team,football,AC Pisa 1909,ita,openfootball
+fb-ita-roma,team,football,AS Roma,ita,openfootball
+fb-ita-salernitana,team,football,US Salernitana 1919,ita,openfootball
+fb-ita-sassuolo,team,football,US Sassuolo Calcio,ita,openfootball
+fb-ita-ss-lazio,team,football,SS Lazio,ita,openfootball
+fb-ita-torino,team,football,Torino FC,ita,openfootball
+fb-ita-udinese,team,football,Udinese Calcio,ita,openfootball
+fb-ita-venezia,team,football,Venezia FC,ita,openfootball
+fb-mco-monaco,team,football,AS Monaco FC,mco,openfootball
+fb-ned-ado-den-haag,team,football,ADO Den Haag,ned,openfootball
+fb-ned-ajax,team,football,AFC Ajax,ned,openfootball
+fb-ned-almere-city,team,football,Almere City FC,ned,openfootball
+fb-ned-az,team,football,AZ,ned,openfootball
+fb-ned-cambuur-leeuwarden,team,football,SC Cambuur-Leeuwarden,ned,openfootball
+fb-ned-feyenoord-rotterdam,team,football,Feyenoord Rotterdam,ned,openfootball
+fb-ned-fortuna-sittard,team,football,Fortuna Sittard,ned,openfootball
+fb-ned-go-ahead-eagles,team,football,Go Ahead Eagles,ned,openfootball
+fb-ned-groningen,team,football,FC Groningen,ned,openfootball
+fb-ned-heerenveen,team,football,SC Heerenveen,ned,openfootball
+fb-ned-heracles-almelo,team,football,Heracles Almelo,ned,openfootball
+fb-ned-nac-breda,team,football,NAC Breda,ned,openfootball
+fb-ned-nec,team,football,NEC,ned,openfootball
+fb-ned-pec-zwolle,team,football,PEC Zwolle,ned,openfootball
+fb-ned-psv,team,football,PSV,ned,openfootball
+fb-ned-rkc-waalwijk,team,football,RKC Waalwijk,ned,openfootball
+fb-ned-sbv-excelsior,team,football,SBV Excelsior,ned,openfootball
+fb-ned-sbv-vitesse,team,football,SBV Vitesse,ned,openfootball
+fb-ned-sparta-rotterdam,team,football,Sparta Rotterdam,ned,openfootball
+fb-ned-telstar,team,football,Telstar 1963,ned,openfootball
+fb-ned-twente,team,football,FC Twente '65,ned,openfootball
+fb-ned-utrecht,team,football,FC Utrecht,ned,openfootball
+fb-ned-volendam,team,football,FC Volendam,ned,openfootball
+fb-ned-willem-ii-tilburg,team,football,Willem II Tilburg,ned,openfootball
+fb-por-academico-viseu,team,football,Académico de Viseu FC,por,openfootball
+fb-por-alverca,team,football,FC Alverca,por,openfootball
+fb-por-arouca,team,football,FC Arouca,por,openfootball
+fb-por-avs,team,football,AVS,por,openfootball
+fb-por-boavista,team,football,Boavista FC,por,openfootball
+fb-por-casa-pia,team,football,Casa Pia AC,por,openfootball
+fb-por-cs-maritimo,team,football,CS Marítimo,por,openfootball
+fb-por-estrela-da-amadora,team,football,CF Estrela da Amadora,por,openfootball
+fb-por-famalicao,team,football,FC Famalicão,por,openfootball
+fb-por-farense,team,football,SC Farense,por,openfootball
+fb-por-gd-chaves,team,football,GD Chaves,por,openfootball
+fb-por-gd-estoril-praia,team,football,GD Estoril Praia,por,openfootball
+fb-por-gil-vicente,team,football,Gil Vicente FC,por,openfootball
+fb-por-moreirense,team,football,Moreirense FC,por,openfootball
+fb-por-nacional,team,football,CD Nacional,por,openfootball
+fb-por-portimonense,team,football,Portimonense SC,por,openfootball
+fb-por-porto,team,football,FC Porto,por,openfootball
+fb-por-rio-ave,team,football,Rio Ave FC,por,openfootball
+fb-por-santa-clara,team,football,CD Santa Clara,por,openfootball
+fb-por-sport-lisboa-e-benfica,team,football,Sport Lisboa e Benfica,por,openfootball
+fb-por-sporting-clube-braga,team,football,Sporting Clube de Braga,por,openfootball
+fb-por-sporting-clube-portugal,team,football,Sporting Clube de Portugal,por,openfootball
+fb-por-tondela,team,football,CD Tondela,por,openfootball
+fb-por-vitoria-guimaraes,team,football,Vitória Guimarães,por,openfootball
+fb-por-vizela,team,football,FC Vizela,por,openfootball
+fb-sco-celtic,team,football,Celtic FC,sco,openfootball
+fb-srb-crvena-zvezda,team,football,FK Crvena Zvezda,srb,openfootball
+fb-sui-young-boys,team,football,BSC Young Boys,sui,openfootball
+fb-svk-slovan-bratislava,team,football,ŠK Slovan Bratislava,svk,openfootball
+fb-tur-adana-demirspor,team,football,Adana Demirspor,tur,openfootball
+fb-tur-alanyaspor,team,football,Alanyaspor,tur,openfootball
+fb-tur-amedspor,team,football,Amedspor,tur,footballdata_uk
+fb-tur-ankaragucu,team,football,Ankaragucu,tur,footballdata_uk
+fb-tur-antalyaspor,team,football,Antalyaspor,tur,openfootball
+fb-tur-besiktas,team,football,Beşiktaş,tur,openfootball
+fb-tur-bodrum,team,football,Bodrum FK,tur,openfootball
+fb-tur-caykur-rizespor,team,football,Çaykur Rizespor,tur,openfootball
+fb-tur-corum,team,football,Corum,tur,footballdata_uk
+fb-tur-erzurumspor,team,football,Erzurumspor,tur,footballdata_uk
+fb-tur-eyupspor,team,football,Eyüpspor,tur,openfootball
+fb-tur-fatih-karagumruk,team,football,Fatih Karagümrük,tur,openfootball
+fb-tur-fenerbahce,team,football,Fenerbahçe,tur,openfootball
+fb-tur-galatasaray,team,football,Galatasaray,tur,openfootball
+fb-tur-gaziantep,team,football,Gaziantep FK,tur,openfootball
+fb-tur-genclerbirligi,team,football,Gençlerbirliği,tur,openfootball
+fb-tur-goztepe,team,football,Göztepe,tur,openfootball
+fb-tur-hatayspor,team,football,Hatayspor,tur,openfootball
+fb-tur-istanbul-basaksehir,team,football,İstanbul Başakşehir,tur,openfootball
+fb-tur-istanbulspor,team,football,Istanbulspor,tur,footballdata_uk
+fb-tur-kas-mpasa,team,football,Kasımpaşa SK,tur,openfootball
+fb-tur-kayserispor,team,football,Kayserispor,tur,openfootball
+fb-tur-kocaelispor,team,football,Kocaelispor,tur,openfootball
+fb-tur-konyaspor,team,football,Konyaspor,tur,openfootball
+fb-tur-pendikspor,team,football,Pendikspor,tur,footballdata_uk
+fb-tur-samsunspor,team,football,Samsunspor,tur,openfootball
+fb-tur-sivasspor,team,football,Sivasspor,tur,openfootball
+fb-tur-trabzonspor,team,football,Trabzonspor,tur,openfootball
+fb-ukr-shakhtar-donetsk,team,football,FK Shakhtar Donetsk,ukr,openfootball
+fb-usa-atlanta-united,team,football,Atlanta United FC,usa,openfootball
+fb-usa-austin,team,football,Austin FC,usa,openfootball
+fb-usa-charlotte,team,football,Charlotte FC,usa,openfootball
+fb-usa-chicago-fire,team,football,Chicago Fire,usa,openfootball
+fb-usa-cincinnati,team,football,FC Cincinnati,usa,openfootball
+fb-usa-colorado-rapids,team,football,Colorado Rapids,usa,openfootball
+fb-usa-columbus-crew,team,football,Columbus Crew,usa,openfootball
+fb-usa-d-c-united,team,football,D.C. United,usa,openfootball
+fb-usa-dallas,team,football,FC Dallas,usa,openfootball
+fb-usa-houston-dynamo,team,football,Houston Dynamo,usa,openfootball
+fb-usa-internazionale-miami,team,football,Inter Miami CF,usa,openfootball
+fb-usa-los-angeles,team,football,Los Angeles FC,usa,openfootball
+fb-usa-los-angeles-galaxy,team,football,Los Angeles Galaxy,usa,openfootball
+fb-usa-minnesota-united,team,football,Minnesota United FC,usa,openfootball
+fb-usa-montreal,team,football,CF Montréal,usa,openfootball
+fb-usa-nashville,team,football,Nashville SC,usa,openfootball
+fb-usa-new-england-revolution,team,football,New England Revolution,usa,openfootball
+fb-usa-new-york-city,team,football,New York City FC,usa,openfootball
+fb-usa-new-york-rb,team,football,New York RB,usa,openfootball
+fb-usa-orlando-city,team,football,Orlando City,usa,openfootball
+fb-usa-philadelphia-union,team,football,Philadelphia Union,usa,openfootball
+fb-usa-portland-timbers,team,football,Portland Timbers,usa,openfootball
+fb-usa-real-salt-lake,team,football,Real Salt Lake,usa,openfootball
+fb-usa-saint-louis-city,team,football,St. Louis City SC,usa,openfootball
+fb-usa-san-diego,team,football,San Diego FC,usa,openfootball
+fb-usa-san-jose-earthquakes,team,football,San Jose Earthquakes,usa,openfootball
+fb-usa-seattle-sounders,team,football,Seattle Sounders,usa,openfootball
+fb-usa-sporting-kansas-city,team,football,Sporting Kansas City,usa,openfootball
+fb-usa-toronto,team,football,Toronto FC,usa,openfootball
+fb-usa-vancouver-whitecaps,team,football,Vancouver Whitecaps,usa,openfootball

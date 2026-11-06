@@ -1,0 +1,700 @@
+source,kind,raw,scope,entity_id,method,evidence
+footballdata_uk,team,AFC Wimbledon,eng,fb-eng-wimbledon,normalised-name,
+footballdata_uk,team,Accrington,eng,fb-eng-accrington-stanley,fixture-anchored,"votes=53 of 152 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Arsenal,eng,fb-eng-arsenal,normalised-name,
+footballdata_uk,team,Aston Villa,eng,fb-eng-aston-villa,normalised-name,
+footballdata_uk,team,Barnet,eng,fb-eng-barnet,normalised-name,
+footballdata_uk,team,Barnsley,eng,fb-eng-barnsley,normalised-name,
+footballdata_uk,team,Barrow,eng,fb-eng-barrow,normalised-name,
+footballdata_uk,team,Birmingham,eng,fb-eng-birmingham-city,fixture-anchored,"votes=76 of 105 finals, runner-up=2.5, name_sim=0.50"
+footballdata_uk,team,Blackburn,eng,fb-eng-blackburn-rovers,fixture-anchored,"votes=112.5 of 151 finals, runner-up=2.5, name_sim=0.50"
+footballdata_uk,team,Blackpool,eng,fb-eng-blackpool,normalised-name,
+footballdata_uk,team,Bolton,eng,fb-eng-bolton-wanderers,fixture-anchored,"votes=5.5 of 13 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Bournemouth,eng,fb-eng-bournemouth,normalised-name,
+footballdata_uk,team,Bradford,eng,fb-eng-bradford-city,fixture-anchored,"votes=12.5 of 59 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Brentford,eng,fb-eng-brentford,normalised-name,
+footballdata_uk,team,Brighton,eng,fb-eng-brighton-hove-albion,fixture-anchored,"votes=102 of 123 finals, runner-up=1.5, name_sim=0.33"
+footballdata_uk,team,Bristol City,eng,fb-eng-bristol-city,normalised-name,
+footballdata_uk,team,Bristol Rvs,eng,fb-eng-bristol-rovers,fixture-anchored,"votes=36 of 92 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Bromley,eng,fb-eng-bromley,created,no authority data for its seasons
+footballdata_uk,team,Burnley,eng,fb-eng-burnley,normalised-name,
+footballdata_uk,team,Burton,eng,fb-eng-burton-albion,fixture-anchored,"votes=48.5 of 152 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Cambridge,eng,fb-eng-cambridge-united,fixture-anchored,"votes=38 of 106 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Cardiff,eng,fb-eng-cardiff-city,fixture-anchored,"votes=78 of 105 finals, runner-up=2.5, name_sim=0.50"
+footballdata_uk,team,Carlisle,eng,fb-eng-carlisle,created,no authority data for its seasons
+footballdata_uk,team,Charlton,eng,fb-eng-charlton-athletic,fixture-anchored,"votes=42.5 of 59 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Chelsea,eng,fb-eng-chelsea,normalised-name,
+footballdata_uk,team,Cheltenham,eng,fb-eng-cheltenham,created,no authority data for its seasons
+footballdata_uk,team,Chesterfield,eng,fb-eng-chesterfield,normalised-name,
+footballdata_uk,team,Colchester,eng,fb-eng-colchester-united,fixture-anchored,"votes=51 of 151 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Coventry,eng,fb-eng-coventry-city,fixture-anchored,"votes=4.5 of 9 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Crawley Town,eng,fb-eng-crawley-town,normalised-name,
+footballdata_uk,team,Crewe,eng,fb-eng-crewe-alexandra,fixture-anchored,"votes=53 of 152 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Crystal Palace,eng,fb-eng-crystal-palace,normalised-name,
+footballdata_uk,team,Derby,eng,fb-eng-derby-county,fixture-anchored,"votes=82 of 105 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Doncaster,eng,fb-eng-doncaster-rovers,fixture-anchored,"votes=13 of 59 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Everton,eng,fb-eng-everton,normalised-name,
+footballdata_uk,team,Exeter,eng,fb-eng-exeter-city,fixture-anchored,"votes=51.5 of 138 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Fleetwood Town,eng,fb-eng-fleetwood-town,created,no authority data for its seasons
+footballdata_uk,team,Forest Green,eng,fb-eng-forest-green,created,no authority data for its seasons
+footballdata_uk,team,Fulham,eng,fb-eng-fulham,normalised-name,
+footballdata_uk,team,Gillingham,eng,fb-eng-gillingham,normalised-name,
+footballdata_uk,team,Grimsby,eng,fb-eng-grimsby-town,fixture-anchored,"votes=55 of 152 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Harrogate,eng,fb-eng-harrogate-town,fixture-anchored,"votes=57.5 of 138 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Huddersfield,eng,fb-eng-huddersfield-town,fixture-anchored,"votes=37 of 46 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Hull,eng,fb-eng-hull-city,fixture-anchored,"votes=4.5 of 9 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Ipswich,eng,fb-eng-ipswich-town,fixture-anchored,"votes=38 of 47 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Leeds,eng,fb-eng-leeds-united,fixture-anchored,"votes=38.5 of 47 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Leicester,eng,fb-eng-leicester-city,fixture-anchored,"votes=34 of 38 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Leyton Orient,eng,fb-eng-leyton-orient,normalised-name,
+footballdata_uk,team,Lincoln,eng,fb-eng-lincoln-city,fixture-anchored,"votes=7 of 13 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Liverpool,eng,fb-eng-liverpool,normalised-name,
+footballdata_uk,team,Luton,eng,fb-eng-luton-town,fixture-anchored,"votes=34 of 38 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Man City,eng,fb-eng-manchester-city,normalised-name,
+footballdata_uk,team,Man United,eng,fb-eng-manchester-united,normalised-name,
+footballdata_uk,team,Mansfield,eng,fb-eng-mansfield-town,fixture-anchored,"votes=55 of 104 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Middlesbrough,eng,fb-eng-middlesbrough,normalised-name,
+footballdata_uk,team,Millwall,eng,fb-eng-millwall,normalised-name,
+footballdata_uk,team,Milton Keynes Dons,eng,fb-eng-milton-keynes-dons,created,no authority data for its seasons
+footballdata_uk,team,Morecambe,eng,fb-eng-morecambe,normalised-name,
+footballdata_uk,team,Newcastle,eng,fb-eng-newcastle-united,fixture-anchored,"votes=109.5 of 123 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Newport County,eng,fb-eng-newport-county,normalised-name,
+footballdata_uk,team,Northampton,eng,fb-eng-northampton-town,fixture-anchored,"votes=55 of 138 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Norwich,eng,fb-eng-norwich-city,fixture-anchored,"votes=122 of 151 finals, runner-up=2, name_sim=0.50"
+footballdata_uk,team,Nott'm Forest,eng,fb-eng-nottingham-forest,normalised-name,
+footballdata_uk,team,Notts County,eng,fb-eng-notts-county,created,no authority data for its seasons
+footballdata_uk,team,Oldham,eng,fb-eng-oldham-athletic,fixture-anchored,"votes=15 of 59 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Oxford,eng,fb-eng-oxford-united,fixture-anchored,"votes=79 of 92 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Oxford Utd,eng,fb-eng-oxford-united,normalised-name,
+footballdata_uk,team,Peterboro,eng,fb-eng-peterborough-united,fixture-anchored,"votes=54 of 151 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Plymouth,eng,fb-eng-plymouth-argyle,fixture-anchored,"votes=79 of 92 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Port Vale,eng,fb-eng-port-vale,normalised-name,
+footballdata_uk,team,Portsmouth,eng,fb-eng-portsmouth,normalised-name,
+footballdata_uk,team,Preston,eng,fb-eng-preston-north-end,fixture-anchored,"votes=129.5 of 152 finals, runner-up=3.5, name_sim=0.33"
+footballdata_uk,team,QPR,eng,fb-eng-queens-park-rangers,fixture-anchored,"votes=132.5 of 151 finals, runner-up=2, name_sim=0.33"
+footballdata_uk,team,Reading,eng,fb-eng-reading,normalised-name,
+footballdata_uk,team,Rochdale,eng,fb-eng-rochdale,created,no authority data for its seasons
+footballdata_uk,team,Rotherham,eng,fb-eng-rotherham-united,fixture-anchored,"votes=42 of 46 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Salford,eng,fb-eng-salford-city,fixture-anchored,"votes=58 of 152 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Sheffield United,eng,fb-eng-sheffield-united,normalised-name,
+footballdata_uk,team,Sheffield Utd,eng,fb-eng-sheffield-united,normalised-name,
+footballdata_uk,team,Sheffield Weds,eng,fb-eng-sheffield-wednesday,fixture-anchored,"votes=129 of 138 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Shrewsbury,eng,fb-eng-shrewsbury-town,fixture-anchored,"votes=43 of 92 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Southampton,eng,fb-eng-southampton,normalised-name,
+footballdata_uk,team,Stevenage,eng,fb-eng-stevenage,normalised-name,
+footballdata_uk,team,Stockport,eng,fb-eng-stockport-county,fixture-anchored,"votes=58 of 106 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Stoke,eng,fb-eng-stoke-city,fixture-anchored,"votes=139.5 of 151 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Sunderland,eng,fb-eng-sunderland,normalised-name,
+footballdata_uk,team,Sutton,eng,fb-eng-sutton,created,no authority data for its seasons
+footballdata_uk,team,Swansea,eng,fb-eng-swansea-city,fixture-anchored,"votes=143 of 151 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Swindon,eng,fb-eng-swindon-town,fixture-anchored,"votes=60 of 152 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Tottenham,eng,fb-eng-tottenham-hotspur,fixture-anchored,"votes=113 of 123 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Tranmere,eng,fb-eng-tranmere-rovers,fixture-anchored,"votes=60 of 152 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Walsall,eng,fb-eng-walsall,normalised-name,
+footballdata_uk,team,Watford,eng,fb-eng-watford,normalised-name,
+footballdata_uk,team,West Brom,eng,fb-eng-west-bromwich-albion,fixture-anchored,"votes=146 of 151 finals, runner-up=0, name_sim=0.67"
+footballdata_uk,team,West Ham,eng,fb-eng-west-ham-united,fixture-anchored,"votes=111 of 114 finals, runner-up=0.5, name_sim=0.67"
+footballdata_uk,team,Wigan,eng,fb-eng-wigan-athletic,fixture-anchored,"votes=59.5 of 151 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Wolves,eng,fb-eng-wolverhampton-wanderers,fixture-anchored,"votes=114 of 114 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Wrexham,eng,fb-eng-wrexham,normalised-name,
+footballdata_uk,team,Wycombe,eng,fb-eng-wycombe-wanderers,fixture-anchored,"votes=60 of 151 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,York,eng,fb-eng-york,created,no authority data for its seasons
+footballdata_uk,team,Alaves,esp,fb-esp-deportivo-alaves,fixture-anchored,"votes=96.5 of 125 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Almeria,esp,fb-esp-almeria,normalised-name,
+footballdata_uk,team,Ath Bilbao,esp,fb-esp-athletic,fixture-anchored,"votes=99 of 124 finals, runner-up=1.5, name_sim=0.00"
+footballdata_uk,team,Ath Madrid,esp,fb-esp-atletico-madrid,fixture-anchored,"votes=103.5 of 125 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Barcelona,esp,fb-esp-barcelona,normalised-name,
+footballdata_uk,team,Betis,esp,fb-esp-real-betis-balompie,fixture-anchored,"votes=106 of 125 finals, runner-up=1, name_sim=0.33"
+footballdata_uk,team,Cadiz,esp,fb-esp-cadiz,normalised-name,
+footballdata_uk,team,Celta,esp,fb-esp-celta-vigo,fixture-anchored,"votes=109 of 125 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Elche,esp,fb-esp-elche,normalised-name,
+footballdata_uk,team,Espanol,esp,fb-esp-espanyol-barcelona,fixture-anchored,"votes=75 of 87 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Getafe,esp,fb-esp-getafe,normalised-name,
+footballdata_uk,team,Girona,esp,fb-esp-girona,normalised-name,
+footballdata_uk,team,Granada,esp,fb-esp-granada,normalised-name,
+footballdata_uk,team,La Coruna,esp,fb-esp-deportivo-coruna,fixture-anchored,"votes=7 of 11 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Las Palmas,esp,fb-esp-las-palmas,normalised-name,
+footballdata_uk,team,Leganes,esp,fb-esp-leganes,normalised-name,
+footballdata_uk,team,Levante,esp,fb-esp-levante,normalised-name,
+footballdata_uk,team,Malaga,esp,fb-esp-malaga,normalised-name,
+footballdata_uk,team,Mallorca,esp,fb-esp-mallorca,normalised-name,
+footballdata_uk,team,Osasuna,esp,fb-esp-osasuna,normalised-name,
+footballdata_uk,team,Oviedo,esp,fb-esp-real-oviedo,fixture-anchored,"votes=36 of 38 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Real Madrid,esp,fb-esp-real-madrid,normalised-name,
+footballdata_uk,team,Santander,esp,fb-esp-real-racing-santander,fixture-anchored,"votes=6.5 of 11 finals, runner-up=0, name_sim=0.33"
+footballdata_uk,team,Sevilla,esp,fb-esp-sevilla,normalised-name,
+footballdata_uk,team,Sociedad,esp,fb-esp-real-sociedad-futbol,fixture-anchored,"votes=116 of 125 finals, runner-up=1, name_sim=0.33"
+footballdata_uk,team,Valencia,esp,fb-esp-valencia,normalised-name,
+footballdata_uk,team,Valladolid,esp,fb-esp-real-valladolid,fixture-anchored,"votes=36 of 38 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Vallecano,esp,fb-esp-rayo-vallecano-madrid,fixture-anchored,"votes=120 of 124 finals, runner-up=0, name_sim=0.33"
+footballdata_uk,team,Villarreal,esp,fb-esp-villarreal,normalised-name,
+footballdata_uk,team,Angers,fra,fb-fra-angers-sco,fixture-anchored,"votes=52 of 77 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Auxerre,fra,fb-fra-aj-auxerre,fixture-anchored,"votes=54.5 of 77 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Brest,fra,fb-fra-brestois,fixture-anchored,"votes=82.5 of 111 finals, runner-up=2, name_sim=1.00"
+footballdata_uk,team,Clermont,fra,fb-fra-clermont-foot,fixture-anchored,"votes=26 of 34 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Le Havre,fra,fb-fra-le-havre,normalised-name,
+footballdata_uk,team,Le Mans,fra,fb-fra-le-mans,normalised-name,
+footballdata_uk,team,Lens,fra,fb-fra-racing-lens,fixture-anchored,"votes=86.5 of 111 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Lille,fra,fb-fra-lille-osc,fixture-anchored,"votes=89 of 111 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Lorient,fra,fb-fra-lorient,normalised-name,
+footballdata_uk,team,Lyon,fra,fb-fra-olympique-lyonnais,fixture-anchored,"votes=92.5 of 111 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Marseille,fra,fb-fra-olympique-marseille,fixture-anchored,"votes=94.5 of 111 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Metz,fra,fb-fra-metz,normalised-name,
+footballdata_uk,team,Monaco,fra,fb-fra-monaco,normalised-name,
+footballdata_uk,team,Montpellier,fra,fb-fra-montpellier-hsc,fixture-anchored,"votes=62 of 68 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Nantes,fra,fb-fra-nantes,normalised-name,
+footballdata_uk,team,Nice,fra,fb-fra-nice,normalised-name,
+footballdata_uk,team,Paris FC,fra,fb-fra-paris,normalised-name,
+footballdata_uk,team,Paris SG,fra,fb-fra-paris-saint-germain,fixture-anchored,"votes=100.5 of 111 finals, runner-up=0.5, name_sim=0.33"
+footballdata_uk,team,Reims,fra,fb-fra-reims,normalised-name,
+footballdata_uk,team,Rennes,fra,fb-fra-rennais,fixture-anchored,"votes=104 of 111 finals, runner-up=0, name_sim=1.00"
+footballdata_uk,team,St Etienne,fra,fb-fra-saint-etienne,normalised-name,
+footballdata_uk,team,Strasbourg,fra,fb-fra-strasbourg-alsace,fixture-anchored,"votes=106.5 of 111 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Toulouse,fra,fb-fra-toulouse,normalised-name,
+footballdata_uk,team,Troyes,fra,fb-fra-es-troyes,fixture-anchored,"votes=5 of 9 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Augsburg,ger,fb-ger-augsburg,normalised-name,
+footballdata_uk,team,Bayern Munich,ger,fb-ger-bayern-munchen,normalised-name,
+footballdata_uk,team,Bochum,ger,fb-ger-bochum,normalised-name,
+footballdata_uk,team,Darmstadt,ger,fb-ger-darmstadt,normalised-name,
+footballdata_uk,team,Dortmund,ger,fb-ger-borussia-dortmund,fixture-anchored,"votes=95.5 of 110 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Ein Frankfurt,ger,fb-ger-eintracht-frankfurt,normalised-name,
+footballdata_uk,team,Elversberg,ger,fb-ger-elversberg,normalised-name,
+footballdata_uk,team,FC Koln,ger,fb-ger-koln,normalised-name,
+footballdata_uk,team,Freiburg,ger,fb-ger-freiburg,normalised-name,
+footballdata_uk,team,Hamburg,ger,fb-ger-hamburger,fixture-anchored,"votes=34.5 of 42 finals, runner-up=0, name_sim=1.00"
+footballdata_uk,team,Heidenheim,ger,fb-ger-heidenheim,normalised-name,
+footballdata_uk,team,Hoffenheim,ger,fb-ger-hoffenheim,normalised-name,
+footballdata_uk,team,Holstein Kiel,ger,fb-ger-holstein-kiel,normalised-name,
+footballdata_uk,team,Leverkusen,ger,fb-ger-bayer-leverkusen,fixture-anchored,"votes=100 of 110 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,M'gladbach,ger,fb-ger-borussia-monchengladbach,fixture-anchored,"votes=102.5 of 110 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Mainz,ger,fb-ger-fsv-mainz,fixture-anchored,"votes=106 of 110 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Paderborn,ger,fb-ger-paderborn,normalised-name,
+footballdata_uk,team,RB Leipzig,ger,fb-ger-rb-leipzig,normalised-name,
+footballdata_uk,team,Schalke 04,ger,fb-ger-schalke,normalised-name,
+footballdata_uk,team,St Pauli,ger,fb-ger-saint-pauli,normalised-name,
+footballdata_uk,team,Stuttgart,ger,fb-ger-stuttgart,normalised-name,
+footballdata_uk,team,Union Berlin,ger,fb-ger-union-berlin,normalised-name,
+footballdata_uk,team,Werder Bremen,ger,fb-ger-werder-bremen,normalised-name,
+footballdata_uk,team,Wolfsburg,ger,fb-ger-wolfsburg,normalised-name,
+footballdata_uk,team,Atalanta,ita,fb-ita-atalanta-bc,fixture-anchored,"votes=103 of 124 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Bologna,ita,fb-ita-bologna,normalised-name,
+footballdata_uk,team,Cagliari,ita,fb-ita-cagliari,normalised-name,
+footballdata_uk,team,Como,ita,fb-ita-como,normalised-name,
+footballdata_uk,team,Cremonese,ita,fb-ita-cremonese,normalised-name,
+footballdata_uk,team,Empoli,ita,fb-ita-empoli,normalised-name,
+footballdata_uk,team,Fiorentina,ita,fb-ita-acf-fiorentina,fixture-anchored,"votes=106 of 124 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Frosinone,ita,fb-ita-frosinone,normalised-name,
+footballdata_uk,team,Genoa,ita,fb-ita-genoa-cfc,fixture-anchored,"votes=108.5 of 124 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Inter,ita,fb-ita-internazionale-milano,fixture-anchored,"votes=112 of 124 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Juventus,ita,fb-ita-juventus,normalised-name,
+footballdata_uk,team,Lazio,ita,fb-ita-ss-lazio,fixture-anchored,"votes=115 of 124 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Lecce,ita,fb-ita-lecce,normalised-name,
+footballdata_uk,team,Milan,ita,fb-ita-milan,normalised-name,
+footballdata_uk,team,Monza,ita,fb-ita-monza,normalised-name,
+footballdata_uk,team,Napoli,ita,fb-ita-napoli,normalised-name,
+footballdata_uk,team,Parma,ita,fb-ita-parma,normalised-name,
+footballdata_uk,team,Pisa,ita,fb-ita-pisa,normalised-name,
+footballdata_uk,team,Roma,ita,fb-ita-roma,normalised-name,
+footballdata_uk,team,Salernitana,ita,fb-ita-salernitana,normalised-name,
+footballdata_uk,team,Sassuolo,ita,fb-ita-sassuolo,normalised-name,
+footballdata_uk,team,Torino,ita,fb-ita-torino,normalised-name,
+footballdata_uk,team,Udinese,ita,fb-ita-udinese,normalised-name,
+footballdata_uk,team,Venezia,ita,fb-ita-venezia,normalised-name,
+footballdata_uk,team,Verona,ita,fb-ita-hellas-verona,fixture-anchored,"votes=113 of 114 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,AZ Alkmaar,ned,fb-ned-az,fixture-anchored,"votes=86.5 of 113 finals, runner-up=1.5, name_sim=0.50"
+footballdata_uk,team,Ajax,ned,fb-ned-ajax,normalised-name,
+footballdata_uk,team,Almere City,ned,fb-ned-almere-city,normalised-name,
+footballdata_uk,team,Cambuur,ned,fb-ned-cambuur-leeuwarden,fixture-anchored,"votes=5 of 11 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Den Haag,ned,fb-ned-ado-den-haag,fixture-anchored,"votes=6 of 11 finals, runner-up=1, name_sim=0.67"
+footballdata_uk,team,Excelsior,ned,fb-ned-sbv-excelsior,fixture-anchored,"votes=62 of 79 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Feyenoord,ned,fb-ned-feyenoord-rotterdam,fixture-anchored,"votes=92.5 of 113 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,For Sittard,ned,fb-ned-fortuna-sittard,fixture-anchored,"votes=95 of 113 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Go Ahead Eagles,ned,fb-ned-go-ahead-eagles,normalised-name,
+footballdata_uk,team,Groningen,ned,fb-ned-groningen,normalised-name,
+footballdata_uk,team,Heerenveen,ned,fb-ned-heerenveen,normalised-name,
+footballdata_uk,team,Heracles,ned,fb-ned-heracles-almelo,fixture-anchored,"votes=92 of 102 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,NAC Breda,ned,fb-ned-nac-breda,normalised-name,
+footballdata_uk,team,Nijmegen,ned,fb-ned-nec,normalised-name,
+footballdata_uk,team,PSV Eindhoven,ned,fb-ned-psv,fixture-anchored,"votes=102 of 113 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Sparta Rotterdam,ned,fb-ned-sparta-rotterdam,normalised-name,
+footballdata_uk,team,Telstar,ned,fb-ned-telstar,normalised-name,
+footballdata_uk,team,Twente,ned,fb-ned-twente,normalised-name,
+footballdata_uk,team,Utrecht,ned,fb-ned-utrecht,normalised-name,
+footballdata_uk,team,Vitesse,ned,fb-ned-sbv-vitesse,fixture-anchored,"votes=31 of 34 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Volendam,ned,fb-ned-volendam,normalised-name,
+footballdata_uk,team,Waalwijk,ned,fb-ned-rkc-waalwijk,fixture-anchored,"votes=65 of 68 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Willem II,ned,fb-ned-willem-ii-tilburg,fixture-anchored,"votes=40 of 45 finals, runner-up=0, name_sim=0.67"
+footballdata_uk,team,Zwolle,ned,fb-ned-pec-zwolle,fixture-anchored,"votes=109 of 113 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,AVS,por,fb-por-avs,normalised-name,
+footballdata_uk,team,Academico Viseu,por,fb-por-academico-viseu,normalised-name,
+footballdata_uk,team,Alverca,por,fb-por-alverca,normalised-name,
+footballdata_uk,team,Arouca,por,fb-por-arouca,normalised-name,
+footballdata_uk,team,Benfica,por,fb-por-sport-lisboa-e-benfica,fixture-anchored,"votes=92 of 112 finals, runner-up=2, name_sim=0.25"
+footballdata_uk,team,Boavista,por,fb-por-boavista,normalised-name,
+footballdata_uk,team,Casa Pia,por,fb-por-casa-pia,normalised-name,
+footballdata_uk,team,Chaves,por,fb-por-gd-chaves,fixture-anchored,"votes=29 of 34 finals, runner-up=1, name_sim=0.50"
+footballdata_uk,team,Estoril,por,fb-por-gd-estoril-praia,fixture-anchored,"votes=96.5 of 112 finals, runner-up=1, name_sim=0.33"
+footballdata_uk,team,Estrela,por,fb-por-estrela-da-amadora,fixture-anchored,"votes=99 of 112 finals, runner-up=1, name_sim=0.33"
+footballdata_uk,team,Famalicao,por,fb-por-famalicao,normalised-name,
+footballdata_uk,team,Farense,por,fb-por-farense,normalised-name,
+footballdata_uk,team,Gil Vicente,por,fb-por-gil-vicente,normalised-name,
+footballdata_uk,team,Guimaraes,por,fb-por-vitoria-guimaraes,fixture-anchored,"votes=102 of 112 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Maritimo,por,fb-por-cs-maritimo,fixture-anchored,"votes=7 of 10 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Moreirense,por,fb-por-moreirense,normalised-name,
+footballdata_uk,team,Nacional,por,fb-por-nacional,normalised-name,
+footballdata_uk,team,Portimonense,por,fb-por-portimonense,normalised-name,
+footballdata_uk,team,Porto,por,fb-por-porto,normalised-name,
+footballdata_uk,team,Rio Ave,por,fb-por-rio-ave,normalised-name,
+footballdata_uk,team,Santa Clara,por,fb-por-santa-clara,normalised-name,
+footballdata_uk,team,Sp Braga,por,fb-por-sporting-clube-braga,fixture-anchored,"votes=105 of 112 finals, runner-up=0.5, name_sim=0.67"
+footballdata_uk,team,Sp Lisbon,por,fb-por-sporting-clube-portugal,fixture-anchored,"votes=109 of 112 finals, runner-up=0, name_sim=0.33"
+footballdata_uk,team,Tondela,por,fb-por-tondela,normalised-name,
+footballdata_uk,team,Vizela,por,fb-por-vizela,normalised-name,
+footballdata_uk,team,Ad. Demirspor,tur,fb-tur-adana-demirspor,fixture-anchored,"votes=30 of 74 finals, runner-up=0.5, name_sim=0.50"
+footballdata_uk,team,Alanyaspor,tur,fb-tur-alanyaspor,normalised-name,
+footballdata_uk,team,Amedspor,tur,fb-tur-amedspor,created,no authority data for its seasons
+footballdata_uk,team,Ankaragucu,tur,fb-tur-ankaragucu,created,no authority data for its seasons
+footballdata_uk,team,Antalyaspor,tur,fb-tur-antalyaspor,normalised-name,
+footballdata_uk,team,Besiktas,tur,fb-tur-besiktas,normalised-name,
+footballdata_uk,team,Bodrumspor,tur,fb-tur-bodrum,fixture-anchored,"votes=31 of 36 finals, runner-up=1, name_sim=1.00"
+footballdata_uk,team,Buyuksehyr,tur,fb-tur-istanbul-basaksehir,fixture-anchored,"votes=42.5 of 118 finals, runner-up=1, name_sim=0.00"
+footballdata_uk,team,Corum,tur,fb-tur-corum,created,no authority data for its seasons
+footballdata_uk,team,Erzurumspor,tur,fb-tur-erzurumspor,created,no authority data for its seasons
+footballdata_uk,team,Eyupspor,tur,fb-tur-eyupspor,normalised-name,
+footballdata_uk,team,Fenerbahce,tur,fb-tur-fenerbahce,normalised-name,
+footballdata_uk,team,Galatasaray,tur,fb-tur-galatasaray,normalised-name,
+footballdata_uk,team,Gaziantep,tur,fb-tur-gaziantep,normalised-name,
+footballdata_uk,team,Genclerbirligi,tur,fb-tur-genclerbirligi,normalised-name,
+footballdata_uk,team,Goztep,tur,fb-tur-goztepe,fixture-anchored,"votes=44 of 80 finals, runner-up=0.5, name_sim=1.00"
+footballdata_uk,team,Hatayspor,tur,fb-tur-hatayspor,normalised-name,
+footballdata_uk,team,Istanbulspor,tur,fb-tur-istanbulspor,created,no authority data for its seasons
+footballdata_uk,team,Karagumruk,tur,fb-tur-fatih-karagumruk,fixture-anchored,"votes=10 of 72 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Kasimpasa,tur,fb-tur-kas-mpasa,fixture-anchored,"votes=45.5 of 118 finals, runner-up=0.5, name_sim=0.00"
+footballdata_uk,team,Kayserispor,tur,fb-tur-kayserispor,normalised-name,
+footballdata_uk,team,Kocaelispor,tur,fb-tur-kocaelispor,normalised-name,
+footballdata_uk,team,Konyaspor,tur,fb-tur-konyaspor,normalised-name,
+footballdata_uk,team,Pendikspor,tur,fb-tur-pendikspor,created,no authority data for its seasons
+footballdata_uk,team,Rizespor,tur,fb-tur-caykur-rizespor,fixture-anchored,"votes=47 of 118 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Samsunspor,tur,fb-tur-samsunspor,normalised-name,
+footballdata_uk,team,Sivasspor,tur,fb-tur-sivasspor,normalised-name,
+footballdata_uk,team,Trabzonspor,tur,fb-tur-trabzonspor,normalised-name,
+footballdata_uk,team,Atlanta Utd,usa,fb-usa-atlanta-united,normalised-name,
+footballdata_uk,team,Austin FC,usa,fb-usa-austin,normalised-name,
+footballdata_uk,team,CF Montreal,usa,fb-usa-montreal,normalised-name,
+footballdata_uk,team,Charlotte,usa,fb-usa-charlotte,normalised-name,
+footballdata_uk,team,Chicago Fire,usa,fb-usa-chicago-fire,normalised-name,
+footballdata_uk,team,Colorado Rapids,usa,fb-usa-colorado-rapids,normalised-name,
+footballdata_uk,team,Columbus Crew,usa,fb-usa-columbus-crew,normalised-name,
+footballdata_uk,team,DC United,usa,fb-usa-d-c-united,fixture-anchored,"votes=10.5 of 135 finals, runner-up=0, name_sim=1.00"
+footballdata_uk,team,FC Cincinnati,usa,fb-usa-cincinnati,normalised-name,
+footballdata_uk,team,FC Dallas,usa,fb-usa-dallas,normalised-name,
+footballdata_uk,team,Houston Dynamo,usa,fb-usa-houston-dynamo,normalised-name,
+footballdata_uk,team,Inter Miami,usa,fb-usa-internazionale-miami,normalised-name,
+footballdata_uk,team,Los Angeles FC,usa,fb-usa-los-angeles,normalised-name,
+footballdata_uk,team,Los Angeles Galaxy,usa,fb-usa-los-angeles-galaxy,normalised-name,
+footballdata_uk,team,Minnesota United,usa,fb-usa-minnesota-united,normalised-name,
+footballdata_uk,team,Nashville SC,usa,fb-usa-nashville,normalised-name,
+footballdata_uk,team,New England Revolution,usa,fb-usa-new-england-revolution,normalised-name,
+footballdata_uk,team,New York City,usa,fb-usa-new-york-city,normalised-name,
+footballdata_uk,team,New York Red Bulls,usa,fb-usa-new-york-rb,fixture-anchored,"votes=11 of 143 finals, runner-up=0, name_sim=0.50"
+footballdata_uk,team,Orlando City,usa,fb-usa-orlando-city,normalised-name,
+footballdata_uk,team,Philadelphia Union,usa,fb-usa-philadelphia-union,normalised-name,
+footballdata_uk,team,Portland Timbers,usa,fb-usa-portland-timbers,normalised-name,
+footballdata_uk,team,Real Salt Lake,usa,fb-usa-real-salt-lake,normalised-name,
+footballdata_uk,team,San Diego FC,usa,fb-usa-san-diego,normalised-name,
+footballdata_uk,team,San Jose Earthquakes,usa,fb-usa-san-jose-earthquakes,normalised-name,
+footballdata_uk,team,Seattle Sounders,usa,fb-usa-seattle-sounders,normalised-name,
+footballdata_uk,team,Sporting Kansas City,usa,fb-usa-sporting-kansas-city,normalised-name,
+footballdata_uk,team,St. Louis City,usa,fb-usa-saint-louis-city,normalised-name,
+footballdata_uk,team,Toronto FC,usa,fb-usa-toronto,normalised-name,
+footballdata_uk,team,Vancouver Whitecaps,usa,fb-usa-vancouver-whitecaps,normalised-name,
+openfootball,team,AC Milan (ITA),,fb-ita-milan,country-suffix,AC Milan in ita
+openfootball,team,AC Sparta Praha (CZE),,fb-cze-sparta-praha,created,
+openfootball,team,AS Monaco FC (MCO),,fb-mco-monaco,created,
+openfootball,team,Algeria,,fb-int-algeria,created,
+openfootball,team,Argentina,,fb-int-argentina,created,
+openfootball,team,Arsenal FC (ENG),,fb-eng-arsenal,country-suffix,Arsenal FC in eng
+openfootball,team,Aston Villa FC (ENG),,fb-eng-aston-villa,country-suffix,Aston Villa FC in eng
+openfootball,team,Atalanta BC (ITA),,fb-ita-atalanta-bc,country-suffix,Atalanta BC in ita
+openfootball,team,Australia,,fb-int-australia,created,
+openfootball,team,Austria,,fb-int-austria,created,
+openfootball,team,BSC Young Boys (SUI),,fb-sui-young-boys,created,
+openfootball,team,Bayer 04 Leverkusen (GER),,fb-ger-bayer-leverkusen,country-suffix,Bayer 04 Leverkusen in ger
+openfootball,team,Belgium,,fb-int-belgium,created,
+openfootball,team,Bologna FC 1909 (ITA),,fb-ita-bologna,country-suffix,Bologna FC 1909 in ita
+openfootball,team,Borussia Dortmund (GER),,fb-ger-borussia-dortmund,country-suffix,Borussia Dortmund in ger
+openfootball,team,Bosnia & Herzegovina,,fb-int-bosnia-herzegovina,created,
+openfootball,team,Brazil,,fb-int-brazil,created,
+openfootball,team,Canada,,fb-int-canada,created,
+openfootball,team,Cape Verde,,fb-int-cape-verde,created,
+openfootball,team,Celtic FC (SCO),,fb-sco-celtic,created,
+openfootball,team,Club Atlético de Madrid (ESP),,fb-esp-atletico-madrid,country-suffix,Club Atlético de Madrid in esp
+openfootball,team,Club Brugge KV (BEL),,fb-bel-brugge-kv,created,
+openfootball,team,Colombia,,fb-int-colombia,created,
+openfootball,team,Croatia,,fb-int-croatia,created,
+openfootball,team,Curaçao,,fb-int-curacao,created,
+openfootball,team,Czech Republic,,fb-int-czech-republic,created,
+openfootball,team,DR Congo,,fb-int-dr-congo,created,
+openfootball,team,Ecuador,,fb-int-ecuador,created,
+openfootball,team,Egypt,,fb-int-egypt,created,
+openfootball,team,England,,fb-int-england,created,
+openfootball,team,FC Barcelona (ESP),,fb-esp-barcelona,country-suffix,FC Barcelona in esp
+openfootball,team,FC Bayern München (GER),,fb-ger-bayern-munchen,country-suffix,FC Bayern München in ger
+openfootball,team,FC Internazionale Milano (ITA),,fb-ita-internazionale-milano,country-suffix,FC Internazionale Milano in ita
+openfootball,team,FC Red Bull Salzburg (AUT),,fb-aut-red-bull-salzburg,created,
+openfootball,team,FK Crvena Zvezda (SRB),,fb-srb-crvena-zvezda,created,
+openfootball,team,FK Shakhtar Donetsk (UKR),,fb-ukr-shakhtar-donetsk,created,
+openfootball,team,Feyenoord Rotterdam (NED),,fb-ned-feyenoord-rotterdam,country-suffix,Feyenoord Rotterdam in ned
+openfootball,team,France,,fb-int-france,created,
+openfootball,team,GNK Dinamo Zagreb (CRO),,fb-cro-gnk-dinamo-zagreb,created,
+openfootball,team,Germany,,fb-int-germany,created,
+openfootball,team,Ghana,,fb-int-ghana,created,
+openfootball,team,Girona FC (ESP),,fb-esp-girona,country-suffix,Girona FC in esp
+openfootball,team,Haiti,,fb-int-haiti,created,
+openfootball,team,Iran,,fb-int-iran,created,
+openfootball,team,Iraq,,fb-int-iraq,created,
+openfootball,team,Ivory Coast,,fb-int-ivory-coast,created,
+openfootball,team,Japan,,fb-int-japan,created,
+openfootball,team,Jordan,,fb-int-jordan,created,
+openfootball,team,Juventus FC (ITA),,fb-ita-juventus,country-suffix,Juventus FC in ita
+openfootball,team,Lille OSC (FRA),,fb-fra-lille-osc,country-suffix,Lille OSC in fra
+openfootball,team,Liverpool FC (ENG),,fb-eng-liverpool,country-suffix,Liverpool FC in eng
+openfootball,team,Manchester City FC (ENG),,fb-eng-manchester-city,country-suffix,Manchester City FC in eng
+openfootball,team,Mexico,,fb-int-mexico,created,
+openfootball,team,Morocco,,fb-int-morocco,created,
+openfootball,team,Netherlands,,fb-int-netherlands,created,
+openfootball,team,New Zealand,,fb-int-new-zealand,created,
+openfootball,team,Norway,,fb-int-norway,created,
+openfootball,team,PSV (NED),,fb-ned-psv,country-suffix,PSV in ned
+openfootball,team,Panama,,fb-int-panama,created,
+openfootball,team,Paraguay,,fb-int-paraguay,created,
+openfootball,team,Paris Saint-Germain FC (FRA),,fb-fra-paris-saint-germain,country-suffix,Paris Saint-Germain FC in fra
+openfootball,team,Portugal,,fb-int-portugal,created,
+openfootball,team,Qatar,,fb-int-qatar,created,
+openfootball,team,RB Leipzig (GER),,fb-ger-rb-leipzig,country-suffix,RB Leipzig in ger
+openfootball,team,Real Madrid CF (ESP),,fb-esp-real-madrid,country-suffix,Real Madrid CF in esp
+openfootball,team,SK Sturm Graz (AUT),,fb-aut-sturm-graz,created,
+openfootball,team,Saudi Arabia,,fb-int-saudi-arabia,created,
+openfootball,team,Scotland,,fb-int-scotland,created,
+openfootball,team,Senegal,,fb-int-senegal,created,
+openfootball,team,South Africa,,fb-int-south-africa,created,
+openfootball,team,South Korea,,fb-int-south-korea,created,
+openfootball,team,Spain,,fb-int-spain,created,
+openfootball,team,Sport Lisboa e Benfica (POR),,fb-por-sport-lisboa-e-benfica,country-suffix,Sport Lisboa e Benfica in por
+openfootball,team,Sporting Clube de Portugal (POR),,fb-por-sporting-clube-portugal,country-suffix,Sporting Clube de Portugal in por
+openfootball,team,Stade Brestois 29 (FRA),,fb-fra-brestois,country-suffix,Stade Brestois 29 in fra
+openfootball,team,Sweden,,fb-int-sweden,created,
+openfootball,team,Switzerland,,fb-int-switzerland,created,
+openfootball,team,Tunisia,,fb-int-tunisia,created,
+openfootball,team,Turkey,,fb-int-turkey,created,
+openfootball,team,USA,,fb-int-usa,created,
+openfootball,team,Uruguay,,fb-int-uruguay,created,
+openfootball,team,Uzbekistan,,fb-int-uzbekistan,created,
+openfootball,team,VfB Stuttgart (GER),,fb-ger-stuttgart,country-suffix,VfB Stuttgart in ger
+openfootball,team,ŠK Slovan Bratislava (SVK),,fb-svk-slovan-bratislava,created,
+openfootball,team,AFC Bournemouth,eng,fb-eng-bournemouth,created,
+openfootball,team,AFC Wimbledon,eng,fb-eng-wimbledon,created,
+openfootball,team,Accrington Stanley,eng,fb-eng-accrington-stanley,created,
+openfootball,team,Arsenal FC,eng,fb-eng-arsenal,created,
+openfootball,team,Aston Villa FC,eng,fb-eng-aston-villa,created,
+openfootball,team,Barnet FC,eng,fb-eng-barnet,created,
+openfootball,team,Barnsley FC,eng,fb-eng-barnsley,created,
+openfootball,team,Barrow AFC,eng,fb-eng-barrow,created,
+openfootball,team,Birmingham City,eng,fb-eng-birmingham-city,normalised-name,
+openfootball,team,Birmingham City FC,eng,fb-eng-birmingham-city,created,
+openfootball,team,Blackburn Rovers FC,eng,fb-eng-blackburn-rovers,created,
+openfootball,team,Blackpool FC,eng,fb-eng-blackpool,created,
+openfootball,team,Bolton Wanderers,eng,fb-eng-bolton-wanderers,normalised-name,
+openfootball,team,Bolton Wanderers FC,eng,fb-eng-bolton-wanderers,created,
+openfootball,team,Bradford City,eng,fb-eng-bradford-city,created,
+openfootball,team,Brentford FC,eng,fb-eng-brentford,created,
+openfootball,team,Brighton & Hove Albion FC,eng,fb-eng-brighton-hove-albion,created,
+openfootball,team,Bristol City FC,eng,fb-eng-bristol-city,created,
+openfootball,team,Bristol Rovers,eng,fb-eng-bristol-rovers,created,
+openfootball,team,Bromley FC,eng,fb-eng-bromley,normalised-name,
+openfootball,team,Burnley FC,eng,fb-eng-burnley,created,
+openfootball,team,Burton Albion,eng,fb-eng-burton-albion,created,
+openfootball,team,Cambridge United,eng,fb-eng-cambridge-united,created,
+openfootball,team,Cardiff City,eng,fb-eng-cardiff-city,normalised-name,
+openfootball,team,Cardiff City FC,eng,fb-eng-cardiff-city,created,
+openfootball,team,Carlisle United,eng,fb-eng-carlisle,adopted-provisional,"46 games agree by date, side and score"
+openfootball,team,Charlton Athletic,eng,fb-eng-charlton-athletic,normalised-name,
+openfootball,team,Charlton Athletic FC,eng,fb-eng-charlton-athletic,created,
+openfootball,team,Chelsea FC,eng,fb-eng-chelsea,created,
+openfootball,team,Cheltenham Town,eng,fb-eng-cheltenham,adopted-provisional,"60 games agree by date, side and score"
+openfootball,team,Chesterfield FC,eng,fb-eng-chesterfield,created,
+openfootball,team,Colchester United,eng,fb-eng-colchester-united,created,
+openfootball,team,Coventry City FC,eng,fb-eng-coventry-city,created,
+openfootball,team,Crawley Town,eng,fb-eng-crawley-town,created,
+openfootball,team,Crewe Alexandra,eng,fb-eng-crewe-alexandra,created,
+openfootball,team,Crystal Palace FC,eng,fb-eng-crystal-palace,created,
+openfootball,team,Derby County FC,eng,fb-eng-derby-county,created,
+openfootball,team,Doncaster Rovers,eng,fb-eng-doncaster-rovers,created,
+openfootball,team,Everton FC,eng,fb-eng-everton,created,
+openfootball,team,Exeter City,eng,fb-eng-exeter-city,created,
+openfootball,team,Fleetwood Town,eng,fb-eng-fleetwood-town,normalised-name,
+openfootball,team,Fulham FC,eng,fb-eng-fulham,created,
+openfootball,team,Gillingham FC,eng,fb-eng-gillingham,created,
+openfootball,team,Grimsby Town,eng,fb-eng-grimsby-town,created,
+openfootball,team,Harrogate Town,eng,fb-eng-harrogate-town,created,
+openfootball,team,Huddersfield Town,eng,fb-eng-huddersfield-town,normalised-name,
+openfootball,team,Huddersfield Town AFC,eng,fb-eng-huddersfield-town,created,
+openfootball,team,Hull City AFC,eng,fb-eng-hull-city,created,
+openfootball,team,Ipswich Town FC,eng,fb-eng-ipswich-town,created,
+openfootball,team,Leeds United FC,eng,fb-eng-leeds-united,created,
+openfootball,team,Leicester City FC,eng,fb-eng-leicester-city,created,
+openfootball,team,Leyton Orient,eng,fb-eng-leyton-orient,created,
+openfootball,team,Lincoln City,eng,fb-eng-lincoln-city,normalised-name,
+openfootball,team,Lincoln City FC,eng,fb-eng-lincoln-city,created,
+openfootball,team,Liverpool FC,eng,fb-eng-liverpool,created,
+openfootball,team,Luton Town,eng,fb-eng-luton-town,normalised-name,
+openfootball,team,Luton Town FC,eng,fb-eng-luton-town,created,
+openfootball,team,Manchester City FC,eng,fb-eng-manchester-city,created,
+openfootball,team,Manchester United FC,eng,fb-eng-manchester-united,created,
+openfootball,team,Mansfield Town,eng,fb-eng-mansfield-town,created,
+openfootball,team,Middlesbrough FC,eng,fb-eng-middlesbrough,created,
+openfootball,team,Millwall FC,eng,fb-eng-millwall,created,
+openfootball,team,Milton Keynes Dons,eng,fb-eng-milton-keynes-dons,normalised-name,
+openfootball,team,Morecambe FC,eng,fb-eng-morecambe,created,
+openfootball,team,Newcastle United FC,eng,fb-eng-newcastle-united,created,
+openfootball,team,Newport County,eng,fb-eng-newport-county,created,
+openfootball,team,Northampton Town,eng,fb-eng-northampton-town,created,
+openfootball,team,Norwich City FC,eng,fb-eng-norwich-city,created,
+openfootball,team,Nottingham Forest FC,eng,fb-eng-nottingham-forest,created,
+openfootball,team,Notts County,eng,fb-eng-notts-county,normalised-name,
+openfootball,team,Oldham Athletic,eng,fb-eng-oldham-athletic,created,
+openfootball,team,Oxford United FC,eng,fb-eng-oxford-united,created,
+openfootball,team,Peterborough United,eng,fb-eng-peterborough-united,created,
+openfootball,team,Plymouth Argyle,eng,fb-eng-plymouth-argyle,normalised-name,
+openfootball,team,Plymouth Argyle FC,eng,fb-eng-plymouth-argyle,created,
+openfootball,team,Port Vale FC,eng,fb-eng-port-vale,created,
+openfootball,team,Portsmouth FC,eng,fb-eng-portsmouth,created,
+openfootball,team,Preston North End FC,eng,fb-eng-preston-north-end,created,
+openfootball,team,Queens Park Rangers FC,eng,fb-eng-queens-park-rangers,created,
+openfootball,team,Reading FC,eng,fb-eng-reading,created,
+openfootball,team,Rotherham United,eng,fb-eng-rotherham-united,normalised-name,
+openfootball,team,Rotherham United FC,eng,fb-eng-rotherham-united,created,
+openfootball,team,Salford City,eng,fb-eng-salford-city,created,
+openfootball,team,Sheffield United FC,eng,fb-eng-sheffield-united,created,
+openfootball,team,Sheffield Wednesday FC,eng,fb-eng-sheffield-wednesday,created,
+openfootball,team,Shrewsbury Town,eng,fb-eng-shrewsbury-town,created,
+openfootball,team,Southampton FC,eng,fb-eng-southampton,created,
+openfootball,team,Stevenage FC,eng,fb-eng-stevenage,created,
+openfootball,team,Stockport County,eng,fb-eng-stockport-county,created,
+openfootball,team,Stoke City FC,eng,fb-eng-stoke-city,created,
+openfootball,team,Sunderland AFC,eng,fb-eng-sunderland,created,
+openfootball,team,Swansea City AFC,eng,fb-eng-swansea-city,created,
+openfootball,team,Swindon Town,eng,fb-eng-swindon-town,created,
+openfootball,team,Tottenham Hotspur FC,eng,fb-eng-tottenham-hotspur,created,
+openfootball,team,Tranmere Rovers,eng,fb-eng-tranmere-rovers,created,
+openfootball,team,Walsall FC,eng,fb-eng-walsall,created,
+openfootball,team,Watford FC,eng,fb-eng-watford,created,
+openfootball,team,West Bromwich Albion FC,eng,fb-eng-west-bromwich-albion,created,
+openfootball,team,West Ham United FC,eng,fb-eng-west-ham-united,created,
+openfootball,team,Wigan Athletic,eng,fb-eng-wigan-athletic,created,
+openfootball,team,Wolverhampton Wanderers FC,eng,fb-eng-wolverhampton-wanderers,created,
+openfootball,team,Wrexham AFC,eng,fb-eng-wrexham,created,
+openfootball,team,Wycombe Wanderers,eng,fb-eng-wycombe-wanderers,created,
+openfootball,team,Athletic Club,esp,fb-esp-athletic,created,
+openfootball,team,CA Osasuna,esp,fb-esp-osasuna,created,
+openfootball,team,CD Leganés,esp,fb-esp-leganes,created,
+openfootball,team,Club Atlético de Madrid,esp,fb-esp-atletico-madrid,created,
+openfootball,team,Cádiz CF,esp,fb-esp-cadiz,created,
+openfootball,team,Deportivo Alavés,esp,fb-esp-deportivo-alaves,created,
+openfootball,team,Elche CF,esp,fb-esp-elche,created,
+openfootball,team,FC Barcelona,esp,fb-esp-barcelona,created,
+openfootball,team,Getafe CF,esp,fb-esp-getafe,created,
+openfootball,team,Girona FC,esp,fb-esp-girona,created,
+openfootball,team,Granada CF,esp,fb-esp-granada,created,
+openfootball,team,Levante UD,esp,fb-esp-levante,created,
+openfootball,team,Málaga CF,esp,fb-esp-malaga,created,
+openfootball,team,RC Celta de Vigo,esp,fb-esp-celta-vigo,created,
+openfootball,team,RC Deportivo La Coruña,esp,fb-esp-deportivo-coruna,created,
+openfootball,team,RCD Espanyol de Barcelona,esp,fb-esp-espanyol-barcelona,created,
+openfootball,team,RCD Mallorca,esp,fb-esp-mallorca,created,
+openfootball,team,Rayo Vallecano de Madrid,esp,fb-esp-rayo-vallecano-madrid,created,
+openfootball,team,Real Betis Balompié,esp,fb-esp-real-betis-balompie,created,
+openfootball,team,Real Madrid CF,esp,fb-esp-real-madrid,created,
+openfootball,team,Real Oviedo,esp,fb-esp-real-oviedo,created,
+openfootball,team,Real Racing Club de Santander,esp,fb-esp-real-racing-santander,created,
+openfootball,team,Real Sociedad de Fútbol,esp,fb-esp-real-sociedad-futbol,created,
+openfootball,team,Real Valladolid CF,esp,fb-esp-real-valladolid,created,
+openfootball,team,Sevilla FC,esp,fb-esp-sevilla,created,
+openfootball,team,UD Almería,esp,fb-esp-almeria,created,
+openfootball,team,UD Las Palmas,esp,fb-esp-las-palmas,created,
+openfootball,team,Valencia CF,esp,fb-esp-valencia,created,
+openfootball,team,Villarreal CF,esp,fb-esp-villarreal,created,
+openfootball,team,AJ Auxerre,fra,fb-fra-aj-auxerre,created,
+openfootball,team,AS Monaco FC,fra,fb-fra-monaco,created,
+openfootball,team,AS Saint-Étienne,fra,fb-fra-saint-etienne,created,
+openfootball,team,Angers SCO,fra,fb-fra-angers-sco,created,
+openfootball,team,Clermont Foot 63,fra,fb-fra-clermont-foot,created,
+openfootball,team,ES Troyes AC,fra,fb-fra-es-troyes,created,
+openfootball,team,FC Lorient,fra,fb-fra-lorient,created,
+openfootball,team,FC Metz,fra,fb-fra-metz,created,
+openfootball,team,FC Nantes,fra,fb-fra-nantes,created,
+openfootball,team,Le Havre AC,fra,fb-fra-le-havre,created,
+openfootball,team,Le Mans FC,fra,fb-fra-le-mans,created,
+openfootball,team,Lille OSC,fra,fb-fra-lille-osc,created,
+openfootball,team,Montpellier HSC,fra,fb-fra-montpellier-hsc,created,
+openfootball,team,OGC Nice,fra,fb-fra-nice,created,
+openfootball,team,Olympique Lyonnais,fra,fb-fra-olympique-lyonnais,created,
+openfootball,team,Olympique de Marseille,fra,fb-fra-olympique-marseille,created,
+openfootball,team,Paris FC,fra,fb-fra-paris,created,
+openfootball,team,Paris Saint-Germain FC,fra,fb-fra-paris-saint-germain,created,
+openfootball,team,RC Strasbourg Alsace,fra,fb-fra-strasbourg-alsace,created,
+openfootball,team,Racing Club de Lens,fra,fb-fra-racing-lens,created,
+openfootball,team,Stade Brestois 29,fra,fb-fra-brestois,created,
+openfootball,team,Stade Rennais FC 1901,fra,fb-fra-rennais,created,
+openfootball,team,Stade de Reims,fra,fb-fra-reims,created,
+openfootball,team,Toulouse FC,fra,fb-fra-toulouse,created,
+openfootball,team,1. FC Heidenheim 1846,ger,fb-ger-heidenheim,created,
+openfootball,team,1. FC Köln,ger,fb-ger-koln,created,
+openfootball,team,1. FC Union Berlin,ger,fb-ger-union-berlin,created,
+openfootball,team,1. FSV Mainz 05,ger,fb-ger-fsv-mainz,created,
+openfootball,team,Bayer 04 Leverkusen,ger,fb-ger-bayer-leverkusen,created,
+openfootball,team,Borussia Dortmund,ger,fb-ger-borussia-dortmund,created,
+openfootball,team,Borussia Mönchengladbach,ger,fb-ger-borussia-monchengladbach,created,
+openfootball,team,Eintracht Frankfurt,ger,fb-ger-eintracht-frankfurt,created,
+openfootball,team,FC Augsburg,ger,fb-ger-augsburg,created,
+openfootball,team,FC Bayern München,ger,fb-ger-bayern-munchen,created,
+openfootball,team,FC Schalke 04,ger,fb-ger-schalke,created,
+openfootball,team,FC St. Pauli 1910,ger,fb-ger-saint-pauli,created,
+openfootball,team,Hamburger SV,ger,fb-ger-hamburger,created,
+openfootball,team,Holstein Kiel,ger,fb-ger-holstein-kiel,created,
+openfootball,team,RB Leipzig,ger,fb-ger-rb-leipzig,created,
+openfootball,team,SC Freiburg,ger,fb-ger-freiburg,created,
+openfootball,team,SC Paderborn 07,ger,fb-ger-paderborn,created,
+openfootball,team,SV 07 Elversberg,ger,fb-ger-elversberg,created,
+openfootball,team,SV Darmstadt 98,ger,fb-ger-darmstadt,created,
+openfootball,team,SV Werder Bremen,ger,fb-ger-werder-bremen,created,
+openfootball,team,TSG 1899 Hoffenheim,ger,fb-ger-hoffenheim,created,
+openfootball,team,VfB Stuttgart,ger,fb-ger-stuttgart,created,
+openfootball,team,VfL Bochum 1848,ger,fb-ger-bochum,created,
+openfootball,team,VfL Wolfsburg,ger,fb-ger-wolfsburg,created,
+openfootball,team,AC Milan,ita,fb-ita-milan,created,
+openfootball,team,AC Monza,ita,fb-ita-monza,created,
+openfootball,team,AC Pisa 1909,ita,fb-ita-pisa,created,
+openfootball,team,ACF Fiorentina,ita,fb-ita-acf-fiorentina,created,
+openfootball,team,AS Roma,ita,fb-ita-roma,created,
+openfootball,team,Atalanta BC,ita,fb-ita-atalanta-bc,created,
+openfootball,team,Bologna FC 1909,ita,fb-ita-bologna,created,
+openfootball,team,Cagliari Calcio,ita,fb-ita-cagliari,created,
+openfootball,team,Como 1907,ita,fb-ita-como,created,
+openfootball,team,Empoli FC,ita,fb-ita-empoli,created,
+openfootball,team,FC Internazionale Milano,ita,fb-ita-internazionale-milano,created,
+openfootball,team,Frosinone Calcio,ita,fb-ita-frosinone,created,
+openfootball,team,Genoa CFC,ita,fb-ita-genoa-cfc,created,
+openfootball,team,Hellas Verona FC,ita,fb-ita-hellas-verona,created,
+openfootball,team,Juventus FC,ita,fb-ita-juventus,created,
+openfootball,team,Parma Calcio 1913,ita,fb-ita-parma,created,
+openfootball,team,SS Lazio,ita,fb-ita-ss-lazio,created,
+openfootball,team,SSC Napoli,ita,fb-ita-napoli,created,
+openfootball,team,Torino FC,ita,fb-ita-torino,created,
+openfootball,team,US Cremonese,ita,fb-ita-cremonese,created,
+openfootball,team,US Lecce,ita,fb-ita-lecce,created,
+openfootball,team,US Salernitana 1919,ita,fb-ita-salernitana,created,
+openfootball,team,US Sassuolo Calcio,ita,fb-ita-sassuolo,created,
+openfootball,team,Udinese Calcio,ita,fb-ita-udinese,created,
+openfootball,team,Venezia FC,ita,fb-ita-venezia,created,
+openfootball,team,ADO Den Haag,ned,fb-ned-ado-den-haag,created,
+openfootball,team,AFC Ajax,ned,fb-ned-ajax,created,
+openfootball,team,AZ,ned,fb-ned-az,created,
+openfootball,team,Almere City FC,ned,fb-ned-almere-city,created,
+openfootball,team,FC Groningen,ned,fb-ned-groningen,created,
+openfootball,team,FC Twente '65,ned,fb-ned-twente,created,
+openfootball,team,FC Utrecht,ned,fb-ned-utrecht,created,
+openfootball,team,FC Volendam,ned,fb-ned-volendam,created,
+openfootball,team,Feyenoord Rotterdam,ned,fb-ned-feyenoord-rotterdam,created,
+openfootball,team,Fortuna Sittard,ned,fb-ned-fortuna-sittard,created,
+openfootball,team,Go Ahead Eagles,ned,fb-ned-go-ahead-eagles,created,
+openfootball,team,Heracles Almelo,ned,fb-ned-heracles-almelo,created,
+openfootball,team,NAC Breda,ned,fb-ned-nac-breda,created,
+openfootball,team,NEC,ned,fb-ned-nec,created,
+openfootball,team,PEC Zwolle,ned,fb-ned-pec-zwolle,created,
+openfootball,team,PSV,ned,fb-ned-psv,created,
+openfootball,team,RKC Waalwijk,ned,fb-ned-rkc-waalwijk,created,
+openfootball,team,SBV Excelsior,ned,fb-ned-sbv-excelsior,created,
+openfootball,team,SBV Vitesse,ned,fb-ned-sbv-vitesse,created,
+openfootball,team,SC Cambuur-Leeuwarden,ned,fb-ned-cambuur-leeuwarden,created,
+openfootball,team,SC Heerenveen,ned,fb-ned-heerenveen,created,
+openfootball,team,Sparta Rotterdam,ned,fb-ned-sparta-rotterdam,created,
+openfootball,team,Telstar 1963,ned,fb-ned-telstar,created,
+openfootball,team,Willem II Tilburg,ned,fb-ned-willem-ii-tilburg,created,
+openfootball,team,AVS,por,fb-por-avs,created,
+openfootball,team,Académico de Viseu FC,por,fb-por-academico-viseu,created,
+openfootball,team,Boavista FC,por,fb-por-boavista,created,
+openfootball,team,CD Nacional,por,fb-por-nacional,created,
+openfootball,team,CD Santa Clara,por,fb-por-santa-clara,created,
+openfootball,team,CD Tondela,por,fb-por-tondela,created,
+openfootball,team,CF Estrela da Amadora,por,fb-por-estrela-da-amadora,created,
+openfootball,team,CS Marítimo,por,fb-por-cs-maritimo,created,
+openfootball,team,Casa Pia AC,por,fb-por-casa-pia,created,
+openfootball,team,FC Alverca,por,fb-por-alverca,created,
+openfootball,team,FC Arouca,por,fb-por-arouca,created,
+openfootball,team,FC Famalicão,por,fb-por-famalicao,created,
+openfootball,team,FC Porto,por,fb-por-porto,created,
+openfootball,team,FC Vizela,por,fb-por-vizela,created,
+openfootball,team,GD Chaves,por,fb-por-gd-chaves,created,
+openfootball,team,GD Estoril Praia,por,fb-por-gd-estoril-praia,created,
+openfootball,team,Gil Vicente FC,por,fb-por-gil-vicente,created,
+openfootball,team,Moreirense FC,por,fb-por-moreirense,created,
+openfootball,team,Portimonense SC,por,fb-por-portimonense,created,
+openfootball,team,Rio Ave FC,por,fb-por-rio-ave,created,
+openfootball,team,SC Farense,por,fb-por-farense,created,
+openfootball,team,Sport Lisboa e Benfica,por,fb-por-sport-lisboa-e-benfica,created,
+openfootball,team,Sporting Clube de Braga,por,fb-por-sporting-clube-braga,created,
+openfootball,team,Sporting Clube de Portugal,por,fb-por-sporting-clube-portugal,created,
+openfootball,team,Vitória Guimarães,por,fb-por-vitoria-guimaraes,created,
+openfootball,team,Adana Demirspor,tur,fb-tur-adana-demirspor,created,
+openfootball,team,Alanyaspor,tur,fb-tur-alanyaspor,created,
+openfootball,team,Antalyaspor,tur,fb-tur-antalyaspor,created,
+openfootball,team,Beşiktaş,tur,fb-tur-besiktas,created,
+openfootball,team,Bodrum FK,tur,fb-tur-bodrum,created,
+openfootball,team,Eyüpspor,tur,fb-tur-eyupspor,created,
+openfootball,team,Fatih Karagümrük,tur,fb-tur-fatih-karagumruk,created,
+openfootball,team,Fenerbahçe,tur,fb-tur-fenerbahce,created,
+openfootball,team,Galatasaray,tur,fb-tur-galatasaray,created,
+openfootball,team,Gaziantep FK,tur,fb-tur-gaziantep,created,
+openfootball,team,Gençlerbirliği,tur,fb-tur-genclerbirligi,created,
+openfootball,team,Göztepe,tur,fb-tur-goztepe,created,
+openfootball,team,Hatayspor,tur,fb-tur-hatayspor,created,
+openfootball,team,Kasımpaşa SK,tur,fb-tur-kas-mpasa,created,
+openfootball,team,Kayserispor,tur,fb-tur-kayserispor,created,
+openfootball,team,Kocaelispor,tur,fb-tur-kocaelispor,created,
+openfootball,team,Konyaspor,tur,fb-tur-konyaspor,created,
+openfootball,team,Samsunspor,tur,fb-tur-samsunspor,created,
+openfootball,team,Sivasspor,tur,fb-tur-sivasspor,created,
+openfootball,team,Trabzonspor,tur,fb-tur-trabzonspor,created,
+openfootball,team,Çaykur Rizespor,tur,fb-tur-caykur-rizespor,created,
+openfootball,team,İstanbul Başakşehir,tur,fb-tur-istanbul-basaksehir,created,
+openfootball,team,Atlanta United FC,usa,fb-usa-atlanta-united,created,
+openfootball,team,Austin FC,usa,fb-usa-austin,created,
+openfootball,team,CF Montréal,usa,fb-usa-montreal,created,
+openfootball,team,Charlotte FC,usa,fb-usa-charlotte,created,
+openfootball,team,Chicago Fire,usa,fb-usa-chicago-fire,created,
+openfootball,team,Colorado Rapids,usa,fb-usa-colorado-rapids,created,
+openfootball,team,Columbus Crew,usa,fb-usa-columbus-crew,created,
+openfootball,team,D.C. United,usa,fb-usa-d-c-united,created,
+openfootball,team,FC Cincinnati,usa,fb-usa-cincinnati,created,
+openfootball,team,FC Dallas,usa,fb-usa-dallas,created,
+openfootball,team,Houston Dynamo,usa,fb-usa-houston-dynamo,created,
+openfootball,team,Inter Miami CF,usa,fb-usa-internazionale-miami,created,
+openfootball,team,Los Angeles FC,usa,fb-usa-los-angeles,created,
+openfootball,team,Los Angeles Galaxy,usa,fb-usa-los-angeles-galaxy,created,
+openfootball,team,Minnesota United FC,usa,fb-usa-minnesota-united,created,
+openfootball,team,Nashville SC,usa,fb-usa-nashville,created,
+openfootball,team,New England Revolution,usa,fb-usa-new-england-revolution,created,
+openfootball,team,New York City FC,usa,fb-usa-new-york-city,created,
+openfootball,team,New York RB,usa,fb-usa-new-york-rb,created,
+openfootball,team,Orlando City,usa,fb-usa-orlando-city,created,
+openfootball,team,Philadelphia Union,usa,fb-usa-philadelphia-union,created,
+openfootball,team,Portland Timbers,usa,fb-usa-portland-timbers,created,
+openfootball,team,Real Salt Lake,usa,fb-usa-real-salt-lake,created,
+openfootball,team,San Diego FC,usa,fb-usa-san-diego,created,
+openfootball,team,San Jose Earthquakes,usa,fb-usa-san-jose-earthquakes,created,
+openfootball,team,Seattle Sounders,usa,fb-usa-seattle-sounders,created,
+openfootball,team,Sporting Kansas City,usa,fb-usa-sporting-kansas-city,created,
+openfootball,team,St. Louis City SC,usa,fb-usa-saint-louis-city,created,
+openfootball,team,Toronto FC,usa,fb-usa-toronto,created,
+openfootball,team,Vancouver Whitecaps,usa,fb-usa-vancouver-whitecaps,created,

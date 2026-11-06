@@ -1,0 +1,520 @@
+{
+ "aliases_by_method": {
+  "footballdata_uk:created": 16,
+  "footballdata_uk:fixture-anchored": 116,
+  "footballdata_uk:normalised-name": 177,
+  "openfootball:adopted-provisional": 2,
+  "openfootball:country-suffix": 25,
+  "openfootball:created": 350,
+  "openfootball:normalised-name": 13
+ },
+ "closing_odds_spread_p_home": {
+  "matches": 16386,
+  "median": 0.0079,
+  "p90": 0.0183,
+  "share_over_8pts": 0.00085
+ },
+ "competitions": {
+  "eng.1": {
+   "both_final": 1190,
+   "canonical_matches": 1520,
+   "in_one_source_only": {
+    "openfootball": 290
+   },
+   "in_two_or_more_sources": 1230,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 1230,
+   "kickoff_within_15min": 0.9992,
+   "rows_per_source": {
+    "footballdata_uk": 1230,
+    "openfootball": 1520
+   },
+   "same_local_date": 1.0,
+   "score_agreement": 1.0,
+   "score_disagreements": 0
+  },
+  "eng.2": {
+   "both_final": 1751,
+   "canonical_matches": 2224,
+   "in_one_source_only": {
+    "footballdata_uk": 1,
+    "openfootball": 399
+   },
+   "in_two_or_more_sources": 1824,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 1824,
+   "kickoff_within_15min": 1.0,
+   "rows_per_source": {
+    "footballdata_uk": 1825,
+    "openfootball": 2223
+   },
+   "same_local_date": 1.0,
+   "score_agreement": 1.0,
+   "score_disagreements": 0
+  },
+  "eng.3": {
+   "both_final": 813,
+   "canonical_matches": 1826,
+   "in_one_source_only": {
+    "footballdata_uk": 998,
+    "openfootball": 12
+   },
+   "in_two_or_more_sources": 816,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 816,
+   "kickoff_within_15min": 0.6765,
+   "rows_per_source": {
+    "footballdata_uk": 1814,
+    "openfootball": 828
+   },
+   "same_local_date": 0.9975,
+   "score_agreement": 0.89299,
+   "score_disagreements": 87
+  },
+  "eng.4": {
+   "both_final": 826,
+   "canonical_matches": 1822,
+   "in_one_source_only": {
+    "footballdata_uk": 718,
+    "openfootball": 2
+   },
+   "in_two_or_more_sources": 1102,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 1102,
+   "kickoff_within_15min": 0.5009,
+   "rows_per_source": {
+    "footballdata_uk": 1820,
+    "openfootball": 1104
+   },
+   "same_local_date": 0.961,
+   "score_agreement": 0.88378,
+   "score_disagreements": 96
+  },
+  "esp.1": {
+   "both_final": 1199,
+   "canonical_matches": 1520,
+   "in_one_source_only": {
+    "openfootball": 271
+   },
+   "in_two_or_more_sources": 1249,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 1229,
+   "kickoff_within_15min": 1.0,
+   "rows_per_source": {
+    "footballdata_uk": 1249,
+    "openfootball": 1520
+   },
+   "same_local_date": 0.9904,
+   "score_agreement": 1.0,
+   "score_disagreements": 0
+  },
+  "fifa.world": {
+   "both_final": 0,
+   "canonical_matches": 104,
+   "in_one_source_only": {
+    "openfootball": 104
+   },
+   "in_two_or_more_sources": 0,
+   "kickoff_median_abs_diff_min": null,
+   "kickoff_pairs_exact": 0,
+   "kickoff_within_15min": null,
+   "rows_per_source": {
+    "openfootball": 104
+   },
+   "same_local_date": null,
+   "score_agreement": null,
+   "score_disagreements": 0
+  },
+  "fra.1": {
+   "both_final": 962,
+   "canonical_matches": 1224,
+   "in_one_source_only": {
+    "openfootball": 225
+   },
+   "in_two_or_more_sources": 999,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 999,
+   "kickoff_within_15min": 0.993,
+   "rows_per_source": {
+    "footballdata_uk": 999,
+    "openfootball": 1224
+   },
+   "same_local_date": 0.995,
+   "score_agreement": 1.0,
+   "score_disagreements": 0
+  },
+  "ger.1": {
+   "both_final": 954,
+   "canonical_matches": 1224,
+   "in_one_source_only": {
+    "openfootball": 234
+   },
+   "in_two_or_more_sources": 990,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 990,
+   "kickoff_within_15min": 0.999,
+   "rows_per_source": {
+    "footballdata_uk": 990,
+    "openfootball": 1224
+   },
+   "same_local_date": 1.0,
+   "score_agreement": 1.0,
+   "score_disagreements": 0
+  },
+  "ita.1": {
+   "both_final": 1180,
+   "canonical_matches": 1520,
+   "in_one_source_only": {
+    "openfootball": 280
+   },
+   "in_two_or_more_sources": 1240,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 1240,
+   "kickoff_within_15min": 0.9976,
+   "rows_per_source": {
+    "footballdata_uk": 1240,
+    "openfootball": 1520
+   },
+   "same_local_date": 1.0,
+   "score_agreement": 1.0,
+   "score_disagreements": 0
+  },
+  "ned.1": {
+   "both_final": 980,
+   "canonical_matches": 1224,
+   "in_one_source_only": {
+    "openfootball": 207
+   },
+   "in_two_or_more_sources": 1017,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 1017,
+   "kickoff_within_15min": 0.998,
+   "rows_per_source": {
+    "footballdata_uk": 1017,
+    "openfootball": 1224
+   },
+   "same_local_date": 1.0,
+   "score_agreement": 0.99898,
+   "score_disagreements": 1
+  },
+  "por.1": {
+   "both_final": 980,
+   "canonical_matches": 1224,
+   "in_one_source_only": {
+    "openfootball": 216
+   },
+   "in_two_or_more_sources": 1008,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 1007,
+   "kickoff_within_15min": 0.999,
+   "rows_per_source": {
+    "footballdata_uk": 1008,
+    "openfootball": 1224
+   },
+   "same_local_date": 0.999,
+   "score_agreement": 0.99796,
+   "score_disagreements": 2
+  },
+  "tur.1": {
+   "both_final": 437,
+   "canonical_matches": 1118,
+   "in_one_source_only": {
+    "footballdata_uk": 470
+   },
+   "in_two_or_more_sources": 648,
+   "kickoff_median_abs_diff_min": 0.0,
+   "kickoff_pairs_exact": 486,
+   "kickoff_within_15min": 0.7037,
+   "rows_per_source": {
+    "footballdata_uk": 1118,
+    "openfootball": 648
+   },
+   "same_local_date": 0.8333,
+   "score_agreement": 1.0,
+   "score_disagreements": 0
+  },
+  "uefa.champions": {
+   "both_final": 0,
+   "canonical_matches": 189,
+   "in_one_source_only": {
+    "openfootball": 189
+   },
+   "in_two_or_more_sources": 0,
+   "kickoff_median_abs_diff_min": null,
+   "kickoff_pairs_exact": 0,
+   "kickoff_within_15min": null,
+   "rows_per_source": {
+    "openfootball": 189
+   },
+   "same_local_date": null,
+   "score_agreement": null,
+   "score_disagreements": 0
+  },
+  "usa.1": {
+   "both_final": 164,
+   "canonical_matches": 2078,
+   "in_one_source_only": {
+    "footballdata_uk": 1568
+   },
+   "in_two_or_more_sources": 510,
+   "kickoff_median_abs_diff_min": null,
+   "kickoff_pairs_exact": 0,
+   "kickoff_within_15min": null,
+   "rows_per_source": {
+    "footballdata_uk": 2078,
+    "openfootball": 510
+   },
+   "same_local_date": 0.1745,
+   "score_agreement": 1.0,
+   "score_disagreements": 0
+  }
+ },
+ "conflicts": {
+  "kickoff:major": 99,
+  "kickoff:minor": 921,
+  "score:major": 186,
+  "status:minor": 1186
+ },
+ "generated_at": "2026-11-06T09:53:29+00:00",
+ "missing_results_in_source": {
+  "openfootball:eng.1/2026-27": {
+   "not_final": 40,
+   "rows": 90,
+   "share": 0.4444
+  },
+  "openfootball:eng.2/2026-27": {
+   "not_final": 61,
+   "rows": 156,
+   "share": 0.391
+  },
+  "openfootball:eng.3/2025-26": {
+   "not_final": 3,
+   "rows": 274,
+   "share": 0.0109
+  },
+  "openfootball:eng.4/2025-26": {
+   "not_final": 276,
+   "rows": 552,
+   "share": 0.5
+  },
+  "openfootball:esp.1/2024-25": {
+   "not_final": 10,
+   "rows": 380,
+   "share": 0.0263
+  },
+  "openfootball:esp.1/2026-27": {
+   "not_final": 40,
+   "rows": 109,
+   "share": 0.367
+  },
+  "openfootball:fra.1/2025-26": {
+   "not_final": 1,
+   "rows": 306,
+   "share": 0.0033
+  },
+  "openfootball:fra.1/2026-27": {
+   "not_final": 36,
+   "rows": 81,
+   "share": 0.4444
+  },
+  "openfootball:ger.1/2026-27": {
+   "not_final": 36,
+   "rows": 72,
+   "share": 0.5
+  },
+  "openfootball:ita.1/2024-25": {
+   "not_final": 10,
+   "rows": 380,
+   "share": 0.0263
+  },
+  "openfootball:ita.1/2026-27": {
+   "not_final": 50,
+   "rows": 100,
+   "share": 0.5
+  },
+  "openfootball:ned.1/2025-26": {
+   "not_final": 1,
+   "rows": 306,
+   "share": 0.0033
+  },
+  "openfootball:ned.1/2026-27": {
+   "not_final": 36,
+   "rows": 99,
+   "share": 0.3636
+  },
+  "openfootball:por.1/2026-27": {
+   "not_final": 28,
+   "rows": 90,
+   "share": 0.3111
+  },
+  "openfootball:tur.1/2024-25": {
+   "not_final": 4,
+   "rows": 342,
+   "share": 0.0117
+  },
+  "openfootball:tur.1/2025-26": {
+   "not_final": 207,
+   "rows": 306,
+   "share": 0.6765
+  },
+  "openfootball:usa.1/2025": {
+   "not_final": 346,
+   "rows": 510,
+   "share": 0.6784
+  }
+ },
+ "quarantined": [
+  {
+   "message": "276 rows quarantined: date outside season 2025-26",
+   "subject": "openfootball:eng.3/2025-26"
+  }
+ ],
+ "source_quality": [
+  {
+   "competition_id": "eng.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2023-24",
+   "shared_finals": 380,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "eng.3",
+   "demoted": 1,
+   "kickoff_disagreements": 264,
+   "score_disagreements": 87,
+   "season": "2025-26",
+   "shared_finals": 261,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "eng.4",
+   "demoted": 1,
+   "kickoff_disagreements": 550,
+   "score_disagreements": 96,
+   "season": "2025-26",
+   "shared_finals": 274,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "fra.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2023-24",
+   "shared_finals": 306,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "fra.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2025-26",
+   "shared_finals": 305,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "fra.1",
+   "demoted": 0,
+   "kickoff_disagreements": 5,
+   "score_disagreements": 0,
+   "season": "2026-27",
+   "shared_finals": 45,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "ger.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2024-25",
+   "shared_finals": 306,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "ita.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2023-24",
+   "shared_finals": 380,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "ita.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2024-25",
+   "shared_finals": 370,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "ita.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2025-26",
+   "shared_finals": 380,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "ned.1",
+   "demoted": 0,
+   "kickoff_disagreements": 0,
+   "score_disagreements": 1,
+   "season": "2023-24",
+   "shared_finals": 306,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "ned.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2024-25",
+   "shared_finals": 306,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "ned.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2025-26",
+   "shared_finals": 305,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "por.1",
+   "demoted": 0,
+   "kickoff_disagreements": 0,
+   "score_disagreements": 2,
+   "season": "2025-26",
+   "shared_finals": 306,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "por.1",
+   "demoted": 0,
+   "kickoff_disagreements": 1,
+   "score_disagreements": 0,
+   "season": "2026-27",
+   "shared_finals": 62,
+   "source": "openfootball"
+  },
+  {
+   "competition_id": "tur.1",
+   "demoted": 0,
+   "kickoff_disagreements": 144,
+   "score_disagreements": 0,
+   "season": "2025-26",
+   "shared_finals": 99,
+   "source": "openfootball"
+  }
+ ],
+ "teams": 366,
+ "unresolved": []
+}

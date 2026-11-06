@@ -1,0 +1,68 @@
+# Daily multi-source data job (Step 2). Runs on GitHub's free minutes; no server needed.
+# Keys live in the repository's Actions secrets (Settings > Secrets and variables > Actions) and
+# reach the job only as environment variables. A source without a key is skipped automatically.
+# If the health check finds a critical problem the job fails, and GitHub emails the repository owner.
+name: data-pipeline
+
+on:
+  schedule:
+    - cron: "17 4 * * *" # 04:17 UTC daily
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: data-pipeline
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: pipeline
+    env:
+      FOOTBALL_DATA_ORG_KEY: ${{ secrets.FOOTBALL_DATA_ORG_KEY }}
+      THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+      BALLDONTLIE_API_KEY: ${{ secrets.BALLDONTLIE_API_KEY }}
+      MK_ALERT_WEBHOOK: ${{ secrets.MK_ALERT_WEBHOOK }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Restore store and HTTP cache
+        uses: actions/cache@v4
+        with:
+          path: pipeline/var
+          key: mkdata-${{ github.run_id }}
+          restore-keys: mkdata-
+      - name: Tests
+        run: python -m pip install --quiet pytest && python -m pytest -q
+      - name: Fetch current season from every usable source
+        run: python -m mkdata sync --current
+      - name: Upcoming fixtures and current odds
+        run: python -m mkdata upcoming
+      - name: Internal IDs, canonical matches, conflicts
+        run: python -m mkdata link
+      - name: Ratings
+        run: python -m mkdata elo
+      - name: Cross-check and snapshot
+        run: |
+          python -m mkdata crosscheck --out var/crosscheck.json > /dev/null
+          python -m mkdata snapshot > var/snapshot.json
+      - name: Health (fails the job on critical alerts)
+        run: python -m mkdata health --status var/status.json
+      - name: Keep reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mkdata-reports
+          path: |
+            pipeline/var/status.json
+            pipeline/var/crosscheck.json
+            pipeline/var/snapshot.json
+            pipeline/registry/
+          retention-days: 30

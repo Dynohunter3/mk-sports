@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mk-sports-data"
+version = "0.1.0"
+description = "Multi-source sports data layer for the MK Sports prediction engine: adapters, internal IDs, point-in-time store, conflict rules, fallback and monitoring"
+requires-python = ">=3.10"
+# Standard library only, so it runs unchanged in a free scheduled CI job.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+mkdata = "mkdata.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["mkdata*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
