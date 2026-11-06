@@ -1,0 +1,65 @@
+{
+ "generated_at": "2026-11-06T10:45:22+00:00",
+ "matches": 7740,
+ "bands": {
+  "selection 2024-25": {
+   "high": {
+    "share": 0.8094638811980871,
+    "n": 3216,
+    "log_loss": 0.9640727492371023,
+    "excess_loss": -0.012269819283995401,
+    "gap_to_closing": 0.003277202445220414,
+    "accuracy": 0.5357587064676617
+   },
+   "medium": {
+    "share": 0.1839919456330229,
+    "n": 731,
+    "log_loss": 1.0311865135035272,
+    "excess_loss": 0.016029237517904388,
+    "gap_to_closing": 0.027901941930580567,
+    "accuracy": 0.4856361149110807
+   },
+   "low": {
+    "share": 0.006544173168890007,
+    "n": 26,
+    "log_loss": 0.9334987049880141,
+    "excess_loss": 0.07443127869991238,
+    "gap_to_closing": null,
+    "accuracy": 0.6538461538461539
+   }
+  },
+  "test 2025-26": {
+   "high": {
+    "share": 0.8417839129280594,
+    "n": 3171,
+    "log_loss": 0.9802535710203106,
+    "excess_loss": -0.007733963478140759,
+    "gap_to_closing": 0.0005296596528788845,
+    "accuracy": 0.5250709555345316
+   },
+   "medium": {
+    "share": 0.15662330767188745,
+    "n": 590,
+    "log_loss": 1.0433050099656929,
+    "excess_loss": 0.019640976866124975,
+    "gap_to_closing": 0.01790198621205254,
+    "accuracy": 0.47627118644067795
+   },
+   "low": {
+    "share": 0.0015927794000530925,
+    "n": 6,
+    "log_loss": 1.2696608466194859,
+    "excess_loss": 0.3340118212114773,
+    "gap_to_closing": 0.14163819648569484,
+    "accuracy": 0.16666666666666666
+   }
+  }
+ },
+ "reasons": {
+  "no bookmaker odds yet": 1260,
+  "no shot data for this league": 1250,
+  "component models disagree strongly": 123,
+  "sources disagree on this fixture": 2
+ },
+ "note": "excess = actual log loss minus the model's own expected log loss (entropy); gap = log loss minus closing odds log loss"
+}

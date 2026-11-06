@@ -1,0 +1,14 @@
+{
+ "_doc": "Backtest log loss per competition of the deployed rule (final (market ensemble when pre-match odds exist, else calibrated no-market ensemble)), Step 3, both seasons. monitor.accuracy_drop alerts when the rolling log loss of graded live predictions exceeds this by max(0.02, 2 standard errors).",
+ "eng.1": 0.9948,
+ "eng.2": 1.0365,
+ "esp.1": 0.9585,
+ "fra.1": 0.9645,
+ "ger.1": 0.9706,
+ "ita.1": 0.9652,
+ "ned.1": 0.96,
+ "por.1": 0.921,
+ "tur.1": 0.9399,
+ "uefa.champions": 0.9399,
+ "usa.1": 1.051
+}

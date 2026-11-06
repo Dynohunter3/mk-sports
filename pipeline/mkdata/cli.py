@@ -200,7 +200,7 @@ def cmd_snapshot(args) -> int:
 
 def cmd_health(args) -> int:
     store, *_ = _ctx(args)
-    baselines = json.loads(Path(args.baselines).read_text()) if args.baselines else {}
+    baselines = {k: v for k, v in json.loads(Path(args.baselines).read_text()).items() if not k.startswith("_")} if args.baselines else {}
     rep = monitor.check(store, time.time(), baselines)
     if args.status:
         Path(args.status).parent.mkdir(parents=True, exist_ok=True)

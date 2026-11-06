@@ -45,7 +45,9 @@ class M:
         return 0 if self.hs > self.as_ else 1 if self.hs == self.as_ else 2
 
 
-def load(path: Path = STORE, comps: list[str] | None = None) -> list[M]:
+def load(path: Path = STORE, comps: list[str] | None = None, as_of: float | None = None) -> list[M]:
+    """All canonical matches. With ``as_of``, the data exactly as it was known then: results known later
+    are blanked and odds published later are dropped (used by production and by honest replays)."""
     db = sqlite3.connect(path)
     db.row_factory = sqlite3.Row
     comps = comps or APP_LEAGUES + LOWER
@@ -55,7 +57,7 @@ def load(path: Path = STORE, comps: list[str] | None = None) -> list[M]:
         f"""SELECT match_id, competition_id, season, kickoff_utc, home_id, away_id, home_score, away_score, status,
                    result_available_at, agreement FROM matches WHERE sport='football' AND competition_id IN ({marks})
             ORDER BY kickoff_utc, match_id""", comps):
-        final = r["status"] == "final"
+        final = r["status"] == "final" and (as_of is None or (r["result_available_at"] or 1e18) < as_of)
         out[r["match_id"]] = M(r["match_id"], r["competition_id"], r["season"], r["kickoff_utc"], r["home_id"], r["away_id"],
                                r["home_score"] if final else None, r["away_score"] if final else None,
                                r["result_available_at"] if final else None, r["agreement"])
@@ -67,13 +69,21 @@ def load(path: Path = STORE, comps: list[str] | None = None) -> list[M]:
     best: dict[tuple, tuple] = {}
     rank = {"pinnacle": 0, "market_avg": 1, "bet365": 2}
     for r in db.execute("""SELECT sm.match_id, o.bookmaker, o.kind, o.home, o.draw, o.away, o.available_at FROM odds o
-                           JOIN source_matches sm ON sm.mkey=o.match_key WHERE sm.match_id IS NOT NULL AND o.kind IN ('pre','closing')
-                           AND o.bookmaker IN ('pinnacle','market_avg','bet365') AND o.draw IS NOT NULL"""):
-        k = (r["match_id"], r["kind"])
-        cand = (rank[r["bookmaker"]], devig(r["home"], r["draw"], r["away"]), r["available_at"], r["bookmaker"])
-        if k not in best or cand[0] < best[k][0]:
+                           JOIN source_matches sm ON sm.mkey=o.match_key WHERE sm.match_id IS NOT NULL AND o.kind IN ('pre','current','closing')
+                           AND o.draw IS NOT NULL"""):
+        if as_of is not None and r["available_at"] >= as_of:
+            continue
+        # 'current' (live pre-match odds, e.g. football-data.co.uk fixtures.csv) plays the role of 'pre'
+        kind = "pre" if r["kind"] in ("pre", "current") else "closing"
+        k = (r["match_id"], kind)
+        book_rank = rank.get(r["bookmaker"], 3)
+        if r["bookmaker"] == "market_max" or (kind == "closing" and book_rank == 3):
+            continue  # best-price-across-books is not a probability; closing benchmark uses known books only
+        # per kind: preferred bookmaker first, then the most recent snapshot
+        cand = (book_rank, -r["available_at"], devig(r["home"], r["draw"], r["away"]), r["available_at"], r["bookmaker"])
+        if k not in best or cand[:2] < best[k][:2]:
             best[k] = cand
-    for (mid, kind), (_, p, at, book) in best.items():
+    for (mid, kind), (_, _, p, at, book) in best.items():
         m = out.get(mid)
         if not m:
             continue

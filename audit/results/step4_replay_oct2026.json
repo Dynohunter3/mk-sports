@@ -1,0 +1,224 @@
+{
+ "bundle": "fb-2026-10-43dd4add",
+ "runs": [
+  [
+   [
+    2026,
+    10,
+    2,
+    18
+   ],
+   99,
+   99,
+   0,
+   {
+    "first prediction": 99
+   }
+  ],
+  [
+   [
+    2026,
+    10,
+    7,
+    12
+   ],
+   141,
+   58,
+   83,
+   {
+    "new results changed team ratings": 15,
+    "first prediction": 43
+   }
+  ],
+  [
+   [
+    2026,
+    10,
+    9,
+    18
+   ],
+   217,
+   162,
+   55,
+   {
+    "bookmaker odds published": 84,
+    "first prediction": 78
+   }
+  ],
+  [
+   [
+    2026,
+    10,
+    14,
+    12
+   ],
+   130,
+   130,
+   0,
+   {
+    "bookmaker odds published; new results changed team ratings": 4,
+    "new results changed team ratings": 105,
+    "first prediction": 21
+   }
+  ],
+  [
+   [
+    2026,
+    10,
+    16,
+    18
+   ],
+   194,
+   183,
+   11,
+   {
+    "bookmaker odds published": 66,
+    "bookmaker odds published; new results changed team ratings": 12,
+    "new results changed team ratings": 21,
+    "first prediction": 84
+   }
+  ],
+  [
+   [
+    2026,
+    10,
+    21,
+    12
+   ],
+   137,
+   137,
+   0,
+   {
+    "bookmaker odds published; new results changed team ratings": 1,
+    "new results changed team ratings": 99,
+    "first prediction": 37
+   }
+  ],
+  [
+   [
+    2026,
+    10,
+    23,
+    18
+   ],
+   221,
+   203,
+   18,
+   {
+    "bookmaker odds published": 76,
+    "bookmaker odds published; new results changed team ratings": 10,
+    "new results changed team ratings": 30,
+    "first prediction": 87
+   }
+  ],
+  [
+   [
+    2026,
+    10,
+    28,
+    12
+   ],
+   142,
+   142,
+   0,
+   {
+    "bookmaker odds published; new results changed team ratings": 8,
+    "new results changed team ratings": 109,
+    "first prediction": 25
+   }
+  ],
+  [
+   [
+    2026,
+    10,
+    30,
+    18
+   ],
+   192,
+   174,
+   18,
+   {
+    "bookmaker odds published": 76,
+    "bookmaker odds published; new results changed team ratings": 10,
+    "new results changed team ratings": 16,
+    "first prediction": 72
+   }
+  ]
+ ],
+ "graded": 375,
+ "model_ll": 0.9487039412446095,
+ "model_brier": 0.5598064811306467,
+ "closing_n": 375,
+ "model_ll_on_closing": 0.9487039412446095,
+ "closing_ll": 0.9431272787607471,
+ "predictions_per_match": {
+  "1": 105,
+  "2": 145,
+  "3": 291,
+  "4": 5
+ },
+ "all_competitions": {
+  "graded": 466,
+  "log_loss": 0.9609632249869551,
+  "brier": 0.568725642287391,
+  "with_closing": 466,
+  "model_ll_on_closing": 0.9609632249869551,
+  "closing_ll": 0.9542034798720168,
+  "per_competition": {
+   "eng.1": [
+    40,
+    0.9768
+   ],
+   "eng.2": [
+    73,
+    1.0038
+   ],
+   "esp.1": [
+    40,
+    0.8748
+   ],
+   "fra.1": [
+    36,
+    0.869
+   ],
+   "ger.1": [
+    36,
+    1.0688
+   ],
+   "ita.1": [
+    50,
+    0.8785
+   ],
+   "ned.1": [
+    36,
+    1.0798
+   ],
+   "por.1": [
+    28,
+    0.9278
+   ],
+   "tur.1": [
+    36,
+    0.83
+   ],
+   "usa.1": [
+    91,
+    1.0115
+   ]
+  },
+  "recompute_moves": {
+   "new results": {
+    "n": 395,
+    "mean_abs_change_p_home": 0.0119,
+    "p90": 0.0283,
+    "pick_flips": 0.0152
+   },
+   "odds published": {
+    "n": 347,
+    "mean_abs_change_p_home": 0.05,
+    "p90": 0.0989,
+    "pick_flips": 0.1556
+   }
+  }
+ }
+}

@@ -21,16 +21,14 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-import lightgbm as lgb
 import numpy as np
-from scipy.optimize import minimize
 
 from .data import APP_LEAGUES, LOWER, in_eval, load
 from .features import FEATURES, Config, EloParams, build
+from .learners import SEED, blend_probs, fit_blend, fit_gbm, fit_ordered_logit, predict_gbm, predict_ordered_logit, to_log
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "audit" / "results"
-SEED = 42
 EPS = 1e-12
 TRAIN_FROM = datetime(2020, 8, 1, tzinfo=timezone.utc).timestamp()
 CACHE = ROOT / "pipeline" / "var" / "step3_preds.npz"
@@ -103,33 +101,12 @@ def walk_forward(X, y, ms, pred_mask, fit_predict, min_train=2000):
 
 
 def ordered_logit(Xtr, ytr, Xte, ttr, start):
-    """P(outcome) from the Elo difference: home win if z > c2, away if z < c1 (z = b*diff)."""
-    d, dte = Xtr[:, 0] / 100, Xte[:, 0] / 100
-    w = np.exp(-(start - ttr) / 86400 * 0.0012)
-
-    def probs(th, dd):
-        b, c1, c2 = th[0], th[1], th[1] + math.exp(th[2])
-        z = b * dd
-        pa = 1 / (1 + np.exp(-(c1 - z)))
-        pad = 1 / (1 + np.exp(-(c2 - z)))
-        return np.stack([1 - pad, pad - pa, pa], 1)
-
-    def nll(th):
-        P = np.clip(probs(th, d), EPS, 1)
-        return -np.sum(w * np.log(P[np.arange(len(ytr)), ytr]))
-
-    th = minimize(nll, np.array([0.5, -0.3, math.log(0.6)]), method="Nelder-Mead", options={"maxiter": 2000, "xatol": 1e-6, "fatol": 1e-8}).x
-    return probs(th, dte)
+    return predict_ordered_logit(fit_ordered_logit(Xtr, ytr, ttr, start), Xte)
 
 
 def gbm_factory(cols: list[int]):
     def fp(Xtr, ytr, Xte, ttr, start):
-        w = np.exp(-(start - ttr) / 86400 * 0.0008)
-        clf = lgb.LGBMClassifier(objective="multiclass", n_estimators=350, learning_rate=0.03, num_leaves=15, min_child_samples=60,
-                                 subsample=0.8, subsample_freq=1, colsample_bytree=0.8, reg_lambda=2.0, random_state=SEED,
-                                 deterministic=True, force_row_wise=True, n_jobs=4, verbose=-1)
-        clf.fit(Xtr[:, cols], ytr, sample_weight=w)
-        return clf.predict_proba(Xte[:, cols])
+        return predict_gbm(fit_gbm(cols, Xtr, ytr, ttr, start), cols, Xte)
 
     return fp
 
@@ -156,7 +133,7 @@ def calibrate_and_blend(base: dict[str, np.ndarray], y, ms, pred_mask, names: li
     kick = np.array([m.t for m in ms])
     res_at = np.array([m.result_at or np.inf for m in ms])
     out = np.full((len(ms), 3), np.nan)
-    L = np.stack([np.log(np.clip(with_fallback(base, n, extra_fb), EPS, 1)) for n in names], 0)  # k x n x 3
+    L = np.stack([to_log(with_fallback(base, n, extra_fb)) for n in names], 0)  # k x n x 3
     avail = np.all(np.isfinite(L), axis=(0, 2))
     for yy, mm in sorted({month_key(m.t) for m, p in zip(ms, pred_mask) if p}):
         start = datetime(yy, mm, 1, tzinfo=timezone.utc).timestamp()
@@ -165,31 +142,8 @@ def calibrate_and_blend(base: dict[str, np.ndarray], y, ms, pred_mask, names: li
         te = pred_mask & avail & (kick >= start) & (kick < end)
         if not te.any():
             continue
-        k = len(names)
-        if tr.sum() < 300:
-            wts, A, c = np.ones(k) / k, np.eye(3), np.zeros(3)
-        else:
-            Ltr, ytr = L[:, tr], y[tr]
-
-            def blend(theta, Lx):
-                wv = np.exp(theta[:k]) / np.exp(theta[:k]).sum()
-                z = np.tensordot(wv, Lx, 1)
-                if calibrate:
-                    z = z * math.exp(theta[k]) + np.r_[theta[k + 1], 0.0, theta[k + 2]]
-                z = z - z.max(1, keepdims=True)
-                return np.exp(z) / np.exp(z).sum(1, keepdims=True)
-
-            def nll(theta):
-                P = np.clip(blend(theta, Ltr), EPS, 1)
-                return -np.mean(np.log(P[np.arange(len(ytr)), ytr])) + 1e-3 * np.sum(theta[k:] ** 2)
-
-            x0 = np.zeros(k + (3 if calibrate else 0))
-            th = minimize(nll, x0, method="Nelder-Mead", options={"maxiter": 4000}).x
-            out[te] = blend(th, L[:, te])
-            continue
-        z = np.tensordot(wts, L[:, te], 1)
-        z = z - z.max(1, keepdims=True)
-        out[te] = np.exp(z) / np.exp(z).sum(1, keepdims=True)
+        theta = fit_blend(L[:, tr], y[tr], calibrate)
+        out[te] = blend_probs(theta, L[:, te], calibrate)
     return out
 
 

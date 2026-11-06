@@ -209,6 +209,7 @@ class Config:
     refit_days: int = 7
     start: float = 0.0  # first kick-off for which features are produced
     use_comps: tuple = ()  # competitions whose results feed the state (default: all loaded)
+    as_of: float | None = None  # production / replays: the moment the prediction is made
 
 
 def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
@@ -232,6 +233,8 @@ def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
 
     def release(upto: float):
         nonlocal xg_coef, xg_coef_t
+        if cfg.as_of is not None:
+            upto = min(upto, cfg.as_of)  # never use a result that was not known yet at as_of
         while pending and pending[0][0] < upto:
             _, i = heapq.heappop(pending)
             m = matches[i]

@@ -49,12 +49,18 @@ jobs:
         run: python -m mkdata link
       - name: Ratings
         run: python -m mkdata elo
+      - name: Retrain the model (1st of the month only; otherwise skipped)
+        run: python -m mkmodel.production retrain --if-due
+      - name: Predict the next 10 days (writes only predictions whose inputs changed)
+        run: python -m mkmodel.production predict
+      - name: Grade finished matches
+        run: python -m mkmodel.production grade
       - name: Cross-check and snapshot
         run: |
           python -m mkdata crosscheck --out var/crosscheck.json > /dev/null
           python -m mkdata snapshot > var/snapshot.json
       - name: Health (fails the job on critical alerts)
-        run: python -m mkdata health --status var/status.json
+        run: python -m mkdata health --status var/status.json --baselines config/baselines.json
       - name: Keep reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -64,5 +70,7 @@ jobs:
             pipeline/var/status.json
             pipeline/var/crosscheck.json
             pipeline/var/snapshot.json
+            pipeline/var/publish/
+            pipeline/var/models/current.json
             pipeline/registry/
           retention-days: 30
