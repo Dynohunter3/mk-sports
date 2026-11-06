@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "predictpro-engine"
+version = "1.0.0"
+description = "Explainable sports prediction models (Elo, Poisson, net rating) for PredictPro"
+requires-python = ">=3.10"
+# The baseline models are pure Python on purpose: fast to install, easy to embed in the
+# API/worker, and trivially reproducible. Phase 3 ML dependencies live in the optional extra.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+ml = ["pandas>=2.2", "scikit-learn>=1.5", "xgboost>=2.1"]
+
+[project.scripts]
+predictpro-backtest = "predictpro_engine.backtest:main"
+
+[tool.setuptools.packages.find]
+include = ["predictpro_engine*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

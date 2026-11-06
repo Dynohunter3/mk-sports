@@ -1,0 +1,12 @@
+import { useEffect, useState } from 'react';
+
+/** Current time, re-rendering every `intervalMs` (0 = static). Used for lock countdowns. */
+export function useNow(intervalMs = 1000): number {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!intervalMs) return undefined;
+    const id = setInterval(() => setNow(Date.now()), intervalMs);
+    return () => clearInterval(id);
+  }, [intervalMs]);
+  return now;
+}

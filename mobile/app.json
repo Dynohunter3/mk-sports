@@ -1,0 +1,73 @@
+{
+  "expo": {
+    "name": "MK Sports",
+    "slug": "mk-sports",
+    "version": "1.4.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "mksports",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#060A16",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.predictpro.mobile"
+    },
+    "android": {
+      "package": "app.predictpro.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1430",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "versionCode": 6,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ],
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/favicon.png",
+      "name": "MK Sports",
+      "themeColor": "#060A16",
+      "backgroundColor": "#060A16"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-web-browser",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#060A16",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160
+        }
+      ],
+      "./plugins/withAndroidRelease",
+      "expo-image",
+      "expo-background-task",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#2CF59A",
+          "defaultChannel": "match"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}

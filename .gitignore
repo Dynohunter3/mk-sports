@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+build/
+
+# Local config & data
+.env
+*.db
+*.db-wal
+*.db-shm
+
+# Node / Expo (mobile/.gitignore has more)
+node_modules/
+.expo/
+dist/
+
+.DS_Store
+
+# Build outputs
+mobile/dist-apk/
+mobile/android/
+# Downloaded audit data (re-fetchable)
+audit/data/

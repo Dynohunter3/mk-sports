@@ -1,0 +1,405 @@
+/**
+ * Predictions on the device.
+ *
+ *  1. Ratings: a rating book per sport, replayed from the stored real results.
+ *  2. Sources: the MK Sports model, plus whatever independent forecasts exist for the
+ *     match: market consensus (prices -> probabilities), ClubElo, ESPN Analytics.
+ *  3. Blend: weights lean towards the sources that have been more accurate on the same
+ *     matches (walk-forward backtest on history + forecasts this device saw before kick-off).
+ *  4. Every pre-kick-off forecast is snapshotted and scored once the result is in.
+ */
+import {
+  argmax,
+  basketballScoreFor,
+  blend,
+  brier,
+  Confidence,
+  FinishedMatch,
+  footballScoreFor,
+  getModel,
+  isCorrect,
+  KeyFactor,
+  logLoss,
+  Outcome,
+  outcomeOf,
+  Prediction,
+  probabilities,
+  Probs,
+  SOURCE_INFO,
+  SourceForecast,
+  SourceId,
+  SourceStats,
+  sourceWeights,
+  SportModel,
+} from '@/engine';
+
+import { clubEloFor } from './clubelo';
+import type { Injury, SEvent, TeamInfo } from './espn';
+import { historyVersion, sportMatches } from './history';
+import { readKV, writeKV } from './kv';
+import { MATCH_LEAGUES, SportSlug, sportOf } from './leagues';
+
+const MODEL_VERSION = '2.1.0';
+export const PREDICTED_SPORTS: SportSlug[] = ['football', 'basketball', 'american-football', 'ice-hockey', 'baseball'];
+const hasDrawsOf = (sport: string) => !!sportOf(sport)?.hasDraws;
+const names = new Map<string, string>();
+const disabled = new Set<SourceId>();
+
+/** Settings: e.g. leave the betting-market consensus out of forecasts. */
+export function setDisabledSources(list: SourceId[]) {
+  disabled.clear();
+  list.forEach((s) => disabled.add(s));
+  books.clear();
+}
+
+export function registerTeams(teams: TeamInfo[]) {
+  for (const t of teams) names.set(t.id, t.short);
+}
+
+function modelFor(sport: SportSlug): SportModel {
+  const lp: Record<string, Record<string, number>> = {};
+  for (const l of MATCH_LEAGUES) if (l.sport === sport && l.modelParams) lp[l.slug] = l.modelParams;
+  return getModel(sport, {}, lp);
+}
+
+function toFinished(sport: SportSlug, ms: ReturnType<typeof sportMatches>): FinishedMatch[] {
+  return ms.map((m) => ({ id: `${m.league}~${m.espnId}`, date: m.date, home: `${sport}:${m.home}`, away: `${sport}:${m.away}`, homeScore: m.homeScore, awayScore: m.awayScore, competition: m.league, neutral: m.neutral }));
+}
+
+type BookEntry = { version: number; before: number | null; model: SportModel; book: ReturnType<SportModel['newBook']> };
+const books = new Map<string, BookEntry>();
+
+/** The rating book for a sport (optionally as it stood before a given kick-off). */
+export function bookFor(sport: SportSlug, before?: number): BookEntry | null {
+  const v = historyVersion();
+  const key = `${sport}|${before ?? ''}`;
+  const hit = books.get(key);
+  if (hit && hit.version === v) return hit;
+  const ms = sportMatches(sport, before);
+  if (!ms.length) return null;
+  const model = modelFor(sport);
+  const book = model.newBook();
+  book.updateMany(toFinished(sport, ms));
+  const entry = { version: v, before: before ?? null, model, book };
+  if (before !== undefined) for (const k of [...books.keys()]) if (k.startsWith(`${sport}|`) && k !== `${sport}|`) books.delete(k);
+  books.set(key, entry);
+  return entry;
+}
+
+// ------------------------------------------------------------------ source accuracy
+type EvalRecord = { id: string; sport: SportSlug; league: string; kickoff: number; home: string; away: string; score: string; outcome: Outcome; sources: Partial<Record<SourceId, Probs>>; blended: Probs; confidence: Confidence };
+type Snapshot = Omit<EvalRecord, 'outcome' | 'score'> & { at: number };
+
+let snapshots: Record<string, Snapshot> | null = null;
+let evals: EvalRecord[] | null = null;
+const SNAP_KEY = 'pred:snap:v1';
+const EVAL_KEY = 'pred:eval:v1';
+
+async function loadStores() {
+  if (!snapshots) snapshots = (await readKV<Record<string, Snapshot>>(SNAP_KEY)) ?? {};
+  if (!evals) evals = (await readKV<EvalRecord[]>(EVAL_KEY)) ?? [];
+  for (const sp of PREDICTED_SPORTS) {
+    if (!backtests.has(sp)) {
+      const saved = await readKV<Backtest>(BT_KEY(sp));
+      if (saved?.records) backtests.set(sp, saved);
+    }
+  }
+}
+export const storesReady = loadStores;
+
+type Backtest = { at: number; count: number; records: { league: string; kickoff: number; outcome: Outcome; model: Probs; market: Probs | null; confidence: Confidence }[] };
+const backtests = new Map<SportSlug, Backtest>();
+const BT_KEY = (s: SportSlug) => `pred:bt:v1:${s}`;
+const changeListeners = new Set<() => void>();
+export function onPredictionDataChange(fn: () => void) {
+  changeListeners.add(fn);
+  return () => changeListeners.delete(fn);
+}
+
+export const getBacktest = (sport: SportSlug) => backtests.get(sport) ?? null;
+
+const pendingBt = new Set<SportSlug>();
+/** Recompute in the background when stale (6h) or the history grew by 5%+; never blocks a screen. */
+export function scheduleBacktest(sport: SportSlug) {
+  if (pendingBt.has(sport)) return;
+  const cur = backtests.get(sport);
+  const count = sportMatches(sport).length;
+  if (!count) return;
+  if (cur && Date.now() - cur.at < 6 * 3600_000 && count < cur.count * 1.05) return;
+  pendingBt.add(sport);
+  setTimeout(() => {
+    try {
+      backtest(sport);
+      changeListeners.forEach((f) => f());
+    } finally {
+      pendingBt.delete(sport);
+    }
+  }, 300);
+}
+
+/** Walk-forward: every past match predicted from earlier results only (cold starts skipped). */
+export function backtest(sport: SportSlug): Backtest {
+  const ms = sportMatches(sport);
+  const fin = toFinished(sport, ms);
+  const model = modelFor(sport);
+  const book = model.newBook();
+  const records: Backtest['records'] = [];
+  fin.forEach((m, i) => {
+    const inp = book.buildInput({ home: m.home, away: m.away, kickoff: m.date, competition: m.competition, neutral: m.neutral });
+    if (Math.min(inp.home.games, inp.away.games) >= 3) {
+      const p = model.predict(inp);
+      const o = outcomeOf(m.homeScore, m.awayScore);
+      if (!(o === 'draw' && !hasDrawsOf(sport))) records.push({ league: m.competition, kickoff: m.date.getTime(), outcome: o, model: probabilities(p), market: ms[i].market, confidence: p.confidence });
+    }
+    book.update(m);
+  });
+  const bt = { at: Date.now(), count: ms.length, records };
+  backtests.set(sport, bt);
+  writeKV(BT_KEY(sport), bt);
+  return bt;
+}
+
+/** Like-for-like evidence per source: mean log-loss gap to the model on shared matches. */
+export function sourceStats(sport: SportSlug): SourceStats {
+  const acc: Partial<Record<SourceId, { n: number; sum: number }>> = {};
+  const add = (s: SourceId, p: Probs, model: Probs, o: Outcome) => {
+    const a = (acc[s] ??= { n: 0, sum: 0 });
+    a.n += 1;
+    a.sum += logLoss(p, o) - logLoss(model, o);
+  };
+  const bt = backtests.get(sport);
+  for (const r of bt?.records ?? []) if (r.market) add('market', r.market, r.model, r.outcome);
+  for (const e of evals ?? []) {
+    if (e.sport !== sport || !e.sources.model) continue;
+    for (const s of Object.keys(e.sources) as SourceId[]) if (s !== 'model' && !(s === 'market' && bt)) add(s, e.sources[s]!, e.sources.model, e.outcome);
+  }
+  return Object.fromEntries(Object.entries(acc).map(([k, v]) => [k, { n: v!.n, delta: v!.sum / v!.n }])) as SourceStats;
+}
+
+// ------------------------------------------------------------------ prediction
+export type SourceRow = { source: SourceId; label: string; description: string; probs: Probs; weight: number };
+export type FullPrediction = {
+  version: number;
+  created_at: string;
+  trigger: string;
+  model: string;
+  model_version: string;
+  probabilities: Probs;
+  predicted_score: [number, number];
+  expected: [number, number];
+  confidence: Confidence;
+  key_factors: KeyFactor[];
+  explanation: { method: string; summary: string; steps: { title: string; detail: string }[]; inputs: Record<string, unknown> };
+  versions: number;
+  correct: boolean | null;
+  sources: SourceRow[];
+};
+export type MiniPrediction = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome };
+
+const pct = (x: number | undefined) => `${Math.round((x ?? 0) * 100)}%`;
+const LEVELS: Confidence[] = ['low', 'medium', 'high'];
+
+function toAbsences(list: Injury[] | undefined) {
+  return (list ?? []).filter((i) => i.status !== 'available').map((i) => ({ player: i.player, position: i.position, importance: i.importance, reason: i.status, tag: i.importance >= 1 ? 'star' : null }));
+}
+
+export type PredictOptions = { injuries?: { home: Injury[]; away: Injury[] } | null; espnPredictor?: Probs | null; before?: number };
+
+export function predictEvent(ev: SEvent, opts: PredictOptions = {}): FullPrediction | null {
+  const entry = bookFor(ev.sport, opts.before);
+  if (!entry) return null;
+  const { model, book } = entry;
+  const sport = ev.sport;
+  const inp = book.buildInput({
+    home: ev.home.id,
+    away: ev.away.id,
+    kickoff: new Date(ev.start),
+    competition: ev.league,
+    neutral: ev.neutral,
+    homeAbsences: toAbsences(opts.injuries?.home),
+    awayAbsences: toAbsences(opts.injuries?.away),
+    homeName: ev.home.short,
+    awayName: ev.away.short,
+  });
+  const base: Prediction = model.predict(inp);
+  const hasDraws = hasDrawsOf(sport);
+  scheduleBacktest(sport);
+
+  const forecasts: SourceForecast[] = [{ source: 'model', probs: probabilities(base) }];
+  if (ev.market && !disabled.has('market')) forecasts.push({ source: 'market', probs: ev.market });
+  const elo = disabled.has('clubelo') ? null : clubEloFor(ev);
+  if (elo) forecasts.push({ source: 'clubelo', probs: elo });
+  if (opts.espnPredictor && !disabled.has('espn')) forecasts.push({ source: 'espn', probs: opts.espnPredictor });
+  const weights = sourceWeights(
+    forecasts.map((f) => f.source),
+    sourceStats(sport),
+  );
+  const blended = blend(forecasts, weights, hasDraws);
+  const fav = argmax(blended);
+
+  let score: [number, number];
+  let expected: [number, number];
+  if (sport === 'football') {
+    const r = footballScoreFor(blended, Number(base.explanation.inputs.total_goals ?? base.expectedHome + base.expectedAway));
+    score = r.score;
+    expected = [Math.round(r.lambdas[0] * 100) / 100, Math.round(r.lambdas[1] * 100) / 100];
+  } else {
+    const sigma = (model as { paramsFor: (c: string) => { sigma: number } }).paramsFor(ev.league).sigma;
+    const r = basketballScoreFor(blended, Number(base.explanation.inputs.total_points ?? base.expectedHome + base.expectedAway), sigma);
+    score = r.score;
+    expected = [Math.round(((score[0] + score[1] + r.margin) / 2) * 10) / 10, Math.round(((score[0] + score[1] - r.margin) / 2) * 10) / 10];
+  }
+
+  // confidence on the blended view
+  const top = blended[fav] ?? 0;
+  const mp = sport === 'football' ? null : (model as { paramsFor: (c: string) => { highConfidence: number; mediumConfidence: number } }).paramsFor(ev.league);
+  const [hi, mid] = sport === 'football' ? [0.6, 0.45] : [mp!.highConfidence, mp!.mediumConfidence];
+  let level = top >= hi ? 2 : top >= mid ? 1 : 0;
+  const reasons = [top >= mid ? `Favourite has a ${pct(top)} chance` : `No outcome above ${pct(mid)}: a close match`];
+  if (Math.min(inp.home.games, inp.away.games) < 5) {
+    level -= 1;
+    reasons.push('Limited recent data for one of the teams');
+  }
+  const strong = forecasts.filter((f) => (weights[f.source] ?? 0) >= 0.15);
+  if (strong.some((f) => argmax(f.probs) !== fav)) {
+    level -= 1;
+    reasons.push('The sources disagree on the favourite');
+  }
+  const confidence = LEVELS[Math.max(0, level)];
+
+  // key factors: one line on what the independent sources say, then the model's reasons
+  const ext = forecasts.filter((f) => f.source !== 'model');
+  const teamName = (o: Outcome) => (o === 'home' ? ev.home.short : o === 'away' ? ev.away.short : 'a draw');
+  const factors: KeyFactor[] = [];
+  if (ext.length) {
+    const agree = ext.filter((f) => argmax(f.probs) === fav);
+    const label = (f: SourceForecast) => (f.source === 'market' ? 'the betting market' : SOURCE_INFO[f.source].label);
+    if (agree.length) {
+      const who = agree.map(label).join(' and ');
+      const p = agree[0].probs[fav];
+      factors.push({ text: `${who[0].toUpperCase()}${who.slice(1)} also ${agree.length > 1 ? 'favour' : 'favours'} ${teamName(fav)}${agree.length === 1 && p !== undefined ? ` (${pct(p)})` : ''}`, impact: 0.6, favours: fav === 'draw' ? 'neutral' : fav, category: 'sources' });
+    } else {
+      const f = ext[0];
+      const o = argmax(f.probs);
+      factors.push({ text: `${label(f)[0].toUpperCase()}${label(f).slice(1)} favours ${teamName(o)} (${pct(f.probs[o])})`, impact: 0.6, favours: o === 'draw' ? 'neutral' : o, category: 'sources' });
+    }
+  }
+  for (const f of base.keyFactors) if (factors.length < 5) factors.push(f);
+
+  const favName = teamName(fav);
+  const head =
+    fav === 'draw' ? `A draw is the single most likely result (${pct(top)})` : top < mid ? `Too close to call, with ${favName} marginally favoured (${pct(top)})` : `${favName} ${sport === 'football' ? 'are favourites' : 'favoured'} (${pct(top)})`;
+  const reason = factors.find((f) => f.favours === fav)?.text;
+  const summary = `${head}${reason ? `. ${reason}.` : '.'} ${sport === 'football' ? 'Most likely score' : 'Projected score'} ${score[0]}-${score[1]}.`;
+
+  const fmt = (p: Probs) => (hasDraws ? `${ev.home.short} ${pct(p.home)} · draw ${pct(p.draw)} · ${ev.away.short} ${pct(p.away)}` : `${ev.home.short} ${pct(p.home)} · ${ev.away.short} ${pct(p.away)}`);
+  const steps = [
+    ...base.explanation.steps.filter((s) => s.title !== 'Confidence').map((s) => ({ title: `Model: ${s.title}`, detail: s.detail })),
+    {
+      title: 'Combining sources',
+      detail:
+        forecasts.map((f) => `${SOURCE_INFO[f.source].label} (weight ${pct(weights[f.source])}): ${fmt(f.probs)}`).join('. ') +
+        '. Weights favour the sources that have been more accurate on the same past matches.',
+    },
+    { title: 'Final forecast', detail: `${fmt(blended)}; ${sport === 'football' ? 'most likely score' : 'projected score'} ${score[0]}-${score[1]}` },
+    { title: 'Confidence', detail: reasons.join('; ') },
+  ];
+
+  return {
+    version: 1,
+    created_at: new Date().toISOString(),
+    trigger: opts.before !== undefined ? 'pre-match' : 'live',
+    model: 'mksports-ensemble',
+    model_version: MODEL_VERSION,
+    probabilities: blended,
+    predicted_score: score,
+    expected,
+    confidence,
+    key_factors: factors,
+    explanation: { method: `MK Sports model + ${ext.length ? ext.map((f) => SOURCE_INFO[f.source].label).join(' + ') : 'no external sources available'}`, summary, steps, inputs: base.explanation.inputs },
+    versions: 1,
+    correct: null,
+    sources: forecasts.map((f) => ({ source: f.source, label: SOURCE_INFO[f.source].label, description: SOURCE_INFO[f.source].description, probs: f.probs, weight: weights[f.source] ?? 0 })),
+  };
+}
+
+export function mini(p: FullPrediction): MiniPrediction {
+  const pr = p.probabilities;
+  return { home: pr.home ?? 0, draw: pr.draw ?? null, away: pr.away ?? 0, score: p.predicted_score, confidence: p.confidence, pick: argmax(pr) };
+}
+
+// ------------------------------------------------------------------ snapshots & scoring
+let saveTimer: ReturnType<typeof setTimeout> | null = null;
+function persist() {
+  if (saveTimer) return;
+  saveTimer = setTimeout(() => {
+    saveTimer = null;
+    writeKV(SNAP_KEY, snapshots);
+    writeKV(EVAL_KEY, evals);
+  }, 1500);
+}
+
+/** Remember the latest pre-kick-off forecast so it can be scored after the match. */
+export function snapshot(ev: SEvent, p: FullPrediction) {
+  if (!snapshots || ev.status !== 'scheduled' || Date.parse(ev.start) <= Date.now()) return;
+  const prev = snapshots[ev.id];
+  if (prev && Date.now() - prev.at < 10 * 60_000 && Object.keys(prev.sources).length >= p.sources.length) return;
+  snapshots[ev.id] = {
+    id: ev.id,
+    sport: ev.sport,
+    league: ev.league,
+    kickoff: Date.parse(ev.start),
+    home: ev.home.short,
+    away: ev.away.short,
+    sources: Object.fromEntries(p.sources.map((s) => [s.source, s.probs])),
+    blended: p.probabilities,
+    confidence: p.confidence,
+    at: Date.now(),
+  };
+  persist();
+}
+
+export function preMatchSnapshot(id: string): Snapshot | null {
+  return snapshots?.[id] ?? null;
+}
+
+/** Score snapshots whose matches have finished. */
+export function scoreFinished(events: SEvent[]) {
+  if (!snapshots || !evals) return;
+  let changed = false;
+  for (const ev of events) {
+    const s = snapshots[ev.id];
+    if (!s) continue;
+    if (ev.status === 'cancelled' || ev.status === 'postponed') {
+      delete snapshots[ev.id];
+      changed = true;
+    } else if (ev.status === 'finished' && ev.homeScore !== null && ev.awayScore !== null) {
+      const o = outcomeOf(ev.homeScore, ev.awayScore);
+      if (!(o === 'draw' && !hasDrawsOf(ev.sport))) evals.unshift({ ...s, outcome: o, score: `${ev.homeScore}-${ev.awayScore}` });
+      delete snapshots[ev.id];
+      changed = true;
+    }
+  }
+  if (changed) {
+    evals.length = Math.min(evals.length, 1000);
+    persist();
+  }
+}
+
+export function liveEvaluations(): EvalRecord[] {
+  return evals ?? [];
+}
+
+export function scorePrediction(p: Probs, homeScore: number, awayScore: number) {
+  const o = outcomeOf(homeScore, awayScore);
+  return { correct: isCorrect(p, o), brier: brier(p, o), logLoss: logLoss(p, o) };
+}
+
+export async function clearPredictionStores() {
+  snapshots = {};
+  evals = [];
+  books.clear();
+  backtests.clear();
+  await writeKV(SNAP_KEY, {});
+  await writeKV(EVAL_KEY, []);
+}

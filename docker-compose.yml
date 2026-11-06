@@ -1,0 +1,65 @@
+# Local stack: PostgreSQL + Redis + API + background worker.
+#   docker compose up -d --build
+#   docker compose run --rm api python -m app.cli seed      # demo data, no API keys needed
+# API docs: http://localhost:8000/docs
+name: predictpro
+
+x-backend-env: &backend-env
+  DATABASE_URL: postgresql+psycopg://predictpro:predictpro@db:5432/predictpro
+  REDIS_URL: redis://redis:6379/0
+  AUTH_MODE: ${AUTH_MODE:-dev}
+  JWT_SECRET: ${JWT_SECRET:-change-me-in-production-please-32b}
+  ADMIN_TOKEN: ${ADMIN_TOKEN:-local-admin-token}
+  DATA_PROVIDER: ${DATA_PROVIDER:-mock}
+  PROVIDER_FOOTBALL: ${PROVIDER_FOOTBALL:-}
+  PROVIDER_BASKETBALL: ${PROVIDER_BASKETBALL:-}
+  FOOTBALL_DATA_API_KEY: ${FOOTBALL_DATA_API_KEY:-}
+  API_SPORTS_KEY: ${API_SPORTS_KEY:-}
+  SUPABASE_URL: ${SUPABASE_URL:-}
+  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:-}
+  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: predictpro
+      POSTGRES_PASSWORD: predictpro
+      POSTGRES_DB: predictpro
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U predictpro"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    environment:
+      <<: *backend-env
+      RUN_SCHEDULER: "false"
+    ports: ["8000:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  # Exactly one worker runs the schedulers (fixtures, live polling, predictions, settlement).
+  worker:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    command: ["python", "-m", "app.cli", "worker"]
+    environment:
+      <<: *backend-env
+      RUN_SCHEDULER: "false"
+    depends_on:
+      api: { condition: service_started }
+
+volumes:
+  pgdata:
