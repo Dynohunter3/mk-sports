@@ -80,6 +80,12 @@ def test_predict_twice_writes_nothing_new(world):
     doc = json.loads((world["pub"] / "football_predictions.json").read_text())
     assert doc["model_version"] == b.version and len(doc["matches"]) == first["considered"]
     assert all(abs(sum(m["p"].values()) - 1) < 1e-3 for m in doc["matches"])
+    for m in doc["matches"]:
+        assert m["call"]["pick"] in ("home", "draw", "away") and m["call"]["tier"] in ("strong", "likely", "lean", "toss-up")
+        assert m["call"]["double_chance"]["probability"] >= max(m["p"].values())
+        assert m["goals"]["over25"] is None or 0 < m["goals"]["over25"] < 1
+    logged = db.execute("SELECT pick, tier, dc_call, p_over25 FROM predictions LIMIT 1").fetchone()
+    assert logged[0] in ("home", "draw", "away") and logged[1] and logged[2]
 
 
 def test_odds_arrival_triggers_a_logged_recompute(world):

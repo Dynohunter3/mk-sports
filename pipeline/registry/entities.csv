@@ -23,6 +23,7 @@ fb-eng-bristol-rvs,team,football,Bristol Rvs,eng,footballdata_uk
 fb-eng-bromley,team,football,Bromley,eng,footballdata_uk
 fb-eng-burnley,team,football,Burnley,eng,footballdata_uk
 fb-eng-burton,team,football,Burton,eng,footballdata_uk
+fb-eng-bury,team,football,Bury,eng,footballdata_uk
 fb-eng-cambridge,team,football,Cambridge,eng,footballdata_uk
 fb-eng-cardiff,team,football,Cardiff,eng,footballdata_uk
 fb-eng-carlisle,team,football,Carlisle,eng,footballdata_uk
@@ -35,6 +36,7 @@ fb-eng-coventry,team,football,Coventry,eng,footballdata_uk
 fb-eng-crawley-town,team,football,Crawley Town,eng,footballdata_uk
 fb-eng-crewe,team,football,Crewe,eng,footballdata_uk
 fb-eng-crystal-palace,team,football,Crystal Palace,eng,footballdata_uk
+fb-eng-dag-red,team,football,Dag and Red,eng,footballdata_uk
 fb-eng-derby,team,football,Derby,eng,footballdata_uk
 fb-eng-doncaster,team,football,Doncaster,eng,footballdata_uk
 fb-eng-everton,team,football,Everton,eng,footballdata_uk
@@ -105,46 +107,101 @@ fb-eng-wimbledon,team,football,AFC Wimbledon,eng,footballdata_uk
 fb-eng-wolverhampton,team,football,Wolves,eng,footballdata_uk
 fb-eng-wrexham,team,football,Wrexham,eng,footballdata_uk
 fb-eng-wycombe,team,football,Wycombe,eng,footballdata_uk
+fb-eng-yeovil,team,football,Yeovil,eng,footballdata_uk
 fb-eng-york,team,football,York,eng,footballdata_uk
 fb-esp-alaves,team,football,Alaves,esp,footballdata_uk
+fb-esp-albacete,team,football,Albacete,esp,footballdata_uk
+fb-esp-alcorcon,team,football,Alcorcon,esp,footballdata_uk
 fb-esp-almeria,team,football,Almeria,esp,footballdata_uk
+fb-esp-amorebieta,team,football,Amorebieta,esp,footballdata_uk
+fb-esp-andorra,team,football,Andorra,esp,footballdata_uk
 fb-esp-ath-bilbao,team,football,Ath Bilbao,esp,footballdata_uk
+fb-esp-ath-bilbao-b,team,football,Ath Bilbao B,esp,footballdata_uk
 fb-esp-ath-madrid,team,football,Ath Madrid,esp,footballdata_uk
 fb-esp-barcelona,team,football,Barcelona,esp,footballdata_uk
+fb-esp-barcelona-b,team,football,Barcelona B,esp,footballdata_uk
 fb-esp-betis,team,football,Betis,esp,footballdata_uk
+fb-esp-burgos,team,football,Burgos,esp,footballdata_uk
 fb-esp-cadiz,team,football,Cadiz,esp,footballdata_uk
+fb-esp-cartagena,team,football,Cartagena,esp,footballdata_uk
+fb-esp-castellon,team,football,Castellon,esp,footballdata_uk
 fb-esp-celta,team,football,Celta,esp,footballdata_uk
+fb-esp-celta-b,team,football,Celta B,esp,footballdata_uk
+fb-esp-ceuta,team,football,Ceuta,esp,footballdata_uk
+fb-esp-cordoba,team,football,Cordoba,esp,footballdata_uk
 fb-esp-coruna,team,football,La Coruna,esp,footballdata_uk
+fb-esp-cultural-leonesa,team,football,Cultural Leonesa,esp,footballdata_uk
 fb-esp-eibar,team,football,Eibar,esp,footballdata_uk
 fb-esp-elche,team,football,Elche,esp,footballdata_uk
+fb-esp-eldense,team,football,Eldense,esp,footballdata_uk
 fb-esp-espanol,team,football,Espanol,esp,footballdata_uk
+fb-esp-extremadura,team,football,Extremadura UD,esp,footballdata_uk
+fb-esp-ferrol,team,football,Ferrol,esp,footballdata_uk
+fb-esp-fuenlabrada,team,football,Fuenlabrada,esp,footballdata_uk
 fb-esp-getafe,team,football,Getafe,esp,footballdata_uk
+fb-esp-gimnastic,team,football,Gimnastic,esp,footballdata_uk
 fb-esp-girona,team,football,Girona,esp,footballdata_uk
 fb-esp-granada,team,football,Granada,esp,footballdata_uk
 fb-esp-huesca,team,football,Huesca,esp,footballdata_uk
+fb-esp-ibiza,team,football,Ibiza,esp,footballdata_uk
 fb-esp-las-palmas,team,football,Las Palmas,esp,footballdata_uk
 fb-esp-leganes,team,football,Leganes,esp,footballdata_uk
 fb-esp-levante,team,football,Levante,esp,footballdata_uk
+fb-esp-llagostera,team,football,Llagostera,esp,footballdata_uk
+fb-esp-logrones,team,football,Logrones,esp,footballdata_uk
+fb-esp-lorca,team,football,Lorca,esp,footballdata_uk
+fb-esp-lugo,team,football,Lugo,esp,footballdata_uk
 fb-esp-malaga,team,football,Malaga,esp,footballdata_uk
 fb-esp-mallorca,team,football,Mallorca,esp,footballdata_uk
+fb-esp-mirandes,team,football,Mirandes,esp,footballdata_uk
+fb-esp-numancia,team,football,Numancia,esp,footballdata_uk
 fb-esp-osasuna,team,football,Osasuna,esp,footballdata_uk
 fb-esp-oviedo,team,football,Oviedo,esp,footballdata_uk
+fb-esp-ponferradina,team,football,Ponferradina,esp,footballdata_uk
+fb-esp-rayo-majadahonda,team,football,Rayo Majadahonda,esp,footballdata_uk
 fb-esp-real-madrid,team,football,Real Madrid,esp,footballdata_uk
+fb-esp-recreativo,team,football,Recreativo,esp,footballdata_uk
+fb-esp-reus-deportiu,team,football,Reus Deportiu,esp,footballdata_uk
+fb-esp-sabadell,team,football,Sabadell,esp,footballdata_uk
 fb-esp-santander,team,football,Santander,esp,footballdata_uk
 fb-esp-sevilla,team,football,Sevilla,esp,footballdata_uk
+fb-esp-sevilla-b,team,football,Sevilla B,esp,footballdata_uk
 fb-esp-sociedad,team,football,Sociedad,esp,footballdata_uk
+fb-esp-sociedad-b,team,football,Sociedad B,esp,footballdata_uk
+fb-esp-sporting-gijon,team,football,Sp Gijon,esp,footballdata_uk
+fb-esp-tenerife,team,football,Tenerife,esp,footballdata_uk
+fb-esp-ucam-murcia,team,football,UCAM Murcia,esp,footballdata_uk
 fb-esp-valencia,team,football,Valencia,esp,footballdata_uk
 fb-esp-valladolid,team,football,Valladolid,esp,footballdata_uk
 fb-esp-vallecano,team,football,Vallecano,esp,footballdata_uk
 fb-esp-villarreal,team,football,Villarreal,esp,footballdata_uk
+fb-esp-villarreal-b,team,football,Villarreal B,esp,footballdata_uk
+fb-esp-zaragoza,team,football,Zaragoza,esp,footballdata_uk
 fb-fra-ajaccio,team,football,Ajaccio,fra,footballdata_uk
+fb-fra-ajaccio-gfco,team,football,Ajaccio GFCO,fra,footballdata_uk
 fb-fra-amiens,team,football,Amiens,fra,footballdata_uk
 fb-fra-angers,team,football,Angers,fra,footballdata_uk
+fb-fra-annecy,team,football,Annecy,fra,footballdata_uk
+fb-fra-arles,team,football,Arles,fra,footballdata_uk
 fb-fra-auxerre,team,football,Auxerre,fra,footballdata_uk
+fb-fra-bastia,team,football,Bastia,fra,footballdata_uk
+fb-fra-beziers,team,football,Beziers,fra,footballdata_uk
 fb-fra-bordeaux,team,football,Bordeaux,fra,footballdata_uk
+fb-fra-boulogne,team,football,Boulogne,fra,footballdata_uk
+fb-fra-bourg-peronnas,team,football,Bourg Peronnas,fra,footballdata_uk
 fb-fra-brest,team,football,Brest,fra,footballdata_uk
+fb-fra-caen,team,football,Caen,fra,footballdata_uk
+fb-fra-chambly,team,football,Chambly,fra,footballdata_uk
+fb-fra-chateauroux,team,football,Chateauroux,fra,footballdata_uk
 fb-fra-clermont,team,football,Clermont,fra,footballdata_uk
+fb-fra-concarneau,team,football,Concarneau,fra,footballdata_uk
+fb-fra-creteil,team,football,Creteil,fra,footballdata_uk
 fb-fra-dijon,team,football,Dijon,fra,footballdata_uk
+fb-fra-dunkerque,team,football,Dunkerque,fra,footballdata_uk
+fb-fra-evian-thonon-gaillard,team,football,Evian Thonon Gaillard,fra,footballdata_uk
+fb-fra-grenoble,team,football,Grenoble,fra,footballdata_uk
+fb-fra-guingamp,team,football,Guingamp,fra,footballdata_uk
+fb-fra-laval,team,football,Laval,fra,footballdata_uk
 fb-fra-le-havre,team,football,Le Havre,fra,footballdata_uk
 fb-fra-le-mans,team,football,Le Mans,fra,footballdata_uk
 fb-fra-lens,team,football,Lens,fra,footballdata_uk
@@ -152,48 +209,81 @@ fb-fra-lille,team,football,Lille,fra,footballdata_uk
 fb-fra-lorient,team,football,Lorient,fra,footballdata_uk
 fb-fra-lyon,team,football,Lyon,fra,footballdata_uk
 fb-fra-marseille,team,football,Marseille,fra,footballdata_uk
+fb-fra-martigues,team,football,Martigues,fra,footballdata_uk
 fb-fra-metz,team,football,Metz,fra,footballdata_uk
 fb-fra-monaco,team,football,Monaco,fra,footballdata_uk
 fb-fra-montpellier,team,football,Montpellier,fra,footballdata_uk
+fb-fra-nancy,team,football,Nancy,fra,footballdata_uk
 fb-fra-nantes,team,football,Nantes,fra,footballdata_uk
 fb-fra-nice,team,football,Nice,fra,footballdata_uk
 fb-fra-nimes,team,football,Nimes,fra,footballdata_uk
+fb-fra-niort,team,football,Niort,fra,footballdata_uk
+fb-fra-orleans,team,football,Orleans,fra,footballdata_uk
 fb-fra-paris,team,football,Paris FC,fra,footballdata_uk
 fb-fra-paris-sg,team,football,Paris SG,fra,footballdata_uk
+fb-fra-pau,team,football,Pau FC,fra,footballdata_uk
+fb-fra-quevilly-rouen,team,football,Quevilly Rouen,fra,footballdata_uk
+fb-fra-red-star,team,football,Red Star,fra,footballdata_uk
 fb-fra-reims,team,football,Reims,fra,footballdata_uk
 fb-fra-rennes,team,football,Rennes,fra,footballdata_uk
+fb-fra-rodez,team,football,Rodez,fra,footballdata_uk
 fb-fra-saint-etienne,team,football,St Etienne,fra,footballdata_uk
+fb-fra-sochaux,team,football,Sochaux,fra,footballdata_uk
 fb-fra-strasbourg,team,football,Strasbourg,fra,footballdata_uk
 fb-fra-toulouse,team,football,Toulouse,fra,footballdata_uk
+fb-fra-tours,team,football,Tours,fra,footballdata_uk
 fb-fra-troyes,team,football,Troyes,fra,footballdata_uk
+fb-fra-valenciennes,team,football,Valenciennes,fra,footballdata_uk
+fb-ger-aalen,team,football,Aalen,ger,footballdata_uk
 fb-ger-augsburg,team,football,Augsburg,ger,footballdata_uk
 fb-ger-bayern-munchen,team,football,Bayern Munich,ger,footballdata_uk
 fb-ger-bielefeld,team,football,Bielefeld,ger,footballdata_uk
 fb-ger-bochum,team,football,Bochum,ger,footballdata_uk
+fb-ger-braunschweig,team,football,Braunschweig,ger,footballdata_uk
+fb-ger-cottbus,team,football,Cottbus,ger,footballdata_uk
 fb-ger-darmstadt,team,football,Darmstadt,ger,footballdata_uk
 fb-ger-dortmund,team,football,Dortmund,ger,footballdata_uk
+fb-ger-dresden,team,football,Dresden,ger,footballdata_uk
+fb-ger-duisburg,team,football,Duisburg,ger,footballdata_uk
 fb-ger-eintracht-frankfurt,team,football,Ein Frankfurt,ger,footballdata_uk
 fb-ger-elversberg,team,football,Elversberg,ger,footballdata_uk
+fb-ger-erzgebirge-aue,team,football,Erzgebirge Aue,ger,footballdata_uk
 fb-ger-fortuna-dusseldorf,team,football,Fortuna Dusseldorf,ger,footballdata_uk
+fb-ger-frankfurt-fsv,team,football,Frankfurt FSV,ger,footballdata_uk
 fb-ger-freiburg,team,football,Freiburg,ger,footballdata_uk
 fb-ger-greuther-furth,team,football,Greuther Furth,ger,footballdata_uk
 fb-ger-hamburg,team,football,Hamburg,ger,footballdata_uk
+fb-ger-hannover,team,football,Hannover,ger,footballdata_uk
+fb-ger-hansa-rostock,team,football,Hansa Rostock,ger,footballdata_uk
 fb-ger-heidenheim,team,football,Heidenheim,ger,footballdata_uk
 fb-ger-hertha,team,football,Hertha,ger,footballdata_uk
 fb-ger-hoffenheim,team,football,Hoffenheim,ger,footballdata_uk
 fb-ger-holstein-kiel,team,football,Holstein Kiel,ger,footballdata_uk
+fb-ger-ingolstadt,team,football,Ingolstadt,ger,footballdata_uk
+fb-ger-kaiserslautern,team,football,Kaiserslautern,ger,footballdata_uk
+fb-ger-karlsruhe,team,football,Karlsruhe,ger,footballdata_uk
 fb-ger-koln,team,football,FC Koln,ger,footballdata_uk
 fb-ger-leverkusen,team,football,Leverkusen,ger,footballdata_uk
+fb-ger-magdeburg,team,football,Magdeburg,ger,footballdata_uk
 fb-ger-mainz,team,football,Mainz,ger,footballdata_uk
 fb-ger-monchengladbach,team,football,M'gladbach,ger,footballdata_uk
+fb-ger-munchen,team,football,Munich 1860,ger,footballdata_uk
+fb-ger-nurnberg,team,football,Nurnberg,ger,footballdata_uk
+fb-ger-osnabruck,team,football,Osnabruck,ger,footballdata_uk
 fb-ger-paderborn,team,football,Paderborn,ger,footballdata_uk
+fb-ger-preu-en-munster,team,football,Preußen Münster,ger,footballdata_uk
 fb-ger-rb-leipzig,team,football,RB Leipzig,ger,footballdata_uk
+fb-ger-regensburg,team,football,Regensburg,ger,footballdata_uk
 fb-ger-saint-pauli,team,football,St Pauli,ger,footballdata_uk
+fb-ger-sandhausen,team,football,Sandhausen,ger,footballdata_uk
 fb-ger-schalke,team,football,Schalke 04,ger,footballdata_uk
 fb-ger-stuttgart,team,football,Stuttgart,ger,footballdata_uk
+fb-ger-ulm,team,football,Ulm,ger,footballdata_uk
 fb-ger-union-berlin,team,football,Union Berlin,ger,footballdata_uk
+fb-ger-wehen,team,football,Wehen,ger,footballdata_uk
 fb-ger-werder-bremen,team,football,Werder Bremen,ger,footballdata_uk
 fb-ger-wolfsburg,team,football,Wolfsburg,ger,footballdata_uk
+fb-ger-wurzburger-kickers,team,football,Wurzburger Kickers,ger,footballdata_uk
 fb-int-algeria,team,football,Algeria,,openfootball
 fb-int-argentina,team,football,Argentina,,openfootball
 fb-int-australia,team,football,Australia,,openfootball
@@ -242,54 +332,94 @@ fb-int-turkey,team,football,Turkey,,openfootball
 fb-int-uruguay,team,football,Uruguay,,openfootball
 fb-int-usa,team,football,USA,,openfootball
 fb-int-uzbekistan,team,football,Uzbekistan,,openfootball
+fb-ita-alessandria,team,football,Alessandria,ita,footballdata_uk
+fb-ita-arezzo,team,football,Arezzo,ita,footballdata_uk
+fb-ita-ascoli,team,football,Ascoli,ita,footballdata_uk
 fb-ita-atalanta,team,football,Atalanta,ita,footballdata_uk
+fb-ita-avellino,team,football,Avellino,ita,footballdata_uk
+fb-ita-bari,team,football,Bari,ita,footballdata_uk
 fb-ita-benevento,team,football,Benevento,ita,footballdata_uk
 fb-ita-bologna,team,football,Bologna,ita,footballdata_uk
 fb-ita-brescia,team,football,Brescia,ita,footballdata_uk
 fb-ita-cagliari,team,football,Cagliari,ita,footballdata_uk
+fb-ita-carpi,team,football,Carpi,ita,footballdata_uk
+fb-ita-carrarese,team,football,Carrarese,ita,footballdata_uk
+fb-ita-catania,team,football,Catania,ita,footballdata_uk
+fb-ita-catanzaro,team,football,Catanzaro,ita,footballdata_uk
+fb-ita-cesena,team,football,Cesena,ita,footballdata_uk
+fb-ita-chievo,team,football,Chievo,ita,footballdata_uk
+fb-ita-cittadella,team,football,Cittadella,ita,footballdata_uk
 fb-ita-como,team,football,Como,ita,footballdata_uk
+fb-ita-cosenza,team,football,Cosenza,ita,footballdata_uk
 fb-ita-cremonese,team,football,Cremonese,ita,footballdata_uk
 fb-ita-crotone,team,football,Crotone,ita,footballdata_uk
 fb-ita-empoli,team,football,Empoli,ita,footballdata_uk
+fb-ita-feralpisalo,team,football,FeralpiSalo,ita,footballdata_uk
 fb-ita-fiorentina,team,football,Fiorentina,ita,footballdata_uk
+fb-ita-foggia,team,football,Foggia,ita,footballdata_uk
 fb-ita-frosinone,team,football,Frosinone,ita,footballdata_uk
 fb-ita-genoa,team,football,Genoa,ita,footballdata_uk
 fb-ita-internazionale,team,football,Inter,ita,footballdata_uk
+fb-ita-juve-stabia,team,football,Juve Stabia,ita,footballdata_uk
 fb-ita-juventus,team,football,Juventus,ita,footballdata_uk
+fb-ita-latina,team,football,Latina,ita,footballdata_uk
 fb-ita-lazio,team,football,Lazio,ita,footballdata_uk
 fb-ita-lecce,team,football,Lecce,ita,footballdata_uk
+fb-ita-lecco,team,football,Lecco,ita,footballdata_uk
+fb-ita-livorno,team,football,Livorno,ita,footballdata_uk
+fb-ita-mantova,team,football,Mantova,ita,footballdata_uk
 fb-ita-milan,team,football,Milan,ita,footballdata_uk
+fb-ita-modena,team,football,Modena,ita,footballdata_uk
 fb-ita-monza,team,football,Monza,ita,footballdata_uk
 fb-ita-napoli,team,football,Napoli,ita,footballdata_uk
+fb-ita-novara,team,football,Novara,ita,footballdata_uk
+fb-ita-padova,team,football,Padova,ita,footballdata_uk
+fb-ita-palermo,team,football,Palermo,ita,footballdata_uk
 fb-ita-parma,team,football,Parma,ita,footballdata_uk
+fb-ita-perugia,team,football,Perugia,ita,footballdata_uk
+fb-ita-pescara,team,football,Pescara,ita,footballdata_uk
 fb-ita-pisa,team,football,Pisa,ita,footballdata_uk
+fb-ita-pordenone,team,football,Pordenone,ita,footballdata_uk
+fb-ita-pro-vercelli,team,football,Pro Vercelli,ita,footballdata_uk
+fb-ita-reggiana,team,football,Reggiana,ita,footballdata_uk
+fb-ita-reggina,team,football,Reggina,ita,footballdata_uk
 fb-ita-roma,team,football,Roma,ita,footballdata_uk
 fb-ita-salernitana,team,football,Salernitana,ita,footballdata_uk
 fb-ita-sampdoria,team,football,Sampdoria,ita,footballdata_uk
 fb-ita-sassuolo,team,football,Sassuolo,ita,footballdata_uk
 fb-ita-spal,team,football,Spal,ita,footballdata_uk
 fb-ita-spezia,team,football,Spezia,ita,footballdata_uk
+fb-ita-sudtirol,team,football,Sudtirol,ita,footballdata_uk
+fb-ita-ternana,team,football,Ternana,ita,footballdata_uk
 fb-ita-torino,team,football,Torino,ita,footballdata_uk
+fb-ita-trapani,team,football,Trapani,ita,footballdata_uk
 fb-ita-udinese,team,football,Udinese,ita,footballdata_uk
+fb-ita-varese,team,football,Varese,ita,footballdata_uk
 fb-ita-venezia,team,football,Venezia,ita,footballdata_uk
 fb-ita-verona,team,football,Verona,ita,footballdata_uk
+fb-ita-vicenza,team,football,Vicenza,ita,footballdata_uk
+fb-ita-virtus-entella,team,football,Virtus Entella,ita,footballdata_uk
+fb-ita-virtus-lanciano,team,football,Virtus Lanciano,ita,footballdata_uk
 fb-mco-monaco,team,football,AS Monaco FC,mco,openfootball
 fb-ned-ajax,team,football,Ajax,ned,footballdata_uk
 fb-ned-almere-city,team,football,Almere City,ned,footballdata_uk
 fb-ned-az-alkmaar,team,football,AZ Alkmaar,ned,footballdata_uk
 fb-ned-cambuur,team,football,Cambuur,ned,footballdata_uk
 fb-ned-den-haag,team,football,Den Haag,ned,footballdata_uk
+fb-ned-dordrecht,team,football,Dordrecht,ned,footballdata_uk
 fb-ned-emmen,team,football,FC Emmen,ned,footballdata_uk
 fb-ned-excelsior,team,football,Excelsior,ned,footballdata_uk
 fb-ned-feyenoord,team,football,Feyenoord,ned,footballdata_uk
 fb-ned-for-sittard,team,football,For Sittard,ned,footballdata_uk
 fb-ned-go-ahead-eagles,team,football,Go Ahead Eagles,ned,footballdata_uk
+fb-ned-graafschap,team,football,Graafschap,ned,footballdata_uk
 fb-ned-groningen,team,football,Groningen,ned,footballdata_uk
 fb-ned-heerenveen,team,football,Heerenveen,ned,footballdata_uk
 fb-ned-heracles,team,football,Heracles,ned,footballdata_uk
 fb-ned-nac-breda,team,football,NAC Breda,ned,footballdata_uk
 fb-ned-nec,team,football,Nijmegen,ned,footballdata_uk
 fb-ned-psv-eindhoven,team,football,PSV Eindhoven,ned,footballdata_uk
+fb-ned-roda,team,football,Roda,ned,footballdata_uk
 fb-ned-sparta-rotterdam,team,football,Sparta Rotterdam,ned,footballdata_uk
 fb-ned-telstar,team,football,Telstar,ned,footballdata_uk
 fb-ned-twente,team,football,Twente,ned,footballdata_uk
@@ -300,6 +430,7 @@ fb-ned-vvv-venlo,team,football,VVV Venlo,ned,footballdata_uk
 fb-ned-waalwijk,team,football,Waalwijk,ned,footballdata_uk
 fb-ned-willem-ii,team,football,Willem II,ned,footballdata_uk
 fb-ned-zwolle,team,football,Zwolle,ned,footballdata_uk
+fb-por-academica,team,football,Academica,por,footballdata_uk
 fb-por-academico-viseu,team,football,Academico Viseu,por,footballdata_uk
 fb-por-alverca,team,football,Alverca,por,footballdata_uk
 fb-por-arouca,team,football,Arouca,por,footballdata_uk
@@ -314,12 +445,14 @@ fb-por-estoril,team,football,Estoril,por,footballdata_uk
 fb-por-estrela,team,football,Estrela,por,footballdata_uk
 fb-por-famalicao,team,football,Famalicao,por,footballdata_uk
 fb-por-farense,team,football,Farense,por,footballdata_uk
+fb-por-feirense,team,football,Feirense,por,footballdata_uk
 fb-por-gil-vicente,team,football,Gil Vicente,por,footballdata_uk
 fb-por-guimaraes,team,football,Guimaraes,por,footballdata_uk
 fb-por-maritimo,team,football,Maritimo,por,footballdata_uk
 fb-por-moreirense,team,football,Moreirense,por,footballdata_uk
 fb-por-nacional,team,football,Nacional,por,footballdata_uk
 fb-por-pacos-ferreira,team,football,Pacos Ferreira,por,footballdata_uk
+fb-por-penafiel,team,football,Penafiel,por,footballdata_uk
 fb-por-portimonense,team,football,Portimonense,por,footballdata_uk
 fb-por-porto,team,football,Porto,por,footballdata_uk
 fb-por-rio-ave,team,football,Rio Ave,por,footballdata_uk
@@ -328,38 +461,49 @@ fb-por-setubal,team,football,Setubal,por,footballdata_uk
 fb-por-sporting-braga,team,football,Sp Braga,por,footballdata_uk
 fb-por-sporting-lisbon,team,football,Sp Lisbon,por,footballdata_uk
 fb-por-tondela,team,football,Tondela,por,footballdata_uk
+fb-por-uniao-madeira,team,football,Uniao Madeira,por,footballdata_uk
 fb-por-vizela,team,football,Vizela,por,footballdata_uk
 fb-sco-celtic,team,football,Celtic FC,sco,openfootball
 fb-srb-crvena-zvezda,team,football,FK Crvena Zvezda,srb,openfootball
 fb-sui-young-boys,team,football,BSC Young Boys,sui,openfootball
 fb-svk-slovan-bratislava,team,football,ŠK Slovan Bratislava,svk,openfootball
 fb-tur-ad-demirspor,team,football,Ad. Demirspor,tur,footballdata_uk
+fb-tur-adanaspor,team,football,Adanaspor,tur,footballdata_uk
+fb-tur-akhisar-belediyespor,team,football,Akhisar Belediyespor,tur,footballdata_uk
 fb-tur-alanyaspor,team,football,Alanyaspor,tur,footballdata_uk
 fb-tur-altay,team,football,Altay,tur,footballdata_uk
 fb-tur-amedspor,team,football,Amedspor,tur,footballdata_uk
 fb-tur-ankaragucu,team,football,Ankaragucu,tur,footballdata_uk
 fb-tur-antalyaspor,team,football,Antalyaspor,tur,footballdata_uk
+fb-tur-balikesirspor,team,football,Balikesirspor,tur,footballdata_uk
 fb-tur-besiktas,team,football,Besiktas,tur,footballdata_uk
 fb-tur-bodrumspor,team,football,Bodrumspor,tur,footballdata_uk
+fb-tur-bursaspor,team,football,Bursaspor,tur,footballdata_uk
 fb-tur-buyuksehyr,team,football,Buyuksehyr,tur,footballdata_uk
 fb-tur-corum,team,football,Corum,tur,footballdata_uk
 fb-tur-denizlispor,team,football,Denizlispor,tur,footballdata_uk
+fb-tur-erciyesspor,team,football,Erciyesspor,tur,footballdata_uk
 fb-tur-erzurum-bb,team,football,Erzurum BB,tur,footballdata_uk
 fb-tur-erzurumspor,team,football,Erzurumspor,tur,footballdata_uk
+fb-tur-eskisehirspor,team,football,Eskisehirspor,tur,footballdata_uk
 fb-tur-eyupspor,team,football,Eyupspor,tur,footballdata_uk
 fb-tur-fenerbahce,team,football,Fenerbahce,tur,footballdata_uk
 fb-tur-galatasaray,team,football,Galatasaray,tur,footballdata_uk
 fb-tur-gaziantep,team,football,Gaziantep,tur,footballdata_uk
+fb-tur-gaziantepspor,team,football,Gaziantepspor,tur,footballdata_uk
 fb-tur-genclerbirligi,team,football,Genclerbirligi,tur,footballdata_uk
 fb-tur-giresunspor,team,football,Giresunspor,tur,footballdata_uk
 fb-tur-goztep,team,football,Goztep,tur,footballdata_uk
 fb-tur-hatayspor,team,football,Hatayspor,tur,footballdata_uk
 fb-tur-istanbulspor,team,football,Istanbulspor,tur,footballdata_uk
+fb-tur-karabukspor,team,football,Karabukspor,tur,footballdata_uk
 fb-tur-karagumruk,team,football,Karagumruk,tur,footballdata_uk
 fb-tur-kasimpasa,team,football,Kasimpasa,tur,footballdata_uk
 fb-tur-kayserispor,team,football,Kayserispor,tur,footballdata_uk
 fb-tur-kocaelispor,team,football,Kocaelispor,tur,footballdata_uk
 fb-tur-konyaspor,team,football,Konyaspor,tur,footballdata_uk
+fb-tur-mersin-idman-yurdu,team,football,Mersin Idman Yurdu,tur,footballdata_uk
+fb-tur-osmanlispor,team,football,Osmanlispor,tur,footballdata_uk
 fb-tur-pendikspor,team,football,Pendikspor,tur,footballdata_uk
 fb-tur-rizespor,team,football,Rizespor,tur,footballdata_uk
 fb-tur-samsunspor,team,football,Samsunspor,tur,footballdata_uk

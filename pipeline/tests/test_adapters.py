@@ -97,3 +97,24 @@ def test_odds_api_stops_at_credit_reserve(comps, monkeypatch):
         a.fetch_upcoming(["esp.1"])  # 40 left <= reserve of 50
     assert len(t.calls) == 1
     assert "secret-key-123" not in res.matches[0]["source_key"]
+
+
+def test_stale_fixture_list_cannot_erase_a_final_result(comps):
+    """Regression: fixtures.csv kept last weekend's games and overwrote their final scores with 'scheduled'."""
+    from mkdata.adapters.footballdata_uk import parse_csv
+    from mkdata.store import Store
+
+    a = FootballDataUK(HttpClient(), comps)
+    season = parse_csv("Div,Date,Time,HomeTeam,AwayTeam,FTHG,FTAG,FTR\nE0,06/11/2026,20:00,Everton,Coventry,3,1,H\n")
+    fixtures = parse_csv("Div,Date,Time,HomeTeam,AwayTeam,PSH,PSD,PSA\nE0,06/11/2026,20:00,Everton,Coventry,1.6,4.1,5.5\n"
+                         "E0,14/11/2026,15:00,Leeds,Fulham,2.1,3.4,3.6\n")
+    now = utc(2026, 11, 10, 19)
+    s = Store(":memory:")
+    s.upsert_source_matches(a.parse_rows("eng.1", season, now, season="2026-27").matches)
+    live = a.parse_rows("eng.1", fixtures, now, live=True)
+    assert [m["home_raw"] for m in live.matches] == ["Leeds"]  # the played match is not an upcoming fixture
+    # even if a non-final row for it arrives (another path, an older client), the final score stays
+    stale = dict(a.parse_rows("eng.1", season, now, season="2026-27").matches[0], status="scheduled", home_score=None, away_score=None)
+    s.upsert_source_matches([stale])
+    r = s.q("SELECT status, home_score, away_score FROM source_matches")[0]
+    assert (r["status"], r["home_score"], r["away_score"]) == ("final", 3, 1)

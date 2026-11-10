@@ -124,9 +124,18 @@ class IdRegistry:
                 for r in csv.DictReader(f):
                     self.ensure(r["id"], r["kind"], r["sport"], r["name"], r["country"] or None, r["created_by"])
                     n += 1
+        # reviewed corrections win over learned aliases (manual_aliases.csv is never rewritten by dump)
+        manual = {}
+        if (folder / "manual_aliases.csv").exists():
+            with open(folder / "manual_aliases.csv", newline="") as f:
+                for r in csv.DictReader(f):
+                    manual[(r["source"], r["kind"], r["raw"], r["scope"])] = r
         if (folder / "aliases.csv").exists():
             with open(folder / "aliases.csv", newline="") as f:
                 for r in csv.DictReader(f):
-                    self.add_alias(r["source"], r["kind"], r["raw"], r["scope"], r["entity_id"], r["method"], r["evidence"])
+                    if (r["source"], r["kind"], r["raw"], r["scope"]) not in manual:
+                        self.add_alias(r["source"], r["kind"], r["raw"], r["scope"], r["entity_id"], r["method"], r["evidence"])
+        for r in manual.values():
+            self.add_alias(r["source"], r["kind"], r["raw"], r["scope"], r["entity_id"], "manual", r["evidence"])
         self.s.db.commit()
         return n

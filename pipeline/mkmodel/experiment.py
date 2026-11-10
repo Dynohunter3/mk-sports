@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import math
 import time
 from datetime import datetime, timezone
@@ -23,25 +24,32 @@ from pathlib import Path
 
 import numpy as np
 
-from .data import APP_LEAGUES, LOWER, in_eval, load
+from .data import APP_LEAGUES, LOWER, LOWER_LEGACY, in_eval, load
 from .features import FEATURES, Config, EloParams, build
 from .learners import SEED, blend_probs, fit_blend, fit_gbm, fit_ordered_logit, predict_gbm, predict_ordered_logit, to_log
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "audit" / "results"
 EPS = 1e-12
-TRAIN_FROM = datetime(2020, 8, 1, tzinfo=timezone.utc).timestamp()
-import os
-
-RUN = os.environ.get("MK_RUN", "step3")  # step5 = the Step 5 re-run (writes step5.json, its own cache)
+RUN = os.environ.get("MK_RUN", "step3")  # which experiment: step3, step5 (MLS fix) or step6 (more data + features)
 CACHE = ROOT / "pipeline" / "var" / f"{RUN}_preds.npz"
+
 
 GROUPS = {
     "elo+context": ["elo_diff", "elo_h", "elo_a", "rest_h", "rest_a", "busy_h", "busy_a", "games_h", "games_a", "lg_home", "lg_draw", "lg_goals"],
     "dc": ["dc_h", "dc_d", "dc_a", "dc_lh", "dc_la"],
     "xg_proxy": ["dcx_h", "dcx_d", "dcx_a", "dcx_lh", "dcx_la"],
+    "pi": ["pi_h", "pi_a", "pi_gd"],
+    "form": ["form_pts_h", "form_pts_a", "form_gd_h", "form_gd_a", "form_xgd_h", "form_xgd_a"],
+    "draw": ["abs_elo_diff", "dc_total", "dc_absdiff", "draw_rate_h", "draw_rate_a", "tier"],
     "market_pre": ["mk_h", "mk_d", "mk_a"],
 }
+# Step 3/5 runs used the first three groups + market and data from 2020; step6 adds history from 2015
+LEGACY = RUN in ("step3", "step5")
+FEED = LOWER_LEGACY if LEGACY else LOWER
+STEP_GROUPS = ["elo+context", "dc", "xg_proxy", "market_pre"] if LEGACY else list(GROUPS)
+FEATURE_START = datetime(2020 if LEGACY else 2015, 7, 1, tzinfo=timezone.utc).timestamp()
+TRAIN_FROM = datetime(2020 if LEGACY else 2016, 8, 1, tzinfo=timezone.utc).timestamp()
 
 
 def split_of(m) -> str:
@@ -182,8 +190,8 @@ def report(models: dict[str, np.ndarray], y, ms, mask, keys=("selection", "test"
 
 def main() -> None:
     t0 = time.time()
-    ms_all = load(comps=APP_LEAGUES + LOWER)
-    cfg = Config(elo=EloParams(), start=datetime(2020, 7, 1, tzinfo=timezone.utc).timestamp())
+    ms_all = load(comps=APP_LEAGUES + FEED)
+    cfg = Config(elo=EloParams(), start=FEATURE_START)
     X, ms = build(ms_all, cfg)
     y = np.array([m.outcome if m.outcome is not None else -1 for m in ms])
     print(f"features: {X.shape} in {time.time() - t0:.0f}s")
@@ -209,7 +217,7 @@ def main() -> None:
     kept: list[str] = []
     steps = []
     best_ll = None
-    for g in GROUPS:
+    for g in STEP_GROUPS:
         trial = kept + [g]
         cols = [col[f] for grp in trial for f in GROUPS[grp]]
         P = walk_forward(X, y, ms, ext, gbm_factory(cols))
@@ -252,7 +260,7 @@ def finalize() -> None:
     """Add the deployable rule, score everything on one common match set, write step3.json (from the cache)."""
     d = np.load(CACHE, allow_pickle=True)
     meta = json.loads(CACHE.with_suffix(".meta.json").read_text())
-    byid = {m.id: m for m in load(comps=APP_LEAGUES + LOWER)}
+    byid = {m.id: m for m in load(comps=APP_LEAGUES + FEED)}
     ms = [byid[i] for i in d["ids"]]
     y, mask = d["y"], d["mask"]
     skip = {"ids", "y", "mask", "common"}

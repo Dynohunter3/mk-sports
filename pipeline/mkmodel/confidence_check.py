@@ -11,21 +11,26 @@ from datetime import datetime, timezone
 
 import numpy as np
 
-from .data import APP_LEAGUES, LOWER, load
-from .experiment import CACHE, RESULTS, RUN, metrics
+from .data import APP_LEAGUES, load
+from .experiment import CACHE, FEED, RESULTS, RUN, metrics
 from .features import Config, EloParams, build
-from .production import COL, FEATURE_START, confidence, label
+from .experiment import FEATURE_START
+from .production import COL, confidence, label
 
 
 def main() -> None:
     d = np.load(CACHE, allow_pickle=True)
-    ms_all = load(comps=APP_LEAGUES + LOWER)
+    ms_all = load(comps=APP_LEAGUES + FEED)
     X, ms = build(ms_all, Config(elo=EloParams(), start=FEATURE_START))
     pos = {m.id: i for i, m in enumerate(ms)}
     ids, y, mask = d["ids"], d["y"], d["mask"]
-    assert all(pos[i] == k for k, i in enumerate(ids)), "feature rows must line up with the Step 3 cache"
+    # line the feature rows up with the experiment's cache by match id (the store may have gained matches since)
+    ix = [pos[i] for i in ids]
+    X, ms = X[ix], [ms[j] for j in ix]
+    # the boosted model without odds: the longest gbm[...] name that has no market group
+    nomkt = max((k for k in d.files if k.startswith("gbm[") and "market_pre" not in k), key=len)
     final = np.where(np.all(np.isfinite(d["bookmaker pre-closing (Tue/Fri)"]), 1)[:, None], d["ensemble + market"], d["ensemble (no market) + calibration"])
-    comps = {"elo": d["elo (ordered logit)"], "dc": X[:, [COL["dc_h"], COL["dc_d"], COL["dc_a"]]], "gbm_nomkt": d["gbm[elo+context+dc+xg_proxy]"]}
+    comps = {"elo": d["elo (ordered logit)"], "dc": X[:, [COL["dc_h"], COL["dc_d"], COL["dc_a"]]], "gbm_nomkt": d[nomkt]}
     # source-disagreement context, point in time: a team's last 10 results known before kick-off
     history: dict[str, list[tuple[float, float]]] = {}
     for m in ms:

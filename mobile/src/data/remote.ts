@@ -42,7 +42,19 @@ export type RemoteMatch = {
   versions?: number;
   model_version?: string;
   result?: [number, number] | null;
+  /** The call the service makes from the probabilities (schema addition; older files lack it). */
+  call?: RemoteCall;
+  goals?: { over25: number | null; btts: number | null };
 };
+export type Tier = 'strong' | 'likely' | 'lean' | 'toss-up';
+export type RemoteCall = {
+  pick: 'home' | 'draw' | 'away';
+  pick_probability: number;
+  tier: Tier;
+  draw_call: boolean;
+  double_chance: { call: 'home or draw' | 'away or draw' | 'home or away'; probability: number };
+};
+export type TrackRecord = { n: number; hit_rate: number };
 export type RemoteFile = {
   schema: number;
   generated_at: string;
@@ -68,6 +80,16 @@ export type RemoteAccuracy = {
     recent: { match_id: string; competition: string; kickoff: string; home: string; away: string; score: string; pick: 'home' | 'draw' | 'away'; probability: number; correct: number; confidence_label: 'high' | 'medium' | 'low' }[];
   };
   backtest: { source: string; period: string; competitions: Record<string, { n: number; new: Trio; previous: Trio | null; bookmaker: Trio | null }> } | null;
+  /** Backtest hit rates of the calls the app shows: by strength, draws, double chance, goal markets. */
+  track_record?: {
+    tiers: Partial<Record<Tier, TrackRecord & { share: number }>>;
+    draw_calls: TrackRecord & { share: number; base_rate: number };
+    all_matches: TrackRecord;
+    bookmaker: TrackRecord;
+    double_chance: TrackRecord & { strong: TrackRecord & { share: number } };
+    over25?: TrackRecord & { confident: TrackRecord & { share: number } };
+    btts?: TrackRecord & { confident: TrackRecord & { share: number } };
+  };
   note: string;
 };
 const ACC_KEY = 'remote:accuracy:v1';

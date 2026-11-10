@@ -38,7 +38,7 @@ import type { Injury, SEvent, TeamInfo } from './espn';
 import { historyVersion, sportMatches } from './history';
 import { readKV, writeKV } from './kv';
 import { MATCH_LEAGUES, SportSlug, sportOf } from './leagues';
-import { remoteFile, remoteFor, RemoteMatch } from './remote';
+import { remoteAccuracy, remoteFile, remoteFor, RemoteMatch } from './remote';
 
 const MODEL_VERSION = '2.1.0';
 export const PREDICTED_SPORTS: SportSlug[] = ['football', 'basketball', 'american-football', 'ice-hockey', 'baseball'];
@@ -194,8 +194,12 @@ export type FullPrediction = {
   versions: number;
   correct: boolean | null;
   sources: SourceRow[];
+  /** The called outcome when it differs from the plain most-likely one (e.g. a draw call). */
+  pick?: Outcome;
+  call?: { tier: 'strong' | 'likely' | 'lean' | 'toss-up'; tier_label: string; tier_hit_rate: number | null; draw_call: boolean; safer: { label: string; probability: number; hit_rate: number | null } };
+  goals?: { over25: number; btts: number };
 };
-export type MiniPrediction = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome };
+export type MiniPrediction = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome; tier?: 'strong' | 'likely' | 'lean' | 'toss-up' };
 
 const pct = (x: number | undefined) => `${Math.round((x ?? 0) * 100)}%`;
 const LEVELS: Confidence[] = ['low', 'medium', 'high'];
@@ -211,8 +215,9 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
   const probs: Probs = { home: r.p.home, draw: r.p.draw, away: r.p.away };
   const [lh, la] = r.expected_goals;
   const total = lh !== null && la !== null ? lh + la : 2.6;
-  const sc = footballScoreFor(probs, total);
-  const fav = argmax(probs);
+  const call = r.call;
+  const fav: Outcome = call?.pick ?? argmax(probs);
+  const sc = footballScoreFor(probs, total, undefined, fav);
   const name = (o: Outcome) => (o === 'home' ? ev.home.short : o === 'away' ? ev.away.short : 'a draw');
   const factors: KeyFactor[] = [];
   const [eh, ea] = r.elo;
@@ -226,7 +231,16 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
     factors.push({ text: `The betting market also leans ${mo === fav ? 'the same way' : `towards ${name(mo)}`}`, impact: 0.5, favours: mo === 'draw' ? 'neutral' : mo, category: 'sources' });
   } else factors.push({ text: 'Bookmaker odds not published yet: this forecast will update when they are', impact: 0.2, favours: 'neutral', category: 'sources' });
   const top = probs[fav] ?? 0;
-  const head = fav === 'draw' ? `A draw is the single most likely result (${pct(top)})` : `${name(fav)} are favourites (${pct(top)})`;
+  const rec = remoteAccuracy()?.track_record;
+  const tierRec = call ? rec?.tiers?.[call.tier] : undefined;
+  const head =
+    fav === 'draw'
+      ? `Draw called (${pct(top)}): evenly matched, neither side clearly ahead`
+      : call?.tier === 'toss-up'
+        ? `Too close to call, ${name(fav)} marginally ahead (${pct(top)})`
+        : `${name(fav)} are favourites (${pct(top)})`;
+  const dcName = (c: string) => (c === 'home or draw' ? `${ev.home.short} or draw` : c === 'away or draw' ? `${ev.away.short} or draw` : `${ev.home.short} or ${ev.away.short} (no draw)`);
+  if (fav === 'draw') factors.unshift({ text: `Draw called: draw ${pct(probs.draw)} vs ${ev.home.short} ${pct(probs.home)} and ${ev.away.short} ${pct(probs.away)}`, impact: 0.7, favours: 'neutral', category: 'draw' });
   const comp = (k: keyof RemoteMatch['components'], label: string) => {
     const v = r.components[k];
     return v[0] === null ? null : `${label}: ${ev.home.short} ${pct(v[0]!)} · draw ${pct(v[1]!)} · ${ev.away.short} ${pct(v[2]!)}`;
@@ -251,6 +265,8 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
           .filter((x): x is string => !!x)
           .map((d) => ({ title: d.split(':')[0], detail: d.split(': ')[1] })),
         { title: 'Final forecast', detail: `${ev.home.short} ${pct(probs.home)} · draw ${pct(probs.draw)} · ${ev.away.short} ${pct(probs.away)}` },
+        ...(call ? [{ title: 'Call strength', detail: `${TIER_LABEL[call.tier]}${tierRec ? `: calls this strong were right ${pct(tierRec.hit_rate)} of the time in ${tierRec.n.toLocaleString()} backtested matches` : ''}` }] : []),
+        ...(call ? [{ title: 'Safer call', detail: `${dcName(call.double_chance.call)} (${pct(call.double_chance.probability)})` }] : []),
         { title: 'Confidence', detail: `${r.confidence_label}${r.confidence_reasons.length ? `: ${r.confidence_reasons.join('; ')}` : ''}` },
         { title: 'Last update', detail: `${new Date(r.made_at).toUTCString()} (${r.last_change})` },
         { title: 'Data', detail: fileInfo?.attribution ?? 'football-data.co.uk, openfootball' },
@@ -260,8 +276,20 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
     versions: r.versions ?? 1,
     correct: null,
     sources: [{ source: 'model', label: 'MK Sports model', description: 'Published daily by the MK Sports data pipeline', probs, weight: 1 }],
+    pick: fav,
+    call: call
+      ? {
+          tier: call.tier,
+          tier_label: TIER_LABEL[call.tier],
+          tier_hit_rate: tierRec?.hit_rate ?? null,
+          draw_call: call.draw_call,
+          safer: { label: dcName(call.double_chance.call), probability: call.double_chance.probability, hit_rate: rec?.double_chance?.hit_rate ?? null },
+        }
+      : undefined,
+    goals: r.goals && r.goals.over25 !== null && r.goals.btts !== null ? { over25: r.goals.over25, btts: r.goals.btts } : undefined,
   };
 }
+const TIER_LABEL = { strong: 'Strong call', likely: 'Likely', lean: 'Lean', 'toss-up': 'Toss-up' } as const;
 
 export function predictEvent(ev: SEvent, opts: PredictOptions = {}): FullPrediction | null {
   // covered football competitions: the published pipeline prediction (falls back below only if missing)
@@ -388,7 +416,7 @@ export function predictEvent(ev: SEvent, opts: PredictOptions = {}): FullPredict
 
 export function mini(p: FullPrediction): MiniPrediction {
   const pr = p.probabilities;
-  return { home: pr.home ?? 0, draw: pr.draw ?? null, away: pr.away ?? 0, score: p.predicted_score, confidence: p.confidence, pick: argmax(pr) };
+  return { home: pr.home ?? 0, draw: pr.draw ?? null, away: pr.away ?? 0, score: p.predicted_score, confidence: p.confidence, pick: p.pick ?? argmax(pr), tier: p.call?.tier };
 }
 
 // ------------------------------------------------------------------ snapshots & scoring

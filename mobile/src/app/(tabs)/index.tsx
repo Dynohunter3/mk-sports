@@ -185,6 +185,15 @@ function Home() {
     [feed.data],
   );
   const lg = league ? LEAGUE_BY_SLUG[league] : null;
+  // upcoming matches where the model's call is in its strongest band
+  const strongCalls = useMemo(() => {
+    const seen = new Set<string>();
+    return (feed.data?.sections ?? [])
+      .flatMap((s) => s.items)
+      .filter((m) => m.status === 'scheduled' && m.prediction?.tier === 'strong' && !seen.has(m.id) && !!seen.add(m.id))
+      .sort((a, b) => a.start_time.localeCompare(b.start_time))
+      .slice(0, 10);
+  }, [feed.data]);
 
   const header = (
     <View style={{ paddingTop: space.sm }}>
@@ -235,6 +244,12 @@ function Home() {
         <>
           <SectionHeader title={prefs.dataSaver ? 'Live now' : 'Live now · auto-updating'} icon="access-point" color={t.live} />
           <MatchStrip items={liveItems} />
+        </>
+      ) : null}
+      {strongCalls.length ? (
+        <>
+          <SectionHeader title="Strongest calls" icon="shield-check" color={t.win} action="Track record" onAction={() => router.push('/accuracy')} />
+          <MatchStrip items={strongCalls} />
         </>
       ) : null}
       {news.data?.items.length ? (

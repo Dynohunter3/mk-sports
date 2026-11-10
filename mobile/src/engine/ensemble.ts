@@ -112,7 +112,7 @@ export function americanToDecimal(ml: number | string | null | undefined): numbe
  * total goals, find the goal supremacy whose Poisson grid reproduces P(home) - P(away), and
  * take the most likely score inside the blended favourite.
  */
-export function footballScoreFor(blended: Probs, totalGoals: number, rho = -0.08): { score: [number, number]; lambdas: [number, number] } {
+export function footballScoreFor(blended: Probs, totalGoals: number, rho = -0.08, call?: Outcome): { score: [number, number]; lambdas: [number, number] } {
   const target = (blended.home ?? 0) - (blended.away ?? 0);
   const total = clamp(totalGoals, 1, 5);
   let lo = -total + 0.3;
@@ -126,7 +126,7 @@ export function footballScoreFor(blended: Probs, totalGoals: number, rho = -0.08
     else hi = mid;
   }
   const sup = (lo + hi) / 2;
-  return { score: mostLikelyScore(grid, argmax(blended)), lambdas: [(total + sup) / 2, (total - sup) / 2] };
+  return { score: mostLikelyScore(grid, call ?? argmax(blended)), lambdas: [(total + sup) / 2, (total - sup) / 2] };
 }
 
 export function basketballScoreFor(blended: Probs, totalPoints: number, sigma: number): { score: [number, number]; margin: number } {

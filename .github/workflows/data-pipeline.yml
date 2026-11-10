@@ -24,7 +24,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90 # the first run backfills 13 seasons (about 20 minutes of polite downloads)
     defaults:
       run:
         working-directory: pipeline

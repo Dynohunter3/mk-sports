@@ -1,21 +1,226 @@
 {
-  "_doc": "Internal competition IDs (same slugs the app uses) and each source's code. tz = local time zone of kick-off times in openfootball. football-data.co.uk times are UK local for every file (checked against LaLiga 2025-26).",
-  "eng.1": {"sport": "football", "country": "eng", "name": "Premier League", "tz": "Europe/London", "seasons": "split", "footballdata_uk": "E0", "openfootball": "en.1", "football_data_org": "PL", "the_odds_api": "soccer_epl"},
-  "eng.2": {"sport": "football", "country": "eng", "name": "Championship", "tz": "Europe/London", "seasons": "split", "footballdata_uk": "E1", "openfootball": "en.2", "football_data_org": "ELC", "the_odds_api": "soccer_efl_champ"},
-  "eng.3": {"sport": "football", "country": "eng", "name": "League One", "tz": "Europe/London", "seasons": "split", "footballdata_uk": "E2", "openfootball": "en.3", "the_odds_api": "soccer_england_league1", "_why": "cold-start: cup opponents"},
-  "eng.4": {"sport": "football", "country": "eng", "name": "League Two", "tz": "Europe/London", "seasons": "split", "footballdata_uk": "E3", "openfootball": "en.4", "the_odds_api": "soccer_england_league2", "_why": "cold-start: cup opponents"},
-  "esp.1": {"sport": "football", "country": "esp", "name": "LaLiga", "tz": "Europe/Madrid", "seasons": "split", "footballdata_uk": "SP1", "openfootball": "es.1", "football_data_org": "PD", "the_odds_api": "soccer_spain_la_liga"},
-  "ita.1": {"sport": "football", "country": "ita", "name": "Serie A", "tz": "Europe/Rome", "seasons": "split", "footballdata_uk": "I1", "openfootball": "it.1", "football_data_org": "SA", "the_odds_api": "soccer_italy_serie_a"},
-  "ger.1": {"sport": "football", "country": "ger", "name": "Bundesliga", "tz": "Europe/Berlin", "seasons": "split", "footballdata_uk": "D1", "openfootball": "de.1", "football_data_org": "BL1", "the_odds_api": "soccer_germany_bundesliga"},
-  "fra.1": {"sport": "football", "country": "fra", "name": "Ligue 1", "tz": "Europe/Paris", "seasons": "split", "footballdata_uk": "F1", "openfootball": "fr.1", "football_data_org": "FL1", "the_odds_api": "soccer_france_ligue_one"},
-  "ned.1": {"sport": "football", "country": "ned", "name": "Eredivisie", "tz": "Europe/Amsterdam", "seasons": "split", "footballdata_uk": "N1", "openfootball": "nl.1", "football_data_org": "DED", "the_odds_api": "soccer_netherlands_eredivisie"},
-  "por.1": {"sport": "football", "country": "por", "name": "Liga Portugal", "tz": "Europe/Lisbon", "seasons": "split", "footballdata_uk": "P1", "openfootball": "pt.1", "football_data_org": "PPL", "the_odds_api": "soccer_portugal_primeira_liga"},
-  "tur.1": {"sport": "football", "country": "tur", "name": "Süper Lig", "tz": "Europe/Istanbul", "seasons": "split", "footballdata_uk": "T1", "openfootball": "tr.1", "the_odds_api": "soccer_turkey_super_league"},
-  "usa.1": {"sport": "football", "country": "usa", "name": "MLS", "tz": null, "seasons": "calendar", "footballdata_uk_extra": "USA", "openfootball": "mls", "the_odds_api": "soccer_usa_mls"},
-  "uefa.champions": {"sport": "football", "country": null, "name": "Champions League", "tz": "Europe/Paris", "seasons": "split", "openfootball": "uefa.cl", "football_data_org": "CL", "the_odds_api": "soccer_uefa_champs_league"},
-  "fifa.world": {"sport": "football", "country": null, "name": "World Cup 2026", "tz": null, "seasons": "calendar", "openfootball_worldcup": "2026", "football_data_org": "WC", "the_odds_api": "soccer_fifa_world_cup"},
-  "nba": {"sport": "basketball", "country": "usa", "name": "NBA", "tz": null, "seasons": "split", "balldontlie": "nba", "the_odds_api": "basketball_nba"},
-  "nfl": {"sport": "american-football", "country": "usa", "name": "NFL", "tz": null, "seasons": "split", "the_odds_api": "americanfootball_nfl"},
-  "nhl": {"sport": "hockey", "country": "usa", "name": "NHL", "tz": null, "seasons": "split", "the_odds_api": "icehockey_nhl"},
-  "mlb": {"sport": "baseball", "country": "usa", "name": "MLB", "tz": null, "seasons": "calendar", "the_odds_api": "baseball_mlb"}
+ "_doc": "Internal competition IDs (same slugs the app uses) and each source's code. tz = local time zone of kick-off times in openfootball. football-data.co.uk times are UK local for every file (checked against LaLiga 2025-26).",
+ "eng.1": {
+  "sport": "football",
+  "country": "eng",
+  "name": "Premier League",
+  "tz": "Europe/London",
+  "seasons": "split",
+  "footballdata_uk": "E0",
+  "openfootball": "en.1",
+  "football_data_org": "PL",
+  "the_odds_api": "soccer_epl"
+ },
+ "eng.2": {
+  "sport": "football",
+  "country": "eng",
+  "name": "Championship",
+  "tz": "Europe/London",
+  "seasons": "split",
+  "footballdata_uk": "E1",
+  "openfootball": "en.2",
+  "football_data_org": "ELC",
+  "the_odds_api": "soccer_efl_champ"
+ },
+ "eng.3": {
+  "sport": "football",
+  "country": "eng",
+  "name": "League One",
+  "tz": "Europe/London",
+  "seasons": "split",
+  "footballdata_uk": "E2",
+  "openfootball": "en.3",
+  "the_odds_api": "soccer_england_league1",
+  "_why": "cold-start: cup opponents"
+ },
+ "eng.4": {
+  "sport": "football",
+  "country": "eng",
+  "name": "League Two",
+  "tz": "Europe/London",
+  "seasons": "split",
+  "footballdata_uk": "E3",
+  "openfootball": "en.4",
+  "the_odds_api": "soccer_england_league2",
+  "_why": "cold-start: cup opponents"
+ },
+ "ger.2": {
+  "sport": "football",
+  "country": "ger",
+  "name": "2. Bundesliga",
+  "tz": "Europe/Berlin",
+  "seasons": "split",
+  "footballdata_uk": "D2",
+  "openfootball": "de.2",
+  "_why": "promoted teams arrive rated"
+ },
+ "ita.2": {
+  "sport": "football",
+  "country": "ita",
+  "name": "Serie B",
+  "tz": "Europe/Rome",
+  "seasons": "split",
+  "footballdata_uk": "I2",
+  "openfootball": "it.2",
+  "_why": "promoted teams arrive rated"
+ },
+ "esp.2": {
+  "sport": "football",
+  "country": "esp",
+  "name": "LaLiga 2",
+  "tz": "Europe/Madrid",
+  "seasons": "split",
+  "footballdata_uk": "SP2",
+  "openfootball": "es.2",
+  "_why": "promoted teams arrive rated"
+ },
+ "fra.2": {
+  "sport": "football",
+  "country": "fra",
+  "name": "Ligue 2",
+  "tz": "Europe/Paris",
+  "seasons": "split",
+  "footballdata_uk": "F2",
+  "openfootball": "fr.2",
+  "_why": "promoted teams arrive rated"
+ },
+ "esp.1": {
+  "sport": "football",
+  "country": "esp",
+  "name": "LaLiga",
+  "tz": "Europe/Madrid",
+  "seasons": "split",
+  "footballdata_uk": "SP1",
+  "openfootball": "es.1",
+  "football_data_org": "PD",
+  "the_odds_api": "soccer_spain_la_liga"
+ },
+ "ita.1": {
+  "sport": "football",
+  "country": "ita",
+  "name": "Serie A",
+  "tz": "Europe/Rome",
+  "seasons": "split",
+  "footballdata_uk": "I1",
+  "openfootball": "it.1",
+  "football_data_org": "SA",
+  "the_odds_api": "soccer_italy_serie_a"
+ },
+ "ger.1": {
+  "sport": "football",
+  "country": "ger",
+  "name": "Bundesliga",
+  "tz": "Europe/Berlin",
+  "seasons": "split",
+  "footballdata_uk": "D1",
+  "openfootball": "de.1",
+  "football_data_org": "BL1",
+  "the_odds_api": "soccer_germany_bundesliga"
+ },
+ "fra.1": {
+  "sport": "football",
+  "country": "fra",
+  "name": "Ligue 1",
+  "tz": "Europe/Paris",
+  "seasons": "split",
+  "footballdata_uk": "F1",
+  "openfootball": "fr.1",
+  "football_data_org": "FL1",
+  "the_odds_api": "soccer_france_ligue_one"
+ },
+ "ned.1": {
+  "sport": "football",
+  "country": "ned",
+  "name": "Eredivisie",
+  "tz": "Europe/Amsterdam",
+  "seasons": "split",
+  "footballdata_uk": "N1",
+  "openfootball": "nl.1",
+  "football_data_org": "DED",
+  "the_odds_api": "soccer_netherlands_eredivisie"
+ },
+ "por.1": {
+  "sport": "football",
+  "country": "por",
+  "name": "Liga Portugal",
+  "tz": "Europe/Lisbon",
+  "seasons": "split",
+  "footballdata_uk": "P1",
+  "openfootball": "pt.1",
+  "football_data_org": "PPL",
+  "the_odds_api": "soccer_portugal_primeira_liga"
+ },
+ "tur.1": {
+  "sport": "football",
+  "country": "tur",
+  "name": "Süper Lig",
+  "tz": "Europe/Istanbul",
+  "seasons": "split",
+  "footballdata_uk": "T1",
+  "openfootball": "tr.1",
+  "the_odds_api": "soccer_turkey_super_league"
+ },
+ "usa.1": {
+  "sport": "football",
+  "country": "usa",
+  "name": "MLS",
+  "tz": null,
+  "seasons": "calendar",
+  "footballdata_uk_extra": "USA",
+  "openfootball": "mls",
+  "the_odds_api": "soccer_usa_mls"
+ },
+ "uefa.champions": {
+  "sport": "football",
+  "country": null,
+  "name": "Champions League",
+  "tz": "Europe/Paris",
+  "seasons": "split",
+  "openfootball": "uefa.cl",
+  "football_data_org": "CL",
+  "the_odds_api": "soccer_uefa_champs_league"
+ },
+ "fifa.world": {
+  "sport": "football",
+  "country": null,
+  "name": "World Cup 2026",
+  "tz": null,
+  "seasons": "calendar",
+  "openfootball_worldcup": "2026",
+  "football_data_org": "WC",
+  "the_odds_api": "soccer_fifa_world_cup"
+ },
+ "nba": {
+  "sport": "basketball",
+  "country": "usa",
+  "name": "NBA",
+  "tz": null,
+  "seasons": "split",
+  "balldontlie": "nba",
+  "the_odds_api": "basketball_nba"
+ },
+ "nfl": {
+  "sport": "american-football",
+  "country": "usa",
+  "name": "NFL",
+  "tz": null,
+  "seasons": "split",
+  "the_odds_api": "americanfootball_nfl"
+ },
+ "nhl": {
+  "sport": "hockey",
+  "country": "usa",
+  "name": "NHL",
+  "tz": null,
+  "seasons": "split",
+  "the_odds_api": "icehockey_nhl"
+ },
+ "mlb": {
+  "sport": "baseball",
+  "country": "usa",
+  "name": "MLB",
+  "tz": null,
+  "seasons": "calendar",
+  "the_odds_api": "baseball_mlb"
+ }
 }

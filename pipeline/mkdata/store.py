@@ -109,9 +109,12 @@ class Store:
                      :home_raw,:away_raw,:status,:home_score,:away_score,:fetched_at,:available_at,:mkey)
                    ON CONFLICT(source, source_key) DO UPDATE SET
                      season=excluded.season, kickoff_utc=excluded.kickoff_utc, kickoff_exact=excluded.kickoff_exact, local_date=excluded.local_date,
-                     status=excluded.status, home_score=excluded.home_score, away_score=excluded.away_score,
+                     -- a final result is never downgraded by a later non-final row (e.g. a stale fixtures list)
+                     status=CASE WHEN source_matches.status='final' AND excluded.status!='final' THEN source_matches.status ELSE excluded.status END,
+                     home_score=CASE WHEN source_matches.status='final' AND excluded.status!='final' THEN source_matches.home_score ELSE excluded.home_score END,
+                     away_score=CASE WHEN source_matches.status='final' AND excluded.status!='final' THEN source_matches.away_score ELSE excluded.away_score END,
                      fetched_at=excluded.fetched_at,
-                     available_at=CASE WHEN source_matches.status=excluded.status
+                     available_at=CASE WHEN (source_matches.status='final' AND excluded.status!='final') OR source_matches.status=excluded.status
                                         AND source_matches.home_score IS excluded.home_score
                                         AND source_matches.away_score IS excluded.away_score
                                        THEN source_matches.available_at ELSE excluded.available_at END""",

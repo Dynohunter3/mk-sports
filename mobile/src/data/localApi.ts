@@ -618,6 +618,7 @@ async function accuracy(q: URLSearchParams) {
     leagues: [...fbLeagues, ...MATCH_LEAGUES.filter((l) => !(fbRemote && l.sport === 'football')).map((l) => row(l.slug, l.name, l.sport, items.filter((i) => i.league === l.slug))).filter((r) => r.n)],
     football_backtest: footballBacktest,
     football_note: fbRemote ? ra!.note : null,
+    football_track: fbRemote ? ra!.track_record ?? null : null,
     recent: [...fbRecent, ...live.slice(0, 10).map((e) => ({ match_id: e.id, home: e.home, away: e.away, score: e.score, predicted: argmax(e.blended), probability: Math.max(...Object.values(e.blended).map(Number)), correct: argmax(e.blended) === e.outcome, confidence: e.confidence }))].slice(0, 20),
     by_source: [...fbSources, ...Object.entries(perSource).map(([k, v]) => {
       const [src, kind] = k.split(':');

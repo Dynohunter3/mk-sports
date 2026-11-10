@@ -151,6 +151,58 @@ export default function AccuracyScreen() {
               </Row>
             ))}
           </Card>
+          {source !== 'live' && d.football_track ? (
+            <>
+              <SectionHeader title="Football: how often each call is right" />
+              <Card>
+                {(
+                  [
+                    ['Strong calls', d.football_track.tiers.strong, t.win],
+                    ['Likely', d.football_track.tiers.likely, t.brand],
+                    ['Lean', d.football_track.tiers.lean, t.pending],
+                    ['Toss-up', d.football_track.tiers['toss-up'], t.textMuted],
+                  ] as const
+                ).map(([label, r, color]) =>
+                  r ? (
+                    <Row key={label} style={{ minHeight: 34 }}>
+                      <Text v="small" style={{ width: 96 }}>
+                        {label}
+                      </Text>
+                      <Bar value={r.hit_rate} color={color} />
+                      <Text v="small" dim style={{ width: 118, textAlign: 'right' }}>
+                        {pct(r.hit_rate)} · {pct(r.share)} of games
+                      </Text>
+                    </Row>
+                  ) : null,
+                )}
+                <View style={{ height: 1, backgroundColor: t.surface2, marginVertical: space.sm }} />
+                {(
+                  [
+                    ['All matches', d.football_track.all_matches.hit_rate, `bookmakers ${pct(d.football_track.bookmaker.hit_rate)}`],
+                    ['Draw calls', d.football_track.draw_calls.hit_rate, `${pct(d.football_track.draw_calls.share)} of games · ${pct(d.football_track.draw_calls.base_rate)} of all games are draws`],
+                    ['Safer call (two outcomes)', d.football_track.double_chance.hit_rate, `strongest ${pct(d.football_track.double_chance.strong.share)}: ${pct(d.football_track.double_chance.strong.hit_rate)}`],
+                    ...(d.football_track.over25 ? [['Over/under 2.5 goals', d.football_track.over25.hit_rate, `when 60%+ sure: ${pct(d.football_track.over25.confident.hit_rate)}`] as const] : []),
+                    ...(d.football_track.btts ? [['Both teams to score', d.football_track.btts.hit_rate, `when 60%+ sure: ${pct(d.football_track.btts.confident.hit_rate)}`] as const] : []),
+                  ] as const
+                ).map(([label, v, sub]) => (
+                  <View key={label} style={{ marginBottom: space.sm }}>
+                    <Row style={{ justifyContent: 'space-between' }}>
+                      <Text v="small">{label}</Text>
+                      <Text v="small" style={{ fontWeight: '700' }}>
+                        {pct(v)}
+                      </Text>
+                    </Row>
+                    <Text v="tiny" muted>
+                      {sub}
+                    </Text>
+                  </View>
+                ))}
+                <Text v="tiny" muted style={{ marginTop: space.xs }}>
+                  Measured on two full past seasons, each match predicted only from earlier data. Football has three outcomes and many upsets: across all matches even bookmakers call just over half correctly, so the app shows how strong each call is.
+                </Text>
+              </Card>
+            </>
+          ) : null}
           {source !== 'live' && d.football_backtest?.length ? (
             <>
               <SectionHeader title="Football: new model vs previous engine" />

@@ -208,6 +208,22 @@ function FollowBell({ m }: { m: MatchDetail }) {
   );
 }
 
+function CallRow({ icon, color, title, value }: { icon: string; color: string; title: string; value: string }) {
+  return (
+    <Row style={{ justifyContent: 'space-between', minHeight: 30 }}>
+      <Row gap={space.sm} style={{ flex: 1 }}>
+        <Icon name={icon as never} size={18} color={color} />
+        <Text v="small" style={{ flex: 1 }} numberOfLines={1}>
+          {title}
+        </Text>
+      </Row>
+      <Text v="small" dim>
+        {value}
+      </Text>
+    </Row>
+  );
+}
+
 // ------------------------------------------------------------------ overview (prediction, form, news)
 function Overview({ m }: { m: MatchDetail }) {
   const t = useTheme();
@@ -241,6 +257,23 @@ function Overview({ m }: { m: MatchDetail }) {
             <Text dim style={{ marginTop: space.md }}>
               {p.explanation.summary}
             </Text>
+            {p.call ? (
+              <View style={{ marginTop: space.md, gap: space.sm }}>
+                <CallRow
+                  icon={p.call.tier === 'strong' ? 'shield-check' : p.call.tier === 'likely' ? 'thumb-up-outline' : p.call.tier === 'lean' ? 'scale-balance' : 'help-circle-outline'}
+                  color={p.call.tier === 'strong' ? t.win : p.call.tier === 'likely' ? t.brand : p.call.tier === 'lean' ? t.pending : t.textMuted}
+                  title={p.call.tier_label}
+                  value={p.call.tier_hit_rate !== null ? `${Math.round(p.call.tier_hit_rate * 100)}% right in backtests` : ''}
+                />
+                <CallRow icon="shield-half-full" color={t.brand} title={`Safer call: ${p.call.safer.label}`} value={`${Math.round(p.call.safer.probability * 100)}%`} />
+                {p.goals ? (
+                  <>
+                    <CallRow icon="soccer" color={t.pending} title={p.goals.over25 >= 0.5 ? 'Over 2.5 goals' : 'Under 2.5 goals'} value={`${Math.round(Math.max(p.goals.over25, 1 - p.goals.over25) * 100)}%`} />
+                    <CallRow icon="swap-horizontal" color={t.pending} title={p.goals.btts >= 0.5 ? 'Both teams to score' : 'At least one side kept out'} value={`${Math.round(Math.max(p.goals.btts, 1 - p.goals.btts) * 100)}%`} />
+                  </>
+                ) : null}
+              </View>
+            ) : null}
             <SectionHeader title="Key factors" />
             <Row style={{ marginTop: -space.xs, marginBottom: space.sm, flexWrap: 'wrap' }} gap={space.md}>
               {(

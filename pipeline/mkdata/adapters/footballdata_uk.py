@@ -82,6 +82,8 @@ class FootballDataUK(Adapter):
                 continue
             d = parse_dmy(x["Date"])
             kick, exact = local_kickoff(d, x.get("Time") or None, "Europe/London")
+            if live and kick <= fetched_at:
+                continue  # the fixtures list can lag: a match that has kicked off is not an upcoming fixture
             hg, ag = x.get("FTHG", x.get("HG", "")), x.get("FTAG", x.get("AG", ""))
             final = hg.strip() != "" and ag.strip() != ""
             row_season = season or season_of(d, comp["seasons"])

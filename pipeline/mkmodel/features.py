@@ -175,6 +175,43 @@ def fit_league(rows: list[tuple], t_fit: float, xi: float, target: str):
     return LeagueDC(teams, x, best_rho, t_fit)
 
 
+def goal_markets(lh, la, rho):
+    """P(over 2.5 goals), P(both teams score) from the Dixon-Coles score matrix."""
+    p = _tau_matrix(lh, la, rho)
+    tot = np.add.outer(_G, _G)
+    return float(p[tot >= 3].sum()), float(p[1:, 1:].sum())
+
+
+# ----------------------------------------------------------------------------------- pi-ratings
+class PiRatings:
+    """Constantinou & Fenton (2013): separate home and away ratings in goal units, updated from the
+    gap between the expected and the actual goal difference, with diminishing weight for big margins."""
+
+    def __init__(self, lam: float = 0.035, gamma: float = 0.7):
+        self.lam, self.gamma = lam, gamma
+        self.H: dict[str, float] = defaultdict(float)
+        self.A: dict[str, float] = defaultdict(float)
+
+    @staticmethod
+    def _g(r: float) -> float:
+        return math.copysign(10 ** (abs(r) / 3) - 1, r)
+
+    def expected_gd(self, h: str, a: str) -> float:
+        return self._g(self.H[h]) - self._g(self.A[a])
+
+    def update(self, h: str, a: str, hs: int, as_: int) -> None:
+        exp = self.expected_gd(h, a)
+        obs = hs - as_
+        psi = 3 * math.log10(1 + abs(obs - exp))
+        sign = 1.0 if obs > exp else -1.0
+        d_h = sign * psi * self.lam
+        self.H[h] += d_h
+        self.A[h] += d_h * self.gamma
+        d_a = -sign * psi * self.lam
+        self.A[a] += d_a
+        self.H[a] += d_a * self.gamma
+
+
 # ----------------------------------------------------------------------------------- xG proxy
 def xg_proxy_coefs(rows: list[M]) -> tuple[float, float]:
     """goals ~ a*shots_on_target + b*off_target shots (Poisson, no intercept), on finished rows with stats."""
@@ -205,7 +242,17 @@ FEATURES = [
     "rest_h", "rest_a", "busy_h", "busy_a", "games_h", "games_a",
     "lg_home", "lg_draw", "lg_goals",
     "mk_h", "mk_d", "mk_a",
+    # pi-ratings (goal units)
+    "pi_h", "pi_a", "pi_gd",
+    # recent form: last 6 matches (points per game, goal difference, shot-based xG difference)
+    "form_pts_h", "form_pts_a", "form_gd_h", "form_gd_a", "form_xgd_h", "form_xgd_a",
+    # draw signals: how evenly matched, how low-scoring, how draw-prone
+    "abs_elo_diff", "dc_total", "dc_absdiff", "draw_rate_h", "draw_rate_a", "tier",
+    # goal markets from the goals model
+    "dc_o25", "dc_btts", "dcx_o25", "dcx_btts",
 ]
+TIER = {"eng.1": 1, "esp.1": 1, "ita.1": 1, "ger.1": 1, "fra.1": 1, "ned.1": 1, "por.1": 1, "tur.1": 1, "usa.1": 1,
+        "eng.2": 2, "esp.2": 2, "ita.2": 2, "ger.2": 2, "fra.2": 2, "eng.3": 3, "eng.4": 4}
 DOMESTIC = {"eng.1", "eng.2", "eng.3", "eng.4", "esp.1", "ita.1", "ger.1", "fra.1", "ned.1", "por.1", "tur.1", "usa.1",
             "esp.2", "ita.2", "ger.2", "fra.2"}
 
@@ -239,6 +286,8 @@ def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
     xg_coef_t = -1e18
     pre_ratings: dict[int, tuple[float, float]] = {}
     feats, order = [], []
+    pi = PiRatings()
+    form: dict[str, deque] = defaultdict(lambda: deque(maxlen=20))  # (points, goal diff, xG diff or None, drawn)
 
     def release(upto: float):
         nonlocal xg_coef, xg_coef_t
@@ -262,6 +311,12 @@ def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
                 xa = xg_coef[0] * sa["shots_on_target"] + xg_coef[1] * max(sa["shots"] - sa["shots_on_target"], 0)
             league_rows[m.comp].append((m.t, m.h, m.a, m.hs, m.as_, xh, xa))
             released.append(m)
+            if dom:
+                pi.update(m.h, m.a, m.hs, m.as_)
+            gd = m.hs - m.as_
+            xd = (xh - xa) if xh is not None else None
+            form[m.h].append((3 if gd > 0 else 1 if gd == 0 else 0, gd, xd, gd == 0))
+            form[m.a].append((3 if gd < 0 else 1 if gd == 0 else 0, -gd, -xd if xd is not None else None, gd == 0))
 
     for i, m in enumerate(matches):
         release(m.t)
@@ -301,7 +356,24 @@ def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
             if st is not None:
                 lh, la = st.lambdas(m.h, m.a)
                 ph, pd, pa = outcome_probs(lh, la, st.rho)
-                f.update({f"{key}_h": ph, f"{key}_d": pd, f"{key}_a": pa, f"{key}_lh": lh, f"{key}_la": la})
+                o25, btts = goal_markets(lh, la, st.rho)
+                f.update({f"{key}_h": ph, f"{key}_d": pd, f"{key}_a": pa, f"{key}_lh": lh, f"{key}_la": la,
+                          f"{key}_o25": o25, f"{key}_btts": btts})
+                if key == "dc":
+                    f.update(dc_total=lh + la, dc_absdiff=abs(lh - la))
+        f.update(pi_h=pi.H[m.h], pi_a=pi.A[m.a], pi_gd=pi.expected_gd(m.h, m.a), abs_elo_diff=abs(rh + cfg.elo.hfa - ra),
+                 tier=TIER.get(comp, 1))
+        for side, team in (("h", m.h), ("a", m.a)):
+            q = list(form[team])
+            last = q[-6:]
+            if len(last) >= 3:
+                f[f"form_pts_{side}"] = float(np.mean([x[0] for x in last]))
+                f[f"form_gd_{side}"] = float(np.mean([x[1] for x in last]))
+                xs = [x[2] for x in last if x[2] is not None]
+                if len(xs) >= 3:
+                    f[f"form_xgd_{side}"] = float(np.mean(xs))
+            if len(q) >= 5:  # shrunk toward a 26% prior: a team's own draw rate is a weak signal
+                f[f"draw_rate_{side}"] = (sum(x[3] for x in q) + 0.26 * 10) / (len(q) + 10)
         (rest_h, busy_h), (rest_a, busy_a) = ctx
         f.update(rest_h=rest_h, rest_a=rest_a, busy_h=busy_h, busy_a=busy_a, games_h=min(games[m.h], 60), games_a=min(games[m.a], 60))
         hist = league_hist[comp]

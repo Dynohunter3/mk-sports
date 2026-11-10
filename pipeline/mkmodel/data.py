@@ -12,7 +12,9 @@ from mkdata.resolve import devig
 
 STORE = Path(__file__).resolve().parents[1] / "var" / "mkdata.sqlite"
 APP_LEAGUES = ["eng.1", "eng.2", "esp.1", "ita.1", "ger.1", "fra.1", "ned.1", "por.1", "tur.1", "usa.1", "uefa.champions"]
-LOWER = ["eng.3", "eng.4"]
+LOWER_LEGACY = ["eng.3", "eng.4"]  # what the Step 3-5 runs used
+# lower divisions feed ratings only (promoted and relegated teams arrive with a history); never evaluated
+LOWER = ["eng.3", "eng.4", "ger.2", "ita.2", "esp.2", "fra.2"]
 DAY = 86400.0
 # Same evaluation windows as Step 1 ([from, to) UTC)
 EU = (datetime(2024, 7, 1, tzinfo=timezone.utc).timestamp(), datetime(2026, 7, 1, tzinfo=timezone.utc).timestamp())

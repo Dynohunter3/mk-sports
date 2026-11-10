@@ -20,9 +20,11 @@ Every competition is shown in its own brand colours, and every team with its rea
 4. predicts the next 21 days and grades finished matches;
 5. publishes `football_predictions.json` and `accuracy.json` to GitHub Pages, with a mirror on the `predictions` branch.
 
+Each prediction carries a call (home, draw or away), how strong the call is, a safer two-outcome call and an over/under 2.5 goals call, each with a measured track record ([Step 6](docs/audit/STEP6_DRAWS_AND_CALLS.md)).
+
 The app downloads that file and shows those predictions for the Premier League, Championship, LaLiga, Serie A, Bundesliga, Ligue 1, Eredivisie, Liga Portugal, Süper Lig, MLS and the Champions League. It computes predictions on the phone only for other competitions and sports, or as a fallback when the file is unavailable.
 
-How the model was audited, rebuilt and measured: [Step 1](docs/audit/STEP1_AUDIT.md), [Step 2](docs/audit/STEP2_DATA_LAYER.md), [Step 3](docs/audit/STEP3_MODELS.md), [Step 4](docs/audit/STEP4_CONSISTENCY.md), [Step 5](docs/audit/STEP5_RESULTS.md). The data sources and their terms are in [docs/SOURCE_REGISTRY.md](docs/SOURCE_REGISTRY.md).
+How the model was audited, rebuilt and measured: [Step 1](docs/audit/STEP1_AUDIT.md), [Step 2](docs/audit/STEP2_DATA_LAYER.md), [Step 3](docs/audit/STEP3_MODELS.md), [Step 4](docs/audit/STEP4_CONSISTENCY.md), [Step 5](docs/audit/STEP5_RESULTS.md), [Step 6](docs/audit/STEP6_DRAWS_AND_CALLS.md). The data sources and their terms are in [docs/SOURCE_REGISTRY.md](docs/SOURCE_REGISTRY.md).
 
 Fixtures, live scores, line-ups, stats and news still come from public sports feeds fetched by the phone. No server, account or API key is needed. An optional server mode (`backend/`) adds accounts and global leaderboards.
 
@@ -40,7 +42,7 @@ predictpro/
 
 ## Install on Android (APK)
 
-Build the release-signed APK with `mobile/scripts/build-apk.sh` (see [Building the APK](#building-the-apk)). Copy `MKSports-1.5.0.apk` to the phone, open it, and allow "install from this source" when Android asks. It runs on Android 7.0+ on 32- and 64-bit ARM phones.
+Build the release-signed APK with `mobile/scripts/build-apk.sh` (see [Building the APK](#building-the-apk)). Copy `MKSports-1.6.0.apk` to the phone, open it, and allow "install from this source" when Android asks. It runs on Android 7.0+ on 32- and 64-bit ARM phones.
 
 Versions 1.1 and later keep the package id of the 1.0 build (`app.predictpro.mobile`) and the same signing key. They install as updates, so existing picks and points are kept.
 

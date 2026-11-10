@@ -33,16 +33,21 @@ import numpy as np
 from . import learners as L
 from .data import APP_LEAGUES, LOWER, STORE, M, load
 from .experiment import GROUPS
+from .goals_experiment import NON_MARKET, fit_gbm_binary, logit
+from .picks import DRAW_RULE, describe
 from .features import FEATURES, Config, EloParams, build
 
 PIPE = Path(__file__).resolve().parents[1]
 MODELS = PIPE / "var" / "models"
 PUBLISH = PIPE / "var" / "publish"
-FEATURE_START = datetime(2020, 7, 1, tzinfo=timezone.utc).timestamp()  # same as the backtest (DC refit cadence)
-TRAIN_FROM = datetime(2020, 8, 1, tzinfo=timezone.utc).timestamp()
+# Same as the Step 6 backtest (audit/results/step6.json): history from 2015, training rows from 2016
+FEATURE_START = datetime(2015, 7, 1, tzinfo=timezone.utc).timestamp()
+TRAIN_FROM = datetime(2016, 8, 1, tzinfo=timezone.utc).timestamp()
+# feature groups kept by the Step 6 selection (pi-ratings were tried and dropped)
+KEPT_GROUPS = ("elo+context", "dc", "xg_proxy", "form", "draw")
 COL = {f: i for i, f in enumerate(FEATURES)}
 # same column order as the evaluated models (feature groups in the order they were added)
-GBM_NOMKT = [COL[f] for g in ("elo+context", "dc", "xg_proxy") for f in GROUPS[g]]
+GBM_NOMKT = [COL[f] for g in KEPT_GROUPS for f in GROUPS[g]]
 GBM_MKT = GBM_NOMKT + [COL[f] for f in GROUPS["market_pre"]]
 ATTRIBUTION = "Data: football-data.co.uk, openfootball (public domain)."
 DAY = 86400.0
@@ -131,9 +136,11 @@ class Bundle:
         man = json.loads((folder / "manifest.json").read_text())
         b_no = L.gbm_from_string((folder / "gbm_nomkt.txt").read_text())
         b_mk = L.gbm_from_string((folder / "gbm_mkt.txt").read_text())
+        b_ou = L.gbm_from_string((folder / "gbm_over25.txt").read_text())
         learn = {"elo_ol": man["elo_ol"],
                  "gbm_nomkt_predict": lambda X, b=b_no: L.predict_booster(b, GBM_NOMKT, X),
-                 "gbm_mkt_predict": lambda X, b=b_mk: L.predict_booster(b, GBM_MKT, X)}
+                 "gbm_mkt_predict": lambda X, b=b_mk: L.predict_booster(b, GBM_MKT, X),
+                 "over25_predict": lambda X, b=b_ou: b.predict(X[:, NON_MARKET])}
         return cls(man["version"], man, learn)
 
 
@@ -145,6 +152,16 @@ def _fit_learners(X, y, kick, res_at, cutoff):
     learn = {"elo_ol": ol, "gbm_nomkt_predict": lambda Z: L.predict_gbm(g0, GBM_NOMKT, Z),
              "gbm_mkt_predict": lambda Z: L.predict_gbm(g1, GBM_MKT, Z)}
     return learn, g0, g1, int(tr.sum())
+
+
+def over25_probs(X: np.ndarray, gbm_p: np.ndarray) -> np.ndarray:
+    """Over 2.5 goals: boosted trees averaged (in logit space) with the two goals models. Chosen on the
+    selection season in mkmodel.goals_experiment ('gbm+mix')."""
+    dc = X[:, COL["dc_o25"]]
+    dcx = np.where(np.isfinite(X[:, COL["dcx_o25"]]), X[:, COL["dcx_o25"]], dc)
+    mix = 1 / (1 + np.exp(-(logit(dc) + logit(dcx)) / 2))
+    mix = np.where(np.isfinite(mix), mix, gbm_p)
+    return 1 / (1 + np.exp(-(logit(gbm_p) + logit(mix)) / 2))
 
 
 def retrain(cutoff: float, store: Path = STORE, out_root: Path = MODELS, app_comps=None, lower=None) -> Bundle:
@@ -172,10 +189,14 @@ def retrain(cutoff: float, store: Path = STORE, out_root: Path = MODELS, app_com
     blends = {"A": L.fit_blend(logs(sub, INPUTS_A), y[win], calibrate=True),
               "B": L.fit_blend(logs(sub, INPUTS_B), y[win], calibrate=False)}
     learn, g0, g1, n_train = _fit_learners(X, y, kick, res_at, cutoff)
+    goals_total = np.array([(m.hs + m.as_) if m.outcome is not None else -1 for m in ms])
+    tr_g = (res_at < cutoff) & (kick >= TRAIN_FROM) & (y >= 0)
+    g_ou = fit_gbm_binary(X[tr_g], (goals_total[tr_g] >= 3).astype(float), kick[tr_g], cutoff)
     data_version, n_rows = data_fingerprint(ms_all, cutoff)
     cfg = {"elo": EloParams().__dict__, "xi": Config(elo=EloParams()).xi, "refit_days": 7, "feature_start": FEATURE_START,
            "train_from": TRAIN_FROM, "features": FEATURES, "gbm_params": {k: v for k, v in L.GBM_PARAMS.items()},
-           "inputs_A": INPUTS_A, "inputs_B": INPUTS_B, "competitions": app_comps, "lower": lower if lower is not None else LOWER}
+           "inputs_A": INPUTS_A, "inputs_B": INPUTS_B, "competitions": app_comps, "lower": lower if lower is not None else LOWER,
+           "kept_groups": KEPT_GROUPS, "draw_rule": DRAW_RULE, "over25": "gbm+mix"}
     ch = code_hash()
     vh = hashlib.sha256(json.dumps([ch, cfg, data_version, cutoff], sort_keys=True, default=str).encode()).hexdigest()[:8]
     version = f"fb-{datetime.fromtimestamp(cutoff, timezone.utc):%Y-%m}-{vh}"
@@ -183,6 +204,7 @@ def retrain(cutoff: float, store: Path = STORE, out_root: Path = MODELS, app_com
     folder.mkdir(parents=True, exist_ok=True)
     (folder / "gbm_nomkt.txt").write_text(L.gbm_to_string(g0))
     (folder / "gbm_mkt.txt").write_text(L.gbm_to_string(g1))
+    (folder / "gbm_over25.txt").write_text(L.gbm_to_string(g_ou))
     man = {"version": version, "cutoff": cutoff, "cutoff_iso": datetime.fromtimestamp(cutoff, timezone.utc).isoformat(),
            "code_hash": ch, "data_version": data_version, "training_results": n_rows, "training_rows": n_train,
            "blend_rows": int(win.sum()), "elo_ol": learn["elo_ol"], "blends": blends, "config": cfg, "seed": L.SEED,
@@ -196,7 +218,10 @@ def current_bundle(root: Path = MODELS) -> Bundle | None:
     p = root / "current.json"
     if not p.exists():
         return None
-    return Bundle.load(root / json.loads(p.read_text())["version"])
+    try:
+        return Bundle.load(root / json.loads(p.read_text())["version"])
+    except (FileNotFoundError, KeyError):
+        return None  # a bundle from an older model layout: treated as absent, so the next retrain replaces it
 
 
 # ----------------------------------------------------------------------------------- confidence
@@ -246,7 +271,8 @@ def label(score: float) -> str:
 def ensure_log_columns(db: sqlite3.Connection) -> None:
     have = {r[1] for r in db.execute("PRAGMA table_info(predictions)")}
     for col, typ in (("inputs", "TEXT"), ("confidence", "REAL"), ("confidence_label", "TEXT"), ("confidence_reasons", "TEXT"),
-                     ("variant", "TEXT"), ("official", "INTEGER")):
+                     ("variant", "TEXT"), ("official", "INTEGER"), ("pick", "TEXT"), ("tier", "TEXT"), ("dc_call", "TEXT"),
+                     ("p_over25", "REAL")):
         if col not in have:
             db.execute(f"ALTER TABLE predictions ADD COLUMN {col} {typ}")
     db.commit()
@@ -296,6 +322,7 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
     Xu = X[idx]
     comps = base_predictions(Xu, bundle.learn)
     Fp, A, B, has_odds = final_probs(comps, bundle.manifest["blends"])
+    p_over = over25_probs(Xu, bundle.learn["over25_predict"](Xu))
     # source-quality context
     agreement = {r["match_id"]: r["agreement"] for r in db.execute("SELECT match_id, agreement FROM matches")}
     stale = {r[0] for r in db.execute(
@@ -316,6 +343,8 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
         h = hashlib.sha256(json.dumps(inputs, sort_keys=True).encode()).hexdigest()[:16]
         last = db.execute("SELECT inputs_hash, inputs FROM predictions WHERE match_id=? ORDER BY made_at DESC, prediction_id DESC LIMIT 1", (m.id,)).fetchone()
         p = [float(v) for v in Fp[j]]
+        call = describe(Fp[j])
+        over = float(p_over[j]) if np.isfinite(p_over[j]) else None
         variant = "with odds" if has_odds[j] else "no odds yet"
         if last is not None and last["inputs_hash"] == h:
             summary["unchanged"] += 1
@@ -323,10 +352,11 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
             reason = _reason(json.loads(last["inputs"]) if last is not None and last["inputs"] else None, inputs)
             pid = f"{m.id}@{int(now)}:{h[:8]}"
             db.execute("""INSERT INTO predictions (prediction_id, match_id, model_version, made_at, p_home, p_draw, p_away, inputs_hash, reason,
-                          inputs, confidence, confidence_label, confidence_reasons, variant, official)
-                          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)""",
+                          inputs, confidence, confidence_label, confidence_reasons, variant, official, pick, tier, dc_call, p_over25)
+                          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?,?,?)""",
                        (pid, m.id, bundle.version, now, p[0], p[1], p[2], h, reason, json.dumps(inputs, sort_keys=True),
-                        round(score, 4), label(score), json.dumps(why), variant))
+                        round(score, 4), label(score), json.dumps(why), variant, call["pick"], call["tier"],
+                        call["double_chance"]["call"], over))
             summary["new"] += 1
             summary["reasons"][reason] = summary["reasons"].get(reason, 0) + 1
         rnd = lambda v: None if not np.isfinite(v) else round(float(v), 4)  # noqa: E731
@@ -335,6 +365,7 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
                           "expected_goals": [rnd(Xu[j, COL["dc_lh"]]), rnd(Xu[j, COL["dc_la"]])],
                           "elo": [rnd(Xu[j, COL["elo_h"]]), rnd(Xu[j, COL["elo_a"]])],
                           "components": {k: [rnd(v) for v in comps[k][j]] for k in ("elo", "dc", "dcx", "gbm_nomkt", "market")},
+                          "call": call, "goals": {"over25": None if over is None else round(over, 4), "btts": None},
                           "variant": variant, "confidence": round(score, 3), "confidence_label": label(score), "confidence_reasons": why})
     db.commit()
     # names and aliases (every source's spelling) so clients can match their own fixture lists
@@ -457,6 +488,28 @@ def _agg(rows: list[dict]) -> dict:
     return out
 
 
+def track_record() -> dict | None:
+    """Backtest hit rates of each kind of call (two seasons), from the Step 6 picks and goals experiments."""
+    fp, fg = AUDIT / "step6_picks.json", AUDIT / "step6_goals.json"
+    if not fp.exists():
+        return None
+    both = json.loads(fp.read_text())["splits"]["both"]
+    rule, top = both["with_draw_rule"], both["double_chance"]["tiers"][0]
+    out = {"tiers": {t["tier"]: {"n": t["n"], "hit_rate": t["hit_rate"], "share": t["share"]} for t in both["tiers"]},
+           "draw_calls": {"n": rule["draw_calls"], "hit_rate": rule["draw_precision"], "share": rule["draw_share"],
+                          "base_rate": json.loads(fp.read_text())["draw_base_rate"]["selection"] / 2 + json.loads(fp.read_text())["draw_base_rate"]["test"] / 2},
+           "all_matches": {"n": rule["n"], "hit_rate": rule["hit_rate"]},
+           "bookmaker": {"n": both["bookmaker_closing_most_likely"]["n"], "hit_rate": both["bookmaker_closing_most_likely"]["hit_rate"]},
+           "double_chance": {"n": rule["n"], "hit_rate": both["double_chance"]["hit_rate"],
+                             "strong": {"n": top["n"], "hit_rate": top["hit_rate"], "share": top["share"]}}}
+    if fg.exists():
+        g = json.loads(fg.read_text())["markets"]["over25"]
+        r = g["candidates"][g["chosen"]]["both"]
+        out["over25"] = {"n": r["n"], "hit_rate": r["accuracy"],
+                         "confident": {"n": round(r["n"] * r["confident_share"]), "hit_rate": r["confident_accuracy"], "share": r["confident_share"]}}
+    return out
+
+
 def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | None = None) -> dict:
     """Every graded (official) prediction, plus the backtest before/after, for the app's accuracy screen."""
     db = sqlite3.connect(store)
@@ -467,18 +520,29 @@ def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | 
     for r in db.execute("""SELECT p.*, m.competition_id, m.kickoff_utc, m.home_id, m.away_id, m.home_score, m.away_score
                            FROM predictions p JOIN matches m USING (match_id) WHERE p.official=1 ORDER BY m.kickoff_utc DESC"""):
         probs = {"home": r["p_home"], "draw": r["p_draw"], "away": r["p_away"]}
-        pick = max(probs, key=probs.get)
+        pick = r["pick"] or max(probs, key=probs.get)  # the call that was shown (draw rule included)
+        total = r["home_score"] + r["away_score"]
         graded.append({"match_id": r["match_id"], "competition": r["competition_id"], "kickoff": datetime.fromtimestamp(r["kickoff_utc"], timezone.utc).isoformat(),
                        "home": names.get(r["home_id"], r["home_id"]), "away": names.get(r["away_id"], r["away_id"]),
                        "score": f"{r['home_score']}-{r['away_score']}", "pick": pick, "probability": round(probs[pick], 4),
                        "correct": int(pick == r["outcome"]), "log_loss": r["log_loss"], "brier": r["brier"],
-                       "confidence_label": r["confidence_label"], "model_version": r["model_version"]})
+                       "confidence_label": r["confidence_label"], "model_version": r["model_version"], "tier": r["tier"],
+                       "safer_call": r["dc_call"],
+                       "safer_correct": None if not r["dc_call"] else int(r["outcome"] in r["dc_call"].replace(" or ", "|").split("|")),
+                       "over25_correct": None if r["p_over25"] is None else int((r["p_over25"] >= 0.5) == (total >= 3))})
     comps = sorted({g["competition"] for g in graded})
+    def rate(key, rows):
+        xs = [g[key] for g in rows if g.get(key) is not None]
+        return {"n": len(xs), "hit_rate": (sum(xs) / len(xs)) if xs else None}
+
     live = {"overall": _agg(graded), "competitions": {c: _agg([g for g in graded if g["competition"] == c]) for c in comps},
+            "tiers": {t: rate("correct", [g for g in graded if g["tier"] == t]) for t in ("strong", "likely", "lean", "toss-up")},
+            "draw_calls": rate("correct", [g for g in graded if g["pick"] == "draw"]),
+            "safer_call": rate("safer_correct", graded), "over25": rate("over25_correct", graded),
             "recent": [{k: g[k] for k in ("match_id", "competition", "kickoff", "home", "away", "score", "pick", "probability", "correct", "confidence_label")}
                        for g in graded[:30]]}
     backtest = None
-    for name in ("step5.json", "step3.json"):
+    for name in ("step6.json", "step5.json", "step3.json"):
         f = AUDIT / name
         if f.exists():
             r = json.loads(f.read_text())
@@ -496,6 +560,7 @@ def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | 
             break
     doc = {"schema": 1, "generated_at": datetime.fromtimestamp(now or time.time(), timezone.utc).isoformat(timespec="seconds"),
            "model_version": (current_bundle().version if current_bundle() else None), "live": live, "backtest": backtest,
+           "track_record": track_record(),
            "note": "Live = every prediction this service published, graded on its last version before kick-off. "
                    "Backtest = the same model replayed on two past seasons. Hit rate = share where the most likely outcome happened; "
                    "log loss and Brier score measure probability quality (lower is better)."}

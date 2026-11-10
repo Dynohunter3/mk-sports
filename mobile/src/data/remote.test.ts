@@ -108,3 +108,27 @@ test('refresh: Pages down -> mirror; invalid files are rejected; last good copy 
   await refreshRemote(true);
   assert.equal(predictEvent(ev('Manchester United', 'Arsenal'))!.model_version, 'fb-from-mirror');
 });
+
+test('a draw call from the service is shown as a draw with a drawn score', async () => {
+  const { mini } = await import('./predict');
+  const f = file();
+  f.matches[0].p = { home: 0.36, draw: 0.31, away: 0.33 };
+  f.matches[0].call = { pick: 'draw', pick_probability: 0.31, tier: 'toss-up', draw_call: true, double_chance: { call: 'home or draw', probability: 0.67 } };
+  f.matches[0].goals = { over25: 0.44, btts: 0.52 };
+  setRemoteForTests(f, {
+    schema: 1, generated_at: new Date().toISOString(), model_version: 'fb-test', note: '', live: { overall: { n: 0, correct: 0, hit_rate: null, log_loss: null, brier: null, by_confidence: {} }, competitions: {}, recent: [] }, backtest: null,
+    track_record: { tiers: { 'toss-up': { n: 1400, hit_rate: 0.37, share: 0.18 } }, draw_calls: { n: 400, hit_rate: 0.31, share: 0.05, base_rate: 0.25 }, all_matches: { n: 7740, hit_rate: 0.52 }, bookmaker: { n: 7542, hit_rate: 0.528 }, double_chance: { n: 7740, hit_rate: 0.79, strong: { n: 1400, hit_rate: 0.91, share: 0.18 } } },
+  });
+  const p = predictEvent(ev('Manchester United', 'Arsenal'))!;
+  assert.equal(p.pick, 'draw');
+  assert.equal(p.predicted_score[0], p.predicted_score[1]);
+  assert.equal(mini(p).pick, 'draw');
+  assert.equal(mini(p).tier, 'toss-up');
+  assert.equal(p.call?.tier_hit_rate, 0.37);
+  assert.equal(p.call?.safer.label, 'Manchester or draw');
+  assert.deepEqual(p.goals, { over25: 0.44, btts: 0.52 });
+  assert.ok(p.explanation.summary.startsWith('Draw called'));
+  // without a call (older file) the plain most-likely outcome is used
+  setRemoteForTests(file());
+  assert.equal(predictEvent(ev('Manchester United', 'Arsenal'))!.pick, 'away');
+});

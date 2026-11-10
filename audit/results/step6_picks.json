@@ -1,0 +1,833 @@
+{
+ "generated_at": "2026-11-10T14:27:02+00:00",
+ "run": "step6",
+ "criterion": "selection season; draw calls in >= 5% of matches; highest overall hit rate, then draw precision",
+ "chosen_rule": {
+  "min_draw": 0.31,
+  "max_gap": 0.12
+ },
+ "grid_selection": [
+  {
+   "min_draw": 0.27,
+   "max_gap": 0.02,
+   "hit_rate": 0.5288195318399195,
+   "draw_share": 0.006544173168890007,
+   "draw_precision": 0.23076923076923078,
+   "draw_recall": 0.006091370558375634,
+   "n": 3973,
+   "draw_calls": 26
+  },
+  {
+   "min_draw": 0.27,
+   "max_gap": 0.04,
+   "hit_rate": 0.5300780266800906,
+   "draw_share": 0.021142713314875407,
+   "draw_precision": 0.32142857142857145,
+   "draw_recall": 0.027411167512690356,
+   "n": 3973,
+   "draw_calls": 84
+  },
+  {
+   "min_draw": 0.27,
+   "max_gap": 0.06,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.0445507173420589,
+   "draw_precision": 0.3107344632768362,
+   "draw_recall": 0.05583756345177665,
+   "n": 3973,
+   "draw_calls": 177
+  },
+  {
+   "min_draw": 0.27,
+   "max_gap": 0.08,
+   "hit_rate": 0.5247923483513718,
+   "draw_share": 0.09010823055625472,
+   "draw_precision": 0.29329608938547486,
+   "draw_recall": 0.1065989847715736,
+   "n": 3973,
+   "draw_calls": 358
+  },
+  {
+   "min_draw": 0.27,
+   "max_gap": 0.1,
+   "hit_rate": 0.5192549710546187,
+   "draw_share": 0.1490057890762648,
+   "draw_precision": 0.2956081081081081,
+   "draw_recall": 0.17766497461928935,
+   "n": 3973,
+   "draw_calls": 592
+  },
+  {
+   "min_draw": 0.27,
+   "max_gap": 0.12,
+   "hit_rate": 0.5117040020135918,
+   "draw_share": 0.2099169393405487,
+   "draw_precision": 0.29256594724220625,
+   "draw_recall": 0.24771573604060915,
+   "n": 3973,
+   "draw_calls": 834
+  },
+  {
+   "min_draw": 0.27,
+   "max_gap": 0.15,
+   "hit_rate": 0.49962245154794865,
+   "draw_share": 0.28744022149509185,
+   "draw_precision": 0.29159369527145357,
+   "draw_recall": 0.3380710659898477,
+   "n": 3973,
+   "draw_calls": 1142
+  },
+  {
+   "min_draw": 0.27,
+   "max_gap": 0.2,
+   "hit_rate": 0.4820035237855525,
+   "draw_share": 0.38459602315630503,
+   "draw_precision": 0.287303664921466,
+   "draw_recall": 0.44568527918781725,
+   "n": 3973,
+   "draw_calls": 1528
+  },
+  {
+   "min_draw": 0.28,
+   "max_gap": 0.02,
+   "hit_rate": 0.5288195318399195,
+   "draw_share": 0.006544173168890007,
+   "draw_precision": 0.23076923076923078,
+   "draw_recall": 0.006091370558375634,
+   "n": 3973,
+   "draw_calls": 26
+  },
+  {
+   "min_draw": 0.28,
+   "max_gap": 0.04,
+   "hit_rate": 0.5300780266800906,
+   "draw_share": 0.021142713314875407,
+   "draw_precision": 0.32142857142857145,
+   "draw_recall": 0.027411167512690356,
+   "n": 3973,
+   "draw_calls": 84
+  },
+  {
+   "min_draw": 0.28,
+   "max_gap": 0.06,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.0445507173420589,
+   "draw_precision": 0.3107344632768362,
+   "draw_recall": 0.05583756345177665,
+   "n": 3973,
+   "draw_calls": 177
+  },
+  {
+   "min_draw": 0.28,
+   "max_gap": 0.08,
+   "hit_rate": 0.5247923483513718,
+   "draw_share": 0.09010823055625472,
+   "draw_precision": 0.29329608938547486,
+   "draw_recall": 0.1065989847715736,
+   "n": 3973,
+   "draw_calls": 358
+  },
+  {
+   "min_draw": 0.28,
+   "max_gap": 0.1,
+   "hit_rate": 0.5195066700226529,
+   "draw_share": 0.14296501384344323,
+   "draw_precision": 0.29401408450704225,
+   "draw_recall": 0.16954314720812183,
+   "n": 3973,
+   "draw_calls": 568
+  },
+  {
+   "min_draw": 0.28,
+   "max_gap": 0.12,
+   "hit_rate": 0.5124590989176945,
+   "draw_share": 0.1930531084822552,
+   "draw_precision": 0.2907431551499348,
+   "draw_recall": 0.2263959390862944,
+   "n": 3973,
+   "draw_calls": 767
+  },
+  {
+   "min_draw": 0.28,
+   "max_gap": 0.15,
+   "hit_rate": 0.4993707525799144,
+   "draw_share": 0.25044047319405993,
+   "draw_precision": 0.2834170854271357,
+   "draw_recall": 0.2862944162436548,
+   "n": 3973,
+   "draw_calls": 995
+  },
+  {
+   "min_draw": 0.28,
+   "max_gap": 0.2,
+   "hit_rate": 0.48980619179461365,
+   "draw_share": 0.31814749559526806,
+   "draw_precision": 0.28401898734177217,
+   "draw_recall": 0.36446700507614216,
+   "n": 3973,
+   "draw_calls": 1264
+  },
+  {
+   "min_draw": 0.29,
+   "max_gap": 0.02,
+   "hit_rate": 0.5288195318399195,
+   "draw_share": 0.006544173168890007,
+   "draw_precision": 0.23076923076923078,
+   "draw_recall": 0.006091370558375634,
+   "n": 3973,
+   "draw_calls": 26
+  },
+  {
+   "min_draw": 0.29,
+   "max_gap": 0.04,
+   "hit_rate": 0.5300780266800906,
+   "draw_share": 0.021142713314875407,
+   "draw_precision": 0.32142857142857145,
+   "draw_recall": 0.027411167512690356,
+   "n": 3973,
+   "draw_calls": 84
+  },
+  {
+   "min_draw": 0.29,
+   "max_gap": 0.06,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.0445507173420589,
+   "draw_precision": 0.3107344632768362,
+   "draw_recall": 0.05583756345177665,
+   "n": 3973,
+   "draw_calls": 177
+  },
+  {
+   "min_draw": 0.29,
+   "max_gap": 0.08,
+   "hit_rate": 0.5252957462874402,
+   "draw_share": 0.08557764913163857,
+   "draw_precision": 0.29411764705882354,
+   "draw_recall": 0.10152284263959391,
+   "n": 3973,
+   "draw_calls": 340
+  },
+  {
+   "min_draw": 0.29,
+   "max_gap": 0.1,
+   "hit_rate": 0.5220236597029952,
+   "draw_share": 0.12358419330480745,
+   "draw_precision": 0.29938900203665986,
+   "draw_recall": 0.14923857868020304,
+   "n": 3973,
+   "draw_calls": 491
+  },
+  {
+   "min_draw": 0.29,
+   "max_gap": 0.12,
+   "hit_rate": 0.5179964762144476,
+   "draw_share": 0.1563050591492575,
+   "draw_precision": 0.30434782608695654,
+   "draw_recall": 0.1918781725888325,
+   "n": 3973,
+   "draw_calls": 621
+  },
+  {
+   "min_draw": 0.29,
+   "max_gap": 0.15,
+   "hit_rate": 0.5094387113012837,
+   "draw_share": 0.19179461364208406,
+   "draw_precision": 0.3005249343832021,
+   "draw_recall": 0.23248730964467004,
+   "n": 3973,
+   "draw_calls": 762
+  },
+  {
+   "min_draw": 0.29,
+   "max_gap": 0.2,
+   "hit_rate": 0.5059149257488045,
+   "draw_share": 0.2260256732947395,
+   "draw_precision": 0.30178173719376394,
+   "draw_recall": 0.2751269035532995,
+   "n": 3973,
+   "draw_calls": 898
+  },
+  {
+   "min_draw": 0.3,
+   "max_gap": 0.02,
+   "hit_rate": 0.5288195318399195,
+   "draw_share": 0.006544173168890007,
+   "draw_precision": 0.23076923076923078,
+   "draw_recall": 0.006091370558375634,
+   "n": 3973,
+   "draw_calls": 26
+  },
+  {
+   "min_draw": 0.3,
+   "max_gap": 0.04,
+   "hit_rate": 0.5300780266800906,
+   "draw_share": 0.021142713314875407,
+   "draw_precision": 0.32142857142857145,
+   "draw_recall": 0.027411167512690356,
+   "n": 3973,
+   "draw_calls": 84
+  },
+  {
+   "min_draw": 0.3,
+   "max_gap": 0.06,
+   "hit_rate": 0.5310848225522276,
+   "draw_share": 0.043543921469921976,
+   "draw_precision": 0.3179190751445087,
+   "draw_recall": 0.05583756345177665,
+   "n": 3973,
+   "draw_calls": 173
+  },
+  {
+   "min_draw": 0.3,
+   "max_gap": 0.08,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.07097910898565316,
+   "draw_precision": 0.32269503546099293,
+   "draw_recall": 0.09238578680203045,
+   "n": 3973,
+   "draw_calls": 282
+  },
+  {
+   "min_draw": 0.3,
+   "max_gap": 0.1,
+   "hit_rate": 0.5275610369997483,
+   "draw_share": 0.09262522023659703,
+   "draw_precision": 0.31521739130434784,
+   "draw_recall": 0.11776649746192894,
+   "n": 3973,
+   "draw_calls": 368
+  },
+  {
+   "min_draw": 0.3,
+   "max_gap": 0.12,
+   "hit_rate": 0.5268059400956456,
+   "draw_share": 0.11326453561540398,
+   "draw_precision": 0.33111111111111113,
+   "draw_recall": 0.15126903553299492,
+   "n": 3973,
+   "draw_calls": 450
+  },
+  {
+   "min_draw": 0.3,
+   "max_gap": 0.15,
+   "hit_rate": 0.5212685627988926,
+   "draw_share": 0.12836647369745785,
+   "draw_precision": 0.3196078431372549,
+   "draw_recall": 0.16548223350253807,
+   "n": 3973,
+   "draw_calls": 510
+  },
+  {
+   "min_draw": 0.3,
+   "max_gap": 0.2,
+   "hit_rate": 0.5200100679587214,
+   "draw_share": 0.14044802416310093,
+   "draw_precision": 0.31899641577060933,
+   "draw_recall": 0.18071065989847715,
+   "n": 3973,
+   "draw_calls": 558
+  },
+  {
+   "min_draw": 0.31,
+   "max_gap": 0.02,
+   "hit_rate": 0.5288195318399195,
+   "draw_share": 0.006544173168890007,
+   "draw_precision": 0.23076923076923078,
+   "draw_recall": 0.006091370558375634,
+   "n": 3973,
+   "draw_calls": 26
+  },
+  {
+   "min_draw": 0.31,
+   "max_gap": 0.04,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.020639315378806946,
+   "draw_precision": 0.32926829268292684,
+   "draw_recall": 0.027411167512690356,
+   "n": 3973,
+   "draw_calls": 82
+  },
+  {
+   "min_draw": 0.31,
+   "max_gap": 0.06,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.03347596274855273,
+   "draw_precision": 0.3007518796992481,
+   "draw_recall": 0.04060913705583756,
+   "n": 3973,
+   "draw_calls": 133
+  },
+  {
+   "min_draw": 0.31,
+   "max_gap": 0.08,
+   "hit_rate": 0.5313365215202618,
+   "draw_share": 0.046312610118298514,
+   "draw_precision": 0.32065217391304346,
+   "draw_recall": 0.05989847715736041,
+   "n": 3973,
+   "draw_calls": 184
+  },
+  {
+   "min_draw": 0.31,
+   "max_gap": 0.1,
+   "hit_rate": 0.5290712308079537,
+   "draw_share": 0.05738736471180468,
+   "draw_precision": 0.30701754385964913,
+   "draw_recall": 0.07106598984771574,
+   "n": 3973,
+   "draw_calls": 228
+  },
+  {
+   "min_draw": 0.31,
+   "max_gap": 0.12,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.06846211930531085,
+   "draw_precision": 0.33455882352941174,
+   "draw_recall": 0.09238578680203045,
+   "n": 3973,
+   "draw_calls": 272
+  },
+  {
+   "min_draw": 0.31,
+   "max_gap": 0.15,
+   "hit_rate": 0.5293229297759879,
+   "draw_share": 0.07274100176189277,
+   "draw_precision": 0.3356401384083045,
+   "draw_recall": 0.09847715736040609,
+   "n": 3973,
+   "draw_calls": 289
+  },
+  {
+   "min_draw": 0.31,
+   "max_gap": 0.2,
+   "hit_rate": 0.5280644349358168,
+   "draw_share": 0.07500629247420086,
+   "draw_precision": 0.3288590604026846,
+   "draw_recall": 0.09949238578680203,
+   "n": 3973,
+   "draw_calls": 298
+  },
+  {
+   "min_draw": 0.32,
+   "max_gap": 0.02,
+   "hit_rate": 0.5288195318399195,
+   "draw_share": 0.006544173168890007,
+   "draw_precision": 0.23076923076923078,
+   "draw_recall": 0.006091370558375634,
+   "n": 3973,
+   "draw_calls": 26
+  },
+  {
+   "min_draw": 0.32,
+   "max_gap": 0.04,
+   "hit_rate": 0.5295746287440222,
+   "draw_share": 0.01434684117795117,
+   "draw_precision": 0.2982456140350877,
+   "draw_recall": 0.017258883248730966,
+   "n": 3973,
+   "draw_calls": 57
+  },
+  {
+   "min_draw": 0.32,
+   "max_gap": 0.06,
+   "hit_rate": 0.5293229297759879,
+   "draw_share": 0.019380820538635792,
+   "draw_precision": 0.2987012987012987,
+   "draw_recall": 0.023350253807106598,
+   "n": 3973,
+   "draw_calls": 77
+  },
+  {
+   "min_draw": 0.32,
+   "max_gap": 0.08,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.023156305059149257,
+   "draw_precision": 0.31521739130434784,
+   "draw_recall": 0.029441624365482234,
+   "n": 3973,
+   "draw_calls": 92
+  },
+  {
+   "min_draw": 0.32,
+   "max_gap": 0.1,
+   "hit_rate": 0.5298263277120564,
+   "draw_share": 0.027183488547696956,
+   "draw_precision": 0.3148148148148148,
+   "draw_recall": 0.03451776649746193,
+   "n": 3973,
+   "draw_calls": 108
+  },
+  {
+   "min_draw": 0.32,
+   "max_gap": 0.12,
+   "hit_rate": 0.5313365215202618,
+   "draw_share": 0.03045557513214196,
+   "draw_precision": 0.35537190082644626,
+   "draw_recall": 0.04365482233502538,
+   "n": 3973,
+   "draw_calls": 121
+  },
+  {
+   "min_draw": 0.32,
+   "max_gap": 0.15,
+   "hit_rate": 0.5310848225522276,
+   "draw_share": 0.03121067203624465,
+   "draw_precision": 0.3548387096774194,
+   "draw_recall": 0.04467005076142132,
+   "n": 3973,
+   "draw_calls": 124
+  },
+  {
+   "min_draw": 0.32,
+   "max_gap": 0.2,
+   "hit_rate": 0.5308331235841933,
+   "draw_share": 0.031462371004278886,
+   "draw_precision": 0.352,
+   "draw_recall": 0.04467005076142132,
+   "n": 3973,
+   "draw_calls": 125
+  },
+  {
+   "min_draw": 0.33,
+   "max_gap": 0.02,
+   "hit_rate": 0.5293229297759879,
+   "draw_share": 0.004027183488547697,
+   "draw_precision": 0.1875,
+   "draw_recall": 0.003045685279187817,
+   "n": 3973,
+   "draw_calls": 16
+  },
+  {
+   "min_draw": 0.33,
+   "max_gap": 0.04,
+   "hit_rate": 0.5293229297759879,
+   "draw_share": 0.005789076264787314,
+   "draw_precision": 0.21739130434782608,
+   "draw_recall": 0.005076142131979695,
+   "n": 3973,
+   "draw_calls": 23
+  },
+  {
+   "min_draw": 0.33,
+   "max_gap": 0.06,
+   "hit_rate": 0.5290712308079537,
+   "draw_share": 0.0072992700729927005,
+   "draw_precision": 0.2413793103448276,
+   "draw_recall": 0.007106598984771574,
+   "n": 3973,
+   "draw_calls": 29
+  },
+  {
+   "min_draw": 0.33,
+   "max_gap": 0.08,
+   "hit_rate": 0.5295746287440222,
+   "draw_share": 0.008557764913163856,
+   "draw_precision": 0.2647058823529412,
+   "draw_recall": 0.009137055837563452,
+   "n": 3973,
+   "draw_calls": 34
+  },
+  {
+   "min_draw": 0.33,
+   "max_gap": 0.1,
+   "hit_rate": 0.5293229297759879,
+   "draw_share": 0.008809463881198087,
+   "draw_precision": 0.2571428571428571,
+   "draw_recall": 0.009137055837563452,
+   "n": 3973,
+   "draw_calls": 35
+  },
+  {
+   "min_draw": 0.33,
+   "max_gap": 0.12,
+   "hit_rate": 0.5303297256481249,
+   "draw_share": 0.009816259753335011,
+   "draw_precision": 0.3333333333333333,
+   "draw_recall": 0.013197969543147208,
+   "n": 3973,
+   "draw_calls": 39
+  },
+  {
+   "min_draw": 0.33,
+   "max_gap": 0.15,
+   "hit_rate": 0.5300780266800906,
+   "draw_share": 0.010067958721369242,
+   "draw_precision": 0.325,
+   "draw_recall": 0.013197969543147208,
+   "n": 3973,
+   "draw_calls": 40
+  },
+  {
+   "min_draw": 0.33,
+   "max_gap": 0.2,
+   "hit_rate": 0.5300780266800906,
+   "draw_share": 0.010067958721369242,
+   "draw_precision": 0.325,
+   "draw_recall": 0.013197969543147208,
+   "n": 3973,
+   "draw_calls": 40
+  }
+ ],
+ "draw_base_rate": {
+  "selection": 0.2479234835137176,
+  "test": 0.2606848951420228
+ },
+ "draw_auc": {
+  "selection": 0.5712905768590436,
+  "test": 0.557574948717855
+ },
+ "splits": {
+  "selection": {
+   "most_likely_outcome": {
+    "hit_rate": 0.5300780266800906,
+    "draw_share": 0.0022652907123080794,
+    "draw_precision": 0.2222222222222222,
+    "draw_recall": 0.0020304568527918783,
+    "n": 3973,
+    "draw_calls": 9
+   },
+   "with_draw_rule": {
+    "hit_rate": 0.5303297256481249,
+    "draw_share": 0.06846211930531085,
+    "draw_precision": 0.33455882352941174,
+    "draw_recall": 0.09238578680203045,
+    "n": 3973,
+    "draw_calls": 272
+   },
+   "bookmaker_closing_most_likely": {
+    "hit_rate": 0.5328042328042328,
+    "draw_share": 0.002380952380952381,
+    "draw_precision": 0.4444444444444444,
+    "draw_recall": 0.004171011470281543,
+    "n": 3780,
+    "draw_calls": 9
+   },
+   "tiers": [
+    {
+     "tier": "strong",
+     "from": 0.65,
+     "share": 0.1734205889755852,
+     "n": 689,
+     "hit_rate": 0.7619738751814223,
+     "mean_probability": 0.7448491871978443
+    },
+    {
+     "tier": "likely",
+     "from": 0.5,
+     "share": 0.3186508935313365,
+     "n": 1266,
+     "hit_rate": 0.5710900473933649,
+     "mean_probability": 0.566943523029393
+    },
+    {
+     "tier": "lean",
+     "from": 0.4,
+     "share": 0.3055625471935565,
+     "n": 1214,
+     "hit_rate": 0.46375617792421747,
+     "mean_probability": 0.448637927560807
+    },
+    {
+     "tier": "toss-up",
+     "from": 0.0,
+     "share": 0.20236597029952177,
+     "n": 804,
+     "hit_rate": 0.3681592039800995,
+     "mean_probability": 0.35929848875341164
+    }
+   ],
+   "double_chance": {
+    "hit_rate": 0.7948653410521017,
+    "mean_probability": 0.7856936155995923,
+    "tiers": [
+     {
+      "from": 0.85,
+      "share": 0.19632519506670024,
+      "n": 780,
+      "hit_rate": 0.9179487179487179
+     },
+     {
+      "from": 0.75,
+      "share": 0.4049836395670778,
+      "n": 1609,
+      "hit_rate": 0.8017402113113735
+     },
+     {
+      "from": 0.0,
+      "share": 0.398691165366222,
+      "n": 1584,
+      "hit_rate": 0.7272727272727273
+     }
+    ]
+   }
+  },
+  "test": {
+   "most_likely_outcome": {
+    "hit_rate": 0.5195115476506504,
+    "draw_share": 0.002389169100079639,
+    "draw_precision": 0.4444444444444444,
+    "draw_recall": 0.004073319755600814,
+    "n": 3767,
+    "draw_calls": 9
+   },
+   "with_draw_rule": {
+    "hit_rate": 0.5184496947172816,
+    "draw_share": 0.041146801168038226,
+    "draw_precision": 0.33548387096774196,
+    "draw_recall": 0.05295315682281059,
+    "n": 3767,
+    "draw_calls": 155
+   },
+   "bookmaker_closing_most_likely": {
+    "hit_rate": 0.5225943646996278,
+    "draw_share": 0.0013290802764486975,
+    "draw_precision": 0.4,
+    "draw_recall": 0.0020429009193054137,
+    "n": 3762,
+    "draw_calls": 5
+   },
+   "tiers": [
+    {
+     "tier": "strong",
+     "from": 0.65,
+     "share": 0.15237589593841253,
+     "n": 574,
+     "hit_rate": 0.7560975609756098,
+     "mean_probability": 0.735472947480234
+    },
+    {
+     "tier": "likely",
+     "from": 0.5,
+     "share": 0.2981152110432705,
+     "n": 1123,
+     "hit_rate": 0.5512021371326803,
+     "mean_probability": 0.5659529649638746
+    },
+    {
+     "tier": "lean",
+     "from": 0.4,
+     "share": 0.3591717547119724,
+     "n": 1353,
+     "hit_rate": 0.458980044345898,
+     "mean_probability": 0.44690857195189426
+    },
+    {
+     "tier": "toss-up",
+     "from": 0.0,
+     "share": 0.19033713830634458,
+     "n": 717,
+     "hit_rate": 0.3891213389121339,
+     "mean_probability": 0.36757214608819433
+    }
+   ],
+   "double_chance": {
+    "hit_rate": 0.7844438545261482,
+    "mean_probability": 0.7797519625292106,
+    "tiers": [
+     {
+      "from": 0.85,
+      "share": 0.16538359437217945,
+      "n": 623,
+      "hit_rate": 0.9101123595505618
+     },
+     {
+      "from": 0.75,
+      "share": 0.39262012211308733,
+      "n": 1479,
+      "hit_rate": 0.7991886409736308
+     },
+     {
+      "from": 0.0,
+      "share": 0.4419962835147332,
+      "n": 1665,
+      "hit_rate": 0.7243243243243244
+     }
+    ]
+   }
+  },
+  "both": {
+   "most_likely_outcome": {
+    "hit_rate": 0.5249354005167959,
+    "draw_share": 0.002325581395348837,
+    "draw_precision": 0.3333333333333333,
+    "draw_recall": 0.003050330452465684,
+    "n": 7740,
+    "draw_calls": 18
+   },
+   "with_draw_rule": {
+    "hit_rate": 0.524547803617571,
+    "draw_share": 0.05516795865633075,
+    "draw_precision": 0.33489461358313816,
+    "draw_recall": 0.07269954245043213,
+    "n": 7740,
+    "draw_calls": 427
+   },
+   "bookmaker_closing_most_likely": {
+    "hit_rate": 0.5277114823654203,
+    "draw_share": 0.0018562715460090163,
+    "draw_precision": 0.42857142857142855,
+    "draw_recall": 0.0030959752321981426,
+    "n": 7542,
+    "draw_calls": 14
+   },
+   "tiers": [
+    {
+     "tier": "strong",
+     "from": 0.65,
+     "share": 0.1631782945736434,
+     "n": 1263,
+     "hit_rate": 0.7593032462391133,
+     "mean_probability": 0.7405879349429684
+    },
+    {
+     "tier": "likely",
+     "from": 0.5,
+     "share": 0.308656330749354,
+     "n": 2389,
+     "hit_rate": 0.5617413143574718,
+     "mean_probability": 0.5664778902510016
+    },
+    {
+     "tier": "lean",
+     "from": 0.4,
+     "share": 0.33165374677002585,
+     "n": 2567,
+     "hit_rate": 0.4612388001558239,
+     "mean_probability": 0.4477264284806127
+    },
+    {
+     "tier": "toss-up",
+     "from": 0.0,
+     "share": 0.19651162790697674,
+     "n": 1521,
+     "hit_rate": 0.3780407626561473,
+     "mean_probability": 0.3631986940847984
+    }
+   ],
+   "double_chance": {
+    "hit_rate": 0.7897932816537467,
+    "mean_probability": 0.7828018575742528,
+    "tiers": [
+     {
+      "from": 0.85,
+      "share": 0.18126614987080103,
+      "n": 1403,
+      "hit_rate": 0.9144689950106913
+     },
+     {
+      "from": 0.75,
+      "share": 0.39896640826873386,
+      "n": 3088,
+      "hit_rate": 0.8005181347150259
+     },
+     {
+      "from": 0.0,
+      "share": 0.4197674418604651,
+      "n": 3249,
+      "hit_rate": 0.7257617728531855
+     }
+    ]
+   }
+  }
+ }
+}

@@ -39,8 +39,8 @@ VAR = ROOT / "var"
 REGISTRY_DIR = ROOT / "registry"
 DEFAULT_SEASONS = {"split": ["2023-24", "2024-25", "2025-26", "2026-27"], "calendar": ["2023", "2024", "2025", "2026"]}
 # everything the models train on (Step 3 backfilled from 2019-20)
-BACKFILL_SEASONS = {"split": ["2019-20", "2020-21", "2021-22", "2022-23"] + DEFAULT_SEASONS["split"],
-                    "calendar": ["2019", "2020", "2021", "2022"] + DEFAULT_SEASONS["calendar"]}
+BACKFILL_SEASONS = {"split": [f"{y}-{str(y + 1)[2:]}" for y in range(2014, 2023)] + DEFAULT_SEASONS["split"],
+                    "calendar": [str(y) for y in range(2015, 2023)] + DEFAULT_SEASONS["calendar"]}
 RESULT_SOURCES = ["football_data_org", "footballdata_uk", "openfootball", "balldontlie"]
 ODDS_SOURCES = ["the_odds_api", "footballdata_uk"]
 log = logging.getLogger("mkdata")
@@ -95,7 +95,9 @@ def cmd_upcoming(args) -> int:
     store, ids, http, comps = _ctx(args)
     football = [c for c, v in comps.items() if v["sport"] == "football"]
     adapters = [ADAPTERS[n](http, comps) for n in ODDS_SOURCES]
-    res = run_chain(store, "odds_current", "football", adapters, lambda a: a.fetch_upcoming(football), mode="first_success")
+    # an empty list is normal between rounds (the source has not published the next fixtures yet): not a failure
+    res = run_chain(store, "odds_current", "football", adapters, lambda a: a.fetch_upcoming(football), mode="first_success",
+                    validate=lambda r: None)
     _write(store, res, comps)
     print(json.dumps({"used": res.used, "failed": res.failed, "skipped": res.skipped, "degraded": res.degraded,
                       "matches": len(res.data.matches), "odds_rows": len(res.data.odds)}, indent=1))

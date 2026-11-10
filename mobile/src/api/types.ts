@@ -53,7 +53,8 @@ export type League = {
 export type TeamMini = { id: string; name: string; short_name: string; code: string; color: string; logo?: string | null };
 export type Team = TeamMini & { sport: string; country: string | null; venue_name: string | null; venue_city: string | null; elo: number | null; form: string | null; leagues?: string[] };
 
-export type PredictionMini = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome };
+export type CallTier = 'strong' | 'likely' | 'lean' | 'toss-up';
+export type PredictionMini = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome; tier?: CallTier };
 
 export type MyPick = { pick: Outcome; home_score: number | null; away_score: number | null; status: 'pending' | 'won' | 'lost' | 'void'; points: number };
 
@@ -92,6 +93,8 @@ export type PredictionFull = {
   confidence: Confidence;
   key_factors: KeyFactor[];
   explanation: { method: string; summary: string; steps: { title: string; detail: string }[]; inputs: Record<string, unknown> };
+  call?: { tier: CallTier; tier_label: string; tier_hit_rate: number | null; draw_call: boolean; safer: { label: string; probability: number; hit_rate: number | null } };
+  goals?: { over25: number; btts: number };
   versions: number;
   correct: boolean | null;
   /** Each independent forecast and its weight in the blend (device mode). */
@@ -219,6 +222,15 @@ export type Accuracy = {
   by_source?: { source: string; kind: string; label: string; n: number; hit_rate: number; brier: number; log_loss: number }[];
   football_backtest?: { key: string; name: string; n: number; new_log_loss: number; previous_log_loss: number | null; bookmaker_log_loss: number | null }[];
   football_note?: string | null;
+  football_track?: {
+    tiers: Partial<Record<CallTier, { n: number; hit_rate: number; share: number }>>;
+    draw_calls: { n: number; hit_rate: number; share: number; base_rate: number };
+    all_matches: { n: number; hit_rate: number };
+    bookmaker: { n: number; hit_rate: number };
+    double_chance: { n: number; hit_rate: number; strong: { n: number; hit_rate: number; share: number } };
+    over25?: { n: number; hit_rate: number; confident: { n: number; hit_rate: number; share: number } };
+    btts?: { n: number; hit_rate: number; confident: { n: number; hit_rate: number; share: number } };
+  } | null;
   source_evidence?: Record<string, Record<string, { n: number; delta: number }>>;
 };
 
