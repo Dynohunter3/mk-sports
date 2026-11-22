@@ -43,6 +43,7 @@ GROUPS = {
     "form": ["form_pts_h", "form_pts_a", "form_gd_h", "form_gd_a", "form_xgd_h", "form_xgd_a"],
     "draw": ["abs_elo_diff", "dc_total", "dc_absdiff", "draw_rate_h", "draw_rate_a", "tier"],
     "market_pre": ["mk_h", "mk_d", "mk_a"],
+    "market_hist": ["mr_diff", "mr_h", "mr_a", "mr_draw"],
 }
 # Step 3/5 runs used the first three groups + market and data from 2020; step6 adds history from 2015
 LEGACY = RUN in ("step3", "step5")

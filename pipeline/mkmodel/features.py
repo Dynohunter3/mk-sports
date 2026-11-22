@@ -213,6 +213,46 @@ class PiRatings:
 
 
 # ----------------------------------------------------------------------------------- xG proxy
+class MarketRatings:
+    """Team strength as the betting market saw it, learned from the odds of matches already played.
+
+    Per competition, the market's supremacy s = ln(p_home / p_away) of each past match is modelled as
+    r_home - r_away + h_comp, and every match moves both ratings towards what the market implied (larger
+    steps for teams with few rated matches). The odds of a match are used only once its result was published
+    (football-data.co.uk adds closing odds together with the result), so a rating never contains anything
+    that was not public before the match being predicted. Ratings live within a competition: values from
+    different leagues are not on one scale, so cross-league matches get no market-history features."""
+
+    def __init__(self, k: float = 0.2, k_home: float = 0.01, min_n: int = 3, draw_alpha: float = 0.15):
+        self.k, self.k_home, self.min_n, self.draw_alpha = k, k_home, min_n, draw_alpha
+        self.r: dict[tuple, float] = defaultdict(float)
+        self.n: dict[tuple, int] = defaultdict(int)
+        self.home: dict[str, float] = defaultdict(lambda: 0.45)  # ln(0.45/0.29): a typical home edge
+        self.draw: dict[tuple, float] = {}
+
+    def update(self, comp: str, h: str, a: str, p: tuple) -> None:
+        ph, pd, pa = p
+        if not (ph > 0 and pa > 0):
+            return
+        kh, ka = (comp, h), (comp, a)
+        e = math.log(ph / pa) - (self.r[kh] - self.r[ka] + self.home[comp])
+        gh, ga = (min(0.5, max(self.k, 1.0 / (self.n[x] + 1))) for x in (kh, ka))
+        total = min(0.9, gh + ga)
+        self.r[kh] += e * total * gh / (gh + ga)
+        self.r[ka] -= e * total * ga / (gh + ga)
+        self.home[comp] += self.k_home * e
+        for x in (kh, ka):
+            self.n[x] += 1
+            self.draw[x] = pd if x not in self.draw else self.draw[x] + self.draw_alpha * (pd - self.draw[x])
+
+    def features(self, comp: str, h: str, a: str) -> dict:
+        kh, ka = (comp, h), (comp, a)
+        if self.n.get(kh, 0) < self.min_n or self.n.get(ka, 0) < self.min_n:
+            return {}
+        return {"mr_diff": self.r[kh] - self.r[ka] + self.home[comp], "mr_h": self.r[kh], "mr_a": self.r[ka],
+                "mr_draw": (self.draw[kh] + self.draw[ka]) / 2}
+
+
 def xg_proxy_coefs(rows: list[M]) -> tuple[float, float]:
     """goals ~ a*shots_on_target + b*off_target shots (Poisson, no intercept), on finished rows with stats."""
     X, y = [], []
@@ -250,6 +290,8 @@ FEATURES = [
     "abs_elo_diff", "dc_total", "dc_absdiff", "draw_rate_h", "draw_rate_a", "tier",
     # goal markets from the goals model
     "dc_o25", "dc_btts", "dcx_o25", "dcx_btts",
+    # market history: team strength implied by the odds of matches already played (Step 8)
+    "mr_diff", "mr_h", "mr_a", "mr_draw",
 ]
 TIER = {"eng.1": 1, "esp.1": 1, "ita.1": 1, "ger.1": 1, "fra.1": 1, "ned.1": 1, "por.1": 1, "tur.1": 1, "usa.1": 1,
         "eng.2": 2, "esp.2": 2, "ita.2": 2, "ger.2": 2, "fra.2": 2, "eng.3": 3, "eng.4": 4}
@@ -266,6 +308,7 @@ class Config:
     use_comps: tuple = ()  # competitions whose results feed the state (default: all loaded)
     as_of: float | None = None  # production / replays: the moment the prediction is made
     xi_by_comp: dict = field(default_factory=lambda: dict(LEAGUE_XI))  # per-competition override of the DC time decay
+    mr_k: float = 0.2  # market-history rating step size
 
 
 def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
@@ -287,6 +330,7 @@ def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
     pre_ratings: dict[int, tuple[float, float]] = {}
     feats, order = [], []
     pi = PiRatings()
+    mr = MarketRatings(cfg.mr_k)
     form: dict[str, deque] = defaultdict(lambda: deque(maxlen=20))  # (points, goal diff, xG diff or None, drawn)
 
     def release(upto: float):
@@ -313,6 +357,9 @@ def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
             released.append(m)
             if dom:
                 pi.update(m.h, m.a, m.hs, m.as_)
+                odds = m.close if m.close is not None else m.pre  # published with the result at the latest
+                if odds is not None:
+                    mr.update(m.comp, m.h, m.a, odds)
             gd = m.hs - m.as_
             xd = (xh - xa) if xh is not None else None
             form[m.h].append((3 if gd > 0 else 1 if gd == 0 else 0, gd, xd, gd == 0))
@@ -384,6 +431,8 @@ def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:
             f.update(lg_home=oc.count(0) / len(oc), lg_draw=oc.count(1) / len(oc), lg_goals=float(np.mean([x[2] for x in hist])))
         if m.pre is not None and m.pre_at is not None and m.pre_at < m.t:
             f.update(mk_h=m.pre[0], mk_d=m.pre[1], mk_a=m.pre[2])
+        if dom:
+            f.update(mr.features(comp, m.h, m.a))
         feats.append([f[k] for k in FEATURES])
         order.append(m)
     return np.array(feats, float), order

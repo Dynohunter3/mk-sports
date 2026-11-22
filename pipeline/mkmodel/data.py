@@ -37,7 +37,7 @@ class M:
     stats: dict = field(default_factory=dict)  # side -> {shots, shots_on_target, ...}, available after result_at
     pre: tuple | None = None  # de-vigged pre-closing market probs (available before kick-off)
     pre_at: float | None = None
-    close: tuple | None = None  # de-vigged closing probs: benchmark only, never a feature
+    close: tuple | None = None  # de-vigged closing probs: the benchmark; a feature only for LATER matches (market history)
     close_src: str | None = None
 
     @property

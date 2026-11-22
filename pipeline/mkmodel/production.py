@@ -49,6 +49,11 @@ COL = {f: i for i, f in enumerate(FEATURES)}
 # same column order as the evaluated models (feature groups in the order they were added)
 GBM_NOMKT = [COL[f] for g in KEPT_GROUPS for f in GROUPS[g]]
 GBM_MKT = GBM_NOMKT + [COL[f] for f in GROUPS["market_pre"]]
+# Step 8: before a league match's odds are out, the no-odds model also uses market history (team strength
+# implied by the odds of matches already played). Not for MLS or the Champions League, which never get
+# pre-match odds from our source: there it was not better on the selection season (audit/results/step8.json).
+GBM_NOMKT_MH = GBM_NOMKT + [COL[f] for f in GROUPS["market_hist"]]
+NO_PRE_ODDS = {"usa.1", "uefa.champions"}
 ATTRIBUTION = "Data: football-data.co.uk, openfootball (public domain)."
 DAY = 86400.0
 
@@ -92,8 +97,24 @@ def base_predictions(X: np.ndarray, learn: dict) -> dict[str, np.ndarray]:
         "gbm_nomkt": learn["gbm_nomkt_predict"](X),
         "gbm_mkt": learn["gbm_mkt_predict"](X),
         "market": X[:, [COL["mk_h"], COL["mk_d"], COL["mk_a"]]],
+        "mh": mh_predict(learn["mh_ol"], X),
+        "gbm_mh": learn["gbm_mh_predict"](X),
     }
     return P
+
+
+def mh_fit(X, y, kick, cutoff):
+    """Ordered logit on the market-history supremacy alone (rows without it are skipped)."""
+    ok = np.isfinite(X[:, COL["mr_diff"]])
+    return L.fit_ordered_logit(X[ok][:, [COL["mr_diff"]]] * 100, y[ok], kick[ok], cutoff)
+
+
+def mh_predict(th, X: np.ndarray) -> np.ndarray:
+    out = np.full((len(X), 3), np.nan)
+    ok = np.isfinite(X[:, COL["mr_diff"]])
+    if ok.any():
+        out[ok] = L.predict_ordered_logit(th, X[ok][:, [COL["mr_diff"]]] * 100)
+    return out
 
 
 def _fallback(P: dict[str, np.ndarray], name: str, chain: list[str]) -> np.ndarray:
@@ -108,6 +129,7 @@ def _fallback(P: dict[str, np.ndarray], name: str, chain: list[str]) -> np.ndarr
 
 INPUTS_A = [("elo", []), ("dc", ["elo"]), ("dcx", ["dc", "elo"]), ("gbm_nomkt", [])]
 INPUTS_B = INPUTS_A + [("market", ["gbm_nomkt"]), ("gbm_mkt", [])]
+INPUTS_MH = [("elo", []), ("dc", ["elo"]), ("dcx", ["dc", "elo"]), ("mh", ["elo"]), ("gbm_mh", [])]
 
 
 def logs(P: dict[str, np.ndarray], spec) -> np.ndarray:
@@ -117,11 +139,18 @@ def logs(P: dict[str, np.ndarray], spec) -> np.ndarray:
     return np.stack([L.to_log(_fallback(filled, n, chain)) for n, chain in spec], 0)
 
 
-def final_probs(P: dict[str, np.ndarray], blends: dict) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def final_probs(P: dict[str, np.ndarray], blends: dict, comps=None) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Odds out: blend B. No odds yet: blend MH for league matches whose teams both have market history,
+    otherwise blend A. `comps` (competition per row) selects where MH may be used."""
     A = L.blend_probs(blends["A"], logs(P, INPUTS_A), calibrate=True)
     B = L.blend_probs(blends["B"], logs(P, INPUTS_B), calibrate=False)
     has_odds = np.all(np.isfinite(P["market"]), 1)
-    return np.where(has_odds[:, None], B, A), A, B, has_odds
+    no_odds = A
+    if comps is not None and "MH" in blends:
+        use = np.all(np.isfinite(P["mh"]), 1) & np.array([c not in NO_PRE_ODDS for c in comps])
+        if use.any():
+            no_odds = np.where(use[:, None], L.blend_probs(blends["MH"], logs(P, INPUTS_MH), calibrate=True), A)
+    return np.where(has_odds[:, None], B, no_odds), no_odds, B, has_odds
 
 
 # ----------------------------------------------------------------------------------- retrain
@@ -137,9 +166,11 @@ class Bundle:
         b_no = L.gbm_from_string((folder / "gbm_nomkt.txt").read_text())
         b_mk = L.gbm_from_string((folder / "gbm_mkt.txt").read_text())
         b_ou = L.gbm_from_string((folder / "gbm_over25.txt").read_text())
-        learn = {"elo_ol": man["elo_ol"],
+        b_mh = L.gbm_from_string((folder / "gbm_mh.txt").read_text())
+        learn = {"elo_ol": man["elo_ol"], "mh_ol": man["mh_ol"],
                  "gbm_nomkt_predict": lambda X, b=b_no: L.predict_booster(b, GBM_NOMKT, X),
                  "gbm_mkt_predict": lambda X, b=b_mk: L.predict_booster(b, GBM_MKT, X),
+                 "gbm_mh_predict": lambda X, b=b_mh: L.predict_booster(b, GBM_NOMKT_MH, X),
                  "over25_predict": lambda X, b=b_ou: b.predict(X[:, NON_MARKET])}
         return cls(man["version"], man, learn)
 
@@ -149,9 +180,12 @@ def _fit_learners(X, y, kick, res_at, cutoff):
     ol = L.fit_ordered_logit(X[tr], y[tr], kick[tr], cutoff)
     g0 = L.fit_gbm(GBM_NOMKT, X[tr], y[tr], kick[tr], cutoff)
     g1 = L.fit_gbm(GBM_MKT, X[tr], y[tr], kick[tr], cutoff)
-    learn = {"elo_ol": ol, "gbm_nomkt_predict": lambda Z: L.predict_gbm(g0, GBM_NOMKT, Z),
-             "gbm_mkt_predict": lambda Z: L.predict_gbm(g1, GBM_MKT, Z)}
-    return learn, g0, g1, int(tr.sum())
+    g2 = L.fit_gbm(GBM_NOMKT_MH, X[tr], y[tr], kick[tr], cutoff)
+    learn = {"elo_ol": ol, "mh_ol": mh_fit(X[tr], y[tr], kick[tr], cutoff),
+             "gbm_nomkt_predict": lambda Z: L.predict_gbm(g0, GBM_NOMKT, Z),
+             "gbm_mkt_predict": lambda Z: L.predict_gbm(g1, GBM_MKT, Z),
+             "gbm_mh_predict": lambda Z: L.predict_gbm(g2, GBM_NOMKT_MH, Z)}
+    return learn, (g0, g1, g2), int(tr.sum())
 
 
 def over25_probs(X: np.ndarray, gbm_p: np.ndarray) -> np.ndarray:
@@ -174,7 +208,7 @@ def retrain(cutoff: float, store: Path = STORE, out_root: Path = MODELS, app_com
     res_at = np.array([m.result_at if m.result_at is not None else np.inf for m in ms])
     app = np.array([m.comp in app_comps for m in ms])
     # out-of-sample predictions for the previous 12 months, each month from learners refitted at its start
-    P_oos = {k: np.full((len(ms), 3), np.nan) for k in ("elo", "dc", "dcx", "gbm_nomkt", "gbm_mkt", "market")}
+    P_oos = {k: np.full((len(ms), 3), np.nan) for k in ("elo", "dc", "dcx", "gbm_nomkt", "gbm_mkt", "market", "mh", "gbm_mh")}
     for k in range(12, 0, -1):
         m0, m1 = add_months(cutoff, -k), add_months(cutoff, -k + 1)
         rows = app & (kick >= m0) & (kick < m1) & (y >= 0)
@@ -188,14 +222,16 @@ def retrain(cutoff: float, store: Path = STORE, out_root: Path = MODELS, app_com
     sub = {k: v[win] for k, v in P_oos.items()}
     blends = {"A": L.fit_blend(logs(sub, INPUTS_A), y[win], calibrate=True),
               "B": L.fit_blend(logs(sub, INPUTS_B), y[win], calibrate=False)}
-    learn, g0, g1, n_train = _fit_learners(X, y, kick, res_at, cutoff)
+    win_mh = win & np.all(np.isfinite(P_oos["mh"]), 1)
+    blends["MH"] = L.fit_blend(logs({k: v[win_mh] for k, v in P_oos.items()}, INPUTS_MH), y[win_mh], calibrate=True)
+    learn, (g0, g1, g2), n_train = _fit_learners(X, y, kick, res_at, cutoff)
     goals_total = np.array([(m.hs + m.as_) if m.outcome is not None else -1 for m in ms])
     tr_g = (res_at < cutoff) & (kick >= TRAIN_FROM) & (y >= 0)
     g_ou = fit_gbm_binary(X[tr_g], (goals_total[tr_g] >= 3).astype(float), kick[tr_g], cutoff)
     data_version, n_rows = data_fingerprint(ms_all, cutoff)
     cfg = {"elo": EloParams().__dict__, "xi": Config(elo=EloParams()).xi, "refit_days": 7, "feature_start": FEATURE_START,
            "train_from": TRAIN_FROM, "features": FEATURES, "gbm_params": {k: v for k, v in L.GBM_PARAMS.items()},
-           "inputs_A": INPUTS_A, "inputs_B": INPUTS_B, "competitions": app_comps, "lower": lower if lower is not None else LOWER,
+           "inputs_A": INPUTS_A, "inputs_B": INPUTS_B, "inputs_MH": INPUTS_MH, "no_pre_odds": sorted(NO_PRE_ODDS), "competitions": app_comps, "lower": lower if lower is not None else LOWER,
            "kept_groups": KEPT_GROUPS, "draw_rule": DRAW_RULE, "over25": "gbm+mix"}
     ch = code_hash()
     vh = hashlib.sha256(json.dumps([ch, cfg, data_version, cutoff], sort_keys=True, default=str).encode()).hexdigest()[:8]
@@ -205,9 +241,10 @@ def retrain(cutoff: float, store: Path = STORE, out_root: Path = MODELS, app_com
     (folder / "gbm_nomkt.txt").write_text(L.gbm_to_string(g0))
     (folder / "gbm_mkt.txt").write_text(L.gbm_to_string(g1))
     (folder / "gbm_over25.txt").write_text(L.gbm_to_string(g_ou))
+    (folder / "gbm_mh.txt").write_text(L.gbm_to_string(g2))
     man = {"version": version, "cutoff": cutoff, "cutoff_iso": datetime.fromtimestamp(cutoff, timezone.utc).isoformat(),
            "code_hash": ch, "data_version": data_version, "training_results": n_rows, "training_rows": n_train,
-           "blend_rows": int(win.sum()), "elo_ol": learn["elo_ol"], "blends": blends, "config": cfg, "seed": L.SEED,
+           "blend_rows": int(win.sum()), "elo_ol": learn["elo_ol"], "mh_ol": learn["mh_ol"], "blends": blends, "config": cfg, "seed": L.SEED,
            "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "train_seconds": round(time.time() - t0)}
     (folder / "manifest.json").write_text(json.dumps(man, indent=1, sort_keys=True, default=str))
     (out_root / "current.json").write_text(json.dumps({"version": version}))
@@ -321,7 +358,7 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
         return summary
     Xu = X[idx]
     comps = base_predictions(Xu, bundle.learn)
-    Fp, A, B, has_odds = final_probs(comps, bundle.manifest["blends"])
+    Fp, A, B, has_odds = final_probs(comps, bundle.manifest["blends"], [ms[i].comp for i in idx])
     p_over = over25_probs(Xu, bundle.learn["over25_predict"](Xu))
     # source-quality context
     agreement = {r["match_id"]: r["agreement"] for r in db.execute("SELECT match_id, agreement FROM matches")}
