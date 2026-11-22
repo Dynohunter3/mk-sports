@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { Fragment, memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import type { Confidence, MatchCard as MatchCardT, PredictionMini, StandingRow, TeamMini } from '@/api/types';
+import type { CallTier, Confidence, MatchCard as MatchCardT, PredictionMini, StandingRow, TeamMini } from '@/api/types';
 import { dayLabel, kickoffTime, pct } from '@/lib/format';
 import { alpha, leagueColors, radius, space, SPORT_COLORS, TAP, useTheme } from '@/theme/theme';
 
@@ -21,6 +21,46 @@ export function finalLabel(clock: string | null): string {
   if (clock === 'FT/SO') return 'FT (SO)';
   if (clock === 'AET' || clock === 'Pens' || clock.startsWith('F/')) return clock;
   return 'FT';
+}
+
+const TIER_TEXT: Record<CallTier, string> = { strong: 'Strong', likely: 'Likely', lean: 'Lean', 'toss-up': 'Toss-up' };
+/** How strong the call is (from the pick's probability; each tier's backtest hit rate is on the Accuracy screen). */
+export function TierPill({ tier }: { tier: CallTier }) {
+  const t = useTheme();
+  const color = tier === 'strong' ? t.win : tier === 'likely' ? t.brand : tier === 'lean' ? t.pending : t.textMuted;
+  const bars = tier === 'strong' ? 3 : tier === 'likely' ? 2 : tier === 'lean' ? 1 : 0;
+  return (
+    <View style={[s.pill, { borderColor: color + '88', backgroundColor: color + '1A' }]} accessibilityLabel={`${TIER_TEXT[tier]} call`}>
+      <View style={{ flexDirection: 'row', gap: 2, alignItems: 'flex-end' }}>
+        {[1, 2, 3].map((i) => (
+          <View key={i} style={{ width: 3, height: 4 + i * 3, borderRadius: 1, backgroundColor: i <= bars ? color : color + '40' }} />
+        ))}
+      </View>
+      <Text v="tiny" color={color} style={{ fontWeight: '700' }}>
+        {TIER_TEXT[tier]}
+      </Text>
+    </View>
+  );
+}
+
+/** The call on a card: "Draw" gets its own colour so draw calls stand out. */
+export function CallBadge({ p, home, away }: { p: PredictionMini; home: string; away: string }) {
+  const t = useTheme();
+  const draw = p.pick === 'draw';
+  const c = draw ? t.accent2 : t.brand;
+  return (
+    <Row gap={6} style={{ flexShrink: 1 }}>
+      <View style={{ paddingHorizontal: 6, paddingVertical: 1, borderRadius: 6, borderWidth: 1, borderColor: alpha(c, 0.7), backgroundColor: draw ? alpha(c, 0.15) : undefined }}>
+        <Text v="tiny" color={c} style={{ fontWeight: '900' }}>
+          {draw ? 'DRAW' : 'AI'}
+        </Text>
+      </View>
+      <Text v="small" style={{ fontWeight: '700', flexShrink: 1 }} numberOfLines={1}>
+        {p.pick === 'home' ? home : p.pick === 'away' ? away : 'Draw'} · {pct(p.pick === 'home' ? p.home : p.pick === 'away' ? p.away : p.draw)}
+        {p.draw_note && !draw ? ' · draw possible' : ''}
+      </Text>
+    </Row>
+  );
 }
 
 export function ConfidencePill({ level }: { level: Confidence }) {
@@ -204,17 +244,8 @@ export const MatchRow = memo(function MatchRow({ m, showLeague = true }: { m: Ma
         <View style={{ marginTop: space.sm }}>
           <ProbabilityBar p={p} home={m.home.code} away={m.away.code} height={4} showLabels={false} />
           <Row style={{ justifyContent: 'space-between', marginTop: 6 }}>
-            <Row gap={6}>
-              <View style={{ paddingHorizontal: 6, paddingVertical: 1, borderRadius: 6, borderWidth: 1, borderColor: alpha(t.brand, 0.7) }}>
-                <Text v="tiny" color={t.brand} style={{ fontWeight: '900' }}>
-                  AI
-                </Text>
-              </View>
-              <Text v="small" style={{ fontWeight: '700' }} numberOfLines={1}>
-                {p.pick === 'home' ? m.home.short_name : p.pick === 'away' ? m.away.short_name : 'Draw'} · {pct(p.pick === 'home' ? p.home : p.pick === 'away' ? p.away : p.draw)}
-              </Text>
-            </Row>
-            <ConfidencePill level={p.confidence} />
+            <CallBadge p={p} home={m.home.short_name} away={m.away.short_name} />
+            {p.tier ? <TierPill tier={p.tier} /> : <ConfidencePill level={p.confidence} />}
           </Row>
         </View>
       ) : null}

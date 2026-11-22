@@ -4,7 +4,7 @@
                 single most likely outcome (which almost never happens: three-way probabilities rarely put
                 the draw on top even when it is nearly level with the favourite).
 * tier          how strong the call is, from the probability of the pick.
-* double chance the most likely pair of outcomes (home or draw, away or draw, home or away).
+* double chance the safer call: the most likely pair of outcomes that contains the call.
 
 The draw rule's two numbers are tuned on the selection season only (mkmodel.picks_experiment) and
 verified on the test season; they live here so the backtest and production use the same rule.
@@ -38,9 +38,13 @@ def tier_of(p_pick: float) -> str:
     return "toss-up"
 
 
-def double_chance(P: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """(index into PAIRS, probability) of the most likely pair of outcomes."""
+def double_chance(P: np.ndarray, call: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
+    """(index into PAIRS, probability) of the safer call: the most likely pair of outcomes that contains
+    the call (so a draw call is never paired with "home or away"). Without `call`: the most likely pair."""
     pp = np.stack([P[:, list(ix)].sum(1) for _, ix in PAIRS], 1)
+    if call is not None:
+        allowed = np.array([[k in ix for _, ix in PAIRS] for k in call])
+        pp = np.where(allowed, pp, -1.0)
     return pp.argmax(1), pp.max(1)
 
 
@@ -48,6 +52,6 @@ def describe(p: np.ndarray, rule: dict | None = None) -> dict:
     """Everything the app needs for one match."""
     P = np.asarray(p, float)[None, :]
     k = int(picks(P, rule)[0])
-    dc_i, dc_p = double_chance(P)
+    dc_i, dc_p = double_chance(P, np.array([k]))
     return {"pick": OUTCOMES[k], "pick_probability": round(float(P[0, k]), 4), "tier": tier_of(float(P[0, k])),
             "draw_call": bool(k == 1), "double_chance": {"call": PAIRS[int(dc_i[0])][0], "probability": round(float(dc_p[0]), 4)}}

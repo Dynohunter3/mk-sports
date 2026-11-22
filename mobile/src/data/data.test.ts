@@ -13,10 +13,13 @@ import { setFetch } from './http';
 import { memoryKV, setKV } from './kv';
 import { LEAGUE_BY_SLUG } from './leagues';
 import { handleLocal } from './localApi';
+import { setBundledForTests } from './remote';
+import { DEVICE_TRACK } from '../engine/calls';
 
 import { buildWorld, db, EPL, eventJson, fakeFetch, NOW, requests } from './testing/fakeSources';
 
 before(async () => {
+  setBundledForTests(null); // the fake world is predicted by the on-device engine, whatever today's date
   buildWorld();
   setKV(memoryKV());
   setFetch(fakeFetch);
@@ -76,6 +79,32 @@ test('match detail: multi-source blend, explanation, team news availability', as
   assert.equal(nba.injuries.home[0].importance, 1); // season leader -> treated as a star
   assert.ok(nba.prediction_full.sources.some((s: any) => s.source === 'espn'));
   assert.equal(nba.prediction_full.probabilities.draw, undefined);
+  assert.equal(nba.prediction_full.call, undefined); // calls are football only
+});
+
+test('on-device football calls: strength, a safer call that contains the pick, no draw calls', async () => {
+  const d: any = await handleLocal('GET', '/matches/eng.1~9002', null);
+  const c = d.prediction_full.call;
+  assert.equal(c.source, 'device');
+  assert.equal(c.draw_call, false);
+  const pr = d.prediction_full.probabilities;
+  const top = Math.max(pr.home, pr.draw, pr.away);
+  assert.equal(c.tier, top >= 0.65 ? 'strong' : top >= 0.5 ? 'likely' : top >= 0.4 ? 'lean' : 'toss-up');
+  assert.ok(c.safer.pair.split(' or ').includes(d.prediction.pick), `${c.safer.pair} contains ${d.prediction.pick}`);
+  assert.ok(Math.abs(c.safer.probability - c.safer.pair.split(' or ').reduce((s: number, k: string) => s + pr[k], 0)) < 1e-9);
+  assert.equal(c.tier_hit_rate, DEVICE_TRACK.tiers[c.tier as keyof typeof DEVICE_TRACK.tiers]); // the engine's measured hit rate for that tier
+  assert.equal(Boolean(c.draw_note), pr.draw >= 0.29);
+});
+
+test('predictions list: upcoming football with calls, league counts and track records', async () => {
+  const r: any = await handleLocal('GET', '/predictions?days=7', null);
+  assert.ok(r.items.length > 0);
+  assert.ok(r.items.every((m: any) => m.status === 'scheduled' && m.prediction && m.sport === 'football'));
+  assert.ok(r.items.every((m: any, i: number) => i === 0 || r.items[i - 1].start_time <= m.start_time));
+  assert.equal(r.leagues.reduce((s: number, l: any) => s + l.n, 0), r.items.length);
+  const m = r.items[0].prediction;
+  assert.ok(m.tier && m.safer && m.safer_p > 0.5 && m.source === 'device');
+  assert.equal(r.track.device.safer, 0.771);
 });
 
 test('pick game: consent, lock, settle', async () => {

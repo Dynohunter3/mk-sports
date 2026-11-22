@@ -52,6 +52,7 @@ function Navigator() {
         <Stack.Screen name="pick/[id]" options={{ title: 'Make your pick', presentation: 'modal', animation: 'slide_from_bottom' }} />
         <Stack.Screen name="sign-in" options={{ title: 'Sign in', presentation: 'modal', animation: 'slide_from_bottom' }} />
         <Stack.Screen name="accuracy" options={{ title: 'Model accuracy' }} />
+        <Stack.Screen name="predictions" options={{ title: 'Predictions' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
         <Stack.Screen name="private-leagues" options={{ title: 'Private leagues' }} />
       </Stack>

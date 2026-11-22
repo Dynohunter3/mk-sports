@@ -180,6 +180,9 @@ export default function AccuracyScreen() {
                   [
                     ['All matches', d.football_track.all_matches.hit_rate, `bookmakers ${pct(d.football_track.bookmaker.hit_rate)}`],
                     ['Draw calls', d.football_track.draw_calls.hit_rate, `${pct(d.football_track.draw_calls.share)} of games · ${pct(d.football_track.draw_calls.base_rate)} of all games are draws`],
+                    ...(d.football_track.draw_note
+                      ? [['"Draw is a real possibility"', d.football_track.draw_note.ended_level, `ended level · close draws not called (${pct(d.football_track.draw_note.share)} of games)`] as const]
+                      : []),
                     ['Safer call (two outcomes)', d.football_track.double_chance.hit_rate, `strongest ${pct(d.football_track.double_chance.strong.share)}: ${pct(d.football_track.double_chance.strong.hit_rate)}`],
                     ...(d.football_track.over25 ? [['Over/under 2.5 goals', d.football_track.over25.hit_rate, `when 60%+ sure: ${pct(d.football_track.over25.confident.hit_rate)}`] as const] : []),
                     ...(d.football_track.btts ? [['Both teams to score', d.football_track.btts.hit_rate, `when 60%+ sure: ${pct(d.football_track.btts.confident.hit_rate)}`] as const] : []),

@@ -27,6 +27,24 @@ def test_tiers_and_double_chance():
     np.testing.assert_allclose(p, [0.8, 0.8, 0.85])
 
 
+def test_safer_call_always_contains_the_call():
+    # a draw call in a level game: the best pair overall is
+    # "home or away", but the safer call must contain the draw
+    P = np.array([[0.36, 0.31, 0.33], [0.33, 0.31, 0.36]])
+    k = picks(P)
+    assert k.tolist() == [1, 1]
+    assert double_chance(P)[0].tolist() == [2, 2]  # without the call: home or away
+    i, p = double_chance(P, k)
+    assert i.tolist() == [0, 1]  # with it: home or draw, away or draw
+    np.testing.assert_allclose(p, [0.67, 0.67])
+    rng = np.random.default_rng(0)
+    R = rng.dirichlet([3, 2, 3], 2000)
+    k = picks(R)
+    i, _ = double_chance(R, k)
+    pairs = [(0, 1), (1, 2), (0, 2)]
+    assert all(k[j] in pairs[i[j]] for j in range(len(R)))
+
+
 def test_describe_is_consistent():
     d = describe([0.36, 0.32, 0.32])
     assert d["pick"] == "draw" and d["draw_call"] and d["tier"] == "toss-up"

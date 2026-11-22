@@ -7,7 +7,8 @@ import { setFetch } from './http';
 import { memoryKV, setKV } from './kv';
 import { bestSim, nameSim } from './names';
 import { predictEvent } from './predict';
-import { REMOTE_URLS, refreshRemote, remoteCovers, remoteFor, RemoteFile, setRemoteForTests } from './remote';
+import { ensureRemoteLoaded, REMOTE_URLS, refreshRemote, remoteCovers, remoteFor, RemoteFile, remoteSource, setBundledForTests, setRemoteForTests } from './remote';
+import { saferCall, tierOf } from '../engine/calls';
 
 const KICK = '2026-11-08T14:00:00+00:00';
 
@@ -53,6 +54,7 @@ function ev(home: string, away: string, start = KICK, league = 'eng.1'): SEvent 
 
 beforeEach(() => {
   setKV(memoryKV());
+  setBundledForTests(null);
   setRemoteForTests(file());
 });
 
@@ -131,4 +133,45 @@ test('a draw call from the service is shown as a draw with a drawn score', async
   // without a call (older file) the plain most-likely outcome is used
   setRemoteForTests(file());
   assert.equal(predictEvent(ev('Manchester United', 'Arsenal'))!.pick, 'away');
+});
+
+test('the built-in snapshot is used inside its own horizon only, and a download replaces it', async () => {
+  const DAY = 86400e3;
+  // 10 days old, 21-day horizon: older than the 3 days a download is trusted, but still inside its horizon
+  setRemoteForTests(null);
+  setBundledForTests({ predictions: file({ generated_at: new Date(Date.now() - 10 * DAY).toISOString(), matches: file().matches.map((m) => ({ ...m, kickoff: new Date(Date.now() + DAY).toISOString() })) }), accuracy: null });
+  ensureRemoteLoaded();
+  assert.equal(remoteSource(), 'bundled');
+  assert.equal(remoteCovers('eng.1'), true);
+  assert.ok(remoteFor(ev('Manchester United', 'Arsenal', new Date(Date.now() + DAY).toISOString())));
+  // past its horizon: not installed, so the app falls back to the on-device engine
+  setRemoteForTests(null);
+  setBundledForTests({ predictions: file({ generated_at: new Date(Date.now() - 22 * DAY).toISOString() }), accuracy: null });
+  ensureRemoteLoaded();
+  assert.equal(remoteSource(), 'none');
+  assert.equal(remoteCovers('eng.1'), false);
+  // a newer file from the network replaces the snapshot
+  setRemoteForTests(null);
+  setBundledForTests({ predictions: file({ generated_at: new Date(Date.now() - 5 * DAY).toISOString() }), accuracy: null });
+  setFetch((async (url: string) => (url.includes('football_predictions') ? new Response(JSON.stringify(file({ model_version: 'fb-new' })), { status: 200 }) : new Response('nope', { status: 404 }))) as unknown as typeof fetch);
+  assert.equal(await refreshRemote(true), true);
+  assert.equal(remoteSource(), 'network');
+});
+
+test('safer call always contains the call; tiers follow the pick probability', () => {
+  assert.deepEqual(saferCall({ home: 0.34, draw: 0.33, away: 0.33 }, 'draw').pair, 'home or draw');
+  assert.equal(saferCall({ home: 0.2, draw: 0.32, away: 0.48 }, 'draw').pair, 'away or draw'); // never "home or away" for a draw
+  assert.equal(saferCall({ home: 0.5, draw: 0.2, away: 0.3 }, 'home').pair, 'home or away');
+  assert.equal(saferCall({ home: 0.5, draw: 0.3, away: 0.2 }, 'home').pair, 'home or draw');
+  assert.deepEqual([tierOf(0.65), tierOf(0.649), tierOf(0.5), tierOf(0.4), tierOf(0.39)], ['strong', 'likely', 'likely', 'lean', 'toss-up']);
+});
+
+test('published predictions carry the draw note when a draw is close but not called', () => {
+  const m = file().matches[0];
+  setRemoteForTests(file({ matches: [{ ...m, p: { home: 0.4, draw: 0.3, away: 0.3 }, call: { pick: 'home', pick_probability: 0.4, tier: 'lean', draw_call: false, double_chance: { call: 'home or draw', probability: 0.7 } } }] }));
+  const p = predictEvent(ev('Manchester United', 'Arsenal'))!;
+  assert.equal(p.call?.source, 'model');
+  assert.match(p.call?.draw_note ?? '', /real possibility \(30%\): 29% of matches rated like this ended level/);
+  setRemoteForTests(file({ matches: [{ ...m, p: { home: 0.5, draw: 0.25, away: 0.25 }, call: { pick: 'home', pick_probability: 0.5, tier: 'likely', draw_call: false, double_chance: { call: 'home or draw', probability: 0.75 } } }] }));
+  assert.equal(predictEvent(ev('Manchester United', 'Arsenal'))!.call?.draw_note, undefined);
 });

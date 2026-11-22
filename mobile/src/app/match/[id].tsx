@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useApi } from '@/api/cache';
 import type { FormGame, Injury, LineupPlayer, MatchCentre, MatchDetail, TeamStat, TimelineItem } from '@/api/types';
 import { Glass } from '@/components/glass';
-import { ConfidencePill, finalLabel, FormPills, ProbabilityBar, StandingsTable, StatusChip, TeamBadge } from '@/components/match';
+import { ConfidencePill, finalLabel, FormPills, ProbabilityBar, StandingsTable, StatusChip, TeamBadge, TierPill } from '@/components/match';
 import { kitColors, Pitch, ShotMap } from '@/components/pitch';
 import { PlayerPhoto } from '@/components/crest';
 import { Button, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatusBanner, Text } from '@/components/ui';
@@ -224,6 +224,35 @@ function CallRow({ icon, color, title, value }: { icon: string; color: string; t
   );
 }
 
+/** After full time: was each call right? (result, safer call, goals) */
+function Review({ m, p, hs, as }: { m: MatchDetail; p: NonNullable<MatchDetail['prediction_full']>; hs: number; as: number }) {
+  const t = useTheme();
+  const call = p.call!;
+  const o = hs > as ? 'home' : hs < as ? 'away' : 'draw';
+  const pick = m.prediction?.pick;
+  const rows: [string, boolean][] = [];
+  if (pick) rows.push([`Call: ${outcomeLabel(pick, m.home.short_name, m.away.short_name)}`, pick === o]);
+  rows.push([`Safer call: ${call.safer.label}`, call.safer.pair.split(' or ').includes(o)]);
+  if (p.goals) rows.push([p.goals.over25 >= 0.5 ? 'Over 2.5 goals' : 'Under 2.5 goals', p.goals.over25 >= 0.5 === hs + as > 2.5]);
+  return (
+    <View style={{ marginTop: space.md, padding: space.md, borderRadius: radius.md, backgroundColor: t.glass, borderWidth: 1, borderColor: t.glassBorder, gap: space.xs }}>
+      <Text v="tiny" muted style={{ fontWeight: '700' }}>
+        HOW THE CALLS DID · FT {hs}-{as}
+      </Text>
+      {rows.map(([label, ok]) => (
+        <Row key={label} style={{ justifyContent: 'space-between' }}>
+          <Text v="small" style={{ flex: 1 }} numberOfLines={1}>
+            {label}
+          </Text>
+          <Text v="small" color={ok ? t.win : t.loss} style={{ fontWeight: '700' }}>
+            {ok ? '✓ Right' : '✗ Wrong'}
+          </Text>
+        </Row>
+      ))}
+    </View>
+  );
+}
+
 // ------------------------------------------------------------------ overview (prediction, form, news)
 function Overview({ m }: { m: MatchDetail }) {
   const t = useTheme();
@@ -245,7 +274,7 @@ function Overview({ m }: { m: MatchDetail }) {
                 </Text>
               </View>
               <View style={{ alignItems: 'flex-end', gap: 4 }}>
-                <ConfidencePill level={p.confidence} />
+                {p.call ? <TierPill tier={p.call.tier} /> : <ConfidencePill level={p.confidence} />}
                 {p.correct !== null ? (
                   <Text v="tiny" color={p.correct ? t.win : t.loss} style={{ fontWeight: '700' }}>
                     {p.correct ? '✓ Called it' : '✗ Missed'}
@@ -265,15 +294,22 @@ function Overview({ m }: { m: MatchDetail }) {
                   title={p.call.tier_label}
                   value={p.call.tier_hit_rate !== null ? `${Math.round(p.call.tier_hit_rate * 100)}% right in backtests` : ''}
                 />
-                <CallRow icon="shield-half-full" color={t.brand} title={`Safer call: ${p.call.safer.label}`} value={`${Math.round(p.call.safer.probability * 100)}%`} />
+                <CallRow
+                  icon="shield-half-full"
+                  color={t.brand}
+                  title={`Safer call: ${p.call.safer.label}`}
+                  value={`${Math.round(p.call.safer.probability * 100)}%${p.call.safer.hit_rate !== null ? ` · ${Math.round(p.call.safer.hit_rate * 100)}% right` : ''}`}
+                />
+                {p.call.draw_note ? <CallRow icon="equal" color={t.accent2} title={p.call.draw_note} value="" /> : null}
                 {p.goals ? (
-                  <>
-                    <CallRow icon="soccer" color={t.pending} title={p.goals.over25 >= 0.5 ? 'Over 2.5 goals' : 'Under 2.5 goals'} value={`${Math.round(Math.max(p.goals.over25, 1 - p.goals.over25) * 100)}%`} />
-                    <CallRow icon="swap-horizontal" color={t.pending} title={p.goals.btts >= 0.5 ? 'Both teams to score' : 'At least one side kept out'} value={`${Math.round(Math.max(p.goals.btts, 1 - p.goals.btts) * 100)}%`} />
-                  </>
+                  <CallRow icon="soccer" color={t.pending} title={p.goals.over25 >= 0.5 ? 'Over 2.5 goals' : 'Under 2.5 goals'} value={`${Math.round(Math.max(p.goals.over25, 1 - p.goals.over25) * 100)}%`} />
+                ) : null}
+                {p.goals && p.goals.btts !== null ? (
+                  <CallRow icon="swap-horizontal" color={t.pending} title={p.goals.btts >= 0.5 ? 'Both teams to score' : 'At least one side kept out'} value={`${Math.round(Math.max(p.goals.btts, 1 - p.goals.btts) * 100)}%`} />
                 ) : null}
               </View>
             ) : null}
+            {p.call && m.status === 'finished' && m.home_score !== null && m.away_score !== null ? <Review m={m} p={p} hs={m.home_score} as={m.away_score} /> : null}
             <SectionHeader title="Key factors" />
             <Row style={{ marginTop: -space.xs, marginBottom: space.sm, flexWrap: 'wrap' }} gap={space.md}>
               {(
@@ -299,7 +335,11 @@ function Overview({ m }: { m: MatchDetail }) {
             {p.sources?.length ? <Sources p={p} home={m.home.short_name} away={m.away.short_name} hasDraws={m.has_draws} /> : null}
             <Explanation p={p} />
             <Text v="tiny" muted style={{ marginTop: space.md }}>
-              {p.model} v{p.model_version} · updated {relative(new Date(p.created_at).getTime())}
+              {p.call?.source === 'model'
+                ? `MK Sports model ${p.model_version} · prediction made ${relative(new Date(p.created_at).getTime())}`
+                : p.call?.source === 'device'
+                  ? `On-device estimate (this match is not in the published model's file) · updated ${relative(new Date(p.created_at).getTime())}`
+                  : `${p.model} v${p.model_version} · updated ${relative(new Date(p.created_at).getTime())}`}
               {p.trigger === 'team_news' ? ' after team news' : ''}
             </Text>
           </Glass>

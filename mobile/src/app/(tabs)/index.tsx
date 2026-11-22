@@ -246,9 +246,25 @@ function Home() {
           <MatchStrip items={liveItems} />
         </>
       ) : null}
+      <Pressable onPress={() => router.push('/predictions')} accessibilityRole="button" accessibilityLabel="All predictions, including draw calls" style={({ pressed }) => ({ marginTop: space.md, opacity: pressed ? 0.8 : 1 })}>
+        <Glass>
+          <Row gap={space.md}>
+            <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.brand, 0.18), alignItems: 'center', justifyContent: 'center' }}>
+              <Icon name="crystal-ball" size={22} color={t.brand} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: '800' }}>Predictions</Text>
+              <Text v="small" dim>
+                Every football call this week: wins, draws and safer calls
+              </Text>
+            </View>
+            <Icon name="chevron-right" size={22} color={t.textMuted} />
+          </Row>
+        </Glass>
+      </Pressable>
       {strongCalls.length ? (
         <>
-          <SectionHeader title="Strongest calls" icon="shield-check" color={t.win} action="Track record" onAction={() => router.push('/accuracy')} />
+          <SectionHeader title="Strongest calls" icon="shield-check" color={t.win} action="All predictions" onAction={() => router.push('/predictions')} />
           <MatchStrip items={strongCalls} />
         </>
       ) : null}

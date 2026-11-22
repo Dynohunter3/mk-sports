@@ -38,7 +38,8 @@ import type { Injury, SEvent, TeamInfo } from './espn';
 import { historyVersion, sportMatches } from './history';
 import { readKV, writeKV } from './kv';
 import { MATCH_LEAGUES, SportSlug, sportOf } from './leagues';
-import { remoteAccuracy, remoteFile, remoteFor, RemoteMatch } from './remote';
+import { remoteAccuracy, remoteFile, remoteFor, RemoteMatch, remoteSource } from './remote';
+import { DEVICE_TRACK, drawNoteText, MODEL_DRAW_NOTE, saferCall, tierOf, TIER_LABEL as TIER_LABELS } from '../engine/calls';
 
 const MODEL_VERSION = '2.1.0';
 export const PREDICTED_SPORTS: SportSlug[] = ['football', 'basketball', 'american-football', 'ice-hockey', 'baseball'];
@@ -196,10 +197,21 @@ export type FullPrediction = {
   sources: SourceRow[];
   /** The called outcome when it differs from the plain most-likely one (e.g. a draw call). */
   pick?: Outcome;
-  call?: { tier: 'strong' | 'likely' | 'lean' | 'toss-up'; tier_label: string; tier_hit_rate: number | null; draw_call: boolean; safer: { label: string; probability: number; hit_rate: number | null } };
-  goals?: { over25: number; btts: number };
+  call?: {
+    tier: 'strong' | 'likely' | 'lean' | 'toss-up';
+    tier_label: string;
+    tier_hit_rate: number | null;
+    draw_call: boolean;
+    safer: { label: string; pair: 'home or draw' | 'away or draw' | 'home or away'; probability: number; hit_rate: number | null };
+    /** 'model' = the published MK Sports model; 'device' = the on-device engine (fallback) */
+    source: 'model' | 'device';
+    /** when the published prediction was made (built-in snapshot or download) */
+    made_on?: string;
+    draw_note?: string;
+  };
+  goals?: { over25: number; btts: number | null };
 };
-export type MiniPrediction = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome; tier?: 'strong' | 'likely' | 'lean' | 'toss-up' };
+export type MiniPrediction = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome; tier?: 'strong' | 'likely' | 'lean' | 'toss-up'; safer?: string; safer_p?: number; source?: 'model' | 'device'; draw_note?: boolean };
 
 const pct = (x: number | undefined) => `${Math.round((x ?? 0) * 100)}%`;
 const LEVELS: Confidence[] = ['low', 'medium', 'high'];
@@ -268,7 +280,7 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
         ...(call ? [{ title: 'Call strength', detail: `${TIER_LABEL[call.tier]}${tierRec ? `: calls this strong were right ${pct(tierRec.hit_rate)} of the time in ${tierRec.n.toLocaleString()} backtested matches` : ''}` }] : []),
         ...(call ? [{ title: 'Safer call', detail: `${dcName(call.double_chance.call)} (${pct(call.double_chance.probability)})` }] : []),
         { title: 'Confidence', detail: `${r.confidence_label}${r.confidence_reasons.length ? `: ${r.confidence_reasons.join('; ')}` : ''}` },
-        { title: 'Last update', detail: `${new Date(r.made_at).toUTCString()} (${r.last_change})` },
+        { title: 'Last update', detail: `${new Date(r.made_at).toUTCString()} (${r.last_change})${remoteSource() === 'bundled' ? '. Built into this version of the app; the app downloads newer predictions when they are published.' : ''}` },
         { title: 'Data', detail: fileInfo?.attribution ?? 'football-data.co.uk, openfootball' },
       ],
       inputs: { model_version: r.model_version ?? fileInfo?.model_version, data_version: fileInfo?.data_version, variant: r.variant, confidence_score: r.confidence },
@@ -283,13 +295,19 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
           tier_label: TIER_LABEL[call.tier],
           tier_hit_rate: tierRec?.hit_rate ?? null,
           draw_call: call.draw_call,
-          safer: { label: dcName(call.double_chance.call), probability: call.double_chance.probability, hit_rate: rec?.double_chance?.hit_rate ?? null },
+          safer: { label: dcName(call.double_chance.call), pair: call.double_chance.call, probability: call.double_chance.probability, hit_rate: rec?.double_chance?.hit_rate ?? null },
+          source: 'model',
+          made_on: r.made_at,
+          draw_note: (() => {
+            const dn = rec?.draw_note ? { min: rec.draw_note.min_draw, drawn: rec.draw_note.ended_level } : MODEL_DRAW_NOTE;
+            return !call.draw_call && r.p.draw >= dn.min ? drawNoteText(r.p.draw, dn.drawn) : undefined;
+          })(),
         }
       : undefined,
-    goals: r.goals && r.goals.over25 !== null && r.goals.btts !== null ? { over25: r.goals.over25, btts: r.goals.btts } : undefined,
+    goals: r.goals && r.goals.over25 !== null ? { over25: r.goals.over25, btts: r.goals.btts } : undefined,
   };
 }
-const TIER_LABEL = { strong: 'Strong call', likely: 'Likely', lean: 'Lean', 'toss-up': 'Toss-up' } as const;
+const TIER_LABEL = TIER_LABELS;
 
 export function predictEvent(ev: SEvent, opts: PredictOptions = {}): FullPrediction | null {
   // covered football competitions: the published pipeline prediction (falls back below only if missing)
@@ -396,7 +414,19 @@ export function predictEvent(ev: SEvent, opts: PredictOptions = {}): FullPredict
     { title: 'Confidence', detail: reasons.join('; ') },
   ];
 
+  // call strength, safer call and the draw note (football): the device engine never calls a draw
+  let call: FullPrediction['call'];
+  if (sport === 'football') {
+    const tier = tierOf(top);
+    const safe = saferCall(blended, fav);
+    const pairLabel = safe.pair === 'home or draw' ? `${ev.home.short} or draw` : safe.pair === 'away or draw' ? `${ev.away.short} or draw` : `${ev.home.short} or ${ev.away.short}`;
+    const dn = (blended.draw ?? 0) >= DEVICE_TRACK.drawNote.min ? drawNoteText(blended.draw ?? 0, DEVICE_TRACK.drawNote.drawn) : undefined;
+    call = { tier, tier_label: TIER_LABELS[tier], tier_hit_rate: DEVICE_TRACK.tiers[tier], draw_call: false, safer: { label: pairLabel, pair: safe.pair, probability: safe.probability, hit_rate: DEVICE_TRACK.safer }, source: 'device', draw_note: dn };
+  }
+
   return {
+    call,
+    pick: fav,
     version: 1,
     created_at: new Date().toISOString(),
     trigger: opts.before !== undefined ? 'pre-match' : 'live',
@@ -416,7 +446,10 @@ export function predictEvent(ev: SEvent, opts: PredictOptions = {}): FullPredict
 
 export function mini(p: FullPrediction): MiniPrediction {
   const pr = p.probabilities;
-  return { home: pr.home ?? 0, draw: pr.draw ?? null, away: pr.away ?? 0, score: p.predicted_score, confidence: p.confidence, pick: p.pick ?? argmax(pr), tier: p.call?.tier };
+  return {
+    home: pr.home ?? 0, draw: pr.draw ?? null, away: pr.away ?? 0, score: p.predicted_score, confidence: p.confidence, pick: p.pick ?? argmax(pr),
+    tier: p.call?.tier, safer: p.call?.safer.label, safer_p: p.call?.safer.probability, source: p.call?.source, draw_note: !!p.call?.draw_note,
+  };
 }
 
 // ------------------------------------------------------------------ snapshots & scoring

@@ -502,6 +502,9 @@ def track_record() -> dict | None:
            "bookmaker": {"n": both["bookmaker_closing_most_likely"]["n"], "hit_rate": both["bookmaker_closing_most_likely"]["hit_rate"]},
            "double_chance": {"n": rule["n"], "hit_rate": both["double_chance"]["hit_rate"],
                              "strong": {"n": top["n"], "hit_rate": top["hit_rate"], "share": top["share"]}}}
+    if "draw_note" in both:
+        dn = both["draw_note"]
+        out["draw_note"] = {"min_draw": dn["min_draw"], "n": dn["n"], "share": dn["share"], "ended_level": dn["ended_level"]}
     if fg.exists():
         g = json.loads(fg.read_text())["markets"]["over25"]
         r = g["candidates"][g["chosen"]]["both"]

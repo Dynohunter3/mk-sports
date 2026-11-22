@@ -54,7 +54,7 @@ export type TeamMini = { id: string; name: string; short_name: string; code: str
 export type Team = TeamMini & { sport: string; country: string | null; venue_name: string | null; venue_city: string | null; elo: number | null; form: string | null; leagues?: string[] };
 
 export type CallTier = 'strong' | 'likely' | 'lean' | 'toss-up';
-export type PredictionMini = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome; tier?: CallTier };
+export type PredictionMini = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome; tier?: CallTier; safer?: string; safer_p?: number; source?: 'model' | 'device'; draw_note?: boolean };
 
 export type MyPick = { pick: Outcome; home_score: number | null; away_score: number | null; status: 'pending' | 'won' | 'lost' | 'void'; points: number };
 
@@ -79,6 +79,18 @@ export type MatchCard = {
 
 export type MatchPage = { items: MatchCard[]; next_cursor: string | null };
 
+export type PredictionsList = {
+  days: number;
+  items: MatchCard[];
+  leagues: { slug: string; short_name: string; n: number }[];
+  model: { version: string; generated_at: string; source: 'none' | 'network' | 'saved' | 'bundled' } | null;
+  track: {
+    model: { tiers: Partial<Record<CallTier, number | null>>; draw_calls: number | null; draw_base_rate: number; safer: number; safer_strong: number; draw_note: number } | null;
+    device: { tiers: Record<CallTier, number>; safer: number; draw_note: number };
+  };
+  unavailable: string[];
+};
+
 export type KeyFactor = { text: string; impact: number; favours: 'home' | 'away' | 'neutral'; category: string };
 
 export type PredictionFull = {
@@ -93,8 +105,17 @@ export type PredictionFull = {
   confidence: Confidence;
   key_factors: KeyFactor[];
   explanation: { method: string; summary: string; steps: { title: string; detail: string }[]; inputs: Record<string, unknown> };
-  call?: { tier: CallTier; tier_label: string; tier_hit_rate: number | null; draw_call: boolean; safer: { label: string; probability: number; hit_rate: number | null } };
-  goals?: { over25: number; btts: number };
+  call?: {
+    tier: CallTier;
+    tier_label: string;
+    tier_hit_rate: number | null;
+    draw_call: boolean;
+    safer: { label: string; pair: 'home or draw' | 'away or draw' | 'home or away'; probability: number; hit_rate: number | null };
+    source: 'model' | 'device';
+    made_on?: string;
+    draw_note?: string;
+  };
+  goals?: { over25: number; btts: number | null };
   versions: number;
   correct: boolean | null;
   /** Each independent forecast and its weight in the blend (device mode). */
@@ -228,6 +249,7 @@ export type Accuracy = {
     all_matches: { n: number; hit_rate: number };
     bookmaker: { n: number; hit_rate: number };
     double_chance: { n: number; hit_rate: number; strong: { n: number; hit_rate: number; share: number } };
+    draw_note?: { min_draw: number; n: number; share: number; ended_level: number };
     over25?: { n: number; hit_rate: number; confident: { n: number; hit_rate: number; share: number } };
     btts?: { n: number; hit_rate: number; confident: { n: number; hit_rate: number; share: number } };
   } | null;

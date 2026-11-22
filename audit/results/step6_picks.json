@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-10T14:27:02+00:00",
+ "generated_at": "2026-11-22T01:49:32+00:00",
  "run": "step6",
  "criterion": "selection season; draw calls in >= 5% of matches; highest overall hit rate, then draw precision",
  "chosen_rule": {
@@ -637,8 +637,8 @@
     }
    ],
    "double_chance": {
-    "hit_rate": 0.7948653410521017,
-    "mean_probability": 0.7856936155995923,
+    "hit_rate": 0.7923483513717594,
+    "mean_probability": 0.7854884839021053,
     "tiers": [
      {
       "from": 0.85,
@@ -656,9 +656,15 @@
       "from": 0.0,
       "share": 0.398691165366222,
       "n": 1584,
-      "hit_rate": 0.7272727272727273
+      "hit_rate": 0.7209595959595959
      }
     ]
+   },
+   "draw_note": {
+    "min_draw": 0.29,
+    "share": 0.16335263025421595,
+    "n": 649,
+    "ended_level": 0.29121725731895226
    }
   },
   "test": {
@@ -721,8 +727,8 @@
     }
    ],
    "double_chance": {
-    "hit_rate": 0.7844438545261482,
-    "mean_probability": 0.7797519625292106,
+    "hit_rate": 0.7847093177594903,
+    "mean_probability": 0.779634985260498,
     "tiers": [
      {
       "from": 0.85,
@@ -740,9 +746,15 @@
       "from": 0.0,
       "share": 0.4419962835147332,
       "n": 1665,
-      "hit_rate": 0.7243243243243244
+      "hit_rate": 0.7249249249249249
      }
     ]
+   },
+   "draw_note": {
+    "min_draw": 0.29,
+    "share": 0.12370586673745686,
+    "n": 466,
+    "ended_level": 0.2832618025751073
    }
   },
   "both": {
@@ -805,8 +817,8 @@
     }
    ],
    "double_chance": {
-    "hit_rate": 0.7897932816537467,
-    "mean_probability": 0.7828018575742528,
+    "hit_rate": 0.7886304909560724,
+    "mean_probability": 0.7826396299766616,
     "tiers": [
      {
       "from": 0.85,
@@ -824,10 +836,58 @@
       "from": 0.0,
       "share": 0.4197674418604651,
       "n": 3249,
-      "hit_rate": 0.7257617728531855
+      "hit_rate": 0.7229916897506925
      }
     ]
+   },
+   "draw_note": {
+    "min_draw": 0.29,
+    "share": 0.14405684754521964,
+    "n": 1115,
+    "ended_level": 0.2878923766816143
    }
   }
+ },
+ "device_engine": {
+  "n": 7740,
+  "hit_rate": 0.49896640826873384,
+  "tiers": [
+   {
+    "tier": "strong",
+    "share": 0.09974160206718347,
+    "n": 772,
+    "hit_rate": 0.7409326424870466
+   },
+   {
+    "tier": "likely",
+    "share": 0.3161498708010336,
+    "n": 2447,
+    "hit_rate": 0.5639558643236616
+   },
+   {
+    "tier": "lean",
+    "share": 0.391343669250646,
+    "n": 3029,
+    "hit_rate": 0.4460217893694289
+   },
+   {
+    "tier": "toss-up",
+    "share": 0.19276485788113695,
+    "n": 1492,
+    "hit_rate": 0.3746648793565684
+   }
+  ],
+  "safer": 0.7709302325581395,
+  "safer_85": {
+   "share": 0.11782945736434108,
+   "hit_rate": 0.8980263157894737
+  },
+  "draw_note": {
+   "min_draw": 0.29,
+   "share": 0.19573643410852712,
+   "n": 1515,
+   "ended_level": 0.2891089108910891
+  },
+  "draw_rule_test_precision": 0.27169811320754716
  }
 }

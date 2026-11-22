@@ -87,6 +87,8 @@ export type RemoteAccuracy = {
     all_matches: TrackRecord;
     bookmaker: TrackRecord;
     double_chance: TrackRecord & { strong: TrackRecord & { share: number } };
+    /** matches not called a draw but rated at least min_draw: how many ended level */
+    draw_note?: { min_draw: number; n: number; share: number; ended_level: number };
     over25?: TrackRecord & { confident: TrackRecord & { share: number } };
     btts?: TrackRecord & { confident: TrackRecord & { share: number } };
   };
@@ -94,6 +96,15 @@ export type RemoteAccuracy = {
 };
 const ACC_KEY = 'remote:accuracy:v1';
 let accuracyDoc: RemoteAccuracy | null = null;
+// The newest predictions file at build time, shipped inside the app: the new model's calls (draws
+// included) are available from the first launch and while the live file can't be reached. It is used
+// for matches inside its own horizon only, and anything newer (saved or downloaded) replaces it.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+let bundled: { predictions: unknown; accuracy: unknown } | null = { predictions: require('../../assets/data/football_predictions.json'), accuracy: require('../../assets/data/accuracy.json') };
+/** Tests only: run without the built-in snapshot. */
+export function setBundledForTests(b: { predictions: unknown; accuracy: unknown } | null) {
+  bundled = b;
+}
 export const remoteAccuracy = () => accuracyDoc;
 const accValid = (a: unknown): a is RemoteAccuracy => !!a && (a as RemoteAccuracy).schema === 1 && !!(a as RemoteAccuracy).live;
 
@@ -102,14 +113,14 @@ let byComp = new Map<string, RemoteMatch[]>();
 let lastTry = 0;
 let loading: Promise<boolean> | null = null;
 const listeners = new Set<() => void>();
-export const stats = { matched: 0, unmatched: 0, source: 'none' as 'none' | 'network' | 'saved' };
+export const stats = { matched: 0, unmatched: 0, source: 'none' as 'none' | 'network' | 'saved' | 'bundled' };
 
 function valid(f: unknown): f is RemoteFile {
   const x = f as RemoteFile;
   return !!x && x.schema === 1 && Array.isArray(x.matches) && Array.isArray(x.competitions) && typeof x.model_version === 'string';
 }
 
-function install(f: RemoteFile, source: 'network' | 'saved') {
+function install(f: RemoteFile, source: 'network' | 'saved' | 'bundled') {
   file = f;
   stats.source = source;
   byComp = new Map();
@@ -122,6 +133,12 @@ export function onRemoteChange(fn: () => void) {
   return () => listeners.delete(fn);
 }
 
+/** Make the built-in snapshot available synchronously (first launch, before any download finishes). */
+export function ensureRemoteLoaded() {
+  if (!file) installBundled();
+  if (!accuracyDoc && bundled && accValid(bundled.accuracy)) accuracyDoc = bundled.accuracy;
+}
+
 /** Fetch the newest file (best effort, at most every 15 min); keeps the last good copy. */
 export async function refreshRemote(force = false): Promise<boolean> {
   if (loading) return loading;
@@ -132,10 +149,12 @@ export async function refreshRemote(force = false): Promise<boolean> {
     if (!file) {
       const saved = await readKV<RemoteFile>(KV_KEY);
       if (valid(saved) && Date.now() - Date.parse(saved.generated_at) < MAX_AGE_MS) install(saved, 'saved');
+      else installBundled();
     }
     if (!accuracyDoc) {
       const savedAcc = await readKV<RemoteAccuracy>(ACC_KEY);
       if (accValid(savedAcc)) accuracyDoc = savedAcc;
+      else if (bundled && accValid(bundled.accuracy)) accuracyDoc = bundled.accuracy;
     }
     // 1. predictions (Pages, then the mirror); a failure keeps the last good copy
     let ok = false;
@@ -173,11 +192,22 @@ export async function refreshRemote(force = false): Promise<boolean> {
   return loading;
 }
 
+function installBundled() {
+  if (!bundled || !valid(bundled.predictions)) return;
+  const b = bundled.predictions;
+  if (Date.now() < Date.parse(b.generated_at) + b.horizon_days * DAY_MS) install(b, 'bundled');
+}
+const DAY_MS = 86400 * 1000;
+
 export const remoteFile = () => file;
+export const remoteSource = () => stats.source;
 
 /** Is this competition one the pipeline predicts (so the app should not compute its own)? */
 export function remoteCovers(league: string): boolean {
-  return !!file && Date.now() - Date.parse(file.generated_at) < MAX_AGE_MS && file.competitions.includes(league);
+  if (!file || !file.competitions.includes(league)) return false;
+  const age = Date.now() - Date.parse(file.generated_at);
+  // a downloaded or saved file is trusted for 3 days; the built-in snapshot for its own horizon
+  return stats.source === 'bundled' ? age < file.horizon_days * DAY_MS : age < MAX_AGE_MS;
 }
 
 /** The published prediction for an ESPN fixture, or null. */
@@ -206,6 +236,7 @@ export function remoteFor(ev: SEvent): RemoteMatch | null {
 /** Tests only. */
 export function setRemoteForTests(f: RemoteFile | null, acc: RemoteAccuracy | null = null) {
   file = null;
+  stats.source = 'none';
   accuracyDoc = acc;
   byComp = new Map();
   if (f) install(f, 'network');

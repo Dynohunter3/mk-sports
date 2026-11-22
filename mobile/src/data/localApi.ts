@@ -15,7 +15,8 @@ import { SourceError } from './http';
 import * as centreApi from './centre';
 import { LEAGUE_BY_SLUG, LEAGUES, LeagueDef, MATCH_LEAGUES, SportSlug, SPORTS, sportOf } from './leagues';
 import * as more from './more';
-import { AccAgg, onRemoteChange, refreshRemote, remoteAccuracy } from './remote';
+import { AccAgg, ensureRemoteLoaded, onRemoteChange, refreshRemote, remoteAccuracy, remoteFile, remoteSource } from './remote';
+import { DEVICE_TRACK, MODEL_DRAW_NOTE } from '../engine/calls';
 import { backtest, bookFor, clearPredictionStores, getBacktest, onPredictionDataChange, PREDICTED_SPORTS, scheduleBacktest, FullPrediction, liveEvaluations, mini, predictEvent, preMatchSnapshot, registerTeams, scoreFinished, scorePrediction, snapshot, sourceStats, storesReady } from './predict';
 
 const DAY = 86_400_000;
@@ -253,6 +254,45 @@ async function feed(q: URLSearchParams) {
     predictions_loading: [...sportsInFeed].some((s) => !sportReady(s)),
     unavailable: [...leagueErrors.keys()].filter((s) => leagues.some((l) => l.slug === s)).map((s) => LEAGUE_BY_SLUG[s].shortName),
     sections,
+  };
+}
+
+/** Football competitions on the Predictions screen: the leagues, plus the Champions and Europa League. */
+const PREDICTION_LEAGUES = MATCH_LEAGUES.filter((l) => l.sport === 'football' && (l.kind === 'league' || l.slug === 'uefa.champions' || l.slug === 'uefa.europa')).map((l) => l.slug);
+
+/** Every upcoming football prediction for the next few days, with the call, its strength and the safer call. */
+async function predictionsList(q: URLSearchParams) {
+  const days = Math.min(10, Math.max(1, Number(q.get('days') ?? 7) || 7));
+  const now = Date.now();
+  const all = await fetchLeagues(PREDICTION_LEAGUES, now - DAY, now + (days + 1) * DAY);
+  const upcoming = [...new Map(all.map((e) => [e.id, e])).values()]
+    .filter((e) => e.status === 'scheduled' && Date.parse(e.start) > now - 3 * 3600 * 1000 && Date.parse(e.start) < now + days * DAY)
+    .sort((a, b) => a.start.localeCompare(b.start));
+  const items = upcoming.map((e) => card(e)).filter((c) => c.prediction);
+  const counts = new Map<string, number>();
+  for (const c of items) counts.set(c.league.id, (counts.get(c.league.id) ?? 0) + 1);
+  const rec = remoteAccuracy()?.track_record;
+  const f = remoteFile();
+  return {
+    days,
+    items,
+    leagues: PREDICTION_LEAGUES.filter((l) => counts.has(l)).map((l) => ({ slug: l, short_name: LEAGUE_BY_SLUG[l].shortName, n: counts.get(l)! })),
+    model: f ? { version: f.model_version, generated_at: f.generated_at, source: remoteSource() } : null,
+    // backtest hit rates of the published model (two seasons), and of the on-device engine for matches it predicts
+    track: {
+      model: rec
+        ? {
+            tiers: Object.fromEntries(Object.entries(rec.tiers).map(([k, v]) => [k, v?.hit_rate ?? null])),
+            draw_calls: rec.draw_calls.hit_rate,
+            draw_base_rate: rec.draw_calls.base_rate,
+            safer: rec.double_chance.hit_rate,
+            safer_strong: rec.double_chance.strong.hit_rate,
+            draw_note: rec.draw_note?.ended_level ?? MODEL_DRAW_NOTE.drawn,
+          }
+        : null,
+      device: { tiers: DEVICE_TRACK.tiers, safer: DEVICE_TRACK.safer, draw_note: DEVICE_TRACK.drawNote.drawn },
+    },
+    unavailable: [...leagueErrors.keys()].filter((s) => PREDICTION_LEAGUES.includes(s)).map((s) => LEAGUE_BY_SLUG[s].shortName),
   };
 }
 
@@ -806,6 +846,7 @@ async function teamHub(id: string, q: URLSearchParams) {
 export async function handleLocal(method: string, fullPath: string, body: any): Promise<unknown> {
   await Promise.all([game.loadGame(), storesReady()]);
   clubEloFixtures().catch(() => undefined); // best effort, refreshes hourly
+  ensureRemoteLoaded(); // the built-in snapshot, until a newer file is saved or downloaded
   refreshRemote().catch(() => undefined); // published football predictions, best effort, every 15 min
   const [path, q] = parseQuery(fullPath);
   const seg = path.split('/').filter(Boolean);
@@ -832,6 +873,7 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
     if (path === '/cricket') return more.cricket();
     if (path === '/feed') return feed(q);
     if (path === '/matches') return matches(q);
+    if (path === '/predictions') return predictionsList(q);
     if (path === '/matches/live') {
       const now = Date.now();
       const wanted = idsParam(q, 'leagues').filter((l) => LEAGUE_BY_SLUG[l]?.format === 'match');
