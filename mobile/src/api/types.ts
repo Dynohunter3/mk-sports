@@ -73,6 +73,8 @@ export type MatchCard = {
   prediction: PredictionMini | null;
   my_pick: MyPick | null;
   locked: boolean;
+  /** A published prediction listed while its fixture can't be loaded (no match page). */
+  offline?: boolean;
   /** Scorers, when the source lists them on the scoreboard. */
   goals?: { side: 'home' | 'away'; player: string | null; clock: string | null; type: string }[];
 };
@@ -81,6 +83,7 @@ export type MatchPage = { items: MatchCard[]; next_cursor: string | null };
 
 export type PredictionsList = {
   days: number;
+  offline: boolean;
   items: MatchCard[];
   leagues: { slug: string; short_name: string; n: number }[];
   model: { version: string; generated_at: string; source: 'none' | 'network' | 'saved' | 'bundled' } | null;

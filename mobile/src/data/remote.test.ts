@@ -175,3 +175,21 @@ test('published predictions carry the draw note when a draw is close but not cal
   setRemoteForTests(file({ matches: [{ ...m, p: { home: 0.5, draw: 0.25, away: 0.25 }, call: { pick: 'home', pick_probability: 0.5, tier: 'likely', draw_call: false, double_chance: { call: 'home or draw', probability: 0.75 } } }] }));
   assert.equal(predictEvent(ev('Manchester United', 'Arsenal'))!.call?.draw_note, undefined);
 });
+
+test('predictions list: with the live source down, the published predictions are listed (marked offline)', async () => {
+  const { handleLocal } = await import('./localApi');
+  const soon = new Date(Date.now() + 2 * 86400e3).toISOString();
+  const m = file().matches[0];
+  setRemoteForTests(file({ matches: [{ ...m, kickoff: soon, call: { pick: 'away', pick_probability: 0.42, tier: 'lean', draw_call: false, double_chance: { call: 'away or draw', probability: 0.69 } } }] }));
+  setFetch((async () => new Response('down', { status: 503 })) as unknown as typeof fetch);
+  const r: any = await handleLocal('GET', '/predictions?days=7', null);
+  assert.equal(r.offline, true);
+  assert.equal(r.items.length, 1);
+  const c = r.items[0];
+  assert.equal(c.offline, true);
+  assert.equal(c.prediction.pick, 'away');
+  assert.equal(c.prediction.tier, 'lean');
+  assert.equal(c.prediction.source, 'model');
+  assert.equal(c.prediction.safer, 'Arsenal or draw');
+  assert.deepEqual(r.leagues, [{ slug: 'eng.1', short_name: 'Premier League', n: 1 }]);
+});

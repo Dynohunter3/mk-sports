@@ -15,9 +15,9 @@ import { SourceError } from './http';
 import * as centreApi from './centre';
 import { LEAGUE_BY_SLUG, LEAGUES, LeagueDef, MATCH_LEAGUES, SportSlug, SPORTS, sportOf } from './leagues';
 import * as more from './more';
-import { AccAgg, ensureRemoteLoaded, onRemoteChange, refreshRemote, remoteAccuracy, remoteFile, remoteSource } from './remote';
+import { AccAgg, ensureRemoteLoaded, onRemoteChange, refreshRemote, remoteAccuracy, remoteCovers, remoteFile, RemoteMatch, remoteSource } from './remote';
 import { DEVICE_TRACK, MODEL_DRAW_NOTE } from '../engine/calls';
-import { backtest, bookFor, clearPredictionStores, getBacktest, onPredictionDataChange, PREDICTED_SPORTS, scheduleBacktest, FullPrediction, liveEvaluations, mini, predictEvent, preMatchSnapshot, registerTeams, scoreFinished, scorePrediction, snapshot, sourceStats, storesReady } from './predict';
+import { backtest, bookFor, clearPredictionStores, fromRemote, getBacktest, onPredictionDataChange, PREDICTED_SPORTS, scheduleBacktest, FullPrediction, liveEvaluations, mini, predictEvent, preMatchSnapshot, registerTeams, scoreFinished, scorePrediction, snapshot, sourceStats, storesReady } from './predict';
 
 const DAY = 86_400_000;
 export const DISCLAIMER =
@@ -257,6 +257,16 @@ async function feed(q: URLSearchParams) {
   };
 }
 
+/** A card for a published prediction when its fixture can't be loaded from the live source. */
+function offlineCard(m: RemoteMatch) {
+  const team = (t: RemoteMatch['home']): TeamInfo => ({ id: t.id, espnId: t.id, name: t.name, short: t.name, abbr: t.name.replace(/[^A-Za-z]/g, '').slice(0, 3).toUpperCase(), color: '#334155', logo: null });
+  const ev: SEvent = {
+    id: `offline~${m.match_id}`, espnId: m.match_id, league: m.competition, sport: 'football', start: m.kickoff, status: 'scheduled', clock: null,
+    home: team(m.home), away: team(m.away), homeScore: null, awayScore: null, venue: null, neutral: false, round: null, details: [], quarters: null, market: null, preseason: false,
+  };
+  return { ...card(ev, false), prediction: mini(fromRemote(ev, m)), locked: true, offline: true };
+}
+
 /** Football competitions on the Predictions screen: the leagues, plus the Champions and Europa League. */
 const PREDICTION_LEAGUES = MATCH_LEAGUES.filter((l) => l.sport === 'football' && (l.kind === 'league' || l.slug === 'uefa.champions' || l.slug === 'uefa.europa')).map((l) => l.slug);
 
@@ -264,17 +274,32 @@ const PREDICTION_LEAGUES = MATCH_LEAGUES.filter((l) => l.sport === 'football' &&
 async function predictionsList(q: URLSearchParams) {
   const days = Math.min(10, Math.max(1, Number(q.get('days') ?? 7) || 7));
   const now = Date.now();
-  const all = await fetchLeagues(PREDICTION_LEAGUES, now - DAY, now + (days + 1) * DAY);
-  const upcoming = [...new Map(all.map((e) => [e.id, e])).values()]
-    .filter((e) => e.status === 'scheduled' && Date.parse(e.start) > now - 3 * 3600 * 1000 && Date.parse(e.start) < now + days * DAY)
-    .sort((a, b) => a.start.localeCompare(b.start));
-  const items = upcoming.map((e) => card(e)).filter((c) => c.prediction);
+  let items: ReturnType<typeof card>[];
+  let offline = false;
+  try {
+    const all = await fetchLeagues(PREDICTION_LEAGUES, now - DAY, now + (days + 1) * DAY);
+    const upcoming = [...new Map(all.map((e) => [e.id, e])).values()]
+      .filter((e) => e.status === 'scheduled' && Date.parse(e.start) > now - 3 * 3600 * 1000 && Date.parse(e.start) < now + days * DAY)
+      .sort((a, b) => a.start.localeCompare(b.start));
+    items = upcoming.map((e) => card(e)).filter((c) => c.prediction);
+  } catch (e) {
+    // fixtures can't be loaded: list the published predictions themselves (built in or saved), so the
+    // screen still works offline. Rows are marked so the app doesn't open a match page it can't load.
+    const f = remoteFile();
+    if (!f) throw e;
+    offline = true;
+    items = f.matches
+      .filter((m) => remoteCovers(m.competition) && Date.parse(m.kickoff) > now - 3 * 3600 * 1000 && Date.parse(m.kickoff) < now + days * DAY)
+      .sort((a, b) => a.kickoff.localeCompare(b.kickoff))
+      .map(offlineCard);
+  }
   const counts = new Map<string, number>();
   for (const c of items) counts.set(c.league.id, (counts.get(c.league.id) ?? 0) + 1);
   const rec = remoteAccuracy()?.track_record;
   const f = remoteFile();
   return {
     days,
+    offline,
     items,
     leagues: PREDICTION_LEAGUES.filter((l) => counts.has(l)).map((l) => ({ slug: l, short_name: LEAGUE_BY_SLUG[l].shortName, n: counts.get(l)! })),
     model: f ? { version: f.model_version, generated_at: f.generated_at, source: remoteSource() } : null,

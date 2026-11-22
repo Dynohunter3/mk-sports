@@ -21,7 +21,7 @@ const PredictionRow = memo(function PredictionRow({ m, showLeague }: { m: MatchC
   const t = useTheme();
   const p = m.prediction!;
   return (
-    <Pressable onPress={() => router.push(`/match/${m.id}`)} accessibilityRole="button" accessibilityLabel={`${m.home.short_name} against ${m.away.short_name}`} style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}>
+    <Pressable onPress={m.offline ? undefined : () => router.push(`/match/${m.id}`)} disabled={m.offline} accessibilityRole="button" accessibilityLabel={`${m.home.short_name} against ${m.away.short_name}`} style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}>
       <Glass style={{ marginBottom: space.sm }}>
         <Row style={{ justifyContent: 'space-between', marginBottom: 6 }}>
           <Text v="tiny" muted style={{ fontWeight: '700' }}>
@@ -114,11 +114,21 @@ export default function PredictionsScreen() {
           MK Sports model {d.model.version} · predictions published {relative(Date.parse(d.model.generated_at))}
           {d.model.source === 'bundled' ? ' (built into the app; newer ones download when published)' : ''}
         </Text>
-      ) : (
+      ) : d ? (
         <Text v="tiny" muted style={{ marginTop: 4 }}>
-          On-device estimates (the published model&apos;s file is not available on this device yet)
+          On-device estimates (the published predictions have not reached this device yet)
         </Text>
-      )}
+      ) : null}
+      {d?.offline ? (
+        <Glass style={{ marginTop: space.sm }}>
+          <Row gap={space.sm}>
+            <Icon name="wifi-off" size={18} color={t.pending} />
+            <Text v="small" dim style={{ flex: 1 }}>
+              Can&apos;t load live fixtures, so these are the saved predictions. Kick-off times may have changed; match pages open when you&apos;re back online.
+            </Text>
+          </Row>
+        </Glass>
+      ) : null}
       <View style={{ marginTop: space.md }}>
         <Segmented
           scroll

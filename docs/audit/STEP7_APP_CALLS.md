@@ -20,6 +20,7 @@ are right 33.5% of the time.
    - every football match in the next 7 days, with the call (home, **draw** or away), its strength and the safer call;
    - filters: All, **Draws**, Strong, Safer 85%+; league chips.
    - The Draws filter lists draw calls first, then matches where a draw is close but not called.
+   - Without internet (live fixtures unreachable), it lists the built-in or saved predictions, marked offline.
 3. **Calls everywhere.**
    - Match cards show a cyan **DRAW** badge for draw calls and a strength pill (Strong / Likely / Lean / Toss-up) instead of the old High / Medium / Low.
    - The match page adds a draw note and a source line ("MK Sports model …" or "On-device estimate").
@@ -64,5 +65,6 @@ bookmaker and ESPN forecasts, so its live numbers can differ slightly.
 
 ## Tests
 
-- App: 42 tests (5 new): snapshot horizon and replacement; device calls; the predictions list; the draw note; the safer-call rule.
+- App: 43 tests (6 new): snapshot horizon and replacement; device calls; the predictions list and its offline fallback; the draw note; the safer-call rule.
+- Release APK installed and launched on an Android emulator (no internet there). It ran with no crashes on Home and the Predictions screen. Its offline list showed the built-in predictions; that list was added after the first emulator run showed the screen empty offline.
 - Pipeline: 57 tests (1 new): the safer call always contains the call (2,000 random cases).
