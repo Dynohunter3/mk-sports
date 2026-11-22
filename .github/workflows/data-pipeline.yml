@@ -2,7 +2,8 @@
 # Runs on GitHub's free minutes (unlimited for public repositories); no server needed.
 # Optional keys live in the repository's Actions secrets (Settings > Secrets and variables > Actions)
 # and reach the job only as environment variables; a source without a key is skipped automatically.
-# Published for the app: GitHub Pages (primary) and the `predictions` branch (mirror).
+# Published for the app: GitHub Pages (primary, once switched on in Settings > Pages) and the `predictions`
+# branch (mirror; always written, so the app has a source even without Pages).
 # If the health check finds a critical problem the job fails and GitHub emails the repository owner.
 name: data-pipeline
 
@@ -25,6 +26,8 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 90 # the first run backfills 13 seasons (about 20 minutes of polite downloads)
+    outputs:
+      pages: ${{ steps.pages.outputs.enabled }}
     defaults:
       run:
         working-directory: pipeline
@@ -81,7 +84,20 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A && git commit -q -m "Predictions $(date -u +%Y-%m-%dT%H:%MZ)"
           git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:predictions
+      - name: Is GitHub Pages switched on?
+        id: pages
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$(gh api "repos/${{ github.repository }}/pages" --jq .build_type 2>/dev/null)" = "workflow" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=GitHub Pages is off::Predictions were published to the predictions branch, which the app reads. To publish to Pages as well: Settings > Pages > Build and deployment > Source: GitHub Actions."
+          fi
       - name: Upload Pages artifact
+        if: steps.pages.outputs.enabled == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
@@ -103,7 +119,8 @@ jobs:
 
   pages:
     needs: sync
-    if: ${{ !cancelled() }} # publish even when the health check flagged a problem
+    # publish even when the health check flagged a problem; skipped until Pages is switched on
+    if: ${{ !cancelled() && needs.sync.outputs.pages == 'true' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
