@@ -84,3 +84,17 @@ def test_production_routing_uses_market_history_only_where_it_was_better():
         np.testing.assert_allclose(F[i], [.4, .3, .3], atol=1e-6)
     F_old, *_ = pr.final_probs(P, {"A": blends["A"], "B": blends["B"]}, comps)  # an older bundle without MH
     np.testing.assert_allclose(F_old[1], [.4, .3, .3], atol=1e-6)
+
+
+def test_retrain_is_due_for_a_new_month_or_changed_model_code():
+    from mkmodel import production as pr
+
+    class B:
+        manifest = {"cutoff": 100.0, "code_hash": pr.code_hash()}
+
+    assert pr.retrain_due(None, 100.0)
+    assert not pr.retrain_due(B(), 100.0)
+    assert pr.retrain_due(B(), 200.0)  # new month
+    B.manifest = {"cutoff": 100.0, "code_hash": "older-code"}
+    assert pr.retrain_due(B(), 100.0)  # same month, model code changed (e.g. a feature setting)
+    assert "experiment.py" in pr.MODEL_CODE  # the feature groups live there

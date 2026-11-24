@@ -69,11 +69,15 @@ def add_months(t: float, k: int) -> float:
     return datetime(d.year + m // 12, m % 12 + 1, 1, tzinfo=timezone.utc).timestamp()
 
 
+# every module the production model depends on (experiment.py provides the feature groups); a change to any
+# of them changes the fingerprint, and retrain --if-due then refits even within the month
+MODEL_CODE = ("production.py", "data.py", "features.py", "learners.py", "picks.py", "goals_experiment.py", "experiment.py")
+
+
 def code_hash() -> str:
     h = hashlib.sha256()
-    for f in sorted((PIPE / "mkmodel").glob("*.py")):
-        if f.name not in ("experiment.py", "report.py", "export_ts.py", "confidence_check.py"):
-            h.update(f.name.encode() + f.read_bytes())
+    for name in MODEL_CODE:
+        h.update(name.encode() + (PIPE / "mkmodel" / name).read_bytes())
     return h.hexdigest()[:12]
 
 
@@ -232,7 +236,7 @@ def retrain(cutoff: float, store: Path = STORE, out_root: Path = MODELS, app_com
     cfg = {"elo": EloParams().__dict__, "xi": Config(elo=EloParams()).xi, "refit_days": 7, "feature_start": FEATURE_START,
            "train_from": TRAIN_FROM, "features": FEATURES, "gbm_params": {k: v for k, v in L.GBM_PARAMS.items()},
            "inputs_A": INPUTS_A, "inputs_B": INPUTS_B, "inputs_MH": INPUTS_MH, "no_pre_odds": sorted(NO_PRE_ODDS), "competitions": app_comps, "lower": lower if lower is not None else LOWER,
-           "kept_groups": KEPT_GROUPS, "draw_rule": DRAW_RULE, "over25": "gbm+mix"}
+           "kept_groups": KEPT_GROUPS, "draw_rule": DRAW_RULE, "over25": "gbm+mix", "mr_k": Config(elo=EloParams()).mr_k}
     ch = code_hash()
     vh = hashlib.sha256(json.dumps([ch, cfg, data_version, cutoff], sort_keys=True, default=str).encode()).hexdigest()[:8]
     version = f"fb-{datetime.fromtimestamp(cutoff, timezone.utc):%Y-%m}-{vh}"
@@ -249,6 +253,11 @@ def retrain(cutoff: float, store: Path = STORE, out_root: Path = MODELS, app_com
     (folder / "manifest.json").write_text(json.dumps(man, indent=1, sort_keys=True, default=str))
     (out_root / "current.json").write_text(json.dumps({"version": version}))
     return Bundle.load(folder)
+
+
+def retrain_due(cur: "Bundle | None", cutoff: float) -> bool:
+    """A refit is due for a new month, a missing or old-layout bundle, or a change to the model's code."""
+    return cur is None or cur.manifest["cutoff"] != cutoff or cur.manifest.get("code_hash") != code_hash()
 
 
 def current_bundle(root: Path = MODELS) -> Bundle | None:
@@ -411,10 +420,15 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
     for r in db.execute("SELECT entity_id, raw FROM aliases"):
         aliases.setdefault(r["entity_id"], set()).add(r["raw"])
     for e in published:
-        hist = db.execute("SELECT made_at, reason FROM predictions WHERE match_id=? ORDER BY made_at DESC, rowid DESC", (e["match_id"],)).fetchall()
+        hist = db.execute("SELECT made_at, reason, p_home, p_draw, p_away, pick FROM predictions WHERE match_id=? ORDER BY made_at DESC, rowid DESC",
+                          (e["match_id"],)).fetchall()
         e["made_at"] = datetime.fromtimestamp(hist[0]["made_at"], timezone.utc).isoformat(timespec="seconds")
         e["last_change"] = hist[0]["reason"]
         e["versions"] = len(hist)
+        if len(hist) > 1:  # the version before this one, so the app can show how the prediction moved
+            q = hist[1]
+            e["previous"] = {"p": {"home": round(q["p_home"], 4), "draw": round(q["p_draw"], 4), "away": round(q["p_away"], 4)},
+                             "pick": q["pick"], "made_at": datetime.fromtimestamp(q["made_at"], timezone.utc).isoformat(timespec="seconds")}
         for side in ("home", "away"):
             tid = e[f"{side}_id"]
             e[side] = {"id": tid, "name": names.get(tid, tid), "aliases": sorted(aliases.get(tid, set()) | {names.get(tid, tid)})}
@@ -430,7 +444,8 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
              "variant": r["variant"], "confidence": r["confidence"], "confidence_label": r["confidence_label"],
              "confidence_reasons": json.loads(r["confidence_reasons"] or "[]"), "model_version": r["model_version"],
              "made_at": datetime.fromtimestamp(r["made_at"], timezone.utc).isoformat(timespec="seconds"), "last_change": r["reason"],
-             "result": [r["home_score"], r["away_score"]] if r["status"] == "final" else None, "log_loss": r["log_loss"]}
+             "result": [r["home_score"], r["away_score"]] if r["status"] == "final" else None, "log_loss": r["log_loss"],
+             "call": _stored_call(r), "goals": {"over25": None if r["p_over25"] is None else round(r["p_over25"], 4), "btts": None}}
         for side in ("home", "away"):
             tid = e[f"{side}_id"]
             e[side] = {"id": tid, "name": names.get(tid, tid), "aliases": sorted(aliases.get(tid, set()) | {names.get(tid, tid)})}
@@ -444,6 +459,18 @@ def predict(now: float, store: Path = STORE, bundle: Bundle | None = None, horiz
                "recent": recent}
         (publish / "football_predictions.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False))
     return summary
+
+
+def _stored_call(r) -> dict:
+    """The call exactly as it was shown before kick-off (stored with the prediction); older rows: recomputed."""
+    P = np.array([r["p_home"], r["p_draw"], r["p_away"]], float)
+    call = describe(P)
+    if r["pick"] and r["tier"] and r["dc_call"]:
+        k = ["home", "draw", "away"].index(r["pick"])
+        pair = [["home", "draw", "away"].index(x) for x in r["dc_call"].split(" or ")]
+        call = {"pick": r["pick"], "pick_probability": round(float(P[k]), 4), "tier": r["tier"], "draw_call": r["pick"] == "draw",
+                "double_chance": {"call": r["dc_call"], "probability": round(float(P[pair].sum()), 4)}}
+    return call
 
 
 def grade(now: float, store: Path = STORE) -> dict:
@@ -492,7 +519,7 @@ def main(argv=None) -> int:
     if a.cmd == "retrain":
         cutoff = _ts(a.cutoff) if a.cutoff else month_start(time.time())
         cur = current_bundle()
-        if a.if_due and cur and cur.manifest["cutoff"] == cutoff:
+        if a.if_due and not retrain_due(cur, cutoff):
             print(json.dumps({"retrain": "not due", "current": cur.version}))
             return 0
         b = retrain(cutoff)
@@ -579,8 +606,15 @@ def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | 
             "tiers": {t: rate("correct", [g for g in graded if g["tier"] == t]) for t in ("strong", "likely", "lean", "toss-up")},
             "draw_calls": rate("correct", [g for g in graded if g["pick"] == "draw"]),
             "safer_call": rate("safer_correct", graded), "over25": rate("over25_correct", graded),
-            "recent": [{k: g[k] for k in ("match_id", "competition", "kickoff", "home", "away", "score", "pick", "probability", "correct", "confidence_label")}
-                       for g in graded[:30]]}
+            "recent": [{k: g[k] for k in ("match_id", "competition", "kickoff", "home", "away", "score", "pick", "probability", "correct",
+                                          "confidence_label", "tier", "safer_call", "safer_correct", "over25_correct")}
+                       for g in graded[:120]]}
+    # rolling windows by kick-off, for the app's results review
+    t_now = now if now is not None else time.time()
+    for days in (7, 30):
+        rows = [g for g in graded if datetime.fromisoformat(g["kickoff"]).timestamp() >= t_now - days * DAY]
+        live[f"last_{days}_days"] = {"matches": rate("correct", rows), "safer_call": rate("safer_correct", rows),
+                                     "strong": rate("correct", [g for g in rows if g["tier"] == "strong"])}
     backtest = None
     for name in ("step6.json", "step5.json", "step3.json"):
         f = AUDIT / name

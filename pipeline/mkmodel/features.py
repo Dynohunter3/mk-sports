@@ -308,7 +308,7 @@ class Config:
     use_comps: tuple = ()  # competitions whose results feed the state (default: all loaded)
     as_of: float | None = None  # production / replays: the moment the prediction is made
     xi_by_comp: dict = field(default_factory=lambda: dict(LEAGUE_XI))  # per-competition override of the DC time decay
-    mr_k: float = 0.2  # market-history rating step size
+    mr_k: float = 0.35  # market-history rating step size (chosen on the 2024-25 season, audit/results/step8.json)
 
 
 def build(matches: list[M], cfg: Config) -> tuple[np.ndarray, list[M]]:

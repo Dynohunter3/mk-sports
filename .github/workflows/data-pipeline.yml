@@ -9,8 +9,9 @@ name: data-pipeline
 
 on:
   schedule:
-    - cron: "17 4 * * *" # 04:17 UTC daily
-    - cron: "17 18 * * 2,5" # Tue/Fri 18:17 UTC, after football-data.co.uk collects odds
+    # every 6 hours (00:17, 06:17, 12:17, 18:17 UTC): GitHub can delay or skip a scheduled run, and results and
+    # odds arrive at irregular times; 18:17 also follows football-data.co.uk's Tue/Fri odds collection
+    - cron: "17 */6 * * *"
   workflow_dispatch: {}
 
 permissions:

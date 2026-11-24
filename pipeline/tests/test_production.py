@@ -100,6 +100,13 @@ def test_odds_arrival_triggers_a_logged_recompute(world):
     assert out["new"] == 1 and out["reasons"] == {"bookmaker odds published": 1}
     row = db.execute("SELECT variant, confidence_reasons FROM predictions WHERE match_id=? ORDER BY made_at DESC LIMIT 1", (target.id,)).fetchone()
     assert row[0] == "with odds" and "no bookmaker odds yet" not in json.loads(row[1])
+    # the published entry shows how the prediction moved: the version before, and when
+    doc = json.loads((world["pub"] / "football_predictions.json").read_text())
+    e = next(m for m in doc["matches"] if m["match_id"] == target.id)
+    assert e["versions"] == 2 and e["last_change"] == "bookmaker odds published"
+    assert set(e["previous"]["p"]) == {"home", "draw", "away"} and e["previous"]["made_at"] < e["made_at"]
+    assert e["previous"]["p"] != e["p"]
+    assert all("previous" not in m for m in doc["matches"] if m["versions"] == 1)
 
 
 def test_new_result_changes_ratings_and_is_explained(world):
@@ -132,6 +139,17 @@ def test_grade_uses_last_prediction_before_kickoff(world):
     rows = db.execute("SELECT made_at, official, log_loss FROM predictions WHERE match_id=? ORDER BY made_at", (nxt.id,)).fetchall()
     assert [r[1] for r in rows] == [0, 1] and rows[1][0] == nxt.t - 1800 and rows[1][2] > 0
     assert P.grade(nxt.result_at + 2, store=world["store"])["graded"] == 0  # idempotent
+    # finished matches carry the call that was shown, so the app can review it after full time
+    _predict(world, b, now=nxt.result_at + 60)
+    doc = json.loads((world["pub"] / "football_predictions.json").read_text())
+    r = next(m for m in doc["recent"] if m["match_id"] == nxt.id)
+    assert r["result"] == [nxt.hs, nxt.as_] and r["call"]["tier"] and r["call"]["double_chance"]["call"]
+    assert r["call"]["pick"] in ("home", "draw", "away")
+    acc = P.publish_accuracy(store=world["store"], publish=world["pub"], now=nxt.result_at + 60)
+    acc = json.loads((world["pub"] / "accuracy.json").read_text())
+    g = acc["live"]["recent"][0]
+    assert g["match_id"] == nxt.id and g["tier"] and g["safer_call"] and g["safer_correct"] in (0, 1)
+    assert acc["live"]["last_7_days"]["matches"]["n"] == 1 and acc["live"]["last_30_days"]["safer_call"]["n"] == 1
 
 
 def test_confidence_drops_for_missing_odds_shots_and_disagreement():

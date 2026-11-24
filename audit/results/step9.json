@@ -1,0 +1,96 @@
+{
+ "generated_at": "2026-11-24T11:28:09+00:00",
+ "protocol": "Step 9: a market-history component that can call draws.\n\nStep 8's market-history component is an ordered logit on one number (market supremacy). Its draw\nprobability depends only on how far apart the teams are, so it never goes much above 0.30 and, when the\nblend leans on it, the app makes almost no draw calls before odds are out (0.9% of matches in 2025-26).\nHere: a multinomial logistic regression on market supremacy, its size, the two teams' market draw tendency\n(mr_draw) and the league draw rate. Draws can then depend on how draw-prone the market thinks the teams are.\n\nProtocol (fixed before any result was seen):\n  * same matches, features (k = 0.35) and walk-forward as Step 8; only the market-history component changes\n  * scored on days-ahead predictions (league matches before odds are out; the Step 8 production rule)\n  * adopt if its selection-season (2024-25) log loss is lower by more than 0.001; keep Step 8 if higher by more\n    than 0.001; within 0.001, prefer the one whose draw-call rate is closer to the at-kick-off rate\n  * the test season (2025-26) is reported, never used for the decision\n\n    python -m mkmodel.step9            (writes audit/results/step9.json; ~10 min)\n",
+ "kickoff_draw_call_rate": 0.05740740740740741,
+ "results": {
+  "selection": {
+   "before (Step 6)": {
+    "n": 3258,
+    "accuracy": 0.525475751995089,
+    "log_loss": 0.9804098182239809,
+    "brier": 0.5847861435352328,
+    "ece": 0.006177728166780287,
+    "draw_call_share": 0.06537753222836096,
+    "draw_call_precision": 0.30985915492957744
+   },
+   "Step 8 (ordered logit)": {
+    "n": 3258,
+    "accuracy": 0.5322283609576427,
+    "log_loss": 0.9694175369771787,
+    "brier": 0.577326379298391,
+    "ece": 0.012894347198003194,
+    "draw_call_share": 0.07366482504604052,
+    "draw_call_precision": 0.30416666666666664
+   },
+   "Step 9 (multinomial)": {
+    "n": 3258,
+    "accuracy": 0.5319214241866176,
+    "log_loss": 0.9698337291802854,
+    "brier": 0.5775477574799953,
+    "ece": 0.007881487052215589,
+    "draw_call_share": 0.13720073664825047,
+    "draw_call_precision": 0.28859060402684567
+   }
+  },
+  "test": {
+   "before (Step 6)": {
+    "n": 3222,
+    "accuracy": 0.5068280571073868,
+    "log_loss": 0.9933390256476925,
+    "brier": 0.5932200130690517,
+    "ece": 0.010939364533613452,
+    "draw_call_share": 0.023587833643699565,
+    "draw_call_precision": 0.32894736842105265
+   },
+   "Step 8 (ordered logit)": {
+    "n": 3222,
+    "accuracy": 0.5173805090006207,
+    "log_loss": 0.9871922005404609,
+    "brier": 0.5892009221833322,
+    "ece": 0.008651031108854706,
+    "draw_call_share": 0.009000620732464307,
+    "draw_call_precision": 0.3793103448275862
+   },
+   "Step 9 (multinomial)": {
+    "n": 3222,
+    "accuracy": 0.5167597765363129,
+    "log_loss": 0.9876393239687259,
+    "brier": 0.5895278903120252,
+    "ece": 0.00859153470328538,
+    "draw_call_share": 0.019242706393544383,
+    "draw_call_precision": 0.3709677419354839
+   }
+  },
+  "both": {
+   "before (Step 6)": {
+    "n": 6480,
+    "accuracy": 0.5162037037037037,
+    "log_loss": 0.9868385074707708,
+    "brier": 0.5889796508867706,
+    "ece": 0.004185503184692617,
+    "draw_call_share": 0.044598765432098765,
+    "draw_call_precision": 0.314878892733564
+   },
+   "Step 8 (ordered logit)": {
+    "n": 6480,
+    "accuracy": 0.5248456790123457,
+    "log_loss": 0.9782554946933663,
+    "brier": 0.5832306658995146,
+    "ece": 0.010029420183838716,
+    "draw_call_share": 0.041512345679012345,
+    "draw_call_precision": 0.31226765799256506
+   },
+   "Step 9 (multinomial)": {
+    "n": 6480,
+    "accuracy": 0.5243827160493827,
+    "log_loss": 0.9786870665889822,
+    "brier": 0.5835045457492546,
+    "ece": 0.00753513111573531,
+    "draw_call_share": 0.07854938271604939,
+    "draw_call_precision": 0.29862475442043224
+   }
+  }
+ },
+ "decision": "keep Step 8 (tie; draw-call rate closer to kick-off)",
+ "runtime_s": 170
+}
