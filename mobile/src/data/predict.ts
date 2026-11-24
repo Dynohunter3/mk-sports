@@ -227,20 +227,21 @@ export type PredictOptions = { injuries?: { home: Injury[]; away: Injury[] } | n
 /** A published MK Sports pipeline prediction as the app's prediction object (no on-device computation). */
 export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
   const probs: Probs = { home: r.p.home, draw: r.p.draw, away: r.p.away };
-  const [lh, la] = r.expected_goals;
+  // graded entries in the file's `recent` list carry only the probabilities, the call and the result
+  const [lh, la] = r.expected_goals ?? [null, null];
   const total = lh !== null && la !== null ? lh + la : 2.6;
   const call = r.call;
   const fav: Outcome = call?.pick ?? argmax(probs);
   const sc = footballScoreFor(probs, total, undefined, fav);
   const name = (o: Outcome) => (o === 'home' ? ev.home.short : o === 'away' ? ev.away.short : 'a draw');
   const factors: KeyFactor[] = [];
-  const [eh, ea] = r.elo;
+  const [eh, ea] = r.elo ?? [null, null];
   if (eh !== null && ea !== null && Math.abs(eh - ea) >= 25)
     factors.push({ text: `${eh > ea ? ev.home.short : ev.away.short} rated higher (Elo ${Math.round(Math.max(eh, ea))} vs ${Math.round(Math.min(eh, ea))})`, impact: Math.min(1, Math.abs(eh - ea) / 200), favours: eh > ea ? 'home' : 'away', category: 'form' });
   if (lh !== null && la !== null)
     factors.push({ text: `Goals model expects ${lh.toFixed(1)}-${la.toFixed(1)}`, impact: Math.min(1, Math.abs(lh - la)), favours: Math.abs(lh - la) < 0.15 ? 'neutral' : lh > la ? 'home' : 'away', category: 'attack' });
-  const mk = r.components.market;
-  if (r.variant === 'with odds' && mk[0] !== null) {
+  const mk = r.components?.market ?? [null, null, null];
+  if (r.variant === 'with odds' && mk[0] != null) {
     const mo: Outcome = mk[0]! >= mk[2]! && mk[0]! >= mk[1]! ? 'home' : mk[2]! >= mk[1]! ? 'away' : 'draw';
     factors.push({ text: `The betting market also leans ${mo === fav ? 'the same way' : `towards ${name(mo)}`}`, impact: 0.5, favours: mo === 'draw' ? 'neutral' : mo, category: 'sources' });
   } else factors.push({ text: 'Bookmaker odds not published yet: this forecast will update when they are', impact: 0.2, favours: 'neutral', category: 'sources' });
@@ -256,8 +257,8 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
   const dcName = (c: string) => (c === 'home or draw' ? `${ev.home.short} or draw` : c === 'away or draw' ? `${ev.away.short} or draw` : `${ev.home.short} or ${ev.away.short} (no draw)`);
   if (fav === 'draw') factors.unshift({ text: `Draw called: draw ${pct(probs.draw)} vs ${ev.home.short} ${pct(probs.home)} and ${ev.away.short} ${pct(probs.away)}`, impact: 0.7, favours: 'neutral', category: 'draw' });
   const comp = (k: keyof RemoteMatch['components'], label: string) => {
-    const v = r.components[k];
-    return v[0] === null ? null : `${label}: ${ev.home.short} ${pct(v[0]!)} · draw ${pct(v[1]!)} · ${ev.away.short} ${pct(v[2]!)}`;
+    const v = r.components?.[k];
+    return !v || v[0] == null ? null : `${label}: ${ev.home.short} ${pct(v[0]!)} · draw ${pct(v[1]!)} · ${ev.away.short} ${pct(v[2]!)}`;
   };
   const fileInfo = remoteFile();
   return {
@@ -281,7 +282,7 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
         { title: 'Final forecast', detail: `${ev.home.short} ${pct(probs.home)} · draw ${pct(probs.draw)} · ${ev.away.short} ${pct(probs.away)}` },
         ...(call ? [{ title: 'Call strength', detail: `${TIER_LABEL[call.tier]}${tierRec ? `: calls this strong were right ${pct(tierRec.hit_rate)} of the time in ${tierRec.n.toLocaleString()} backtested matches` : ''}` }] : []),
         ...(call ? [{ title: 'Safer call', detail: `${dcName(call.double_chance.call)} (${pct(call.double_chance.probability)})` }] : []),
-        { title: 'Confidence', detail: `${r.confidence_label}${r.confidence_reasons.length ? `: ${r.confidence_reasons.join('; ')}` : ''}` },
+        { title: 'Confidence', detail: `${r.confidence_label}${r.confidence_reasons?.length ? `: ${r.confidence_reasons.join('; ')}` : ''}` },
         { title: 'Last update', detail: `${new Date(r.made_at).toUTCString()} (${r.last_change})${remoteSource() === 'bundled' ? '. Built into this version of the app; the app downloads newer predictions when they are published.' : ''}` },
         { title: 'Data', detail: fileInfo?.attribution ?? 'football-data.co.uk, openfootball' },
       ],

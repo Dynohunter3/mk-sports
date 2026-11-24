@@ -83,6 +83,25 @@ test('predictEvent uses the published prediction for covered football (no on-dev
   assert.ok(p.key_factors.some((f) => f.text.includes('Bookmaker odds not published yet')));
 });
 
+test('a finished match graded in the `recent` list (no xG, Elo or components) does not break the match page', () => {
+  // the shape the pipeline publishes for graded matches (checked against the live file, 24 Nov 2026)
+  const graded = {
+    match_id: 'eng.1/2026-27/fb-eng-liverpool~fb-eng-manchester-united', competition: 'eng.1', kickoff: '2026-11-22T16:30:00+00:00',
+    home_id: 'fb-eng-liverpool', away_id: 'fb-eng-manchester-united',
+    home: { id: 'fb-eng-liverpool', name: 'Liverpool', aliases: ['Liverpool', 'Liverpool FC'] },
+    away: { id: 'fb-eng-manchester-united', name: 'Man United', aliases: ['Man United', 'Manchester United FC'] },
+    p: { home: 0.55, draw: 0.24, away: 0.21 }, variant: 'with odds', confidence: 1, confidence_label: 'high', confidence_reasons: [],
+    model_version: 'fb-2026-11-test', made_at: '2026-11-22T04:37:52+00:00', last_change: 'first prediction', result: [4, 0], log_loss: 0.6,
+    call: { pick: 'home', pick_probability: 0.55, tier: 'likely', draw_call: false, double_chance: { call: 'home or draw', probability: 0.79 } },
+    goals: { over25: 0.55, btts: 0.5 },
+  } as unknown as RemoteFile['matches'][number];
+  setRemoteForTests(file({ recent: [graded] }));
+  const p = predictEvent({ ...ev('Liverpool', 'Manchester United', '2026-11-22T16:30:00Z'), status: 'finished', homeScore: 4, awayScore: 0 })!;
+  assert.equal(p.model, 'mksports-pipeline');
+  assert.equal(p.pick, 'home');
+  assert.ok(p.expected[0] > 0 && p.expected[1] > 0); // from the score model when the file has no xG
+});
+
 test('a stale file is ignored so the app falls back instead of showing old forecasts', () => {
   setRemoteForTests(file({ generated_at: new Date(Date.now() - 4 * 86400_000).toISOString() }));
   assert.equal(remoteCovers('eng.1'), false);
