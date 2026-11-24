@@ -7,6 +7,7 @@ import { Image } from 'expo-image';
 import { memo, useEffect, useState } from 'react';
 import { PixelRatio, View } from 'react-native';
 
+import { usePlayerPhoto, type Who } from '@/data/photos';
 import { onColor, useTheme } from '@/theme/theme';
 
 import { Text } from './ui';
@@ -66,13 +67,19 @@ export const Crest = memo(function Crest({ team, size = 28 }: { team: CrestTeam;
   return img;
 });
 
-/** Round player photo with a shirt-number fallback. */
-export const PlayerPhoto = memo(function PlayerPhoto({ url, jersey, color, size = 44, ring, badge }: { url: string | null; jersey: string | null; color: string; size?: number; ring?: string; badge?: boolean }) {
+/**
+ * Round player photo. For football players (`who` given) a current face crop from Wikimedia Commons
+ * (data/photos.ts) comes first; then the data source's photo; then the shirt number.
+ */
+export const PlayerPhoto = memo(function PlayerPhoto({ url, jersey, color, size = 44, ring, badge, who }: { url: string | null; jersey: string | null; color: string; size?: number; ring?: string; badge?: boolean; who?: Who | null }) {
   const t = useTheme();
-  const [failed, setFailed] = useState(false);
-  useEffect(() => setFailed(false), [url]);
+  const own = usePlayerPhoto(who);
+  const [failed, setFailed] = useState(0); // 1: the Commons crop failed to load, 2: the source photo too
+  useEffect(() => setFailed(0), [url, own?.uri]);
   const border = { borderWidth: 2, borderColor: ring ?? t.glassBorder };
-  if (!url || failed) {
+  // while a football player's crop is being looked up, show the number rather than flash the old photo
+  const src = own && failed < 1 ? own.uri : own === undefined && who ? null : url && failed < 2 ? sizedImage(url, pxFor(size)) : null;
+  if (!src) {
     return (
       <View style={[{ width: size, height: size, borderRadius: size / 2, backgroundColor: color, alignItems: 'center', justifyContent: 'center' }, border]}>
         <Text style={{ fontSize: size * 0.4, fontWeight: '900', color: onColor(color) }}>{jersey ?? ''}</Text>
@@ -82,13 +89,15 @@ export const PlayerPhoto = memo(function PlayerPhoto({ url, jersey, color, size 
   return (
     <View>
       <Image
-        source={{ uri: sizedImage(url, pxFor(size)) }}
+        source={{ uri: src }}
         style={[{ width: size, height: size, borderRadius: size / 2, backgroundColor: '#E8EDF3' }, border]}
         contentFit="cover"
-        contentPosition="top"
+        contentPosition={own && failed < 1 ? 'center' : 'top'}
         cachePolicy="disk"
-        recyclingKey={url}
-        onError={() => setFailed(true)}
+        recyclingKey={src}
+        transition={own ? 150 : 0}
+        onError={() => setFailed((f) => (own && f < 1 ? 1 : 2))}
+        accessibilityIgnoresInvertColors
       />
       {badge && jersey ? (
         <View style={{ position: 'absolute', right: -6, bottom: -4, minWidth: 18, height: 18, borderRadius: 9, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3, borderWidth: 1, borderColor: '#fff', backgroundColor: '#0B1430' }}>

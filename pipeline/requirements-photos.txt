@@ -1,0 +1,1 @@
+opencv-python-headless==4.14.0.94  # face detection for player photo crops (mkdata/photos.py)

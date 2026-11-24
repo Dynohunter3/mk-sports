@@ -574,7 +574,7 @@ function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined
       {l.bench.map((p, i) => (
         <Pressable key={p.id || p.name} onPress={() => open(p)} accessibilityRole="button" style={{ borderTopWidth: i ? 1 : 0, borderColor: t.glassBorder }}>
           <Row gap={8} style={{ paddingHorizontal: space.md, paddingVertical: 8 }}>
-            <PlayerPhoto url={p.headshot} jersey={p.jersey} color={color} size={34} />
+            <PlayerPhoto url={p.headshot} jersey={p.jersey} color={color} size={34} who={{ id: p.id, name: p.name, team: l.teamId, league: m.league.id }} />
             <View style={{ flex: 1 }}>
               <Text v="small" style={{ fontWeight: p.subbedIn !== null ? '800' : '500' }} numberOfLines={1}>
                 {p.short}
@@ -631,7 +631,7 @@ function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined
           );
         })}
       </Row>
-      <TeamPitch key={side} lineup={lu} color={kit} onPlayer={open} />
+      <TeamPitch key={side} lineup={lu} color={kit} onPlayer={open} league={m.league.id} />
       <Row style={{ justifyContent: 'space-between', marginTop: space.xs }}>
         <Text v="tiny" muted style={{ flex: 1 }}>
           Tap a player for this match, season stats and recent form.

@@ -344,7 +344,7 @@ export type Leaders = { league: string; season: string | null; categories: Leade
 export type Article = { id: string; headline: string; description: string | null; published: string; image: string | null; url: string | null; byline: string | null; league: string; teamIds: string[]; type: string; my_team?: boolean };
 export type NewsFeed = { items: Article[]; my_team: Article[] };
 
-export type SquadPlayer = { id: string; name: string; jersey: string | null; position: string | null; age: number | null; nationality: string | null; headshot: string | null };
+export type SquadPlayer = { id: string; name: string; jersey: string | null; position: string | null; age: number | null; nationality: string | null; headshot: string | null; dob?: string | null };
 export type TeamHub = {
   team: TeamMini;
   sport: string;

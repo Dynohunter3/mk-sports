@@ -29,11 +29,11 @@ export function kitColors(home: string, away: string): [string, string] {
   return [h, a];
 }
 
-const PlayerDot = memo(function PlayerDot({ p, color, onPress, size, width }: { p: LineupPlayer; color: string; onPress: (p: LineupPlayer) => void; size: number; width: number }) {
+const PlayerDot = memo(function PlayerDot({ p, color, onPress, size, width, team, league }: { p: LineupPlayer; color: string; onPress: (p: LineupPlayer) => void; size: number; width: number; team: string; league?: string }) {
   return (
     <Pressable onPress={() => onPress(p)} accessibilityRole="button" accessibilityLabel={`${p.name}, number ${p.jersey ?? ''}`} style={{ alignItems: 'center', width }} hitSlop={4}>
       <View>
-        <PlayerPhoto url={p.headshot} jersey={p.jersey} color={color} size={size} ring="#FFFFFF" badge />
+        <PlayerPhoto url={p.headshot} jersey={p.jersey} color={color} size={size} ring="#FFFFFF" badge who={{ id: p.id, name: p.name, team, league }} />
         {p.yellow || p.red ? <View style={[s.card, { backgroundColor: p.red ? '#EF4444' : '#FACC15' }]} /> : null}
         {p.subbedOut !== null ? (
           <View style={[s.sub, { backgroundColor: '#EF4444' }]}>
@@ -85,7 +85,7 @@ function PitchMarkings() {
 }
 
 /** One team on a full pitch: goalkeeper at the top, attacking downwards, with room to breathe. */
-export function TeamPitch({ lineup, color, onPlayer }: { lineup: Lineup; color: string; onPlayer: (p: LineupPlayer) => void }) {
+export function TeamPitch({ lineup, color, onPlayer, league }: { lineup: Lineup; color: string; onPlayer: (p: LineupPlayer) => void; league?: string }) {
   const t = useTheme();
   const [w, setW] = useState(0);
   const height = Math.max(520, w * 1.38);
@@ -109,7 +109,7 @@ export function TeamPitch({ lineup, color, onPlayer }: { lineup: Lineup; color: 
             return (
               <View key={`${lineup.side}-${i}`} style={{ position: 'absolute', left: 0, right: 0, top: y, flexDirection: 'row', justifyContent: 'space-evenly' }}>
                 {[...row].reverse().map((p) => (
-                  <PlayerDot key={p.id || p.name} p={p} color={color} onPress={onPlayer} size={size} width={width} />
+                  <PlayerDot key={p.id || p.name} p={p} color={color} onPress={onPlayer} size={size} width={width} team={lineup.teamId} league={league} />
                 ))}
               </View>
             );

@@ -71,19 +71,29 @@ jobs:
         run: |
           python -m mkdata crosscheck --out var/crosscheck.json > /dev/null
           python -m mkdata snapshot > var/snapshot.json
+      - name: Player photos (Wikidata + Wikimedia Commons; a failure here never fails the job)
+        continue-on-error: true
+        timeout-minutes: 50
+        run: |
+          python -m pip install --quiet -r requirements-photos.txt
+          python -m mkdata photos --budget 1500 --max-minutes 40
       - name: Prepare the public site
         run: |
           rm -rf ../site && mkdir -p ../site
-          cp -r ../pages/. ../site/   # the download page and the league-link page
+          cp -r ../pages/. ../site/   # the download page, the league-link page and the photo credits page
           cp var/publish/*.json ../site/
           cp var/models/current.json ../site/model.json
+          if [ -f var/photos/public/meta.json ]; then   # player photos: index, credits and face crops
+            mkdir -p ../site/photos && cp -r var/photos/public/. ../site/photos/
+            if [ -d var/photos/i ]; then cp -r var/photos/i ../site/photos/; fi
+          fi
       - name: Publish mirror (predictions branch)
         working-directory: site
         run: |
           git init -q -b predictions
           git config user.name "mk-sports-pipeline"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A && git commit -q -m "Predictions $(date -u +%Y-%m-%dT%H:%MZ)"
+          git add -A -- . ':(exclude)photos' && git commit -q -m "Predictions $(date -u +%Y-%m-%dT%H:%MZ)"   # photos: Pages only
           git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:predictions
       - name: Is GitHub Pages switched on?
         id: pages
@@ -115,6 +125,7 @@ jobs:
             pipeline/var/snapshot.json
             pipeline/var/publish/
             pipeline/var/models/current.json
+            pipeline/var/photos/report.json
             pipeline/registry/
           retention-days: 30
 

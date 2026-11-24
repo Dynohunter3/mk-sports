@@ -165,7 +165,7 @@ export function TeamHubView({ id, leagues, onBack, tab = false }: { id: string; 
               {list.map((p, i) => (
                 <Pressable key={p.id} onPress={() => router.push({ pathname: '/player/[id]', params: { id: p.id, league: h.league.id } })} accessibilityRole="button" style={{ borderTopWidth: i ? 1 : 0, borderColor: t.glassBorder }}>
                   <Row gap={10} style={{ paddingHorizontal: space.lg, paddingVertical: 10 }}>
-                    <PlayerPhoto url={p.headshot} jersey={p.jersey} color={h.team.color} size={36} />
+                    <PlayerPhoto url={p.headshot} jersey={p.jersey} color={h.team.color} size={36} who={h.sport === 'football' ? { id: p.id, name: p.name, dob: p.dob, team: h.team.id, league: h.league.id } : null} />
                     <View style={{ flex: 1 }}>
                       <Text style={{ fontWeight: '700' }}>{p.name}</Text>
                       <Text v="tiny" muted>

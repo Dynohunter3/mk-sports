@@ -245,12 +245,12 @@ export async function cricket(): Promise<CricketMatch[]> {
 }
 
 // ------------------------------------------------------------------ team squad
-export type SquadPlayer = { id: string; name: string; jersey: string | null; position: string | null; age: number | null; nationality: string | null; headshot: string | null };
+export type SquadPlayer = { id: string; name: string; jersey: string | null; position: string | null; age: number | null; nationality: string | null; headshot: string | null; dob: string | null };
 export async function squad(slug: string, teamEspnId: string): Promise<SquadPlayer[]> {
   const lg = LEAGUE_BY_SLUG[slug];
   const data: any = await get(`${SITE}/${lg.espnSport}/${slug}/teams/${teamEspnId}/roster`, { ttl: 12 * 3600 });
   const raw: any[] = Array.isArray(data?.athletes?.[0]?.items) ? data.athletes.flatMap((g: any) => g?.items ?? []) : data?.athletes ?? [];
-  return raw.map((a: any) => ({ id: String(a?.id ?? ''), name: a?.displayName ?? '', jersey: a?.jersey ?? null, position: a?.position?.abbreviation ?? a?.position?.displayName ?? null, age: num(a?.age), nationality: a?.citizenship ?? null, headshot: a?.headshot?.href ?? null }));
+  return raw.map((a: any) => ({ id: String(a?.id ?? ''), name: a?.displayName ?? '', jersey: a?.jersey ?? null, position: a?.position?.abbreviation ?? a?.position?.displayName ?? null, age: num(a?.age), nationality: a?.citizenship ?? null, headshot: a?.headshot?.href ?? null, dob: typeof a?.dateOfBirth === 'string' ? a.dateOfBirth.slice(0, 10) : null }));
 }
 
 export { leagueStandings };

@@ -8,6 +8,7 @@
     python -m mkdata snapshot                                                   # versioned data snapshot
     python -m mkdata health [--status var/status.json]                          # alerts; exit 2 on critical
     python -m mkdata registry-doc                                               # docs/SOURCE_REGISTRY.md
+    python -m mkdata photos [--budget 1500]                                     # player photos (Wikidata + Commons)
 """
 
 from __future__ import annotations
@@ -230,6 +231,14 @@ def cmd_registry_doc(args) -> int:
     return 0
 
 
+def cmd_photos(args) -> int:
+    from . import photos
+
+    report = photos.run(HttpClient(cache_dir=VAR / "cache"), VAR / "photos", budget=args.budget, max_seconds=args.max_minutes * 60)
+    print(json.dumps(report, indent=1))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
     p = argparse.ArgumentParser(prog="mkdata")
@@ -252,9 +261,12 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--baselines")
     s = sub.add_parser("registry-doc")
     s.add_argument("--crosscheck")
+    s = sub.add_parser("photos")
+    s.add_argument("--budget", type=int, default=1500, help="most thumbnails to download this run")
+    s.add_argument("--max-minutes", type=float, default=40)
     args = p.parse_args(argv)
     return {"sync": cmd_sync, "upcoming": cmd_upcoming, "link": cmd_link, "elo": cmd_elo, "crosscheck": cmd_crosscheck,
-            "snapshot": cmd_snapshot, "health": cmd_health, "registry-doc": cmd_registry_doc}[args.cmd](args)
+            "snapshot": cmd_snapshot, "health": cmd_health, "registry-doc": cmd_registry_doc, "photos": cmd_photos}[args.cmd](args)
 
 
 if __name__ == "__main__":

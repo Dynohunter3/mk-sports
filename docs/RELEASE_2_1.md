@@ -54,7 +54,44 @@ Code: `mobile/src/data/pleagues.ts` (with tests), `mobile/src/app/private-league
 - **One team at a time on a full pitch,** with a team switcher (crest, name, formation), instead of both teams squeezed onto one pitch.
 - **Bigger player bubbles** (52 px) and more space between lines.
 - **That team's full substitutes list** below the pitch.
-- **Player photos still come from the match data source (ESPN).** It has photos for only some players, and some photos are old; players without one show their shirt number in the team colour. Current photos for every player would need a licensed photo provider, which is usually paid.
+- **Player photos now come from Wikimedia Commons** (see below), with ESPN's photo and then the shirt number as fallbacks.
+
+## Player photos (Wikimedia Commons)
+
+**Why:** ESPN, the match data source, has photos for very few current players. Measured on 24 Nov 2026:
+- 38 of the 605 players in Premier League squads (6%);
+- 2 of the 40 players in the Liverpool v Manchester United squads.
+
+**How it works:**
+- **Server side (`pipeline/mkdata/photos.py`, in the data pipeline):**
+  - Reads footballers' dates of birth, photos and ESPN IDs from Wikidata (CC0).
+  - Reads each photo's author, licence and date from Wikimedia Commons.
+  - Downloads a 500 px thumbnail, finds the face with OpenCV and saves a 160 px square crop.
+  - Publishes the crops with an index by birth month and by ESPN ID, plus a credit for every photo, on GitHub Pages.
+  - Only CC0, public domain, CC BY and CC BY-SA photos are used. When a player has several photos, the newest dated one with a usable face wins.
+- **On the phone (`mobile/src/data/photos.ts`):**
+  - Matches a player by ESPN ID where Wikidata has one, otherwise by date of birth and name.
+  - The date of birth comes from the team's ESPN squad, which the app already loads.
+  - The name rule: the full name, or the same surname with an overlapping first name. A tie between two players means no photo rather than a wrong one.
+  - Used in line-ups, substitutes, squads, leader lists and the player page. The player page shows the photo credit.
+  - Settings > About links to the credits page (`pages/photo-credits.html`).
+
+**Rules followed:**
+- The pipeline never fetches ESPN: the source registry records that ESPN's terms forbid automated extraction.
+- Wikimedia's robot policy is followed:
+  - a User-Agent with contact details;
+  - the Action API one request at a time, 5 s apart;
+  - media one at a time, standard thumbnail sizes only;
+  - Retry-After honoured.
+- The Wikidata query service is paced to one request a minute, its limit while it recovers from an outage.
+
+**Limits:**
+- **Not every player has a free photo.** Players without one keep the ESPN photo or the shirt number.
+- **Photos are as current as Wikimedia's.** Measured on the Premier League photos matched by ESPN ID: median year taken 2024; 103 of 157 from 2023 or later.
+- **Wikidata's club memberships are often out of date,** which is why matching uses date of birth rather than club.
+- **The first build takes several pipeline runs** (a day or two), because Wikimedia rate-limits downloads. Photos appear gradually: players with an ESPN ID on Wikidata first, then the youngest.
+- **Face detection misses some photos.** In a test, 23 of 30 photos gave a usable crop; the rest (crowd shots, side-on faces) are skipped rather than badly cropped.
+- **Professional face cards** (TheSportsDB cutouts, current for most players) need a paid plan: $9 a month, because the free key does not allow published apps. That is the owner's decision.
 
 ## Goals outlook (match page)
 

@@ -41,7 +41,7 @@ export function LeadersView({ categories, league }: { categories: LeaderCategory
                 {c.team_stat || !r.athlete_id ? (
                   r.team ? <TeamBadge team={r.team} size={30} /> : null
                 ) : (
-                  <PlayerPhoto url={r.headshot} jersey={r.position} color={r.team?.color ?? '#334155'} size={34} />
+                  <PlayerPhoto url={r.headshot} jersey={r.position} color={r.team?.color ?? '#334155'} size={34} who={league ? { id: r.athlete_id, name: r.name, team: r.team?.id ?? null, league } : null} />
                 )}
                 <View style={{ flex: 1 }}>
                   <Text style={{ fontWeight: i === 0 ? '800' : '600' }} numberOfLines={1}>

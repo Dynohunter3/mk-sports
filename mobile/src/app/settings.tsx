@@ -5,6 +5,7 @@ import { Linking, Platform, Pressable, ScrollView, Share, Switch, TextInput, Vie
 
 import { ProfileEditor } from '@/components/profile';
 import { CONTACT } from '@/data/contact';
+import { PHOTO_CREDITS_URL } from '@/data/photos';
 import { SITE } from '@/data/pleagues';
 
 import { invalidate } from '@/api/cache';
@@ -271,6 +272,7 @@ export default function Settings() {
         <Text v="small">The pick game is free to play: there are no real-money stakes, entry fees or cash prizes. MK Sports does not show bookmaker odds; if it ever does, an 18+ age check and responsible-gambling resources will be added first.</Text>
         <Text v="small">If gambling is affecting you or someone you know, seek support from a local responsible-gambling organisation.</Text>
         <Item icon="chart-bell-curve" title="How accurate is the model?" onPress={() => router.push('/accuracy')} />
+        <Item icon="image-multiple-outline" title="Player photo credits" sub="Wikimedia Commons photographers, free licences" onPress={() => Linking.openURL(PHOTO_CREDITS_URL).catch(() => notify(PHOTO_CREDITS_URL))} />
       </Card>
 
       <SectionHeader title="Contact us" icon="card-account-phone-outline" />

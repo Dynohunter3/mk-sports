@@ -11,6 +11,7 @@ import { Crest, PlayerPhoto } from '@/components/crest';
 import { Glass } from '@/components/glass';
 import { EmptyState, Icon, Loading, Row, SectionHeader, StatTile, Text } from '@/components/ui';
 import { LEAGUE_BY_SLUG } from '@/data/leagues';
+import { creditLine, usePlayerPhoto, type Who } from '@/data/photos';
 import { alpha, LeagueTheme, space, useTheme } from '@/theme/theme';
 
 const MATCH_KEYS: [string, string][] = [
@@ -57,7 +58,7 @@ function Player({ id, league, match }: { id: string; league: string; match?: str
                 <Icon name="chevron-down" size={26} color="#fff" />
               </Pressable>
               <Row gap={space.lg} style={{ marginTop: space.md }}>
-                <PlayerPhoto url={p.headshot} jersey={p.jersey} color={t.brand} size={88} ring="#FFFFFF" />
+                <PlayerPhoto url={p.headshot} jersey={p.jersey} color={t.brand} size={88} ring="#FFFFFF" who={{ id, name: p.name, team: p.team?.espnId ?? null, league }} />
                 <View style={{ flex: 1 }}>
                   <Text v="title" color="#FFFFFF">
                     {p.name}
@@ -71,6 +72,7 @@ function Player({ id, league, match }: { id: string; league: string; match?: str
                       {p.nationality}
                     </Text>
                   </Row>
+              <PhotoCredit who={{ id, name: p.name, team: p.team?.espnId ?? null, league }} />
                   {p.team ? (
                     <Pressable onPress={() => router.push({ pathname: '/team/[id]', params: { id: p.team!.id, league } })} accessibilityRole="link" style={{ marginTop: 8 }}>
                       <Row gap={6}>
@@ -184,5 +186,16 @@ function Player({ id, league, match }: { id: string; league: string; match?: str
         </View>
       </ScrollView>
     </View>
+  );
+}
+
+/** Wikimedia Commons photos are credited where they are shown large (their licences ask for attribution). */
+function PhotoCredit({ who }: { who: Who }) {
+  const photo = usePlayerPhoto(who);
+  if (!photo) return null;
+  return (
+    <Text v="tiny" color="rgba(255,255,255,0.7)" style={{ marginTop: space.sm }} numberOfLines={2}>
+      {creditLine(photo)}
+    </Text>
   );
 }
