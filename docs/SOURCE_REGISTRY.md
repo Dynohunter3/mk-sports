@@ -14,6 +14,8 @@ Keys are never stored in the app, the repository or logs.
 | Our own Elo ratings (computed in mkdata.ratings) | ratings | football, basketball, american-football, hockey, baseball | free (computed from permitted results) | n/a | Permitted | 0.80 | On |
 | ClubElo API | ratings | football | free, no sign-up | none published | Unverified: not used | 0.85 | Off |
 | ESPN site/core/web APIs (undocumented) | fixtures_results, standings, advanced_stats, lineups_injuries, odds_historical, odds_current | football, basketball, american-football, hockey, baseball | free, undocumented | none published | Restricted: not used | 0.80 | Off |
+| Wikidata (query service) | player_photos | football | free, no key | 1 query a minute at times (outage rule, Nov 2026); robot policy | Permitted | 0.70 | On |
+| Wikimedia Commons (photos) | player_photos | football | free, no key | robot policy: Action API 1 at a time, under 5/s; media 2 at a time, 25 Mbps, standard thumbnail sizes | Permitted (attribution required) | 0.70 | On |
 | NBA.com stats and injury report | advanced_stats, lineups_injuries | basketball | free, undocumented | n/a | Restricted: not used | 0.95 | Off |
 | Understat (football xG) | advanced_stats | football | free website | n/a | Excluded | 0.00 | Off |
 | FBref | advanced_stats | football | free website | n/a | Excluded | 0.00 | Off |
@@ -71,6 +73,19 @@ Keys are never stored in the app, the repository or logs.
 - **Terms status:** Restricted: not used ([source](https://disneytermsofuse.com/english/))
 - **What we read:** Disney Terms of Use (which cover ESPN) forbid, without written permission: commercial or business use or building a business on Disney products (B.viii) and accessing, copying or extracting them 'using a robot, spider, script, or other automated means', including for data mining or 'compiling, building, creating or contributing to any collection of data, data set or database' (B.x). www.espn.com/robots.txt also blocks AI crawlers outright.
 - **Notes:** The current app (1.4.1) reads ESPN directly on each phone, and the Step 1 audit downloaded ESPN history. The pipeline does not fetch ESPN. Keeping, licensing or replacing ESPN in the app is the owner's decision.
+
+### Wikidata (query service)
+
+- **Terms status:** Permitted ([source](https://wikitech.wikimedia.org/wiki/Robot_policy))
+- **What we read:** Structured data is CC0 (public domain). Wikimedia's robot policy asks bots for a User-Agent with contact details, to honour Retry-After on a 429, and to keep request rates low; the query service currently limits clients to one request a minute.
+- **Notes:** Player photos only (mkdata/photos.py): footballers' dates of birth, photos (P18) and ESPN FC IDs (P3681). Club memberships are often out of date, so they are not used for matching.
+
+### Wikimedia Commons (photos)
+
+- **Terms status:** Permitted (attribution required) ([source](https://wikitech.wikimedia.org/wiki/Robot_policy))
+- **What we read:** Every file carries its own licence. The job reads each photo's licence, author and licence URL from the Commons API and uses only CC0, public domain, CC BY and CC BY-SA files. The author, licence and source are credited in the app and on photo-credits.html. Crops of CC BY-SA photos are shared under the same licence. Access follows Wikimedia's robot policy.
+- **Required attribution:** "Photo: <author>, <licence>, via Wikimedia Commons"
+- **Notes:** Face crops (160 px) are re-hosted on GitHub Pages so phones never hit Wikimedia's servers.
 
 ### NBA.com stats and injury report
 

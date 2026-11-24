@@ -7,6 +7,7 @@ the sources, logs every disagreement, and stores each data point with the time i
 
     python -m mkdata sync && python -m mkdata upcoming && python -m mkdata link && python -m mkdata elo
     python -m mkdata health --status var/status.json      # exit 2 on critical alerts
+    python -m mkdata photos --budget 1500                 # player photos: Wikidata + Wikimedia Commons (pip install -r requirements-photos.txt)
     python -m pytest -q
 
 **Optional keys:** `FOOTBALL_DATA_ORG_KEY`, `THE_ODDS_API_KEY` and `BALLDONTLIE_API_KEY` switch on the

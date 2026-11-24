@@ -20,6 +20,7 @@ LINEUPS = "lineups_injuries"
 SCHEDULE = "schedule_context"
 ODDS_HIST = "odds_historical"
 ODDS_LIVE = "odds_current"
+PHOTOS = "player_photos"
 
 # Terms status
 PERMITTED = "permitted"  # terms read; our use is allowed
@@ -249,6 +250,53 @@ REGISTRY: dict[str, SourceSpec] = {
                 "app is the owner's decision."
             ),
             implemented=False,
+        ),
+        SourceSpec(
+            name="wikidata",
+            title="Wikidata (query service)",
+            homepage="https://www.wikidata.org/",
+            provides=(PHOTOS,),
+            sports=("football",),
+            cost="free, no key",
+            rate_limit="1 query a minute at times (outage rule, Nov 2026); robot policy",
+            terms=(
+                "Structured data is CC0 (public domain). Wikimedia's robot policy asks bots for a User-Agent with "
+                "contact details, to honour Retry-After on a 429, and to keep request rates low; the query service "
+                "currently limits clients to one request a minute."
+            ),
+            terms_status=PERMITTED,
+            terms_url="https://wikitech.wikimedia.org/wiki/Robot_policy",
+            terms_checked="2026-11-24",
+            reliability=0.7,
+            min_interval_s=61.0,
+            notes=(
+                "Player photos only (mkdata/photos.py): footballers' dates of birth, photos (P18) and ESPN FC IDs (P3681). "
+                "Club memberships are often out of date, so they are not used for matching."
+            ),
+            implemented=True,
+        ),
+        SourceSpec(
+            name="wikimedia_commons",
+            title="Wikimedia Commons (photos)",
+            homepage="https://commons.wikimedia.org/",
+            provides=(PHOTOS,),
+            sports=("football",),
+            cost="free, no key",
+            rate_limit="robot policy: Action API 1 at a time, under 5/s; media 2 at a time, 25 Mbps, standard thumbnail sizes",
+            terms=(
+                "Every file carries its own licence. The job reads each photo's licence, author and licence URL from "
+                "the Commons API and uses only CC0, public domain, CC BY and CC BY-SA files. The author, licence and "
+                "source are credited in the app and on photo-credits.html. Crops of CC BY-SA photos are shared under "
+                "the same licence. Access follows Wikimedia's robot policy."
+            ),
+            terms_status=PERMITTED_ATTRIBUTION,
+            terms_url="https://wikitech.wikimedia.org/wiki/Robot_policy",
+            terms_checked="2026-11-24",
+            reliability=0.7,
+            min_interval_s=5.0,
+            attribution="Photo: <author>, <licence>, via Wikimedia Commons",
+            notes="Face crops (160 px) are re-hosted on GitHub Pages so phones never hit Wikimedia's servers.",
+            implemented=True,
         ),
         SourceSpec(
             name="nba_com",
