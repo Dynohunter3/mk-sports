@@ -8,14 +8,16 @@ import { memo, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, SectionList, View } from 'react-native';
 
 import { useApi } from '@/api/cache';
-import type { MatchCard, PredictionsList } from '@/api/types';
+import type { GradedCall, MatchCard, PredictionsList, RecordWindow } from '@/api/types';
 import { Glass } from '@/components/glass';
 import { CallBadge, ProbabilityBar, TeamBadge, TierPill } from '@/components/match';
 import { Chip, ChipRow, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatusBanner, Text } from '@/components/ui';
 import { dayLabel, kickoffTime, pct, relative } from '@/lib/format';
 import { space, useTheme } from '@/theme/theme';
 
-type Filter = 'all' | 'draws' | 'strong' | 'safer';
+type Filter = 'all' | 'draws' | 'strong' | 'safer' | 'results';
+type Item = MatchCard | GradedCall;
+const isResult = (x: Item): x is GradedCall => 'score' in x && 'correct' in x;
 
 const PredictionRow = memo(function PredictionRow({ m, showLeague }: { m: MatchCard; showLeague: boolean }) {
   const t = useTheme();
@@ -60,6 +62,53 @@ const PredictionRow = memo(function PredictionRow({ m, showLeague }: { m: MatchC
   );
 });
 
+const OUTCOME_NAME = (o: 'home' | 'draw' | 'away', h: string, a: string) => (o === 'home' ? h : o === 'away' ? a : 'Draw');
+const LEAGUE_NAME: Record<string, string> = {
+  'eng.1': 'Premier League', 'eng.2': 'Championship', 'esp.1': 'LaLiga', 'ita.1': 'Serie A', 'ger.1': 'Bundesliga', 'fra.1': 'Ligue 1',
+  'ned.1': 'Eredivisie', 'por.1': 'Liga Portugal', 'tur.1': 'Süper Lig', 'usa.1': 'MLS', 'uefa.champions': 'Champions League',
+};
+
+/** A finished match: the call made before kick-off and whether it was right. */
+const ResultRow = memo(function ResultRow({ r }: { r: GradedCall }) {
+  const t = useTheme();
+  const ok = r.correct === 1;
+  return (
+    <Glass style={{ marginBottom: space.sm }}>
+      <Row style={{ justifyContent: 'space-between', marginBottom: 4 }}>
+        <Text v="tiny" muted style={{ fontWeight: '700' }}>
+          {new Date(r.kickoff).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })} · {LEAGUE_NAME[r.competition] ?? r.competition}
+        </Text>
+        {r.tier ? <TierPill tier={r.tier} /> : null}
+      </Row>
+      <Text style={{ fontWeight: '800' }} numberOfLines={1}>
+        {r.home} {r.score} {r.away}
+      </Text>
+      <Row style={{ justifyContent: 'space-between', marginTop: 6 }} gap={space.sm}>
+        <Row gap={6} style={{ flexShrink: 1 }}>
+          <Icon name={ok ? 'check-circle' : 'close-circle'} size={18} color={ok ? t.win : t.loss} />
+          <Text v="small" style={{ fontWeight: '700', flexShrink: 1 }} numberOfLines={1}>
+            {OUTCOME_NAME(r.pick, r.home, r.away)} · {pct(r.probability)}
+          </Text>
+        </Row>
+        {r.safer_call ? (
+          <Row gap={4} style={{ flexShrink: 1 }}>
+            <Icon name="shield-half-full" size={14} color={r.safer_correct ? t.win : t.loss} />
+            <Text v="tiny" dim numberOfLines={1} style={{ flexShrink: 1 }}>
+              {r.safer_call.replace('home', r.home).replace('away', r.away)} {r.safer_correct ? '✓' : '✗'}
+            </Text>
+          </Row>
+        ) : null}
+      </Row>
+    </Glass>
+  );
+});
+
+function windowText(label: string, w: RecordWindow | null | undefined) {
+  if (!w || !w.matches.n) return null;
+  const strong = w.strong.n ? ` · strong calls ${Math.round((w.strong.hit_rate ?? 0) * 100)}% (${w.strong.n})` : '';
+  return `${label}: ${Math.round((w.matches.hit_rate ?? 0) * 100)}% right (${w.matches.n} matches) · safer calls ${Math.round((w.safer_call.hit_rate ?? 0) * 100)}%${strong}`;
+}
+
 export default function PredictionsScreen() {
   const t = useTheme();
   const [filter, setFilter] = useState<Filter>('all');
@@ -67,7 +116,15 @@ export default function PredictionsScreen() {
   const res = useApi<PredictionsList>('/predictions?days=7', { maxAge: 120 });
   const d = res.data;
 
-  const sections = useMemo(() => {
+  const sections = useMemo((): { key: string; title: string; data: Item[] }[] => {
+    if (filter === 'results') {
+      const byDay = new Map<string, GradedCall[]>();
+      for (const r of (d?.results.items ?? []).filter((x) => !league || x.competition === league)) {
+        const k = dayLabel(new Date(r.kickoff)) + ' · ' + new Date(r.kickoff).toLocaleDateString([], { day: 'numeric', month: 'short' });
+        byDay.set(k, [...(byDay.get(k) ?? []), r]);
+      }
+      return [...byDay.entries()].map(([k, v]) => ({ key: `r:${k}`, title: k, data: v }));
+    }
     const items = (d?.items ?? []).filter((m) => !league || m.league.id === league);
     if (filter === 'draws') {
       const calls = items.filter((m) => m.prediction?.pick === 'draw');
@@ -92,11 +149,16 @@ export default function PredictionsScreen() {
     draws: n((m) => m.prediction?.pick === 'draw' || !!m.prediction?.draw_note),
     strong: n((m) => m.prediction?.tier === 'strong'),
     safer: n((m) => (m.prediction?.safer_p ?? 0) >= 0.85),
+    results: (d?.results.items ?? []).filter((x) => !league || x.competition === league).length,
   };
+  const rec = d?.results.record;
   const tr = d?.track.model;
 
   const explainer =
-    filter === 'draws'
+    filter === 'results'
+      ? [windowText('Last 7 days', rec?.last_7_days), windowText('Last 30 days', rec?.last_30_days)].filter(Boolean).join('\n') ||
+        'Results appear here as matches finish. Each match is graded on the last prediction made before kick-off, wins and misses alike.'
+      : filter === 'draws'
       ? tr
         ? `Draw calls were right ${pct(tr.draw_calls)} of the time in backtests; draws happen in ${pct(tr.draw_base_rate)} of matches. Where the draw is close but not called, ${pct(tr.draw_note)} of matches ended level. Draws are the hardest result to call: no model gets most of them.`
         : 'Draw calls come from the published model.'
@@ -137,6 +199,7 @@ export default function PredictionsScreen() {
             { value: 'draws', label: `Draws ${counts.draws}` },
             { value: 'strong', label: `Strong ${counts.strong}` },
             { value: 'safer', label: `Safer 85%+ ${counts.safer}` },
+            { value: 'results', label: `Results ${counts.results}` },
           ]}
           value={filter}
           onChange={setFilter}
@@ -154,7 +217,7 @@ export default function PredictionsScreen() {
       ) : null}
       <Glass style={{ marginTop: space.sm }}>
         <Row style={{ alignItems: 'flex-start' }} gap={space.sm}>
-          <Icon name={filter === 'draws' ? 'equal' : 'information-outline'} size={18} color={filter === 'draws' ? t.accent2 : t.textMuted} style={{ marginTop: 1 }} />
+          <Icon name={filter === 'draws' ? 'equal' : filter === 'results' ? 'history' : 'information-outline'} size={18} color={filter === 'draws' ? t.accent2 : filter === 'results' ? t.brand : t.textMuted} style={{ marginTop: 1 }} />
           <Text v="small" dim style={{ flex: 1 }}>
             {explainer}
           </Text>
@@ -166,13 +229,19 @@ export default function PredictionsScreen() {
 
   if (res.loading && !d) return <Loading label="Loading predictions…" />;
   return (
-    <SectionList<MatchCard, { key: string; title: string; data: MatchCard[] }>
+    <SectionList<Item, { key: string; title: string; data: Item[] }>
       style={{ backgroundColor: t.bg }}
       contentContainerStyle={{ padding: space.lg, paddingBottom: space.xxl }}
       sections={sections}
-      keyExtractor={(m) => m.id}
-      renderItem={({ item }) => <PredictionRow m={item} showLeague={!league} />}
-      renderSectionHeader={({ section }) => <SectionHeader title={section.title} icon={section.key === 'calls' ? 'equal' : section.key === 'possible' ? 'approximately-equal' : 'calendar'} color={section.key === 'calls' ? t.accent2 : undefined} />}
+      keyExtractor={(m) => (isResult(m) ? `r:${m.match_id}` : m.id)}
+      renderItem={({ item }) => (isResult(item) ? <ResultRow r={item} /> : <PredictionRow m={item} showLeague={!league} />)}
+      renderSectionHeader={({ section }) => (
+        <SectionHeader
+          title={section.title}
+          icon={section.key === 'calls' ? 'equal' : section.key === 'possible' ? 'approximately-equal' : section.key.startsWith('r:') ? 'history' : 'calendar'}
+          color={section.key === 'calls' ? t.accent2 : undefined}
+        />
+      )}
       stickySectionHeadersEnabled={false}
       ListHeaderComponent={header}
       ListEmptyComponent={
@@ -181,8 +250,14 @@ export default function PredictionsScreen() {
         ) : (
           <EmptyState
             icon="crystal-ball"
-            title={filter === 'draws' ? 'No draws called this week' : filter === 'strong' ? 'No strong calls this week' : filter === 'safer' ? 'No safer calls at 85%+ this week' : 'No upcoming matches'}
-            body={filter === 'draws' ? 'The model calls a draw only when it is a genuine contender, about one match in twenty.' : undefined}
+            title={filter === 'results' ? 'No graded matches yet' : filter === 'draws' ? 'No draws called this week' : filter === 'strong' ? 'No strong calls this week' : filter === 'safer' ? 'No safer calls at 85%+ this week' : 'No upcoming matches'}
+            body={
+              filter === 'draws'
+                ? 'Draw calls are rarest before a match\'s odds are out; they appear when the odds arrive (Tuesdays and Fridays). Matches where a draw is close are listed here too.'
+                : filter === 'results'
+                  ? 'Matches are graded a day or two after full time, once the results source publishes them.'
+                  : undefined
+            }
           />
         )
       }

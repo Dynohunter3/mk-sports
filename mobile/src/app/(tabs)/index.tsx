@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useApi } from '@/api/cache';
 import { qs } from '@/api/client';
-import type { Feed, MatchCard, NewsFeed } from '@/api/types';
+import type { Feed, MatchCard, ModelRecord, NewsFeed } from '@/api/types';
 import { useAuth } from '@/auth/auth';
 import { Wordmark } from '@/components/brand';
 import { Crest } from '@/components/crest';
@@ -176,6 +176,8 @@ function Home() {
   const feed = useApi<Feed>(path, { maxAge: 30, poll: prefs.dataSaver ? 0 : poll });
   const newsLeagues = league ? [league] : feedLeagues.length ? feedLeagues : MATCH_LEAGUES.filter((l) => l.featured).map((l) => l.slug);
   const news = useApi<NewsFeed>('/news' + qs({ leagues: newsLeagues, team: fav?.id, team_league: fav?.leagues?.[0], limit: 5 }), { maxAge: 600 });
+  const record = useApi<ModelRecord>('/model/record', { maxAge: 600 }).data;
+  const rec30 = record?.last_30_days?.matches;
   const liveItems = feed.data?.sections.find((s) => s.key === 'live')?.items ?? [];
   const myTeamItems = feed.data?.sections.find((s) => s.key === 'my_team')?.items ?? [];
   useEffect(() => setPoll(liveItems.length ? 30 : 120), [liveItems.length]);
@@ -257,6 +259,11 @@ function Home() {
               <Text v="small" dim>
                 Every football call this week: wins, draws and safer calls
               </Text>
+              {rec30 && rec30.n >= 10 ? (
+                <Text v="tiny" color={t.brand} style={{ fontWeight: '700', marginTop: 2 }}>
+                  Last 30 days: {Math.round((rec30.hit_rate ?? 0) * 100)}% right · {rec30.n} matches graded
+                </Text>
+              ) : null}
             </View>
             <Icon name="chevron-right" size={22} color={t.textMuted} />
           </Row>

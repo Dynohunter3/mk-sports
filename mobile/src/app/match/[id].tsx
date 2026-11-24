@@ -224,6 +224,27 @@ function CallRow({ icon, color, title, value }: { icon: string; color: string; t
   );
 }
 
+/** How the published prediction moved since its previous version, and why. */
+function Movement({ mv, pick, now, home, away }: { mv: NonNullable<NonNullable<MatchDetail['prediction_full']>['call']>['movement'] & object; pick: 'home' | 'draw' | 'away'; now: { home?: number; draw?: number | null; away?: number }; home: string; away: string }) {
+  const t = useTheme();
+  const name = (o: 'home' | 'draw' | 'away') => (o === 'home' ? home : o === 'away' ? away : 'Draw');
+  const before = mv.from[pick];
+  const after = (now[pick] ?? 0) as number;
+  const delta = Math.round((after - before) * 100);
+  const when = new Date(mv.at).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' });
+  const changed = mv.from_pick && mv.from_pick !== pick;
+  if (!changed && Math.abs(delta) < 2) return null; // small moves (e.g. a routine refit) are not worth a line
+  const title = changed ? `Call changed: ${name(mv.from_pick!)} → ${name(pick)}` : `${name(pick)}: ${Math.round(before * 100)}% → ${Math.round(after * 100)}%`;
+  return (
+    <View>
+      <CallRow icon={delta > 0 ? 'trending-up' : delta < 0 ? 'trending-down' : 'trending-neutral'} color={delta >= 0 ? t.win : t.loss} title={title} value={`since ${when}`} />
+      <Text v="tiny" muted style={{ marginLeft: 26, marginTop: -4 }}>
+        Why: {mv.reason}
+      </Text>
+    </View>
+  );
+}
+
 /** After full time: was each call right? (result, safer call, goals) */
 function Review({ m, p, hs, as }: { m: MatchDetail; p: NonNullable<MatchDetail['prediction_full']>; hs: number; as: number }) {
   const t = useTheme();
@@ -301,6 +322,7 @@ function Overview({ m }: { m: MatchDetail }) {
                   value={`${Math.round(p.call.safer.probability * 100)}%${p.call.safer.hit_rate !== null ? ` · ${Math.round(p.call.safer.hit_rate * 100)}% right` : ''}`}
                 />
                 {p.call.draw_note ? <CallRow icon="equal" color={t.accent2} title={p.call.draw_note} value="" /> : null}
+                {p.call.movement && m.prediction ? <Movement mv={p.call.movement} pick={m.prediction.pick} now={p.probabilities} home={m.home.short_name} away={m.away.short_name} /> : null}
                 {p.goals ? (
                   <CallRow icon="soccer" color={t.pending} title={p.goals.over25 >= 0.5 ? 'Over 2.5 goals' : 'Under 2.5 goals'} value={`${Math.round(Math.max(p.goals.over25, 1 - p.goals.over25) * 100)}%`} />
                 ) : null}

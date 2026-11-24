@@ -257,6 +257,12 @@ async function feed(q: URLSearchParams) {
   };
 }
 
+/** The model's live record: graded predictions (the last one before kick-off), from the published tracker. */
+function modelRecord() {
+  const a = remoteAccuracy();
+  return { last_7_days: a?.live.last_7_days ?? null, last_30_days: a?.live.last_30_days ?? null, graded: a?.live.overall.n ?? 0, generated_at: a?.generated_at ?? null };
+}
+
 /** A card for a published prediction when its fixture can't be loaded from the live source. */
 function offlineCard(m: RemoteMatch) {
   const team = (t: RemoteMatch['home']): TeamInfo => ({ id: t.id, espnId: t.id, name: t.name, short: t.name, abbr: t.name.replace(/[^A-Za-z]/g, '').slice(0, 3).toUpperCase(), color: '#334155', logo: null });
@@ -300,6 +306,7 @@ async function predictionsList(q: URLSearchParams) {
   return {
     days,
     offline,
+    results: { record: modelRecord(), items: (remoteAccuracy()?.live.recent ?? []).slice(0, 120) },
     items,
     leagues: PREDICTION_LEAGUES.filter((l) => counts.has(l)).map((l) => ({ slug: l, short_name: LEAGUE_BY_SLUG[l].shortName, n: counts.get(l)! })),
     model: f ? { version: f.model_version, generated_at: f.generated_at, source: remoteSource() } : null,
@@ -400,7 +407,11 @@ async function matchDetail(id: string) {
   if (p && started) {
     const snap = preMatchSnapshot(id);
     if (snap) p.trigger = 'pre-match (saved before kick-off)';
-    if (ev.status === 'finished' && ev.homeScore !== null && ev.awayScore !== null) p.correct = scorePrediction(p.probabilities, ev.homeScore, ev.awayScore).correct;
+    if (ev.status === 'finished' && ev.homeScore !== null && ev.awayScore !== null) {
+      // judged on the call that was shown (a draw call included), not only the most likely outcome
+      const o = ev.homeScore > ev.awayScore ? 'home' : ev.homeScore < ev.awayScore ? 'away' : 'draw';
+      p.correct = p.pick ? p.pick === o : scorePrediction(p.probabilities, ev.homeScore, ev.awayScore).correct;
+    }
   }
   const lg = LEAGUE_BY_SLUG[ev.league];
   let table: Awaited<ReturnType<typeof standingsRows>> = [];
@@ -899,6 +910,7 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
     if (path === '/feed') return feed(q);
     if (path === '/matches') return matches(q);
     if (path === '/predictions') return predictionsList(q);
+    if (path === '/model/record') return modelRecord();
     if (path === '/matches/live') {
       const now = Date.now();
       const wanted = idsParam(q, 'leagues').filter((l) => LEAGUE_BY_SLUG[l]?.format === 'match');

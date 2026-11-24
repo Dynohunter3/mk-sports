@@ -81,9 +81,17 @@ export type MatchCard = {
 
 export type MatchPage = { items: MatchCard[]; next_cursor: string | null };
 
+export type GradedCall = {
+  match_id: string; competition: string; kickoff: string; home: string; away: string; score: string; pick: Outcome; probability: number;
+  correct: number; tier?: CallTier | null; safer_call?: string | null; safer_correct?: number | null; over25_correct?: number | null;
+};
+export type RecordWindow = { matches: { n: number; hit_rate: number | null }; safer_call: { n: number; hit_rate: number | null }; strong: { n: number; hit_rate: number | null } };
+export type ModelRecord = { last_7_days: RecordWindow | null; last_30_days: RecordWindow | null; graded: number; generated_at: string | null };
+
 export type PredictionsList = {
   days: number;
   offline: boolean;
+  results: { record: ModelRecord; items: GradedCall[] };
   items: MatchCard[];
   leagues: { slug: string; short_name: string; n: number }[];
   model: { version: string; generated_at: string; source: 'none' | 'network' | 'saved' | 'bundled' } | null;
@@ -117,6 +125,7 @@ export type PredictionFull = {
     source: 'model' | 'device';
     made_on?: string;
     draw_note?: string;
+    movement?: { from: { home: number; draw: number; away: number }; from_pick: Outcome | null; at: string; reason: string };
   };
   goals?: { over25: number; btts: number | null };
   versions: number;

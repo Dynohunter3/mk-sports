@@ -45,6 +45,8 @@ export type RemoteMatch = {
   /** The call the service makes from the probabilities (schema addition; older files lack it). */
   call?: RemoteCall;
   goals?: { over25: number | null; btts: number | null };
+  /** The version before this one (schema addition), so the app can show how the prediction moved. */
+  previous?: { p: { home: number; draw: number; away: number }; pick: 'home' | 'draw' | 'away' | null; made_at: string };
 };
 export type Tier = 'strong' | 'likely' | 'lean' | 'toss-up';
 export type RemoteCall = {
@@ -68,6 +70,13 @@ export type RemoteFile = {
   recent?: RemoteMatch[];
 };
 
+export type RemoteGraded = {
+  match_id: string; competition: string; kickoff: string; home: string; away: string; score: string; pick: 'home' | 'draw' | 'away';
+  probability: number; correct: number; confidence_label: 'high' | 'medium' | 'low';
+  tier?: Tier | null; safer_call?: 'home or draw' | 'away or draw' | 'home or away' | null; safer_correct?: number | null; over25_correct?: number | null;
+};
+type Rate = { n: number; hit_rate: number | null };
+export type RemoteWindow = { matches: Rate; safer_call: Rate; strong: Rate };
 export type AccAgg = { n: number; correct: number; hit_rate: number | null; log_loss: number | null; brier: number | null; by_confidence: Partial<Record<'high' | 'medium' | 'low', { n: number; hit_rate: number }>> };
 type Trio = { accuracy: number; log_loss: number; brier: number };
 export type RemoteAccuracy = {
@@ -77,7 +86,9 @@ export type RemoteAccuracy = {
   live: {
     overall: AccAgg;
     competitions: Record<string, AccAgg>;
-    recent: { match_id: string; competition: string; kickoff: string; home: string; away: string; score: string; pick: 'home' | 'draw' | 'away'; probability: number; correct: number; confidence_label: 'high' | 'medium' | 'low' }[];
+    recent: RemoteGraded[];
+    last_7_days?: RemoteWindow;
+    last_30_days?: RemoteWindow;
   };
   backtest: { source: string; period: string; competitions: Record<string, { n: number; new: Trio; previous: Trio | null; bookmaker: Trio | null }> } | null;
   /** Backtest hit rates of the calls the app shows: by strength, draws, double chance, goal markets. */

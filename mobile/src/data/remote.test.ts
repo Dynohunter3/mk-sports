@@ -193,3 +193,28 @@ test('predictions list: with the live source down, the published predictions are
   assert.equal(c.prediction.safer, 'Arsenal or draw');
   assert.deepEqual(r.leagues, [{ slug: 'eng.1', short_name: 'Premier League', n: 1 }]);
 });
+
+test('a published prediction that moved shows where it came from and why', () => {
+  const m = file().matches[0];
+  setRemoteForTests(file({ matches: [{ ...m, versions: 2, last_change: 'bookmaker odds published', previous: { p: { home: 0.25, draw: 0.28, away: 0.47 }, pick: 'away', made_at: '2026-11-05T10:00:00+00:00' }, call: { pick: 'away', pick_probability: 0.42, tier: 'lean', draw_call: false, double_chance: { call: 'away or draw', probability: 0.69 } } }] }));
+  const p = predictEvent(ev('Manchester United', 'Arsenal'))!;
+  assert.deepEqual(p.call?.movement, { from: { home: 0.25, draw: 0.28, away: 0.47 }, from_pick: 'away', at: '2026-11-05T10:00:00+00:00', reason: 'bookmaker odds published' });
+  setRemoteForTests(file());
+  assert.equal(predictEvent(ev('Manchester United', 'Arsenal'))!.call?.movement, undefined); // first version: nothing to show
+});
+
+test('results and the model record come from the published tracker', async () => {
+  const { handleLocal } = await import('./localApi');
+  const w = { matches: { n: 40, hit_rate: 0.575 }, safer_call: { n: 40, hit_rate: 0.8 }, strong: { n: 6, hit_rate: 0.833 } };
+  const graded = { match_id: 'x', competition: 'eng.1', kickoff: '2026-11-22T15:00:00+00:00', home: 'Man City', away: 'Fulham', score: '1-1', pick: 'home' as const,
+    probability: 0.65, correct: 0, confidence_label: 'high' as const, tier: 'strong' as const, safer_call: 'home or draw' as const, safer_correct: 1, over25_correct: 1 };
+  const agg = { n: 40, correct: 23, hit_rate: 0.575, log_loss: 0.96, brier: 0.58, by_confidence: {} };
+  setRemoteForTests(file(), { schema: 1, generated_at: new Date().toISOString(), model_version: 'fb-x', live: { overall: agg, competitions: {}, recent: [graded], last_7_days: w, last_30_days: w }, backtest: null, note: '' });
+  const rec: any = await handleLocal('GET', '/model/record', null);
+  assert.equal(rec.graded, 40);
+  assert.equal(rec.last_30_days.matches.hit_rate, 0.575);
+  setFetch((async () => new Response('down', { status: 503 })) as unknown as typeof fetch);
+  const list: any = await handleLocal('GET', '/predictions?days=7', null);
+  assert.equal(list.results.items[0].safer_correct, 1);
+  assert.equal(list.results.record.last_7_days.strong.n, 6);
+});

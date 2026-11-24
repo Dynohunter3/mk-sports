@@ -24,7 +24,7 @@ Each prediction carries a call (home, draw or away), how strong the call is, a s
 
 The app downloads that file and shows those predictions for the Premier League, Championship, LaLiga, Serie A, Bundesliga, Ligue 1, Eredivisie, Liga Portugal, Süper Lig, MLS and the Champions League. It computes predictions on the phone only for other competitions and sports, or as a fallback when the file is unavailable.
 
-How the model was audited, rebuilt and measured: [Step 1](docs/audit/STEP1_AUDIT.md), [Step 2](docs/audit/STEP2_DATA_LAYER.md), [Step 3](docs/audit/STEP3_MODELS.md), [Step 4](docs/audit/STEP4_CONSISTENCY.md), [Step 5](docs/audit/STEP5_RESULTS.md), [Step 6](docs/audit/STEP6_DRAWS_AND_CALLS.md), [Step 7](docs/audit/STEP7_APP_CALLS.md), [Step 8](docs/audit/STEP8_MARKET_HISTORY.md). The data sources and their terms are in [docs/SOURCE_REGISTRY.md](docs/SOURCE_REGISTRY.md).
+How the model was audited, rebuilt and measured: [Step 1](docs/audit/STEP1_AUDIT.md), [Step 2](docs/audit/STEP2_DATA_LAYER.md), [Step 3](docs/audit/STEP3_MODELS.md), [Step 4](docs/audit/STEP4_CONSISTENCY.md), [Step 5](docs/audit/STEP5_RESULTS.md), [Step 6](docs/audit/STEP6_DRAWS_AND_CALLS.md), [Step 7](docs/audit/STEP7_APP_CALLS.md), [Step 8](docs/audit/STEP8_MARKET_HISTORY.md), [Step 9](docs/audit/STEP9_RELIABILITY_AND_REVIEW.md). The data sources and their terms are in [docs/SOURCE_REGISTRY.md](docs/SOURCE_REGISTRY.md).
 
 Fixtures, live scores, line-ups, stats and news still come from public sports feeds fetched by the phone. No server, account or API key is needed. An optional server mode (`backend/`) adds accounts and global leaderboards.
 
