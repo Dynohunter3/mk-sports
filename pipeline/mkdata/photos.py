@@ -15,7 +15,7 @@ dates of birth are not, so the index is keyed by date of birth. The phone alread
 squad from ESPN, birth dates included (ordinary app use). It matches by ESPN ID where Wikidata has
 one, otherwise by birth date and name.
 
-Who is included: footballers born in 1986 or later, with a photo, who have played for a club in one of
+Who is included: men's footballers born in 1986 or later, with a photo, who have played for a club in one of
 LEAGUES. A club counts if Wikidata gives it that league, or lists it in one of that league's seasons
 since 2022.
 
@@ -26,7 +26,8 @@ Each run is incremental and polite:
 2. Metadata: Commons image info (author, licence, date taken, a 500 px thumbnail) for new files,
    50 per request.
 3. Crops: download the thumbnail, find the face (OpenCV), cut a square around it and save it as a
-   160 px JPEG. Done within a per-run budget: players with an ESPN ID first, then the youngest.
+   160 px JPEG. A second, independent detector must then find a face in the crop, or the next photo
+   is tried. Done within a per-run budget: players with an ESPN ID first, then the youngest.
 4. Publish into `public/`:
    - `meta.json`;
    - `d/<yyyy-mm>.json`: players by birth month;
@@ -161,6 +162,29 @@ def crop_box(w: int, h: int, face: tuple[int, int, int, int], zoom: float = 2.2)
 
 
 _cascade = None
+_check = None
+
+
+def verify_crop(jpeg: bytes) -> bool:
+    """A second, independent detector (Haar alt2) must find a face near the centre of the finished crop.
+    On the first 128 published crops this rejected exactly the 7 that showed grass, legs or a shirt, and
+    none of the 121 real faces."""
+    global _check
+    import cv2
+    import numpy as np
+
+    img = cv2.imdecode(np.frombuffer(jpeg, np.uint8), cv2.IMREAD_COLOR)
+    if img is None:
+        return False
+    if _check is None:
+        _check = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_alt2.xml")
+    g = cv2.equalizeHist(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
+    h, w = g.shape
+    m = int(w * 0.25)
+    for x, y, fw, fh in _check.detectMultiScale(g, scaleFactor=1.05, minNeighbors=3, minSize=(m, m)):
+        if abs(x + fw / 2 - w / 2) < w * 0.22 and abs(y + fh / 2 - h / 2) < h * 0.25:
+            return True
+    return False
 
 
 def face_crop_jpeg(body: bytes) -> tuple[bytes | None, str]:
@@ -189,7 +213,10 @@ def face_crop_jpeg(body: bytes) -> tuple[bytes | None, str]:
     interp = cv2.INTER_AREA if side >= OUT_PX else cv2.INTER_CUBIC
     out = cv2.resize(crop, (OUT_PX, OUT_PX), interpolation=interp)
     ok, buf = cv2.imencode(".jpg", out, [cv2.IMWRITE_JPEG_QUALITY, 82, cv2.IMWRITE_JPEG_PROGRESSIVE, 1, cv2.IMWRITE_JPEG_OPTIMIZE, 1])
-    return (buf.tobytes(), "ok") if ok else (None, "encode")
+    if not ok:
+        return None, "encode"
+    jpeg = buf.tobytes()
+    return (jpeg, "ok") if verify_crop(jpeg) else (None, "unverified")
 
 
 # ---------------------------------------------------------------- Wikidata
@@ -203,6 +230,7 @@ PLAYERS_QUERY = """SELECT ?p ?pen ?pmul ?dob ?img ?espn WHERE {
   VALUES ?c { %(clubs)s }
   ?p wdt:P54 ?c ; wdt:P18 ?img ; wdt:P569 ?dob .
   FILTER(?dob >= "%(born)sT00:00:00Z"^^xsd:dateTime)
+  MINUS { ?p wdt:P21 wd:Q6581072 }  # the app's competitions are men's
   OPTIONAL { ?p wdt:P3681 ?espn }
   OPTIONAL { ?p rdfs:label ?pen FILTER(LANG(?pen)="en") }
   OPTIONAL { ?p rdfs:label ?pmul FILTER(LANG(?pmul)="mul") }
@@ -366,8 +394,12 @@ def refresh_candidates(wdqs: Wdqs, paths: Paths, now: float, stats: Counter, lea
     return saved
 
 
+CROP_CHECK = 2  # crops made before this check version are verified again (from the saved file)
+
+
 def run(http: HttpClient, root: Path, *, budget: int = 1200, max_seconds: float = 2400, leagues=None,
         wdqs: Wdqs | None = None, crop: Callable[[bytes], tuple[bytes | None, str]] = face_crop_jpeg,
+        verify: Callable[[bytes], bool] = verify_crop,
         now: float | None = None, clock: Callable[[], float] = time.time, only: set[str] | None = None) -> dict:
     """One incremental pass. `only`: Wikidata ids to describe and crop (a targeted run, e.g. for a preview)."""
     paths = Paths(root)
@@ -425,7 +457,22 @@ def run(http: HttpClient, root: Path, *, budget: int = 1200, max_seconds: float 
             stats["files_described"] += 1
     _save(paths.index, idx)
 
-    # 3. crops within the budget
+    # 3a. crops made before the current check: verify them again from the saved file
+    for q, p in idx["players"].items():
+        cr = p.get("crop")
+        if not cr or cr.get("check") == CROP_CHECK:
+            continue
+        img = paths.image(q)
+        if img.exists() and verify(img.read_bytes()):
+            cr["check"] = CROP_CHECK
+            continue
+        img.unlink(missing_ok=True)
+        p.setdefault("tried", {})[cr["file"]] = "unverified"
+        del p["crop"]
+        p["status"] = "unverified"
+        stats["crops_withdrawn"] += 1
+
+    # 3b. crops within the budget
     done = 0
     for q in order:
         if done >= budget or clock() - start > max_seconds or stats["image_errors"] >= 5:
@@ -455,7 +502,7 @@ def run(http: HttpClient, root: Path, *, budget: int = 1200, max_seconds: float 
             if jpeg:
                 paths.image(q).parent.mkdir(parents=True, exist_ok=True)
                 paths.image(q).write_bytes(jpeg)
-                p["crop"] = {"file": f, "ver": hashlib.sha1(jpeg).hexdigest()[:8]}
+                p["crop"] = {"file": f, "ver": hashlib.sha1(jpeg).hexdigest()[:8], "check": CROP_CHECK}
                 stats["cropped"] += 1
                 break
             stats[f"crop_{why}"] += 1

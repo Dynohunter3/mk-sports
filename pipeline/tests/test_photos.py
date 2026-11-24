@@ -104,7 +104,7 @@ def test_run_end_to_end(tmp_path):
         "https://upload.wikimedia.org/": [(200, b"\xff\xd8\xff fake jpeg", {})],
     })
     http = HttpClient(transport=t, clock=clock, sleep=clock.sleep)
-    rep = photos.run(http, tmp_path, wdqs=wd, crop=lambda body: (b"JPEG" + body[-4:], "ok"), now=1_800_000_000, clock=clock)
+    rep = photos.run(http, tmp_path, wdqs=wd, crop=lambda body: (b"JPEG" + body[-4:], "ok"), verify=lambda b: True, now=1_800_000_000, clock=clock)
 
     pub = tmp_path / "public"
     meta = json.loads((pub / "meta.json").read_text())
@@ -122,7 +122,7 @@ def test_run_end_to_end(tmp_path):
     # a second run the same day asks Wikidata nothing and downloads nothing
     wd2 = FakeWdqs([])
     calls = len(t.calls)
-    photos.run(http, tmp_path, wdqs=wd2, crop=lambda body: (b"JPEG", "ok"), now=1_800_000_000 + 3600, clock=clock)
+    photos.run(http, tmp_path, wdqs=wd2, crop=lambda body: (b"JPEG", "ok"), verify=lambda b: True, now=1_800_000_000 + 3600, clock=clock)
     assert wd2.requests == 0 and len(t.calls) == calls
 
 
@@ -136,13 +136,13 @@ def test_budget_and_rate_limit_continue_next_run(tmp_path):
     })
     http = HttpClient(transport=t, clock=clock, sleep=clock.sleep)
     crop = lambda body: (b"JPEG", "ok")  # noqa: E731
-    rep = photos.run(http, tmp_path, wdqs=FakeWdqs([clubs, players]), crop=crop, budget=2, now=1_800_000_000, clock=clock)
+    rep = photos.run(http, tmp_path, wdqs=FakeWdqs([clubs, players]), crop=crop, verify=lambda b: True, budget=2, now=1_800_000_000, clock=clock)
     assert rep["players_with_photo"] == 2
-    rep = photos.run(http, tmp_path, wdqs=FakeWdqs([]), crop=crop, budget=10, now=1_800_000_100, clock=clock)
+    rep = photos.run(http, tmp_path, wdqs=FakeWdqs([]), crop=crop, verify=lambda b: True, budget=10, now=1_800_000_100, clock=clock)
     assert rep["players_with_photo"] == 5
 
     # the query service says 429: the saved candidates are kept and nothing is lost
-    rep = photos.run(http, tmp_path, wdqs=FakeWdqs([photos.RateLimited("429")]), crop=crop, now=1_800_000_000 + 2 * 86400, clock=clock)
+    rep = photos.run(http, tmp_path, wdqs=FakeWdqs([photos.RateLimited("429")]), crop=crop, verify=lambda b: True, now=1_800_000_000 + 2 * 86400, clock=clock)
     assert rep["players_with_photo"] == 5 and rep["wdqs_rate_limited"] == 1
 
 
@@ -155,11 +155,11 @@ def test_no_face_is_remembered_and_not_retried(tmp_path):
         "https://upload.wikimedia.org/": [(200, b"\xff\xd8\xff x", {})],
     })
     http = HttpClient(transport=t, clock=clock, sleep=clock.sleep)
-    photos.run(http, tmp_path, wdqs=FakeWdqs([clubs, players]), crop=lambda b: (None, "no-face"), now=1_800_000_000, clock=clock)
+    photos.run(http, tmp_path, wdqs=FakeWdqs([clubs, players]), crop=lambda b: (None, "no-face"), verify=lambda b: True, now=1_800_000_000, clock=clock)
     idx = json.loads((tmp_path / "index.json").read_text())
     assert idx["players"]["Q7"]["status"] == "no-face"
     n = len(t.calls)
-    photos.run(http, tmp_path, wdqs=FakeWdqs([]), crop=lambda b: (None, "no-face"), now=1_800_000_100, clock=clock)
+    photos.run(http, tmp_path, wdqs=FakeWdqs([]), crop=lambda b: (None, "no-face"), verify=lambda b: True, now=1_800_000_100, clock=clock)
     assert len(t.calls) == n
 
 
@@ -170,3 +170,25 @@ def test_truncated_wikidata_answer_is_a_failed_chunk_not_a_crash(tmp_path):
         raise AssertionError("expected FetchError")
     except photos.FetchError as e:
         assert "truncated" in str(e)
+
+
+def test_crops_made_before_the_check_are_verified_again_and_bad_ones_withdrawn(tmp_path):
+    clubs = [{"c": {"value": "http://www.wikidata.org/entity/Q9617"}}]
+    players = [_row("Q1", "Real Face", "2001-01-01", "Face.jpg", "1"), _row("Q2", "Grass Shot", "2002-02-02", "Grass.jpg", "2")]
+    clock = FakeClock()
+    t = FakeTransport({
+        "https://commons.wikimedia.org/": [(200, _commons([("Face.jpg", 2025, "CC0"), ("Grass.jpg", 2025, "CC0")]), {})],
+        "https://upload.wikimedia.org/": [(200, b"\xff\xd8\xff x", {})],
+    })
+    http = HttpClient(transport=t, clock=clock, sleep=clock.sleep)
+    photos.run(http, tmp_path, wdqs=FakeWdqs([clubs, players]), crop=lambda b: (b"JPEG", "ok"), verify=lambda b: True, now=1_800_000_000, clock=clock)
+    idx = json.loads((tmp_path / "index.json").read_text())
+    for q in ("Q1", "Q2"):  # pretend these were made by an older version, before the check
+        del idx["players"][q]["crop"]["check"]
+    (tmp_path / "index.json").write_text(json.dumps(idx))
+    (tmp_path / "i" / "Q2.jpg").write_bytes(b"GRASS")
+    rep = photos.run(http, tmp_path, wdqs=FakeWdqs([]), crop=lambda b: (None, "unverified"), verify=lambda b: b != b"GRASS",
+                     now=1_800_000_100, clock=clock)
+    assert rep["crops_withdrawn"] == 1 and rep["players_with_photo"] == 1
+    assert not (tmp_path / "i" / "Q2.jpg").exists()
+    assert json.loads((tmp_path / "public" / "credits.json").read_text())["c"].keys() == {"Q1"}

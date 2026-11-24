@@ -66,7 +66,7 @@ Code: `mobile/src/data/pleagues.ts` (with tests), `mobile/src/app/private-league
 - **Server side (`pipeline/mkdata/photos.py`, in the data pipeline):**
   - Reads footballers' dates of birth, photos and ESPN IDs from Wikidata (CC0).
   - Reads each photo's author, licence and date from Wikimedia Commons.
-  - Downloads a 500 px thumbnail, finds the face with OpenCV and saves a 160 px square crop.
+  - Downloads a 500 px thumbnail, finds the face with OpenCV and saves a 160 px square crop. A second detector must confirm the face.
   - Publishes the crops with an index by birth month and by ESPN ID, plus a credit for every photo, on GitHub Pages.
   - Only CC0, public domain, CC BY and CC BY-SA photos are used. When a player has several photos, the newest dated one with a usable face wins.
 - **On the phone (`mobile/src/data/photos.ts`):**
@@ -98,7 +98,11 @@ Code: `mobile/src/data/pleagues.ts` (with tests), `mobile/src/app/private-league
   - First run (24 Nov): the index (11,323 players, 11,639 photos described), then 128 crops in the time left.
   - Each later run crops up to about 4,000, at two downloads a second, which is within Wikimedia's media limits.
   - Photos appear gradually: players with an ESPN ID on Wikidata first, then the youngest.
-- **Face detection misses some photos.** In the first pipeline run, 128 of 161 photos (79%) gave a usable crop. The rest (crowd shots, side-on faces) are skipped rather than badly cropped; another photo of the player is tried if there is one.
+- **Face detection misses some photos.**
+  - In the first pipeline run, 128 of 161 photos gave a crop. Checking them by eye, 7 showed grass, legs or a shirt instead of a face.
+  - Every crop must now pass a second, independent face detector. On those 128 it rejected exactly the 7 bad ones and kept all 121 real faces. Existing crops are re-checked.
+  - That leaves about 75% of photos (121 of 161) with a usable crop. The rest (crowd shots, side-on faces) are skipped rather than badly cropped, and another photo of the player is tried if there is one.
+  - Women footballers are excluded, since the app's competitions are men's.
 - **Professional face cards** (TheSportsDB cutouts, current for most players) need a paid plan: $9 a month, because the free key does not allow published apps. That is the owner's decision.
 
 ## Goals outlook (match page)
