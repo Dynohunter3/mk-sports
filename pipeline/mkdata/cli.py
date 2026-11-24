@@ -8,7 +8,7 @@
     python -m mkdata snapshot                                                   # versioned data snapshot
     python -m mkdata health [--status var/status.json]                          # alerts; exit 2 on critical
     python -m mkdata registry-doc                                               # docs/SOURCE_REGISTRY.md
-    python -m mkdata photos [--budget 1500]                                     # player photos (Wikidata + Commons)
+    python -m mkdata photos [--budget 4000]                                     # player photos (Wikidata + Commons)
 """
 
 from __future__ import annotations
@@ -262,7 +262,7 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("registry-doc")
     s.add_argument("--crosscheck")
     s = sub.add_parser("photos")
-    s.add_argument("--budget", type=int, default=1500, help="most thumbnails to download this run")
+    s.add_argument("--budget", type=int, default=4000, help="most thumbnails to download this run")
     s.add_argument("--max-minutes", type=float, default=40)
     args = p.parse_args(argv)
     return {"sync": cmd_sync, "upcoming": cmd_upcoming, "link": cmd_link, "elo": cmd_elo, "crosscheck": cmd_crosscheck,

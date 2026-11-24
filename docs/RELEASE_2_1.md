@@ -87,10 +87,18 @@ Code: `mobile/src/data/pleagues.ts` (with tests), `mobile/src/app/private-league
 
 **Limits:**
 - **Not every player has a free photo.** Players without one keep the ESPN photo or the shirt number.
-- **Photos are as current as Wikimedia's.** Measured on the Premier League photos matched by ESPN ID: median year taken 2024; 103 of 157 from 2023 or later.
+- **Photos are as current as Wikimedia's.** In the first 128 crops, the median year taken is 2025, and 81 are from 2024 or later. The newest photo of each player is preferred.
+
+**Coverage, measured 24 Nov 2026** (players with a Wikimedia photo candidate; a little lower after face detection):
+- **Premier League squads:** 388 of 605 (64%), against 38 (6%) with ESPN photos.
+- **Liverpool v Manchester United squads:** 36 of 40, against 2 with ESPN photos.
+- **Who is missed:** mostly young players with no Wikidata photo, and players whose Wikidata record has no club.
 - **Wikidata's club memberships are often out of date,** which is why matching uses date of birth rather than club.
-- **The first build takes several pipeline runs** (a day or two), because Wikimedia rate-limits downloads. Photos appear gradually: players with an ESPN ID on Wikidata first, then the youngest.
-- **Face detection misses some photos.** In a test, 23 of 30 photos gave a usable crop; the rest (crowd shots, side-on faces) are skipped rather than badly cropped.
+- **The first build takes a few pipeline runs** (about a day).
+  - First run (24 Nov): the index (11,323 players, 11,639 photos described), then 128 crops in the time left.
+  - Each later run crops up to about 4,000, at two downloads a second, which is within Wikimedia's media limits.
+  - Photos appear gradually: players with an ESPN ID on Wikidata first, then the youngest.
+- **Face detection misses some photos.** In the first pipeline run, 128 of 161 photos (79%) gave a usable crop. The rest (crowd shots, side-on faces) are skipped rather than badly cropped; another photo of the player is tried if there is one.
 - **Professional face cards** (TheSportsDB cutouts, current for most players) need a paid plan: $9 a month, because the free key does not allow published apps. That is the owner's decision.
 
 ## Goals outlook (match page)

@@ -76,7 +76,7 @@ jobs:
         timeout-minutes: 50
         run: |
           python -m pip install --quiet -r requirements-photos.txt
-          python -m mkdata photos --budget 1500 --max-minutes 40
+          python -m mkdata photos --budget 4000 --max-minutes 40
       - name: Prepare the public site
         run: |
           rm -rf ../site && mkdir -p ../site

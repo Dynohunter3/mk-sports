@@ -86,7 +86,7 @@ OUT_PX = 160  # the app draws photos at up to 88 px; 160 px is sharp at 52 px on
 CANDIDATES_MAX_AGE = 20 * 3600
 WDQS_GAP = 61.0
 COMMONS_GAP = 5.0  # robot policy, Action API unauthenticated: 1 at a time, and 5 s after a slow request
-IMAGE_GAP = 1.0  # robot policy, media: at most 2 at a time and 25 Mbps; we fetch one 500 px thumbnail a second
+IMAGE_GAP = 0.5  # robot policy, media: at most 2 at a time and 25 Mbps; we fetch one 500 px thumbnail at a time, 2 a second (~1 Mbps)
 PRUNE_AFTER = 120 * 86400
 
 FREE = re.compile(r"^(cc0|cc[- ]zero|public domain|pd\b|pdm\b|cc by(-sa)? \d(\.\d)?\b)", re.I)
