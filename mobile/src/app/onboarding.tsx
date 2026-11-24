@@ -7,13 +7,14 @@ import { useApi } from '@/api/cache';
 import { api, qs } from '@/api/client';
 import type { League, Me, Sport, Team } from '@/api/types';
 import { useAuth } from '@/auth/auth';
+import { FadeIn, Pop } from '@/components/motion';
 import { LogoMark } from '@/components/brand';
 import { Backdrop } from '@/components/glass';
 import { TeamBadge } from '@/components/match';
 import { toFavourite } from '@/components/teamhub';
 import { Button, Card, Chip, Icon, Loading, Row, Text } from '@/components/ui';
 import { usePrefs } from '@/state/prefs';
-import { radius, space, SPORT_ICONS, TAP, useTheme } from '@/theme/theme';
+import { alpha, radius, space, SPORT_ICONS, TAP, useTheme } from '@/theme/theme';
 
 const STEPS = ['welcome', 'sports', 'leagues', 'teams'] as const;
 
@@ -67,28 +68,43 @@ export default function Onboarding() {
       <ScrollView contentContainerStyle={{ padding: space.lg, paddingBottom: space.xxl }} keyboardShouldPersistTaps="handled">
         {name === 'welcome' ? (
           <View style={{ gap: space.lg, paddingTop: space.xl }}>
-            <LogoMark size={96} />
-            <Text style={{ fontSize: 40, fontWeight: '900', letterSpacing: -1, fontStyle: 'italic' }}>
-              MK <Text style={{ fontSize: 40, fontWeight: '900', fontStyle: 'italic' }} color={t.brand}>SPORTS</Text>
-            </Text>
-            <Text v="h3" dim>
-              Live scores, line-ups, stats, news and AI predictions for the world's favourite sports, plus a free game where you make your own picks.
-            </Text>
+            <Pop>
+              <LogoMark size={96} />
+            </Pop>
+            <FadeIn delay={120}>
+              <Text v="hero" style={{ fontSize: 52, lineHeight: 54 }}>
+                CALL IT.
+              </Text>
+              <Text v="hero" color={t.brand} style={{ fontSize: 52, lineHeight: 54 }}>
+                BEAT THE AI.
+              </Text>
+            </FadeIn>
+            <FadeIn delay={220}>
+              <Text v="h3" dim>
+                Live scores, line-ups and stats for the world's favourite sports, AI predictions that show their working, and a free game where your calls take on the machine.
+              </Text>
+            </FadeIn>
             {[
-              ['robot-outline', 'Explainable predictions', 'Win probabilities, likely score, confidence and key factors, blended from several independent sources and weighted by their track record.'],
-              ['lightning-bolt-outline', 'Live match centre', 'Line-ups in formation, live stats (possession, shots, xG, passes), timelines and player stats, straight from public sports data feeds.'],
-              ['shield-star-outline', 'Your team first', 'Fixtures, results, news and stats for your team, one tap from the home screen.'],
-              ['podium', 'Free-to-play pick game', 'Points for correct results, bonuses for exact scores, streaks, badges and leaderboards.'],
-            ].map(([icon, title, body]) => (
-              <Row key={title} style={{ alignItems: 'flex-start' }} gap={space.md}>
-                <Icon name={icon} size={26} color={t.brand} />
-                <View style={{ flex: 1 }}>
-                  <Text style={{ fontWeight: '700' }}>{title}</Text>
-                  <Text v="small" dim>
-                    {body}
-                  </Text>
-                </View>
-              </Row>
+              ['cards-playing-outline', 'Quick Picks', 'Swipe through the next matches and call each one. Then see if you beat the AI.', t.hot],
+              ['robot-outline', 'AI predictions', 'Win, draw or away calls with their real track record, key factors and a safer call.', t.violet],
+              ['lightning-bolt-outline', 'Live match centre', 'Line-ups in formation, live stats, xG, timelines and player stats.', t.gold],
+              ['trophy-outline', 'Levels, streaks and badges', 'Climb from Rookie to GOAT. Free to play, always.', t.brand],
+            ].map(([icon, title, body, color], i) => (
+              <FadeIn key={title} delay={320 + i * 90}>
+                <Row style={{ alignItems: 'flex-start' }} gap={space.md}>
+                  <View style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: alpha(color, 0.18), borderWidth: 1, borderColor: alpha(color, 0.45) }}>
+                    <Icon name={icon} size={24} color={color} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text v="h2" style={{ fontSize: 21, lineHeight: 24 }}>
+                      {title.toUpperCase()}
+                    </Text>
+                    <Text v="small" dim>
+                      {body}
+                    </Text>
+                  </View>
+                </Row>
+              </FadeIn>
             ))}
             <Card tint={t.pending}>
               <Row style={{ alignItems: 'flex-start' }}>

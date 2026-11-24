@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Linking, Pressable, RefreshControl, ScrollView, View } from 'react-native';
+import { Linking, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useApi } from '@/api/cache';
@@ -10,13 +10,14 @@ import { Glass } from '@/components/glass';
 import { ConfidencePill, finalLabel, FormPills, ProbabilityBar, StandingsTable, StatusChip, TeamBadge, TierPill } from '@/components/match';
 import { kitColors, Pitch, ShotMap } from '@/components/pitch';
 import { PlayerPhoto } from '@/components/crest';
+import { Float, PressableScale } from '@/components/motion';
 import { Button, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatusBanner, Text } from '@/components/ui';
 import { confirm, notify } from '@/lib/dialogs';
 import { dayLabel, kickoffTime, outcomeLabel, relative, rulesText } from '@/lib/format';
 import { useNow } from '@/lib/useNow';
 import { NOTIFY_SUPPORTED, requestPermission } from '@/notify/notifications';
 import { usePrefs } from '@/state/prefs';
-import { alpha, LeagueTheme, radius, space, TAP, useTheme } from '@/theme/theme';
+import { alpha, LeagueTheme, matchColors, mix, radius, space, TAP, useTheme } from '@/theme/theme';
 
 type Tab = 'overview' | 'lineups' | 'stats' | 'timeline' | 'table';
 
@@ -92,26 +93,41 @@ function MatchHero({ m, xg }: { m: MatchDetail; xg: MatchCentre['xg'] }) {
   const t = useTheme();
   const started = m.status === 'live' || m.status === 'finished';
   const quarters = m.score_detail.quarters;
-  const team = (tm: MatchDetail['home']) => (
-    <Pressable onPress={() => router.push({ pathname: '/team/[id]', params: { id: tm.id, league: m.league.id } })} accessibilityRole="button" accessibilityLabel={`${tm.name} team page`} style={{ flex: 1, alignItems: 'center', gap: 8 }}>
-      <View style={{ width: 72, height: 72, alignItems: 'center', justifyContent: 'center' }}>
-        <TeamBadge team={tm} size={68} />
-      </View>
-      <Text v="h3" color="#FFFFFF" style={{ textAlign: 'center' }} numberOfLines={2}>
-        {tm.short_name}
+  const [hc, ac] = matchColors(m.home.color, m.away.color, t);
+  const team = (tm: MatchDetail['home'], side: 'home' | 'away') => (
+    <PressableScale onPress={() => router.push({ pathname: '/team/[id]', params: { id: tm.id, league: m.league.id } })} accessibilityRole="button" accessibilityLabel={`${tm.name} team page`} style={{ flex: 1, alignItems: 'center', gap: 8 }}>
+      <Float distance={5} duration={side === 'home' ? 1900 : 2300}>
+        <View style={{ width: 88, height: 88, alignItems: 'center', justifyContent: 'center' }}>
+          <TeamBadge team={tm} size={84} plate />
+        </View>
+      </Float>
+      <Text v="h2" color="#FFFFFF" style={{ textAlign: 'center', fontSize: 22, lineHeight: 25 }} numberOfLines={2}>
+        {tm.short_name.toUpperCase()}
       </Text>
-    </Pressable>
+    </PressableScale>
   );
   return (
-    <LinearGradient colors={[t.heroFrom, t.heroTo]} start={{ x: 0, y: 0 }} end={{ x: 0.3, y: 1 }}>
+    <View style={{ overflow: 'hidden' }}>
+      {/* a diagonal split in the two teams' colours */}
+      <LinearGradient
+        colors={[mix(hc, '#000000', 0.15), mix(hc, '#000000', 0.5), mix(ac, '#000000', 0.5), mix(ac, '#000000', 0.15)]}
+        locations={[0, 0.49, 0.51, 1]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={StyleSheet.absoluteFill}
+      />
+      <LinearGradient colors={['rgba(0,0,0,0)', alpha(t.bg, 0.85)]} start={{ x: 0, y: 0.55 }} end={{ x: 0, y: 1 }} style={StyleSheet.absoluteFill} />
+      <Text v="hero" color="rgba(255,255,255,0.07)" style={{ position: 'absolute', alignSelf: 'center', top: 70, fontSize: 170, lineHeight: 180 }}>
+        VS
+      </Text>
       <SafeAreaView edges={['top']}>
         <View style={{ paddingHorizontal: space.lg, paddingBottom: space.lg }}>
           <Row style={{ justifyContent: 'space-between', minHeight: 44 }}>
-            <Pressable onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} accessibilityRole="button" accessibilityLabel="Back" hitSlop={10} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.25)', alignItems: 'center', justifyContent: 'center' }}>
+            <PressableScale onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} accessibilityRole="button" accessibilityLabel="Back" hitSlop={10} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.3)', alignItems: 'center', justifyContent: 'center' }}>
               <Icon name="chevron-left" size={26} color="#fff" />
-            </Pressable>
+            </PressableScale>
             <Pressable onPress={() => router.push(`/league/${m.league.id}`)} accessibilityRole="link" style={{ flex: 1, alignItems: 'center' }}>
-              <Text v="label" color="rgba(255,255,255,0.75)" numberOfLines={1}>
+              <Text v="label" color="rgba(255,255,255,0.85)" numberOfLines={1}>
                 {m.league_name ?? m.league.short_name}
               </Text>
               {m.round ? (
@@ -123,27 +139,27 @@ function MatchHero({ m, xg }: { m: MatchDetail; xg: MatchCentre['xg'] }) {
             <FollowBell m={m} />
           </Row>
           <Row style={{ alignItems: 'flex-start', marginTop: space.md }}>
-            {team(m.home)}
-            <View style={{ minWidth: 112, alignItems: 'center', paddingTop: 6 }}>
+            {team(m.home, 'home')}
+            <View style={{ minWidth: 118, alignItems: 'center', paddingTop: 10 }}>
               {m.status === 'live' ? (
-                <View style={{ paddingHorizontal: 10, paddingVertical: 3, borderRadius: 12, backgroundColor: alpha(t.live, 0.25) }}>
+                <View style={{ paddingHorizontal: 10, paddingVertical: 2, borderRadius: 12, backgroundColor: 'rgba(0,0,0,0.35)' }}>
                   <StatusChip m={m} />
                 </View>
               ) : (
-                <Text v="small" color="rgba(255,255,255,0.8)" style={{ fontWeight: '700' }}>
+                <Text v="label" color="rgba(255,255,255,0.85)">
                   {m.status === 'finished' ? finalLabel(m.clock) : m.status === 'scheduled' ? dayLabel(new Date(m.start_time)) : m.status}
                 </Text>
               )}
-              <Text style={{ fontSize: started ? 42 : 26, fontWeight: '900', fontVariant: ['tabular-nums'], marginTop: 4 }} color="#FFFFFF" accessibilityLabel={started ? `Score ${m.home_score} to ${m.away_score}` : undefined}>
-                {started ? `${m.home_score} - ${m.away_score}` : kickoffTime(m.start_time)}
+              <Text v={started ? 'hero' : 'display'} color="#FFFFFF" style={started ? { fontSize: 60, lineHeight: 64 } : { fontSize: 40, lineHeight: 44, marginTop: 2 }} accessibilityLabel={started ? `Score ${m.home_score} to ${m.away_score}` : undefined}>
+                {started ? `${m.home_score}–${m.away_score}` : kickoffTime(m.start_time)}
               </Text>
               {xg && started ? (
-                <Text v="tiny" color="rgba(255,255,255,0.8)" style={{ fontWeight: '700' }}>
-                  xG {xg.home.toFixed(2)} - {xg.away.toFixed(2)}
+                <Text v="tiny" color="rgba(255,255,255,0.85)" style={{ fontWeight: '800' }}>
+                  xG {xg.home.toFixed(2)} – {xg.away.toFixed(2)}
                 </Text>
               ) : null}
             </View>
-            {team(m.away)}
+            {team(m.away, 'away')}
           </Row>
           {quarters?.length ? (
             <Text v="tiny" color="rgba(255,255,255,0.75)" style={{ textAlign: 'center', marginTop: space.sm }}>
@@ -176,7 +192,7 @@ function MatchHero({ m, xg }: { m: MatchDetail; xg: MatchCentre['xg'] }) {
           </Row>
         </View>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 }
 
@@ -303,7 +319,7 @@ function Overview({ m }: { m: MatchDetail }) {
                 ) : null}
               </View>
             </Row>
-            <ProbabilityBar p={{ home: p.probabilities.home ?? 0, draw: p.probabilities.draw ?? null, away: p.probabilities.away ?? 0 }} home={m.home.short_name} away={m.away.short_name} />
+            <ProbabilityBar p={{ home: p.probabilities.home ?? 0, draw: p.probabilities.draw ?? null, away: p.probabilities.away ?? 0 }} home={m.home.short_name} away={m.away.short_name} height={10} colors={[m.home.color, m.away.color]} />
             <Text dim style={{ marginTop: space.md }}>
               {p.explanation.summary}
             </Text>
@@ -721,6 +737,26 @@ function PickCta({ m }: { m: MatchDetail }) {
   const locked = m.locked || locksIn <= 0;
   const pickText = p ? `${outcomeLabel(p.pick, m.home.short_name, m.away.short_name)}${p.home_score !== null ? ` ${p.home_score}-${p.away_score}` : ''}` : null;
   if (!m.prediction_full && !p && locked) return null;
+  if (!locked && !p) {
+    return (
+      <PressableScale onPress={() => router.push(`/pick/${m.id}`)} accessibilityLabel="Make your pick" scaleTo={0.97} feedback="thud" style={{ marginTop: space.md }}>
+        <LinearGradient colors={[t.brand, t.accent2]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radius.xl, padding: space.lg, flexDirection: 'row', alignItems: 'center', gap: space.md, overflow: 'hidden' }}>
+          <View style={{ position: 'absolute', right: -24, top: -30, width: 120, height: 120, borderRadius: 60, backgroundColor: 'rgba(255,255,255,0.16)' }} />
+          <View style={{ flex: 1 }}>
+            <Text v="hero" color="#04120B" style={{ fontSize: 38, lineHeight: 40 }}>
+              CALL IT
+            </Text>
+            <Text v="small" color="rgba(4,18,11,0.85)" style={{ fontWeight: '700' }}>
+              Pick the result before kick-off · {relative(new Date(m.start_time).getTime(), now).replace('in ', '')} left
+            </Text>
+          </View>
+          <View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: '#04120B', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="hand-pointing-right" size={26} color={t.brand} />
+          </View>
+        </LinearGradient>
+      </PressableScale>
+    );
+  }
   return (
     <Glass style={{ marginTop: space.md }}>
       {p ? (

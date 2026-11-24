@@ -1,16 +1,18 @@
 import { router } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, RefreshControl, SectionList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useApi } from '@/api/cache';
 import { qs } from '@/api/client';
-import type { Feed, MatchCard, ModelRecord, NewsFeed } from '@/api/types';
+import type { Feed, GameSummary, MatchCard, ModelRecord, NewsFeed } from '@/api/types';
 import { useAuth } from '@/auth/auth';
 import { Wordmark } from '@/components/brand';
 import { Crest } from '@/components/crest';
 import { ArticleRow, MatchStrip } from '@/components/feed';
 import { Backdrop, Glass } from '@/components/glass';
+import { GameChips, PlayHero, ResultsCelebration } from '@/components/game';
+import { Confetti, FadeIn, PressableScale, Skeleton, stagger } from '@/components/motion';
 import { MatchRow, StatusChip, TeamBadge } from '@/components/match';
 import { Chip, ChipRow, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, StatusBanner, Text } from '@/components/ui';
 import { LEAGUE_BY_SLUG, MATCH_LEAGUES } from '@/data/leagues';
@@ -177,6 +179,9 @@ function Home() {
   const newsLeagues = league ? [league] : feedLeagues.length ? feedLeagues : MATCH_LEAGUES.filter((l) => l.featured).map((l) => l.slug);
   const news = useApi<NewsFeed>('/news' + qs({ leagues: newsLeagues, team: fav?.id, team_league: fav?.leagues?.[0], limit: 5 }), { maxAge: 600 });
   const record = useApi<ModelRecord>('/model/record', { maxAge: 600 }).data;
+  const gameData = useApi<GameSummary>('/me/game', { maxAge: 15 }).data;
+  const [burst, setBurst] = useState(0);
+  const celebrate = useCallback(() => setBurst((b) => b + 1), []);
   const rec30 = record?.last_30_days?.matches;
   const liveItems = feed.data?.sections.find((s) => s.key === 'live')?.items ?? [];
   const myTeamItems = feed.data?.sections.find((s) => s.key === 'my_team')?.items ?? [];
@@ -187,6 +192,17 @@ function Home() {
     [feed.data],
   );
   const lg = league ? LEAGUE_BY_SLUG[league] : null;
+  // the next matches you can still call (for the Quick Picks hero)
+  const callable = useMemo(() => {
+    const seen = new Set<string>();
+    return (feed.data?.sections ?? [])
+      .flatMap((s) => s.items)
+      .filter((m) => m.status === 'scheduled' && m.prediction && !m.my_pick && !m.locked && !seen.has(m.id) && !!seen.add(m.id))
+      .sort((a, b) => a.start_time.localeCompare(b.start_time));
+  }, [feed.data]);
+  const hour = new Date().getHours();
+  const hello = hour < 5 ? 'LATE NIGHT' : hour < 12 ? 'GOOD MORNING' : hour < 18 ? 'GOOD AFTERNOON' : 'GOOD EVENING';
+  const firstName = me?.display_name && me.display_name !== 'You' ? me.display_name.split(' ')[0].toUpperCase() : null;
   // upcoming matches where the model's call is in its strongest band
   const strongCalls = useMemo(() => {
     const seen = new Set<string>();
@@ -200,18 +216,26 @@ function Home() {
   const header = (
     <View style={{ paddingTop: space.sm }}>
       <Row style={{ justifyContent: 'space-between' }}>
-        <Pressable onPress={() => router.push('/profile')} accessibilityRole="button" accessibilityLabel="Profile" hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.text, 0.1), alignItems: 'center', justifyContent: 'center' }}>
+        <PressableScale onPress={() => router.push('/profile')} accessibilityRole="button" accessibilityLabel="Profile" hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.text, 0.1), alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="account" size={22} color={t.text} />
-        </Pressable>
+        </PressableScale>
         <Wordmark size={30} />
-        <Pressable onPress={() => router.push('/settings')} accessibilityRole="button" accessibilityLabel="Settings" hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.text, 0.1), alignItems: 'center', justifyContent: 'center' }}>
+        <PressableScale onPress={() => router.push('/settings')} accessibilityRole="button" accessibilityLabel="Settings" hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.text, 0.1), alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="cog-outline" size={22} color={t.text} />
-        </Pressable>
+        </PressableScale>
       </Row>
-      <Text v="small" dim style={{ textAlign: 'center', marginTop: 6 }}>
-        {me ? `Hi ${me.display_name.split(' ')[0]} · ` : ''}
-        {dayLabel(new Date())}, {new Date().toLocaleDateString([], { day: 'numeric', month: 'long' })}
-      </Text>
+      <FadeIn style={{ marginTop: space.md }}>
+        <Text v="label" dim>
+          {dayLabel(new Date())} · {new Date().toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' })}
+        </Text>
+        <Row style={{ justifyContent: 'space-between', flexWrap: 'wrap' }} gap={8}>
+          <Text v="display">
+            {hello}
+            {firstName ? `, ${firstName}` : ''}
+          </Text>
+          <GameChips game={gameData} />
+        </Row>
+      </FadeIn>
       <View style={{ marginTop: space.md }}>
         <LeagueChips />
       </View>
@@ -225,12 +249,9 @@ function Home() {
           </Row>
         </Pressable>
       ) : null}
+      {!league ? <ResultsCelebration game={gameData} onCelebrate={celebrate} /> : null}
+      {!league ? <PlayHero game={gameData} next={callable} /> : null}
       {!league ? <MyTeamCard fav={fav} items={myTeamItems} /> : null}
-      {me && feed.data?.open_picks ? (
-        <View style={{ marginTop: space.md }}>
-          <Chip label={`${feed.data.open_picks} open pick${feed.data.open_picks === 1 ? '' : 's'} · My points`} icon="hand-pointing-right" selected onPress={() => router.push('/leaderboard')} />
-        </View>
-      ) : null}
       <StatusBanner error={feed.error} offline={feed.offline} updatedAt={feed.updatedAt} onRetry={feed.refresh} />
       {feed.data?.predictions_loading ? (
         <Glass style={{ marginTop: space.md }}>
@@ -248,14 +269,14 @@ function Home() {
           <MatchStrip items={liveItems} />
         </>
       ) : null}
-      <Pressable onPress={() => router.push('/predictions')} accessibilityRole="button" accessibilityLabel="All predictions, including draw calls" style={({ pressed }) => ({ marginTop: space.md, opacity: pressed ? 0.8 : 1 })}>
+      <PressableScale onPress={() => router.push('/predictions')} accessibilityRole="button" accessibilityLabel="All predictions, including draw calls" scaleTo={0.97} style={{ marginTop: space.md }}>
         <Glass>
           <Row gap={space.md}>
-            <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.brand, 0.18), alignItems: 'center', justifyContent: 'center' }}>
-              <Icon name="crystal-ball" size={22} color={t.brand} />
+            <View style={{ width: 46, height: 46, borderRadius: 23, backgroundColor: alpha(t.violet, 0.22), alignItems: 'center', justifyContent: 'center' }}>
+              <Icon name="crystal-ball" size={26} color={t.violet} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontWeight: '800' }}>Predictions</Text>
+              <Text v="h2">AI PREDICTIONS</Text>
               <Text v="small" dim>
                 Every football call this week: wins, draws and safer calls
               </Text>
@@ -268,7 +289,7 @@ function Home() {
             <Icon name="chevron-right" size={22} color={t.textMuted} />
           </Row>
         </Glass>
-      </Pressable>
+      </PressableScale>
       {strongCalls.length ? (
         <>
           <SectionHeader title="Strongest calls" icon="shield-check" color={t.win} action="All predictions" onAction={() => router.push('/predictions')} />
@@ -293,7 +314,7 @@ function Home() {
     </View>
   );
 
-  if (feed.loading) return <Loading label="Loading today's matches…" />;
+  if (feed.loading) return <HomeSkeleton />;
   return (
     <View style={{ flex: 1, backgroundColor: t.bg }}>
       <Backdrop />
@@ -301,7 +322,11 @@ function Home() {
         <SectionList<MatchCard, { key: string; title: string; data: MatchCard[] }>
           sections={sections}
           keyExtractor={(m) => String(m.id)}
-          renderItem={({ item }) => <MatchRow m={item} showLeague={!league} />}
+          renderItem={({ item, index }) => (
+            <FadeIn delay={stagger(index)}>
+              <MatchRow m={item} showLeague={!league} />
+            </FadeIn>
+          )}
           renderSectionHeader={({ section }) => <SectionHeader title={section.title} icon={SECTION_ICONS[section.key]} />}
           stickySectionHeadersEnabled={false}
           ListHeaderComponent={header}
@@ -320,6 +345,36 @@ function Home() {
           windowSize={7}
           removeClippedSubviews
         />
+      </SafeAreaView>
+      <Confetti burst={burst} colors={[t.brand, t.hot, t.gold, t.violet, t.accent2]} />
+    </View>
+  );
+}
+
+/** The shape of Home while today's matches load. */
+function HomeSkeleton() {
+  const t = useTheme();
+  const base = alpha(t.text, 0.07);
+  return (
+    <View style={{ flex: 1, backgroundColor: t.bg }}>
+      <Backdrop />
+      <SafeAreaView edges={['top']} style={{ flex: 1, paddingHorizontal: space.lg, paddingTop: space.sm }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Skeleton width={40} height={40} radius={20} base={base} />
+          <Wordmark size={30} />
+          <Skeleton width={40} height={40} radius={20} base={base} />
+        </Row>
+        <Skeleton width={160} height={14} style={{ marginTop: space.lg }} base={base} />
+        <Skeleton width="72%" height={32} style={{ marginTop: 8 }} base={base} />
+        <Row style={{ marginTop: space.md }}>
+          {[70, 120, 90, 100].map((w, i) => (
+            <Skeleton key={i} width={w} height={36} radius={18} base={base} />
+          ))}
+        </Row>
+        <Skeleton height={168} radius={28} style={{ marginTop: space.md }} base={base} />
+        {[0, 1, 2].map((i) => (
+          <Skeleton key={i} height={112} radius={20} style={{ marginTop: space.sm }} base={base} />
+        ))}
       </SafeAreaView>
     </View>
   );

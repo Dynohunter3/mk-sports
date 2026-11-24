@@ -6,9 +6,11 @@
  */
 import { LinearGradient } from 'expo-linear-gradient';
 import { ReactNode } from 'react';
-import { Platform, Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { alpha, radius as R, useTheme } from '@/theme/theme';
+
+import { PressableScale } from './motion';
 
 const WEB_BLUR = Platform.OS === 'web' ? ({ backdropFilter: 'blur(18px) saturate(140%)' } as unknown as ViewStyle) : null;
 
@@ -52,9 +54,9 @@ export function Glass({
   ];
   if (onPress) {
     return (
-      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={accessibilityLabel} style={({ pressed }) => [base, pressed && { opacity: 0.78, transform: [{ scale: 0.99 }] }]}>
+      <PressableScale onPress={onPress} accessibilityRole="button" accessibilityLabel={accessibilityLabel} scaleTo={0.975} style={base}>
         {body}
-      </Pressable>
+      </PressableScale>
     );
   }
   return <View style={base}>{body}</View>;

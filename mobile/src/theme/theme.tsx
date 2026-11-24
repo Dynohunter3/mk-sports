@@ -24,6 +24,10 @@ export const dark = {
   loss: '#F87171',
   draw: '#94A3B8',
   pending: '#F5A524',
+  // expressive accents (celebrations, game, highlights)
+  hot: '#FF3D81',
+  violet: '#9B6BFF',
+  gold: '#FFC93C',
   overlay: 'rgba(0,0,0,0.6)',
   // glass
   glass: 'rgba(255,255,255,0.055)',
@@ -57,6 +61,9 @@ export const light: Palette = {
   loss: '#DC2626',
   draw: '#64748B',
   pending: '#B45309',
+  hot: '#E11D74',
+  violet: '#7C3AED',
+  gold: '#B7791F',
   overlay: 'rgba(15,23,42,0.45)',
   glass: 'rgba(255,255,255,0.72)',
   glassStrong: 'rgba(255,255,255,0.9)',
@@ -125,6 +132,29 @@ export function mix(a: string, b: string, t: number): string {
   const y = rgb(b);
   const c = x.map((v, i) => Math.round(v + (y[i] - v) * t));
   return `#${c.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+}
+
+function distance(a: string, b: string): number {
+  const x = rgb(a);
+  const y = rgb(b);
+  return Math.sqrt(x.reduce((s, v, i) => s + (v - y[i]) ** 2, 0)) / 441.7;
+}
+
+/** A team colour that reads on the current background (very dark or very light kits are lifted or toned). */
+export function readable(hex: string | null | undefined, base: Palette, fallback?: string): string {
+  if (!hex || !/^#?[0-9a-f]{3,8}$/i.test(hex)) return fallback ?? base.brand;
+  const h = hex.startsWith('#') ? hex : `#${hex}`;
+  const l = luminance(h);
+  if (base.mode === 'dark') return l < 0.22 ? mix(h, '#FFFFFF', 0.42) : l < 0.32 ? mix(h, '#FFFFFF', 0.22) : h;
+  return l > 0.82 ? mix(h, '#000000', 0.35) : h;
+}
+
+/** Home and away colours for a match: readable, and distinct from each other (a clash falls back to the palette). */
+export function matchColors(home: string | null | undefined, away: string | null | undefined, base: Palette): [string, string] {
+  const h = readable(home, base, base.brand);
+  let a = readable(away, base, base.pending);
+  if (distance(h, a) < 0.18) a = distance(h, base.pending) > 0.25 ? base.pending : base.accent2;
+  return [h, a];
 }
 
 /** A competition's colours applied on top of the base palette. */

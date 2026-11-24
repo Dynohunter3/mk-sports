@@ -1,11 +1,14 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ComponentProps, memo, ReactNode } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ActivityIndicator, Pressable, ScrollView, StyleProp, StyleSheet, Text as RNText, TextProps, TextStyle, View, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { alpha, radius, space, TAB_BAR_SPACE, TAP, useTheme } from '@/theme/theme';
+import { FONTS } from '@/theme/fonts';
+import { alpha, mix, radius, space, TAB_BAR_SPACE, TAP, useTheme } from '@/theme/theme';
 
 import { Backdrop, Glass } from './glass';
+import { BouncingBall, Float, haptic, PressableScale } from './motion';
 
 export type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
@@ -14,21 +17,33 @@ export function Icon({ name, size = 20, color, style }: { name: string; size?: n
   return <MaterialCommunityIcons name={name as IconName} size={size} color={color ?? t.textDim} style={style} />;
 }
 
-type Variant = 'title' | 'h2' | 'h3' | 'body' | 'small' | 'tiny' | 'label' | 'mono';
+type Variant = 'hero' | 'score' | 'display' | 'title' | 'h2' | 'h3' | 'body' | 'small' | 'tiny' | 'label' | 'mono';
+// display variants use the condensed sports face; Android cannot combine a custom family with fontWeight, so
+// any weight passed to them is dropped (the face itself is the weight)
+const DISPLAY = new Set<Variant>(['hero', 'score', 'display', 'title', 'h2', 'label']);
 const VARIANTS: Record<Variant, TextStyle> = {
-  title: { fontSize: 26, fontWeight: '800', letterSpacing: -0.5 },
-  h2: { fontSize: 20, fontWeight: '700' },
+  hero: { fontFamily: FONTS.displayItalic, fontSize: 46, lineHeight: 50, letterSpacing: 0.3 },
+  score: { fontFamily: FONTS.display, fontSize: 38, lineHeight: 42, fontVariant: ['tabular-nums'] },
+  display: { fontFamily: FONTS.display, fontSize: 32, lineHeight: 36, letterSpacing: 0.2, textTransform: 'uppercase' },
+  title: { fontFamily: FONTS.display, fontSize: 30, lineHeight: 34, letterSpacing: 0.3, textTransform: 'uppercase' },
+  h2: { fontFamily: FONTS.display, fontSize: 24, lineHeight: 28, letterSpacing: 0.2 },
   h3: { fontSize: 16, fontWeight: '700' },
   body: { fontSize: 15 },
   small: { fontSize: 13 },
   tiny: { fontSize: 11 },
-  label: { fontSize: 12, fontWeight: '700', letterSpacing: 0.6, textTransform: 'uppercase' },
+  label: { fontFamily: FONTS.displaySemi, fontSize: 15, letterSpacing: 1.1, textTransform: 'uppercase' },
   mono: { fontSize: 15, fontWeight: '700', fontVariant: ['tabular-nums'] },
 };
 
 export function Text({ v = 'body', dim, muted, color, style, ...rest }: TextProps & { v?: Variant; dim?: boolean; muted?: boolean; color?: string }) {
   const t = useTheme();
-  return <RNText {...rest} style={[VARIANTS[v], { color: color ?? (muted ? t.textMuted : dim ? t.textDim : t.text) }, style]} />;
+  let extra = style;
+  if (DISPLAY.has(v) && style) {
+    const flat = { ...(StyleSheet.flatten(style) ?? {}) };
+    delete flat.fontWeight;
+    extra = flat;
+  }
+  return <RNText {...rest} style={[VARIANTS[v], { color: color ?? (muted ? t.textMuted : dim ? t.textDim : t.text) }, extra]} />;
 }
 
 export function Screen({
@@ -95,25 +110,26 @@ export function Button({
   color?: string;
 }) {
   const t = useTheme();
-  const bg = kind === 'primary' ? color ?? t.brand : kind === 'danger' ? t.live : kind === 'secondary' ? t.glass : 'transparent';
-  const fg = kind === 'primary' ? t.brandText : kind === 'danger' ? '#fff' : kind === 'ghost' ? t.brand : t.text;
+  const base = kind === 'primary' ? color ?? t.brand : kind === 'danger' ? t.live : null;
+  const bg = base ?? (kind === 'secondary' ? t.glass : 'transparent');
+  const fg = kind === 'primary' ? (color ? '#fff' : t.brandText) : kind === 'danger' ? '#fff' : kind === 'ghost' ? t.brand : t.text;
   return (
-    <Pressable
+    <PressableScale
       onPress={onPress}
       disabled={disabled || loading}
       accessibilityRole="button"
       accessibilityState={{ disabled: !!disabled }}
-      style={({ pressed }) => [
-        styles.button,
-        { backgroundColor: bg, borderColor: kind === 'secondary' ? t.glassBorder : 'transparent', opacity: disabled ? 0.45 : pressed ? 0.8 : 1 },
-        style,
-      ]}
+      feedback={kind === 'primary' ? 'thud' : 'tap'}
+      style={[styles.button, { backgroundColor: bg, borderColor: kind === 'secondary' ? t.glassBorder : 'transparent', opacity: disabled ? 0.45 : 1, overflow: 'hidden' }, style]}
     >
+      {base ? (
+        <LinearGradient pointerEvents="none" colors={[mix(base, '#FFFFFF', 0.18), base, mix(base, '#000000', 0.12)]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+      ) : null}
       {loading ? <ActivityIndicator color={fg} /> : icon ? <Icon name={icon} color={fg} size={20} /> : null}
-      <Text v="h3" color={fg} style={{ fontSize: 15 }}>
+      <Text v="h2" color={fg} style={{ fontSize: 19, lineHeight: 22, letterSpacing: 0.8, textTransform: 'uppercase' }}>
         {title}
       </Text>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -121,15 +137,14 @@ export const Chip = memo(function Chip({ label, selected, onPress, color, icon, 
   const t = useTheme();
   const accent = color ?? t.brand;
   return (
-    <Pressable
+    <PressableScale
       onPress={onPress}
       disabled={disabled}
+      feedback="select"
+      scaleTo={0.92}
       accessibilityRole="button"
       accessibilityState={{ selected: !!selected, disabled: !!disabled }}
-      style={({ pressed }) => [
-        styles.chip,
-        { borderColor: selected ? accent : t.glassBorder, backgroundColor: selected ? alpha(accent, 0.2) : t.glass, opacity: disabled ? 0.45 : pressed ? 0.75 : 1 },
-      ]}
+      style={[styles.chip, { borderColor: selected ? accent : t.glassBorder, backgroundColor: selected ? alpha(accent, 0.22) : t.glass, opacity: disabled ? 0.45 : 1 }]}
     >
       {left ?? null}
       {icon ? <Icon name={icon} size={18} color={selected ? accent : t.textDim} /> : null}
@@ -137,11 +152,13 @@ export const Chip = memo(function Chip({ label, selected, onPress, color, icon, 
         {label}
       </Text>
       {badge ? (
-        <Text v="tiny" muted>
-          {badge}
-        </Text>
+        <View style={{ minWidth: 20, paddingHorizontal: 5, borderRadius: 10, backgroundColor: selected ? accent : alpha(t.text, 0.1), alignItems: 'center' }}>
+          <Text v="tiny" color={selected ? (t.mode === 'dark' ? '#04120B' : '#fff') : t.textDim} style={{ fontWeight: '800' }}>
+            {badge}
+          </Text>
+        </View>
       ) : null}
-    </Pressable>
+    </PressableScale>
   );
 });
 
@@ -161,11 +178,20 @@ export function Segmented<T extends string>({ options, value, onChange, scroll }
         {options.map((o) => {
           const on = o.value === value;
           return (
-            <Pressable key={o.value} onPress={() => onChange(o.value)} accessibilityRole="tab" accessibilityState={{ selected: on }} style={{ minHeight: 40, justifyContent: 'center' }}>
-              <Text v="h3" color={on ? t.brand : t.textDim} style={{ fontWeight: on ? '800' : '600' }}>
+            <Pressable
+              key={o.value}
+              onPress={() => {
+                if (!on) haptic.select();
+                onChange(o.value);
+              }}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: on }}
+              style={{ minHeight: 40, justifyContent: 'center' }}
+            >
+              <Text v="h2" color={on ? t.brand : t.textDim} style={{ fontSize: 21, letterSpacing: 0.4, textTransform: 'uppercase' }}>
                 {o.label}
               </Text>
-              <View style={{ height: 3, borderRadius: 2, marginTop: 4, backgroundColor: on ? t.brand : 'transparent', width: 24, alignSelf: 'center' }} />
+              <View style={{ height: 4, borderRadius: 2, marginTop: 3, backgroundColor: on ? t.brand : 'transparent', width: on ? 28 : 0, alignSelf: 'center' }} />
             </Pressable>
           );
         })}
@@ -179,7 +205,10 @@ export function Segmented<T extends string>({ options, value, onChange, scroll }
         return (
           <Pressable
             key={o.value}
-            onPress={() => onChange(o.value)}
+            onPress={() => {
+              if (!on) haptic.select();
+              onChange(o.value);
+            }}
             accessibilityRole="tab"
             accessibilityState={{ selected: on }}
             style={[styles.segment, on && { backgroundColor: alpha(t.brand, 0.18), borderColor: alpha(t.brand, 0.6), borderWidth: 1 }]}
@@ -196,18 +225,21 @@ export function Segmented<T extends string>({ options, value, onChange, scroll }
 
 export function SectionHeader({ title, action, onAction, icon, color }: { title: string; action?: string; onAction?: () => void; icon?: string; color?: string }) {
   const t = useTheme();
+  const c = color ?? t.brand;
   return (
     <View style={styles.sectionHeader}>
-      {icon ? <Icon name={icon} size={18} color={color ?? t.textDim} /> : null}
-      <Text v="label" dim style={{ flex: 1 }}>
+      <LinearGradient colors={[c, alpha(c, 0.15)]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={{ width: 4, height: 20, borderRadius: 2 }} />
+      {icon ? <Icon name={icon} size={18} color={c} /> : null}
+      <Text v="label" style={{ flex: 1 }}>
         {title}
       </Text>
       {action ? (
-        <Pressable onPress={onAction} hitSlop={12} accessibilityRole="button">
-          <Text v="small" color={t.brand} style={{ fontWeight: '700' }}>
+        <PressableScale onPress={onAction} hitSlop={12} accessibilityRole="button" feedback="select" style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+          <Text v="small" color={t.brand} style={{ fontWeight: '800' }}>
             {action}
           </Text>
-        </Pressable>
+          <Icon name="chevron-right" size={16} color={t.brand} />
+        </PressableScale>
       ) : null}
     </View>
   );
@@ -217,7 +249,9 @@ export function Loading({ label }: { label?: string }) {
   const t = useTheme();
   return (
     <View style={styles.center}>
-      <ActivityIndicator color={t.brand} size="large" />
+      <BouncingBall color={t.brand}>
+        <Icon name="soccer" size={36} color={t.text} />
+      </BouncingBall>
       {label ? (
         <Text dim style={{ marginTop: space.md }}>
           {label}
@@ -228,10 +262,15 @@ export function Loading({ label }: { label?: string }) {
 }
 
 export function EmptyState({ icon = 'calendar-blank', title, body, action, onAction }: { icon?: string; title: string; body?: string; action?: string; onAction?: () => void }) {
+  const t = useTheme();
   return (
     <View style={[styles.center, { paddingVertical: space.xxl }]}>
-      <Icon name={icon} size={40} />
-      <Text v="h3" style={{ marginTop: space.md, textAlign: 'center' }}>
+      <Float>
+        <View style={{ width: 76, height: 76, borderRadius: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: alpha(t.brand, 0.12), borderWidth: 1, borderColor: alpha(t.brand, 0.3) }}>
+          <Icon name={icon} size={36} color={t.brand} />
+        </View>
+      </Float>
+      <Text v="h2" style={{ marginTop: space.md, textAlign: 'center' }}>
         {title}
       </Text>
       {body ? (
@@ -288,7 +327,7 @@ export function StatTile({ label, value, sub, color }: { label: string; value: s
       <Text v="tiny" muted style={{ fontWeight: '700', textTransform: 'uppercase' }}>
         {label}
       </Text>
-      <Text v="h2" color={color} style={{ marginTop: 2 }}>
+      <Text v="display" color={color} style={{ marginTop: 2, fontSize: 30, lineHeight: 34 }}>
         {value}
       </Text>
       {sub ? (

@@ -144,6 +144,10 @@ export default function Settings() {
         />
         <Item icon="signal-cellular-1" title="Data saver" sub="Pause automatic refreshing. Pull down to refresh manually." right={<Switch value={prefs.dataSaver} onValueChange={(v) => update({ dataSaver: v })} accessibilityLabel="Data saver" />} />
         <Item icon="robot-outline" title="Show AI prediction when picking" right={<Switch value={prefs.showAiOnPickScreen} onValueChange={(v) => update({ showAiOnPickScreen: v })} accessibilityLabel="Show AI prediction when picking" />} />
+        <Item icon="animation-play-outline" title="Animations" sub="Springy taps, confetti and moving cards. Also follows the phone's reduce-motion setting." right={<Switch value={prefs.motion !== false} onValueChange={(v) => update({ motion: v })} accessibilityLabel="Animations" />} />
+        {Platform.OS !== 'web' ? (
+          <Item icon="vibrate" title="Vibration" sub="A light buzz on taps, picks and celebrations." right={<Switch value={prefs.haptics !== false} onValueChange={(v) => update({ haptics: v })} accessibilityLabel="Vibration" />} />
+        ) : null}
       </Card>
 
       <SectionHeader title="Data sources" />

@@ -557,6 +557,29 @@ async function me() {
   };
 }
 
+/** Everything the game screens need: level, you vs the AI, streaks, badges, results to celebrate. */
+async function gameSummary() {
+  const st = await game.loadGame();
+  const s = game.stats(st);
+  const brief = (p: game.LocalPick) => ({
+    match_id: p.matchId, sport: p.sport, league: p.league, kickoff: p.kickoff, home: p.homeName, away: p.awayName,
+    home_code: p.homeCode, away_code: p.awayCode, home_color: p.homeColor, away_color: p.awayColor, home_logo: p.homeLogo ?? null, away_logo: p.awayLogo ?? null,
+    pick: p.pick, ai_pick: p.ai_pick, status: p.status, points: p.points, final_score: p.final_score, exact_score: p.exact_score,
+  });
+  const settled = Object.values(st.picks).filter((p) => p.status !== 'pending').sort((a, b) => (b.settled_at ?? b.kickoff).localeCompare(a.settled_at ?? a.kickoff));
+  return {
+    consented: !!st.profile.consented_at,
+    display_name: st.profile.display_name,
+    level: game.levelFor(s.total_points),
+    stats: s,
+    vs_ai: game.vsAI(st),
+    badges: game.BADGES.map((b) => ({ ...b, awarded_at: st.badges[b.slug] ?? null })),
+    unseen: game.unseenResults(st).map(brief),
+    recent: settled.slice(0, 12).map(brief),
+    pending: Object.values(st.picks).filter((p) => p.status === 'pending').sort((a, b) => a.kickoff.localeCompare(b.kickoff)).map(brief),
+  };
+}
+
 async function myPicks(q: URLSearchParams) {
   const st = await game.loadGame();
   const status = q.get('status') ?? 'all';
@@ -944,6 +967,7 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
     if (seg[0] === 'matches' && seg.length === 2) return matchDetail(decodeURIComponent(seg[1]));
     if (path === '/me') return me();
     if (path === '/me/picks') return myPicks(q);
+    if (path === '/me/game') return gameSummary();
     if (path === '/me/export') {
       const st = await game.loadGame();
       return { profile: st.profile, picks: Object.values(st.picks), badges: st.badges, exported_at: new Date().toISOString() };
@@ -991,6 +1015,11 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
   if (method === 'PATCH' && path === '/me') {
     await game.updateProfile({ ...(body?.display_name ? { display_name: String(body.display_name).slice(0, 40) } : {}), ...(body?.country ? { country: body.country } : {}) });
     return me();
+  }
+  if (method === 'POST' && path === '/me/game/seen') {
+    await game.markSeen(Array.isArray(body?.ids) ? body.ids.map(String) : []);
+    notify();
+    return gameSummary();
   }
   if (method === 'POST' && path === '/me/consent') {
     await game.updateProfile({ consented_at: new Date().toISOString() });

@@ -369,3 +369,21 @@ export type RaceWeekend = { id: string; name: string; start: string; end: string
 export type F1Board = { current: RaceWeekend[]; calendar: { name: string; start: string; end: string | null }[] };
 export type F1Standing = { rank: number; name: string; flag: string | null; points: number; color: string | null };
 export type CricketMatch = { id: string; competition: string; description: string | null; format: string | null; start: string; state: 'pre' | 'in' | 'post'; status: string; venue: string | null; teams: { name: string; abbr: string; logo: string | null; score: string; winner: boolean }[] };
+
+// ------------------------------------------------------------------ game (levels, you vs the AI)
+export type GamePick = {
+  match_id: string; sport: string; league: string; kickoff: string; home: string; away: string; home_code: string; away_code: string;
+  home_color: string; away_color: string; home_logo: string | null; away_logo: string | null; pick: Outcome; ai_pick: Outcome | null;
+  status: 'pending' | 'won' | 'lost' | 'void'; points: number; final_score: [number, number] | null; exact_score: boolean;
+};
+export type GameSummary = {
+  consented: boolean;
+  display_name: string;
+  level: { level: number; name: string; next: string | null; points: number; from: number; to: number | null; progress: number };
+  stats: { total_points: number; picks_settled: number; picks_correct: number; exact_scores: number; accuracy: number | null; current_streak: number; best_streak: number; pending_picks: number };
+  vs_ai: { matches: number; you: number; ai: number; you_beat_ai: number; ai_beat_you: number; leader: 'you' | 'ai' | 'level' };
+  badges: { slug: string; name: string; description: string; icon: string; awarded_at: string | null }[];
+  unseen: GamePick[];
+  recent: GamePick[];
+  pending: GamePick[];
+};

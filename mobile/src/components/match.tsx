@@ -1,12 +1,14 @@
 import { router } from 'expo-router';
 import { Fragment, memo } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
 
 import type { CallTier, Confidence, MatchCard as MatchCardT, PredictionMini, StandingRow, TeamMini } from '@/api/types';
 import { dayLabel, kickoffTime, pct } from '@/lib/format';
-import { alpha, leagueColors, radius, space, SPORT_COLORS, TAP, useTheme } from '@/theme/theme';
+import { alpha, leagueColors, matchColors, radius, space, SPORT_COLORS, TAP, useTheme } from '@/theme/theme';
 
 import { Crest } from './crest';
+import { CountUp, PressableScale, PulseDot, useGrow } from './motion';
 import { Icon, Row, Text } from './ui';
 
 /** Team crest (official logo from the data source; colours + initials while it loads or if it can't). */
@@ -82,28 +84,61 @@ export function ConfidencePill({ level }: { level: Confidence }) {
 }
 
 /** Home / draw / away probability bar. */
-export function ProbabilityBar({ p, home, away, height = 8, showLabels = true }: { p: Pick<PredictionMini, 'home' | 'draw' | 'away'>; home: string; away: string; height?: number; showLabels?: boolean }) {
+/** Home / draw / away chances as one bar in the teams' own colours; it fills in when it appears. */
+export function ProbabilityBar({
+  p,
+  home,
+  away,
+  height = 8,
+  showLabels = true,
+  colors,
+}: {
+  p: Pick<PredictionMini, 'home' | 'draw' | 'away'>;
+  home: string;
+  away: string;
+  height?: number;
+  showLabels?: boolean;
+  /** the two teams' colours (made readable and distinct); default: the app's palette */
+  colors?: [string | null | undefined, string | null | undefined];
+}) {
   const t = useTheme();
+  const [hc, ac] = colors ? matchColors(colors[0], colors[1], t) : [t.brand, t.pending];
+  const grow = useGrow(80);
   const segs: { key: string; v: number; color: string; label: string }[] = [
-    { key: 'home', v: p.home, color: t.brand, label: home },
+    { key: 'home', v: p.home, color: hc, label: home },
     ...(p.draw !== null && p.draw !== undefined ? [{ key: 'draw', v: p.draw, color: t.draw, label: 'Draw' }] : []),
-    { key: 'away', v: p.away, color: t.pending, label: away },
+    { key: 'away', v: p.away, color: ac, label: away },
   ];
+  const total = segs.reduce((x, y) => x + Math.max(y.v, 0.02), 0);
   return (
     <View accessible accessibilityLabel={segs.map((x) => `${x.label} ${pct(x.v)}`).join(', ')}>
-      <View style={{ flexDirection: 'row', height, borderRadius: height / 2, overflow: 'hidden', gap: 2 }}>
+      <View style={{ flexDirection: 'row', height, borderRadius: height / 2, overflow: 'hidden', gap: 2, backgroundColor: alpha(t.text, 0.06) }}>
         {segs.map((x) => (
-          <View key={x.key} style={{ flex: Math.max(x.v, 0.02), backgroundColor: x.color }} />
+          <Animated.View
+            key={x.key}
+            style={{
+              width: grow.interpolate({ inputRange: [0, 1], outputRange: ['0%', `${(Math.max(x.v, 0.02) / total) * 100}%`] }),
+              flexShrink: 1,
+              backgroundColor: x.color,
+              borderRadius: height / 2,
+            }}
+          />
         ))}
       </View>
       {showLabels ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
           {segs.map((x, i) => (
             <View key={x.key} style={{ flex: 1, alignItems: i === 0 ? 'flex-start' : i === segs.length - 1 ? 'flex-end' : 'center' }}>
-              <Text v="mono" color={x.color} style={{ fontSize: 14 }}>
-                {pct(x.v)}
-              </Text>
-              <Text v="tiny" dim numberOfLines={1}>
+              <CountUp
+                value={Math.round(x.v * 100)}
+                delay={150}
+                render={(v) => (
+                  <Text v="score" color={x.color} style={{ fontSize: 30, lineHeight: 32 }}>
+                    {Math.round(v)}%
+                  </Text>
+                )}
+              />
+              <Text v="tiny" dim numberOfLines={1} style={{ fontWeight: '700' }}>
                 {x.label}
               </Text>
             </View>
@@ -118,9 +153,9 @@ export function StatusChip({ m }: { m: Pick<MatchCardT, 'status' | 'clock' | 'st
   const t = useTheme();
   if (m.status === 'live') {
     return (
-      <Row gap={4}>
-        <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: t.live }} />
-        <Text v="small" color={t.live} style={{ fontWeight: '800' }}>
+      <Row gap={0}>
+        <PulseDot color={t.live} size={7} />
+        <Text v="small" color={t.live} style={{ fontWeight: '900' }}>
           {m.clock ?? 'LIVE'}
         </Text>
       </Row>
@@ -163,6 +198,7 @@ export const MatchRow = memo(function MatchRow({ m, showLeague = true }: { m: Ma
   const t = useTheme();
   const lc = leagueColors(m.league.id);
   const accent = lc?.accent ?? SPORT_COLORS[m.sport] ?? t.brand;
+  const [hc, ac] = matchColors(m.home.color, m.away.color, t);
   const started = m.status === 'live' || m.status === 'finished';
   const live = m.status === 'live';
   const hs = m.home_score ?? 0;
@@ -185,24 +221,34 @@ export const MatchRow = memo(function MatchRow({ m, showLeague = true }: { m: Ma
         </Row>
       ));
   const center = started ? (
-    <Text style={{ fontSize: 24, fontWeight: '900', fontVariant: ['tabular-nums'] }} color={live ? t.brand : t.text} accessibilityLabel={`${hs} to ${as}`}>
-      {hs} - {as}
+    <Text v="score" style={{ fontSize: 34, lineHeight: 38 }} color={live ? t.brand : t.text} accessibilityLabel={`${hs} to ${as}`}>
+      {hs}–{as}
     </Text>
   ) : (
-    <Text v="h3" style={{ fontVariant: ['tabular-nums'] }}>
+    <Text v="h2" style={{ fontSize: 26, lineHeight: 30 }}>
       {kickoffTime(m.start_time)}
     </Text>
   );
   return (
-    <Pressable
+    <PressableScale
       onPress={() => router.push(`/match/${m.id}`)}
       accessibilityRole="button"
       accessibilityLabel={`${m.home.name} versus ${m.away.name}`}
-      style={({ pressed }) => [s.row, { backgroundColor: t.glass, borderColor: t.glassBorder, borderLeftColor: accent }, live && { borderColor: alpha(t.live, 0.5) }, pressed && { opacity: 0.75 }]}
+      scaleTo={0.975}
+      style={[s.row, { backgroundColor: t.glass, borderColor: live ? alpha(t.live, 0.65) : t.glassBorder }]}
     >
-      <Row style={{ justifyContent: 'center', marginBottom: 8 }} gap={6}>
+      <LinearGradient
+        pointerEvents="none"
+        colors={[alpha(hc, t.mode === 'dark' ? 0.24 : 0.14), alpha(hc, 0), alpha(ac, 0), alpha(ac, t.mode === 'dark' ? 0.24 : 0.14)]}
+        locations={[0, 0.38, 0.62, 1]}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
+        style={StyleSheet.absoluteFill}
+      />
+      <Row style={{ justifyContent: 'center', marginBottom: 6 }} gap={6}>
+        <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: accent }} />
         {showLeague ? (
-          <Text v="tiny" muted numberOfLines={1} style={{ fontWeight: '700', flexShrink: 1 }}>
+          <Text v="tiny" muted numberOfLines={1} style={{ fontWeight: '800', flexShrink: 1, letterSpacing: 0.4, textTransform: 'uppercase' }}>
             {m.league.short_name}
             {m.round ? ` · ${m.round}` : ''}
           </Text>
@@ -214,15 +260,15 @@ export const MatchRow = memo(function MatchRow({ m, showLeague = true }: { m: Ma
       </Row>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Row style={{ flex: 1, justifyContent: 'flex-end', minWidth: 0 }} gap={6}>
-          <Text style={{ flexShrink: 1, textAlign: 'right', fontWeight: homeLead ? '900' : '700', fontSize: m.home.short_name.length > 11 ? 13 : 15 }} numberOfLines={2} adjustsFontSizeToFit minimumFontScale={0.8}>
+          <Text v="h2" style={{ flexShrink: 1, textAlign: 'right', fontSize: m.home.short_name.length > 12 ? 17 : 20, lineHeight: 23, opacity: awayLead ? 0.65 : 1 }} numberOfLines={2} adjustsFontSizeToFit minimumFontScale={0.8}>
             {m.home.short_name}
           </Text>
-          <TeamBadge team={m.home} size={34} />
+          <TeamBadge team={m.home} size={36} />
         </Row>
         <View style={{ width: 80, alignItems: 'center' }}>{center}</View>
         <Row style={{ flex: 1, minWidth: 0 }} gap={6}>
-          <TeamBadge team={m.away} size={34} />
-          <Text style={{ flexShrink: 1, fontWeight: awayLead ? '900' : '700', fontSize: m.away.short_name.length > 11 ? 13 : 15 }} numberOfLines={2} adjustsFontSizeToFit minimumFontScale={0.8}>
+          <TeamBadge team={m.away} size={36} />
+          <Text v="h2" style={{ flexShrink: 1, fontSize: m.away.short_name.length > 12 ? 17 : 20, lineHeight: 23, opacity: homeLead ? 0.65 : 1 }} numberOfLines={2} adjustsFontSizeToFit minimumFontScale={0.8}>
             {m.away.short_name}
           </Text>
         </Row>
@@ -242,7 +288,7 @@ export const MatchRow = memo(function MatchRow({ m, showLeague = true }: { m: Ma
       </View>
       {!started && p ? (
         <View style={{ marginTop: space.sm }}>
-          <ProbabilityBar p={p} home={m.home.code} away={m.away.code} height={4} showLabels={false} />
+          <ProbabilityBar p={p} home={m.home.code} away={m.away.code} height={6} showLabels={false} colors={[m.home.color, m.away.color]} />
           <Row style={{ justifyContent: 'space-between', marginTop: 6 }}>
             <CallBadge p={p} home={m.home.short_name} away={m.away.short_name} />
             {p.tier ? <TierPill tier={p.tier} /> : <ConfidencePill level={p.confidence} />}
@@ -250,7 +296,7 @@ export const MatchRow = memo(function MatchRow({ m, showLeague = true }: { m: Ma
         </View>
       ) : null}
       <PickTag m={m} />
-    </Pressable>
+    </PressableScale>
   );
 });
 
@@ -378,7 +424,7 @@ export function StandingsTable({ rows, highlight = [], sport = 'football', compa
 }
 
 const s = StyleSheet.create({
-  row: { borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth * 2, borderLeftWidth: 3, padding: space.md, marginBottom: space.sm, minHeight: TAP + 24 },
+  row: { borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth * 2, padding: space.md, marginBottom: space.sm, minHeight: TAP + 24, overflow: 'hidden' },
   pill: { flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: 7, paddingVertical: 3, borderRadius: radius.pill, borderWidth: 1 },
   pickTag: { alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: space.sm, paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill, borderWidth: 1 },
   form: { width: 20, height: 20, borderRadius: 4, alignItems: 'center', justifyContent: 'center' },

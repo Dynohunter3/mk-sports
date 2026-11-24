@@ -10,6 +10,7 @@ import { Pressable, RefreshControl, SectionList, View } from 'react-native';
 import { useApi } from '@/api/cache';
 import type { GradedCall, MatchCard, PredictionsList, RecordWindow } from '@/api/types';
 import { Glass } from '@/components/glass';
+import { PressableScale } from '@/components/motion';
 import { CallBadge, ProbabilityBar, TeamBadge, TierPill } from '@/components/match';
 import { Chip, ChipRow, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatusBanner, Text } from '@/components/ui';
 import { dayLabel, kickoffTime, pct, relative } from '@/lib/format';
@@ -23,7 +24,7 @@ const PredictionRow = memo(function PredictionRow({ m, showLeague }: { m: MatchC
   const t = useTheme();
   const p = m.prediction!;
   return (
-    <Pressable onPress={m.offline ? undefined : () => router.push(`/match/${m.id}`)} disabled={m.offline} accessibilityRole="button" accessibilityLabel={`${m.home.short_name} against ${m.away.short_name}`} style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}>
+    <PressableScale onPress={m.offline ? undefined : () => router.push(`/match/${m.id}`)} disabled={m.offline} accessibilityRole="button" accessibilityLabel={`${m.home.short_name} against ${m.away.short_name}`} scaleTo={0.975}>
       <Glass style={{ marginBottom: space.sm }}>
         <Row style={{ justifyContent: 'space-between', marginBottom: 6 }}>
           <Text v="tiny" muted style={{ fontWeight: '700' }}>
@@ -44,7 +45,7 @@ const PredictionRow = memo(function PredictionRow({ m, showLeague }: { m: MatchC
           </Row>
         ))}
         <View style={{ marginTop: 6 }}>
-          <ProbabilityBar p={p} home={m.home.code} away={m.away.code} height={5} showLabels={false} />
+          <ProbabilityBar p={p} home={m.home.code} away={m.away.code} height={6} showLabels={false} colors={[m.home.color, m.away.color]} />
         </View>
         <Row style={{ justifyContent: 'space-between', marginTop: space.sm }} gap={space.sm}>
           <CallBadge p={p} home={m.home.short_name} away={m.away.short_name} />
@@ -58,7 +59,7 @@ const PredictionRow = memo(function PredictionRow({ m, showLeague }: { m: MatchC
           ) : null}
         </Row>
       </Glass>
-    </Pressable>
+    </PressableScale>
   );
 });
 

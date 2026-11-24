@@ -36,7 +36,7 @@ export type LocalPick = {
 };
 
 export type Profile = { display_name: string; created_at: string; consented_at: string | null; country: string | null };
-type State = { profile: Profile; picks: Record<string, LocalPick>; badges: Record<string, string> };
+type State = { profile: Profile; picks: Record<string, LocalPick>; badges: Record<string, string>; seen?: Record<string, string> };
 
 const KEY = 'game:v1';
 let state: State | null = null;
@@ -215,6 +215,74 @@ export function stats(st: State) {
     pending_picks: Object.values(st.picks).filter((p) => p.status === 'pending').length,
     global_rank_season: null,
   };
+}
+
+// ------------------------------------------------------------------ levels, you vs the AI, results to celebrate
+/** Levels by total points: each needs a little more than the last. */
+export const LEVELS = [
+  { name: 'Rookie', from: 0 },
+  { name: 'Amateur', from: 10 },
+  { name: 'Semi-pro', from: 25 },
+  { name: 'Pro', from: 50 },
+  { name: 'Star', from: 90 },
+  { name: 'Captain', from: 140 },
+  { name: 'Legend', from: 210 },
+  { name: 'Icon', from: 300 },
+  { name: 'GOAT', from: 420 },
+];
+
+export function levelFor(points: number) {
+  let i = 0;
+  while (i + 1 < LEVELS.length && points >= LEVELS[i + 1].from) i++;
+  const cur = LEVELS[i];
+  const next = LEVELS[i + 1] ?? null;
+  return {
+    level: i + 1,
+    name: cur.name,
+    next: next?.name ?? null,
+    points,
+    from: cur.from,
+    to: next?.from ?? null,
+    progress: next ? (points - cur.from) / (next.from - cur.from) : 1,
+  };
+}
+
+/** You against the AI on the same matches: every settled pick made when the AI had a call. */
+export function vsAI(st: State) {
+  const rows = Object.values(st.picks).filter((p) => p.ai_pick && p.final_score && (p.status === 'won' || p.status === 'lost'));
+  const outcome = (p: LocalPick) => {
+    const [h, a] = p.final_score!;
+    return h > a ? 'home' : h < a ? 'away' : 'draw';
+  };
+  let you = 0;
+  let ai = 0;
+  let youOnly = 0;
+  let aiOnly = 0;
+  for (const p of rows) {
+    const o = outcome(p);
+    const y = p.pick === o;
+    const m = p.ai_pick === o;
+    you += +y;
+    ai += +m;
+    youOnly += +(y && !m);
+    aiOnly += +(m && !y);
+  }
+  return { matches: rows.length, you, ai, you_beat_ai: youOnly, ai_beat_you: aiOnly, leader: you > ai ? 'you' : ai > you ? 'ai' : 'level' };
+}
+
+/** Settled picks the player has not seen yet (for the "results are in" celebration). */
+export function unseenResults(st: State): LocalPick[] {
+  const seen = st.seen ?? {};
+  return Object.values(st.picks)
+    .filter((p) => p.status !== 'pending' && p.settled_at && !seen[p.matchId])
+    .sort((a, b) => (b.settled_at ?? '').localeCompare(a.settled_at ?? ''));
+}
+
+export async function markSeen(ids: string[]) {
+  const st = await loadGame();
+  st.seen = { ...(st.seen ?? {}) };
+  for (const id of ids) st.seen[id] = new Date().toISOString();
+  await save();
 }
 
 function award(st: State): string[] {

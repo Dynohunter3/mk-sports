@@ -13,6 +13,7 @@ import { notify } from '@/lib/dialogs';
 import { clampScore, outcomeLabel, relative, rulesText } from '@/lib/format';
 import { useNow } from '@/lib/useNow';
 import { usePrefs } from '@/state/prefs';
+import { FONTS } from '@/theme/fonts';
 import { radius, space, TAP, useTheme } from '@/theme/theme';
 
 const BADGE_NAMES: Record<string, string> = {
@@ -236,7 +237,7 @@ export default function PickScreen() {
           </Row>
           {prefs.showAiOnPickScreen ? (
             <>
-              <ProbabilityBar p={m.prediction} home={m.home.short_name} away={m.away.short_name} />
+              <ProbabilityBar p={m.prediction} home={m.home.short_name} away={m.away.short_name} colors={[m.home.color, m.away.color]} />
               <Text v="small" dim style={{ marginTop: space.sm }}>
                 Most likely score {m.prediction.score[0]}-{m.prediction.score[1]} ({m.prediction.confidence} confidence). Beat the AI by picking against it, and earn a badge when you're right.
               </Text>
@@ -285,7 +286,7 @@ function ScoreInput({ label, value, onChange, stepper, step, disabled }: { label
       {stepper ? (
         <>
           {btn(step, 'plus')}
-          <Text style={{ fontSize: 32, fontWeight: '800', fontVariant: ['tabular-nums'] }}>{value}</Text>
+          <Text v="score">{value}</Text>
           {btn(-step, 'minus')}
         </>
       ) : (
@@ -296,7 +297,7 @@ function ScoreInput({ label, value, onChange, stepper, step, disabled }: { label
           maxLength={3}
           editable={!disabled}
           accessibilityLabel={`${label} score`}
-          style={{ width: 88, minHeight: 56, textAlign: 'center', fontSize: 28, fontWeight: '800', color: t.text, backgroundColor: t.surface2, borderRadius: radius.md }}
+          style={{ width: 88, minHeight: 56, textAlign: 'center', fontSize: 32, fontFamily: FONTS.display, color: t.text, backgroundColor: t.surface2, borderRadius: radius.md }}
         />
       )}
     </View>

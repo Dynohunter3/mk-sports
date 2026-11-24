@@ -15,6 +15,10 @@ export type Prefs = {
   leagues: string[];
   teams: string[];
   theme: 'dark' | 'light' | 'system';
+  /** vibration feedback on taps, picks and celebrations */
+  haptics: boolean;
+  /** animations (off = calmer, also follows the system's reduce-motion setting) */
+  motion: boolean;
   /** Pauses automatic refreshing to save mobile data. */
   dataSaver: boolean;
   showAiOnPickScreen: boolean;
@@ -34,6 +38,8 @@ const DEFAULTS: Prefs = {
   leagues: [],
   teams: [],
   theme: 'dark',
+  haptics: true,
+  motion: true,
   dataSaver: false,
   showAiOnPickScreen: true,
   useMarket: true,
