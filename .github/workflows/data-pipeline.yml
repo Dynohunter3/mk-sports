@@ -74,9 +74,9 @@ jobs:
       - name: Prepare the public site
         run: |
           rm -rf ../site && mkdir -p ../site
+          cp -r ../pages/. ../site/   # the download page and the league-link page
           cp var/publish/*.json ../site/
           cp var/models/current.json ../site/model.json
-          echo "MK Sports published predictions. Data: football-data.co.uk, openfootball. Information and entertainment only." > ../site/index.html
       - name: Publish mirror (predictions branch)
         working-directory: site
         run: |

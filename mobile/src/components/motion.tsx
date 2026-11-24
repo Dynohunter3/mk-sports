@@ -182,6 +182,29 @@ export function PulseDot({ color, size = 8 }: { color: string; size?: number }) 
   );
 }
 
+/** A soft glow that breathes in and out behind a row (your team in a table). */
+export function PulseGlow({ color, radius = 10, low = 0.08, high = 0.34 }: { color: string; radius?: number; low?: number; high?: number }) {
+  const on = motionEnabled();
+  const a = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (!on) return;
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(a, { toValue: 1, duration: 950, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(a, { toValue: 0, duration: 950, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [a, on]);
+  return (
+    <Animated.View
+      pointerEvents="none"
+      style={[StyleSheet.absoluteFill, { borderRadius: radius, backgroundColor: color, opacity: on ? a.interpolate({ inputRange: [0, 1], outputRange: [low, high] }) : (low + high) / 2 }]}
+    />
+  );
+}
+
 // ------------------------------------------------------------------ loading
 /** A placeholder block with a moving sheen (instead of a spinner). */
 export function Skeleton({ height = 16, width = '100%', radius = 8, style, base = 'rgba(255,255,255,0.07)' }: { height?: number; width?: number | `${number}%`; radius?: number; style?: StyleProp<ViewStyle>; base?: string }) {

@@ -5,10 +5,10 @@ import { Animated, Pressable, StyleSheet, View } from 'react-native';
 
 import type { CallTier, Confidence, MatchCard as MatchCardT, PredictionMini, StandingRow, TeamMini } from '@/api/types';
 import { dayLabel, kickoffTime, pct } from '@/lib/format';
-import { alpha, leagueColors, matchColors, radius, space, SPORT_COLORS, TAP, useTheme } from '@/theme/theme';
+import { alpha, leagueColors, matchColors, radius, readable, space, SPORT_COLORS, TAP, useTheme } from '@/theme/theme';
 
 import { Crest } from './crest';
-import { CountUp, PressableScale, PulseDot, useGrow } from './motion';
+import { CountUp, PressableScale, PulseDot, PulseGlow, useGrow } from './motion';
 import { Icon, Row, Text } from './ui';
 
 /** Team crest (official logo from the data source; colours + initials while it loads or if it can't). */
@@ -384,16 +384,21 @@ export function StandingsTable({ rows, highlight = [], sport = 'football', compa
       </Row>
       {shown.map((r, idx) => {
         const on = highlight.includes(r.team.id);
+        const glow = on ? readable(r.team.color, t, t.brand) : null;
         const rowBody = (
-          <Row style={[s.tableRow, { borderColor: t.glassBorder }, on && { backgroundColor: alpha(t.brand, 0.14) }]} gap={2}>
+          <Row style={[s.tableRow, { borderColor: t.glassBorder }, on && { borderRadius: 10, overflow: 'hidden', borderTopWidth: 0 }]} gap={2}>
+            {/* your team's row breathes in its own colour instead of a flat highlight */}
+            {glow ? <PulseGlow color={glow} /> : null}
             <Text v="small" dim style={{ width: 24, fontWeight: '700' }}>
               {r.position}
             </Text>
             <Row style={{ flex: 1 }} gap={8}>
               <TeamBadge team={r.team} size={22} />
-              <Text v="small" numberOfLines={1} style={{ flex: 1, fontWeight: on ? '800' : '600' }}>
+              <Text v="small" numberOfLines={1} style={{ flexShrink: 1, fontWeight: on ? '900' : '600' }}>
                 {r.team.short_name}
               </Text>
+              {glow ? <PulseDot color={glow} size={6} /> : null}
+              <View style={{ flex: 1 }} />
             </Row>
             {cols.map((c) => (
               <Text key={c.label} v="small" style={[s.tableCell, c.width ? { width: c.width } : null, c.bold ? { fontWeight: '800' } : null]}>

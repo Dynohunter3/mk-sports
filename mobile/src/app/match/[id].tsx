@@ -8,9 +8,10 @@ import { useApi } from '@/api/cache';
 import type { FormGame, Injury, LineupPlayer, MatchCentre, MatchDetail, TeamStat, TimelineItem } from '@/api/types';
 import { Glass } from '@/components/glass';
 import { ConfidencePill, finalLabel, FormPills, ProbabilityBar, StandingsTable, StatusChip, TeamBadge, TierPill } from '@/components/match';
-import { kitColors, Pitch, ShotMap } from '@/components/pitch';
+import { kitColors, ShotMap, TeamPitch } from '@/components/pitch';
 import { PlayerPhoto } from '@/components/crest';
 import { Float, PressableScale } from '@/components/motion';
+import { goalsOutlook, goalsRead } from '@/engine/scorelines';
 import { Button, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatusBanner, Text } from '@/components/ui';
 import { confirm, notify } from '@/lib/dialogs';
 import { dayLabel, kickoffTime, outcomeLabel, relative, rulesText } from '@/lib/format';
@@ -140,7 +141,7 @@ function MatchHero({ m, xg }: { m: MatchDetail; xg: MatchCentre['xg'] }) {
           </Row>
           <Row style={{ alignItems: 'flex-start', marginTop: space.md }}>
             {team(m.home, 'home')}
-            <View style={{ minWidth: 118, alignItems: 'center', paddingTop: 10 }}>
+            <View style={{ width: 128, alignItems: 'center', paddingTop: 10 }}>
               {m.status === 'live' ? (
                 <View style={{ paddingHorizontal: 10, paddingVertical: 2, borderRadius: 12, backgroundColor: 'rgba(0,0,0,0.35)' }}>
                   <StatusChip m={m} />
@@ -150,7 +151,16 @@ function MatchHero({ m, xg }: { m: MatchDetail; xg: MatchCentre['xg'] }) {
                   {m.status === 'finished' ? finalLabel(m.clock) : m.status === 'scheduled' ? dayLabel(new Date(m.start_time)) : m.status}
                 </Text>
               )}
-              <Text v={started ? 'hero' : 'display'} color="#FFFFFF" style={started ? { fontSize: 60, lineHeight: 64 } : { fontSize: 40, lineHeight: 44, marginTop: 2 }} accessibilityLabel={started ? `Score ${m.home_score} to ${m.away_score}` : undefined}>
+              <Text
+                v={started ? 'hero' : 'display'}
+                color="#FFFFFF"
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.5}
+                maxFontSizeMultiplier={1.1}
+                style={[{ alignSelf: 'stretch', textAlign: 'center' }, started ? { fontSize: 56, lineHeight: 62 } : { fontSize: 38, lineHeight: 44, marginTop: 2 }]}
+                accessibilityLabel={started ? `Score ${m.home_score} to ${m.away_score}` : undefined}
+              >
                 {started ? `${m.home_score}–${m.away_score}` : kickoffTime(m.start_time)}
               </Text>
               {xg && started ? (
@@ -237,6 +247,88 @@ function CallRow({ icon, color, title, value }: { icon: string; color: string; t
         {value}
       </Text>
     </Row>
+  );
+}
+
+/** Goals outlook: expected goals, the most likely scorelines, over/under and clean sheets (model estimates). */
+function GoalsOutlook({ m, p }: { m: MatchDetail; p: NonNullable<MatchDetail['prediction_full']> }) {
+  const t = useTheme();
+  const [lh, la] = p.expected;
+  const o = goalsOutlook(lh, la);
+  const [hc, ac] = matchColors(m.home.color, m.away.color, t);
+  const over = p.goals?.over25 ?? o.over25;
+  const maxXg = Math.max(lh, la, 0.1);
+  const bar = (v: number, c: string) => (
+    <View style={{ flex: 1, height: 10, borderRadius: 5, backgroundColor: alpha(t.text, 0.06), overflow: 'hidden' }}>
+      <View style={{ width: `${(v / maxXg) * 100}%`, height: '100%', borderRadius: 5, backgroundColor: c }} />
+    </View>
+  );
+  return (
+    <>
+      <SectionHeader title="Goals outlook" icon="soccer-field" color={t.accent2} />
+      <Glass>
+        <Text v="small" dim>
+          {goalsRead(lh, la, m.home.short_name, m.away.short_name)}
+        </Text>
+        <View style={{ marginTop: space.md, gap: 8 }}>
+          {(
+            [
+              [m.home.short_name, lh, hc],
+              [m.away.short_name, la, ac],
+            ] as const
+          ).map(([name, v, c]) => (
+            <Row key={name} gap={space.sm}>
+              <Text v="small" style={{ width: 96, fontWeight: '800' }} numberOfLines={1}>
+                {name}
+              </Text>
+              {bar(v, c)}
+              <Text v="h2" style={{ width: 44, textAlign: 'right', fontSize: 20 }}>
+                {v.toFixed(1)}
+              </Text>
+            </Row>
+          ))}
+          <Text v="tiny" muted>
+            Expected goals from the model
+          </Text>
+        </View>
+        <Text v="label" style={{ marginTop: space.md }}>
+          Most likely scores
+        </Text>
+        <Row style={{ flexWrap: 'wrap', marginTop: 6 }} gap={8}>
+          {o.top.map((c, i) => (
+            <View key={`${c.h}-${c.a}`} style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.md, backgroundColor: i === 0 ? alpha(t.brand, 0.18) : alpha(t.text, 0.06), borderWidth: 1, borderColor: i === 0 ? alpha(t.brand, 0.6) : 'transparent', alignItems: 'center' }}>
+              <Text v="h2" style={{ fontSize: 20, lineHeight: 22 }}>
+                {c.h}–{c.a}
+              </Text>
+              <Text v="tiny" dim style={{ fontWeight: '700' }}>
+                {Math.round(c.p * 100)}%
+              </Text>
+            </View>
+          ))}
+        </Row>
+        <Row style={{ marginTop: space.md }} gap={space.sm}>
+          {(
+            [
+              ['Over 2.5 goals', over],
+              [`${m.home.code} clean sheet`, o.homeCleanSheet],
+              [`${m.away.code} clean sheet`, o.awayCleanSheet],
+            ] as const
+          ).map(([label, v]) => (
+            <View key={label} style={{ flex: 1, padding: space.sm, borderRadius: radius.md, backgroundColor: alpha(t.text, 0.05) }}>
+              <Text v="tiny" muted numberOfLines={2} style={{ fontWeight: '700' }}>
+                {label}
+              </Text>
+              <Text v="h2" style={{ fontSize: 22 }}>
+                {Math.round(v * 100)}%
+              </Text>
+            </View>
+          ))}
+        </Row>
+        <Text v="tiny" muted style={{ marginTop: space.sm }}>
+          Model estimates from the expected goals. Even the most likely score usually doesn't happen{p.goals ? '; over/under 2.5 was right 57% of the time in backtests' : ''}.
+        </Text>
+      </Glass>
+    </>
   );
 }
 
@@ -381,6 +473,7 @@ function Overview({ m }: { m: MatchDetail }) {
               {p.trigger === 'team_news' ? ' after team news' : ''}
             </Text>
           </Glass>
+          {m.sport === 'football' && p.expected && p.expected[0] > 0 && p.expected[1] > 0 ? <GoalsOutlook m={m} p={p} /> : null}
         </>
       ) : m.status === 'scheduled' ? (
         <Glass style={{ marginTop: space.md }}>
@@ -463,6 +556,7 @@ function Overview({ m }: { m: MatchDetail }) {
 // ------------------------------------------------------------------ line-ups
 function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined; loading: boolean }) {
   const t = useTheme();
+  const [side, setSide] = useState<'home' | 'away'>('home');
   if (!c?.lineups) {
     return <EmptyState icon="tshirt-crew-outline" title={loading ? 'Loading line-ups…' : 'Line-ups not announced yet'} body={loading ? undefined : 'Teams usually publish them about an hour before kick-off.'} />;
   }
@@ -470,7 +564,7 @@ function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined
   const [hc, ac] = kitColors(home.color ?? m.home.color, away.color ?? m.away.color);
   const open = (p: LineupPlayer) => p.id && router.push({ pathname: '/player/[id]', params: { id: p.id, league: m.league.id, match: m.id } });
   const bench = (l: typeof home, color: string, team: MatchDetail['home']) => (
-    <Glass style={{ flex: 1 }} padded={false}>
+    <Glass padded={false}>
       <Row gap={6} style={{ padding: space.md, paddingBottom: space.sm }}>
         <TeamBadge team={team} size={18} />
         <Text v="small" style={{ fontWeight: '800', flex: 1 }} numberOfLines={1}>
@@ -480,7 +574,7 @@ function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined
       {l.bench.map((p, i) => (
         <Pressable key={p.id || p.name} onPress={() => open(p)} accessibilityRole="button" style={{ borderTopWidth: i ? 1 : 0, borderColor: t.glassBorder }}>
           <Row gap={8} style={{ paddingHorizontal: space.md, paddingVertical: 8 }}>
-            <PlayerPhoto url={p.headshot} jersey={p.jersey} color={color} size={26} />
+            <PlayerPhoto url={p.headshot} jersey={p.jersey} color={color} size={34} />
             <View style={{ flex: 1 }}>
               <Text v="small" style={{ fontWeight: p.subbedIn !== null ? '800' : '500' }} numberOfLines={1}>
                 {p.short}
@@ -501,15 +595,47 @@ function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined
       ))}
     </Glass>
   );
+  const lu = side === 'home' ? home : away;
+  const team = side === 'home' ? m.home : m.away;
+  const kit = side === 'home' ? hc : ac;
   return (
     <View style={{ marginTop: space.md }}>
-      <Row style={{ justifyContent: 'space-between', marginBottom: space.sm }}>
-        <Row gap={6}>
-          <TeamBadge team={m.away} size={20} />
-          <Text v="small" style={{ fontWeight: '800' }}>
-            {m.away.short_name} · {away.formation ?? ''}
-          </Text>
-        </Row>
+      {/* one team at a time on a full pitch: pick the side */}
+      <Row gap={space.sm} style={{ marginBottom: space.sm }}>
+        {(
+          [
+            ['home', m.home, home, hc],
+            ['away', m.away, away, ac],
+          ] as const
+        ).map(([k, tm, l, col]) => {
+          const on = side === k;
+          return (
+            <PressableScale
+              key={k}
+              onPress={() => setSide(k)}
+              feedback="select"
+              accessibilityRole="tab"
+              accessibilityState={{ selected: on }}
+              style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, padding: space.sm, borderRadius: radius.md, borderWidth: 1.5, borderColor: on ? col : t.glassBorder, backgroundColor: on ? alpha(col, 0.18) : t.glass }}
+            >
+              <TeamBadge team={tm} size={26} />
+              <View style={{ flex: 1 }}>
+                <Text v="h2" style={{ fontSize: 17, lineHeight: 19 }} numberOfLines={1}>
+                  {tm.short_name.toUpperCase()}
+                </Text>
+                <Text v="tiny" dim style={{ fontWeight: '700' }}>
+                  {l.formation ?? 'Line-up'}
+                </Text>
+              </View>
+            </PressableScale>
+          );
+        })}
+      </Row>
+      <TeamPitch key={side} lineup={lu} color={kit} onPlayer={open} />
+      <Row style={{ justifyContent: 'space-between', marginTop: space.xs }}>
+        <Text v="tiny" muted style={{ flex: 1 }}>
+          Tap a player for this match, season stats and recent form.
+        </Text>
         {c.referee ? (
           <Row gap={4}>
             <Icon name="whistle" size={14} />
@@ -519,21 +645,8 @@ function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined
           </Row>
         ) : null}
       </Row>
-      <Pitch home={home} away={away} homeColor={m.home.color} awayColor={m.away.color} onPlayer={open} />
-      <Row gap={6} style={{ marginTop: space.sm }}>
-        <TeamBadge team={m.home} size={20} />
-        <Text v="small" style={{ fontWeight: '800' }}>
-          {m.home.short_name} · {home.formation ?? ''}
-        </Text>
-      </Row>
-      <Text v="tiny" muted style={{ marginTop: space.xs }}>
-        Tap a player for this match, season stats and recent form.
-      </Text>
-      <SectionHeader title="Substitutes" icon="swap-vertical" />
-      <View style={{ flexDirection: 'row', gap: space.sm }}>
-        {bench(home, hc, m.home)}
-        {bench(away, ac, m.away)}
-      </View>
+      <SectionHeader title={`${team.short_name} substitutes`} icon="swap-vertical" />
+      {bench(lu, kit, team)}
     </View>
   );
 }

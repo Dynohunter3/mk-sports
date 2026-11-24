@@ -124,3 +124,20 @@ test('scorelines agree with blended probabilities', () => {
   const b = basketballScoreFor({ home: 0.3, away: 0.7 }, 226, 12);
   assert.ok(b.score[1] > b.score[0] && b.margin < 0 && Math.abs(b.score[0] + b.score[1] - 226) <= 1);
 });
+
+test('goals outlook: a proper score grid, sensible over/under and clean sheets', async () => {
+  const { goalsOutlook, goalsRead, scoreGrid } = await import('./scorelines');
+  const g = scoreGrid(1.6, 1.1);
+  assert.ok(Math.abs(g.flat().reduce((s, v) => s + v, 0) - 1) < 1e-9);
+  const o = goalsOutlook(1.6, 1.1);
+  assert.equal(o.top.length, 5);
+  assert.ok(o.top[0].p >= o.top[4].p);
+  assert.ok(o.over25 > 0.4 && o.over25 < 0.6, String(o.over25)); // 2.7 expected goals: near a coin flip
+  // a home clean sheet means the away side (1.1 expected) scores none: likelier than the home side (1.6) scoring none
+  assert.ok(o.homeCleanSheet < 0.4 && o.awayCleanSheet < o.homeCleanSheet);
+  const low = goalsOutlook(0.8, 0.7);
+  assert.ok(low.over25 < 0.25);
+  assert.deepEqual([low.top[0].h, low.top[0].a], [0, 0]);
+  assert.match(goalsRead(1.9, 0.8, 'Arsenal', 'Fulham'), /Arsenal expected to create more/);
+  assert.match(goalsRead(0.9, 0.9, 'A', 'B'), /tight, low-scoring.*little between/);
+});

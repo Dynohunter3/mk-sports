@@ -22,6 +22,7 @@ const KEEP_RULES = `
 -keep class expo.modules.taskManager.** { *; }
 -keep class expo.modules.backgroundtask.** { *; }
 -keep class expo.modules.notifications.** { *; }
+-keep class com.asterinet.react.bgactions.** { *; }
 # --- end MK Sports ---
 `;
 

@@ -35,7 +35,17 @@ export type LocalPick = {
   settled_at: string | null;
 };
 
-export type Profile = { display_name: string; created_at: string; consented_at: string | null; country: string | null };
+export type Profile = {
+  display_name: string;
+  created_at: string;
+  consented_at: string | null;
+  country: string | null;
+  /** random id for private-league score cards (made once per phone) */
+  member_id?: string;
+  /** an emoji shown next to the name */
+  avatar?: string;
+};
+export const AVATARS = ['⚽', '🦁', '🐆', '🦅', '🔥', '⚡', '👑', '🎯', '🚀', '🐐', '🌍', '💎'];
 type State = { profile: Profile; picks: Record<string, LocalPick>; badges: Record<string, string>; seen?: Record<string, string> };
 
 const KEY = 'game:v1';
@@ -57,6 +67,10 @@ export const BADGES = [
 export async function loadGame(): Promise<State> {
   if (!state) {
     state = (await readKV<State>(KEY)) ?? { profile: { display_name: 'You', created_at: new Date().toISOString(), consented_at: null, country: null }, picks: {}, badges: {} };
+    if (!state.profile.member_id) {
+      state.profile.member_id = Array.from({ length: 12 }, () => 'abcdefghijkmnpqrstuvwxyz23456789'[Math.floor(Math.random() * 32)]).join('');
+      await writeKV(KEY, state);
+    }
   }
   return state;
 }

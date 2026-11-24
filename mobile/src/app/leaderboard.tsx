@@ -224,6 +224,7 @@ function MyGame() {
                       : `Dead level after ${vs.matches} matches.`}
               </Text>
               <Button title="Quick Picks" icon="cards-playing-outline" onPress={() => router.push('/play')} style={{ marginTop: space.md }} />
+              <Button title="Private leagues" icon="account-group" kind="secondary" onPress={() => router.push('/private-leagues')} style={{ marginTop: space.sm }} />
             </Glass>
           </FadeIn>
 

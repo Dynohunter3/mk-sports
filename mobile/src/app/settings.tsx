@@ -3,13 +3,18 @@ import { router } from 'expo-router';
 import { ReactNode, useState } from 'react';
 import { Linking, Platform, Pressable, ScrollView, Share, Switch, TextInput, View } from 'react-native';
 
+import { ProfileEditor } from '@/components/profile';
+import { CONTACT } from '@/data/contact';
+import { SITE } from '@/data/pleagues';
+
 import { invalidate } from '@/api/cache';
 import { api, API_URL } from '@/api/client';
 import type { Me } from '@/api/types';
 import { useAuth } from '@/auth/auth';
 import { Button, Card, Disclaimer, Icon, Row, SectionHeader, Segmented, Text } from '@/components/ui';
 import { confirm, notify } from '@/lib/dialogs';
-import { NOTIFY_SUPPORTED, requestPermission } from '@/notify/notifications';
+import { startLiveTracking } from '@/notify/live';
+import { NOTIFY_SUPPORTED, requestPermission, sendTestAlerts } from '@/notify/notifications';
 import { usePrefs } from '@/state/prefs';
 import { radius, space, TAP, useTheme } from '@/theme/theme';
 
@@ -118,11 +123,45 @@ export default function Settings() {
         {NOTIFY_SUPPORTED ? (
           <>
             <Text v="small" dim>
-              For {prefs.favoriteTeam ? prefs.favoriteTeam.name : 'your team'}, matches you've picked and matches you follow with the bell. Reminders arrive on time. Goal and result alerts are instant while the app is open; in the background Android checks about every 15 minutes, so they can arrive a little late.
+              For {prefs.favoriteTeam ? prefs.favoriteTeam.name : 'your team'}, matches you've picked and matches you follow with the bell. Reminders and kick-off alerts are scheduled for the exact time. During your matches, live tracking checks every 30 seconds for goals and full time.
             </Text>
             <Item icon="soccer" title="Goals, kick-off & full time" right={<Switch value={prefs.notify.matchAlerts} onValueChange={(v) => setNotify({ matchAlerts: v })} accessibilityLabel="Goal and result alerts" />} />
+            {Platform.OS === 'android' ? (
+              <Item
+                icon="access-point"
+                title="Live tracking during your matches"
+                sub="A live-score notification while your matches are on; goal and full-time alerts within about 30 seconds. Starts when you open the app during a match (the kick-off alert is a handy way in)."
+                right={<Switch value={prefs.notify.matchAlerts && prefs.notify.liveTracking !== false} disabled={!prefs.notify.matchAlerts} onValueChange={(v) => setNotify({ liveTracking: v })} accessibilityLabel="Live tracking" />}
+              />
+            ) : null}
             <Item icon="alarm" title="Kick-off reminders (30 min before)" right={<Switch value={prefs.notify.reminders} onValueChange={(v) => setNotify({ reminders: v })} accessibilityLabel="Kick-off reminders" />} />
             <Item icon="hand-pointing-right" title="Pick results & points" right={<Switch value={prefs.notify.pickResults} onValueChange={(v) => setNotify({ pickResults: v })} accessibilityLabel="Pick results" />} />
+            <Item
+              icon="bell-ring-outline"
+              title="Test my alerts"
+              sub="Sends one alert now and one in exactly a minute"
+              onPress={async () => {
+                const ok = await sendTestAlerts();
+                if (!ok) notify('Notifications are off', 'Allow notifications for MK Sports in your phone settings, then try again.');
+                else if (Platform.OS === 'android' && prefs.notify.matchAlerts && prefs.notify.liveTracking !== false) startLiveTracking().catch(() => undefined); // shows the live-tracking notification for a moment
+              }}
+            />
+            {Platform.OS === 'android' ? (
+              <Item
+                icon="battery-heart-variant"
+                title="Alerts late or missing?"
+                sub="Let MK Sports run in the background"
+                onPress={() =>
+                  confirm(
+                    'Keep alerts on time',
+                    "Some phones pause apps to save battery, which delays alerts. In the next screen open Battery and choose 'Unrestricted' (or turn off battery optimisation). On Tecno, Infinix and itel phones also allow Auto-start in Phone Master; on Xiaomi, allow Autostart.",
+                    'Open settings',
+                  ).then((go) => {
+                    if (go) Linking.openSettings().catch(() => undefined);
+                  })
+                }
+              />
+            ) : null}
           </>
         ) : (
           <Text v="small" dim>
@@ -192,29 +231,9 @@ export default function Settings() {
           <SectionHeader title={auth.mode === 'device' ? 'Profile' : 'Account'} />
           <Card style={{ gap: space.sm }}>
             <Text v="small" dim>
-              Display name (shown on leaderboards)
+              Your name and avatar (shown in private leagues)
             </Text>
-            <Row>
-              <TextInput
-                value={name}
-                onChangeText={setName}
-                maxLength={40}
-                style={{ flex: 1, minHeight: TAP, borderRadius: radius.md, borderWidth: 1, borderColor: t.border, color: t.text, paddingHorizontal: space.md, backgroundColor: t.surface2 }}
-                accessibilityLabel="Display name"
-              />
-              <Button
-                title="Save"
-                kind="secondary"
-                disabled={name.trim().length < 2 || name === me.display_name}
-                loading={savingName}
-                onPress={async () => {
-                  setSavingName(true);
-                  await api('/me', { method: 'PATCH', body: { display_name: name.trim() } }).catch(() => notify('Could not save name'));
-                  await auth.refreshMe();
-                  setSavingName(false);
-                }}
-              />
-            </Row>
+            <ProfileEditor me={me} />
             {auth.mode === 'device' ? (
               <Text v="tiny" muted>
                 No account needed: your profile, picks and points are stored only on this phone.
@@ -252,6 +271,21 @@ export default function Settings() {
         <Text v="small">The pick game is free to play: there are no real-money stakes, entry fees or cash prizes. MK Sports does not show bookmaker odds; if it ever does, an 18+ age check and responsible-gambling resources will be added first.</Text>
         <Text v="small">If gambling is affecting you or someone you know, seek support from a local responsible-gambling organisation.</Text>
         <Item icon="chart-bell-curve" title="How accurate is the model?" onPress={() => router.push('/accuracy')} />
+      </Card>
+
+      <SectionHeader title="Contact us" icon="card-account-phone-outline" />
+      <Card style={{ paddingVertical: 4 }}>
+        <Item icon="email-outline" title="Email" sub={CONTACT.email} onPress={() => Linking.openURL(`mailto:${CONTACT.email}?subject=${encodeURIComponent('MK Sports')}`).catch(() => notify(CONTACT.email))} />
+        <Item icon="phone-outline" title="Call" sub={CONTACT.phoneLabel} onPress={() => Linking.openURL(`tel:${CONTACT.phone}`).catch(() => notify(CONTACT.phoneLabel))} />
+        <Item icon="whatsapp" title="WhatsApp" sub={CONTACT.whatsappLabel} onPress={() => Linking.openURL(`https://wa.me/${CONTACT.whatsapp.replace('+', '')}`).catch(() => notify(CONTACT.whatsappLabel))} />
+        <Item
+          icon="share-variant"
+          title="Share MK Sports"
+          sub="Send friends the download link"
+          onPress={() => Share.share({ message: `Join me on MK Sports: live scores, AI predictions and a free game where you try to beat the AI. Download for Android: ${SITE}/` }).catch(() => undefined)}
+        />
+      </Card>
+      <Card style={{ marginTop: space.sm }}>
         <Text v="tiny" muted>
           MK Sports {Constants.expoConfig?.version ?? ''} · {auth.mode === 'device' ? 'on-device data mode' : `API ${API_URL}`}
         </Text>

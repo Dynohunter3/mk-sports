@@ -198,6 +198,7 @@ export type Badge = { slug: string; name: string; description: string; icon: str
 export type Me = {
   id: string;
   display_name: string;
+  avatar?: string;
   email: string | null;
   phone: string | null;
   country: string | null;
@@ -387,3 +388,9 @@ export type GameSummary = {
   recent: GamePick[];
   pending: GamePick[];
 };
+
+// ------------------------------------------------------------------ private leagues
+export type LeagueCard = { id: string; name: string; avatar: string; points: number; week: number; wk: string; correct: number; settled: number; streak: number; at: number };
+export type LeagueRow = LeagueCard & { rank: number; score: number };
+export type PrivateLeague = { code: string; name: string; created_at: string; members: LeagueRow[]; week_table: LeagueRow[]; my_rank: number | null };
+export type PrivateLeagues = { me: LeagueCard; week: string; leagues: PrivateLeague[] };

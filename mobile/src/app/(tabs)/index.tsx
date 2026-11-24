@@ -251,6 +251,23 @@ function Home() {
       ) : null}
       {!league ? <ResultsCelebration game={gameData} onCelebrate={celebrate} /> : null}
       {!league ? <PlayHero game={gameData} next={callable} /> : null}
+      {!league ? (
+        <Row style={{ marginTop: space.sm }} gap={space.sm}>
+          {(
+            [
+              ['trophy-outline', 'My game', '/leaderboard', t.gold],
+              ['account-group', 'Private leagues', '/private-leagues', t.hot],
+            ] as const
+          ).map(([icon, label, href, color]) => (
+            <PressableScale key={href} onPress={() => router.push(href)} accessibilityLabel={label} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, padding: space.md, borderRadius: 18, backgroundColor: alpha(color, 0.14), borderWidth: 1, borderColor: alpha(color, 0.45) }}>
+              <Icon name={icon} size={20} color={color} />
+              <Text v="h2" style={{ fontSize: 17, lineHeight: 20 }} numberOfLines={1}>
+                {label.toUpperCase()}
+              </Text>
+            </PressableScale>
+          ))}
+        </Row>
+      ) : null}
       {!league ? <MyTeamCard fav={fav} items={myTeamItems} /> : null}
       <StatusBanner error={feed.error} offline={feed.offline} updatedAt={feed.updatedAt} onRetry={feed.refresh} />
       {feed.data?.predictions_loading ? (

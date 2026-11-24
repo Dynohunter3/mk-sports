@@ -10,6 +10,7 @@ import { clubEloFixtures } from './clubelo';
 import * as espn from './espn';
 import type { SEvent, TeamInfo } from './espn';
 import * as game from './game';
+import * as pl from './pleagues';
 import { ensureSport, historyError, historyVersion, ingest, loadedHistory, onHistoryChange, sportMatches, sportReady, teamInfo } from './history';
 import { SourceError } from './http';
 import * as centreApi from './centre';
@@ -542,6 +543,7 @@ async function me() {
   return {
     id: 'device',
     display_name: st.profile.display_name,
+    avatar: st.profile.avatar ?? '⚽',
     email: null,
     phone: null,
     country: st.profile.country,
@@ -555,6 +557,54 @@ async function me() {
     badges: game.BADGES.map((b) => ({ ...b, awarded_at: st.badges[b.slug] ?? null })),
     created_at: st.profile.created_at,
   };
+}
+
+// ------------------------------------------------------------------ private leagues
+/** My score card for private leagues, from the game on this phone. */
+async function myCard(): Promise<pl.Card> {
+  const st = await game.loadGame();
+  const s = game.stats(st);
+  const pts = game.pointsByPeriod(st);
+  const wk = pts.weeks.find((w) => w.key === pts.current_week);
+  return {
+    id: st.profile.member_id ?? 'unknown0000',
+    name: st.profile.display_name === 'You' ? 'Player' : st.profile.display_name,
+    avatar: st.profile.avatar ?? '⚽',
+    points: s.total_points,
+    week: wk?.points ?? 0,
+    wk: pts.current_week,
+    correct: s.picks_correct,
+    settled: s.picks_settled,
+    streak: s.current_streak,
+    at: Math.floor(Date.now() / 1000),
+  };
+}
+
+async function privateLeagues() {
+  const me = await myCard();
+  await pl.refreshMine(me);
+  const list = await pl.leagues();
+  return {
+    me,
+    week: me.wk,
+    leagues: list.map((l) => {
+      const season = pl.table(Object.values(l.members), me.wk, 'season');
+      return { code: l.code, name: l.name, created_at: l.created_at, members: season, week_table: pl.table(Object.values(l.members), me.wk, 'week'), my_rank: season.find((r) => r.id === me.id)?.rank ?? null };
+    }),
+  };
+}
+
+async function shareLeague(code: string) {
+  const me = await myCard();
+  await pl.refreshMine(me);
+  const l = (await pl.leagues()).find((x) => x.code === pl.normaliseCode(code));
+  if (!l) throw new ApiError(404, 'not_found', 'League not found');
+  // my fresh card first, then everyone else's latest
+  const cards = [me, ...Object.values(l.members).filter((c) => c.id !== me.id).sort((a, b) => b.at - a.at)];
+  const url = pl.linkFor(pl.encodeLeague(l, cards));
+  const rank = pl.table(cards, me.wk).find((r) => r.id === me.id)?.rank;
+  const text = `🏆 MK Sports league "${l.name}" (code ${l.code})\n${me.avatar} ${me.name}: ${me.points} pts${rank ? ` · #${rank} of ${cards.length}` : ''}\nTap to join or update the table: ${url}\n\nFree to play, no money involved.`;
+  return { url, text, code: l.code, name: l.name };
 }
 
 /** Everything the game screens need: level, you vs the AI, streaks, badges, results to celebrate. */
@@ -968,6 +1018,8 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
     if (path === '/me') return me();
     if (path === '/me/picks') return myPicks(q);
     if (path === '/me/game') return gameSummary();
+    if (path === '/pleagues') return privateLeagues();
+    if (seg[0] === 'pleagues' && seg[2] === 'share') return shareLeague(seg[1]);
     if (path === '/me/export') {
       const st = await game.loadGame();
       return { profile: st.profile, picks: Object.values(st.picks), badges: st.badges, exported_at: new Date().toISOString() };
@@ -1013,8 +1065,42 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
     }
   }
   if (method === 'PATCH' && path === '/me') {
-    await game.updateProfile({ ...(body?.display_name ? { display_name: String(body.display_name).slice(0, 40) } : {}), ...(body?.country ? { country: body.country } : {}) });
+    await game.updateProfile({
+      ...(body?.display_name ? { display_name: String(body.display_name).slice(0, 40) } : {}),
+      ...(body?.country ? { country: body.country } : {}),
+      ...(body?.avatar && game.AVATARS.includes(String(body.avatar)) ? { avatar: String(body.avatar) } : {}),
+    });
     return me();
+  }
+  if (method === 'POST' && path === '/pleagues') {
+    const l = await pl.create(String(body?.name ?? ''), await myCard());
+    notify();
+    return { code: l.code };
+  }
+  if (method === 'POST' && path === '/pleagues/join') {
+    try {
+      const l = await pl.join(String(body?.code ?? ''), body?.name ? String(body.name) : null, await myCard());
+      notify();
+      return { code: l.code };
+    } catch (e) {
+      throw new ApiError(400, 'bad_code', e instanceof Error ? e.message : 'Invalid code');
+    }
+  }
+  if (method === 'POST' && path === '/pleagues/link') {
+    try {
+      const d = pl.decodeLeague(String(body?.data ?? ''));
+      const before = (await pl.leagues()).some((x) => x.code === d.code);
+      const l = await pl.join(d.code, d.name, await myCard(), d.cards);
+      notify();
+      return { code: l.code, name: l.name, joined: !before, members: Object.keys(l.members).length };
+    } catch (e) {
+      throw new ApiError(400, 'bad_link', e instanceof Error ? e.message : 'This link could not be read');
+    }
+  }
+  if (method === 'DELETE' && seg[0] === 'pleagues' && seg[1]) {
+    await pl.leave(seg[1]);
+    notify();
+    return { ok: true };
   }
   if (method === 'POST' && path === '/me/game/seen') {
     await game.markSeen(Array.isArray(body?.ids) ? body.ids.map(String) : []);

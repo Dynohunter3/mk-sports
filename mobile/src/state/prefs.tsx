@@ -25,7 +25,7 @@ export type Prefs = {
   /** Include betting-market consensus in forecasts (prices are never shown). */
   useMarket: boolean;
   /** Notification types (all off until the user turns them on and grants permission). */
-  notify: { matchAlerts: boolean; reminders: boolean; pickResults: boolean };
+  notify: { matchAlerts: boolean; reminders: boolean; pickResults: boolean; liveTracking?: boolean };
   /** Matches with the bell on (alerts even when it's not your team). */
   followed: string[];
 };

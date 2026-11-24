@@ -5,7 +5,8 @@ import { AppState } from 'react-native';
 
 import { usePrefs } from '@/state/prefs';
 
-import { anyOn, ensureChannels, NOTIFY_SUPPORTED, runAlertCheck, syncBackground } from './notifications';
+import { startLiveTracking } from './live';
+import { anyOn, ensureChannels, liveState, NOTIFY_SUPPORTED, runAlertCheck, syncBackground } from './notifications';
 
 const openFrom = (r: Notifications.NotificationResponse | null) => {
   const id = r?.notification.request.content.data?.matchId;
@@ -23,6 +24,8 @@ export function useAlerts(appReady: boolean) {
   useEffect(() => {
     if (!NOTIFY_SUPPORTED || !appReady) return;
     ensureChannels().catch(() => undefined);
+    // emulator verification builds only (set at build time; never in a release): start live tracking now
+    if (process.env.EXPO_PUBLIC_E2E_LIVE === '1') startLiveTracking().catch(() => undefined);
     // the app was opened by tapping an alert: go to that match once the navigator is up
     const t = setTimeout(() => openFrom(Notifications.getLastNotificationResponse()), 400);
     const sub = Notifications.addNotificationResponseReceivedListener(openFrom);
@@ -36,14 +39,22 @@ export function useAlerts(appReady: boolean) {
     if (!NOTIFY_SUPPORTED || !ready) return;
     syncBackground(on).catch(() => undefined);
     if (!on) return;
+    // while the app is open: check, and start live tracking when one of your matches is on (Android only
+    // allows starting it from the foreground; it then keeps running when the app is closed)
+    const pass = () =>
+      runAlertCheck()
+        .then(() => {
+          if (prefs.notify.matchAlerts && prefs.notify.liveTracking !== false && liveState().matches.length) startLiveTracking().catch(() => undefined);
+        })
+        .catch(() => undefined);
     // prefs are saved asynchronously; give the write a moment before the first pass
-    const first = setTimeout(() => runAlertCheck().catch(() => undefined), 1500);
+    const first = setTimeout(pass, 1500);
     const timer = setInterval(() => {
-      if (AppState.currentState === 'active') runAlertCheck().catch(() => undefined);
+      if (AppState.currentState === 'active') pass();
     }, 60_000);
     return () => {
       clearTimeout(first);
       clearInterval(timer);
     };
-  }, [ready, on, prefs.notify.matchAlerts, prefs.notify.reminders, prefs.notify.pickResults, prefs.favoriteTeam?.id, prefs.followed.length]);
+  }, [ready, on, prefs.notify.matchAlerts, prefs.notify.reminders, prefs.notify.pickResults, prefs.notify.liveTracking, prefs.favoriteTeam?.id, prefs.followed.length]);
 }

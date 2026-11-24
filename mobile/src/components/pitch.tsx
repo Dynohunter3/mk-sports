@@ -1,4 +1,4 @@
-/** Line-ups on a pitch (both teams: away at the top, home at the bottom) and a shot map. */
+/** Line-ups on a pitch (one team at a time, full pitch) and a shot map. */
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useState } from 'react';
 import { LayoutChangeEvent, Pressable, StyleSheet, View } from 'react-native';
@@ -29,30 +29,35 @@ export function kitColors(home: string, away: string): [string, string] {
   return [h, a];
 }
 
-const PlayerDot = memo(function PlayerDot({ p, color, onPress, size }: { p: LineupPlayer; color: string; onPress: (p: LineupPlayer) => void; size: number }) {
+const PlayerDot = memo(function PlayerDot({ p, color, onPress, size, width }: { p: LineupPlayer; color: string; onPress: (p: LineupPlayer) => void; size: number; width: number }) {
   return (
-    <Pressable onPress={() => onPress(p)} accessibilityRole="button" accessibilityLabel={`${p.name}, number ${p.jersey ?? ''}`} style={{ alignItems: 'center', width: size + 34 }} hitSlop={4}>
+    <Pressable onPress={() => onPress(p)} accessibilityRole="button" accessibilityLabel={`${p.name}, number ${p.jersey ?? ''}`} style={{ alignItems: 'center', width }} hitSlop={4}>
       <View>
         <PlayerPhoto url={p.headshot} jersey={p.jersey} color={color} size={size} ring="#FFFFFF" badge />
         {p.yellow || p.red ? <View style={[s.card, { backgroundColor: p.red ? '#EF4444' : '#FACC15' }]} /> : null}
         {p.subbedOut !== null ? (
           <View style={[s.sub, { backgroundColor: '#EF4444' }]}>
-            <Icon name="arrow-down-bold" size={10} color="#fff" />
+            <Icon name="arrow-down-bold" size={11} color="#fff" />
           </View>
         ) : null}
       </View>
-      <Text style={{ fontSize: 11, fontWeight: '800', marginTop: 3, textAlign: 'center', textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 3 }} color="#FFFFFF" numberOfLines={1}>
+      <Text style={{ fontSize: 12.5, fontWeight: '800', marginTop: 5, textAlign: 'center', lineHeight: 15, textShadowColor: 'rgba(0,0,0,0.65)', textShadowRadius: 3, alignSelf: 'stretch' }} color="#FFFFFF" numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>
         {lastName(p)}
       </Text>
-      {p.goals || p.assists || p.ownGoals ? (
-        <Row gap={2} style={{ marginTop: 1 }}>
+      {p.goals || p.assists || p.ownGoals || p.subbedOut ? (
+        <Row gap={3} style={{ marginTop: 2 }}>
           {Array.from({ length: Math.min(3, p.goals) }).map((_, i) => (
-            <Icon key={`g${i}`} name="soccer" size={11} color="#FFFFFF" />
+            <Icon key={`g${i}`} name="soccer" size={12} color="#FFFFFF" />
           ))}
-          {p.ownGoals ? <Icon name="soccer" size={11} color="#F87171" /> : null}
+          {p.ownGoals ? <Icon name="soccer" size={12} color="#F87171" /> : null}
           {p.assists ? (
-            <Text style={{ fontSize: 9, fontWeight: '900' }} color="#A7F3D0">
+            <Text style={{ fontSize: 10, fontWeight: '900' }} color="#A7F3D0">
               {`A${p.assists > 1 ? p.assists : ''}`}
+            </Text>
+          ) : null}
+          {p.subbedOut ? (
+            <Text style={{ fontSize: 10, fontWeight: '900' }} color="#FECACA">
+              {`${p.subbedOut}`}
             </Text>
           ) : null}
         </Row>
@@ -68,41 +73,28 @@ function PitchMarkings() {
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
       <View style={[StyleSheet.absoluteFill, { margin: 8, borderRadius: 4 }, b]} />
       <View style={{ position: 'absolute', left: 8, right: 8, top: '50%', height: 1.5, backgroundColor: line }} />
-      <View style={[{ position: 'absolute', left: '50%', top: '50%', width: 84, height: 84, borderRadius: 42, marginLeft: -42, marginTop: -42 }, b]} />
+      <View style={[{ position: 'absolute', left: '50%', top: '50%', width: 96, height: 96, borderRadius: 48, marginLeft: -48, marginTop: -48 }, b]} />
       {(['top', 'bottom'] as const).map((side) => (
         <View key={side}>
-          <View style={[{ position: 'absolute', left: '22%', right: '22%', height: '14%', [side]: 8 }, b, side === 'top' ? { borderTopWidth: 0 } : { borderBottomWidth: 0 }]} />
-          <View style={[{ position: 'absolute', left: '37%', right: '37%', height: '5.5%', [side]: 8 }, b, side === 'top' ? { borderTopWidth: 0 } : { borderBottomWidth: 0 }]} />
+          <View style={[{ position: 'absolute', left: '22%', right: '22%', height: '13%', [side]: 8 }, b, side === 'top' ? { borderTopWidth: 0 } : { borderBottomWidth: 0 }]} />
+          <View style={[{ position: 'absolute', left: '37%', right: '37%', height: '5%', [side]: 8 }, b, side === 'top' ? { borderTopWidth: 0 } : { borderBottomWidth: 0 }]} />
         </View>
       ))}
     </View>
   );
 }
 
-export function Pitch({ home, away, homeColor, awayColor, onPlayer }: { home: Lineup; away: Lineup; homeColor: string; awayColor: string; onPlayer: (p: LineupPlayer) => void }) {
+/** One team on a full pitch: goalkeeper at the top, attacking downwards, with room to breathe. */
+export function TeamPitch({ lineup, color, onPlayer }: { lineup: Lineup; color: string; onPlayer: (p: LineupPlayer) => void }) {
   const t = useTheme();
   const [w, setW] = useState(0);
-  const height = Math.max(560, w * 1.55);
-  const [hc, ac] = kitColors(home.color ?? homeColor, away.color ?? awayColor);
-  const size = w < 360 ? 34 : 40;
-  const half = (l: Lineup, top: boolean) => {
-    const rows = l.rows;
-    const pad = 22;
-    const span = height / 2 - pad - 58;
-    return rows.map((row, i) => {
-      // goalkeeper at the goal line, forwards towards halfway
-      const frac = rows.length > 1 ? i / (rows.length - 1) : 0;
-      const y = top ? pad + frac * span : height - pad - 58 - frac * span;
-      const ordered = top ? [...row].reverse() : row; // away team attacks downwards: their left is our right
-      return (
-        <View key={`${l.side}-${i}`} style={{ position: 'absolute', left: 0, right: 0, top: y, flexDirection: 'row', justifyContent: 'space-evenly' }}>
-          {ordered.map((p) => (
-            <PlayerDot key={p.id || p.name} p={p} color={top ? ac : hc} onPress={onPlayer} size={size} />
-          ))}
-        </View>
-      );
-    });
-  };
+  const height = Math.max(520, w * 1.38);
+  const size = w < 360 ? 46 : 52;
+  const rows = lineup.rows;
+  const top = 26;
+  const bottom = 92; // room for the last row's names and goal/sub marks
+  const most = Math.max(1, ...rows.map((r) => r.length));
+  const width = Math.min(size + 48, (w - 16) / most);
   return (
     <View onLayout={(e: LayoutChangeEvent) => setW(e.nativeEvent.layout.width)} style={{ borderRadius: 18, overflow: 'hidden', height, borderWidth: 1, borderColor: t.glassBorder }}>
       <LinearGradient colors={[mix(t.pitch, '#000000', 0.15), t.pitch, mix(t.pitch, '#000000', 0.15)]} style={StyleSheet.absoluteFill} />
@@ -110,22 +102,26 @@ export function Pitch({ home, away, homeColor, awayColor, onPlayer }: { home: Li
         <View key={i} style={{ position: 'absolute', left: 0, right: 0, top: `${i * 10}%`, height: '10%', backgroundColor: i % 2 ? 'rgba(255,255,255,0.035)' : 'transparent' }} />
       ))}
       <PitchMarkings />
-      {w ? (
-        <>
-          {half(away, true)}
-          {half(home, false)}
-        </>
+      {w
+        ? rows.map((row, i) => {
+            const frac = rows.length > 1 ? i / (rows.length - 1) : 0;
+            const y = top + frac * (height - top - bottom);
+            return (
+              <View key={`${lineup.side}-${i}`} style={{ position: 'absolute', left: 0, right: 0, top: y, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                {[...row].reverse().map((p) => (
+                  <PlayerDot key={p.id || p.name} p={p} color={color} onPress={onPlayer} size={size} width={width} />
+                ))}
+              </View>
+            );
+          })
+        : null}
+      {lineup.formation ? (
+        <View style={{ position: 'absolute', left: 14, top: 14, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.3)' }}>
+          <Text v="h2" color="#FFFFFF" style={{ fontSize: 16, lineHeight: 19 }}>
+            {lineup.formation}
+          </Text>
+        </View>
       ) : null}
-      <View style={{ position: 'absolute', left: 12, top: '50%', marginTop: -22 }}>
-        <Text v="tiny" color="rgba(255,255,255,0.85)" style={{ fontWeight: '800' }}>
-          {away.formation ?? ''}
-        </Text>
-      </View>
-      <View style={{ position: 'absolute', left: 12, top: '50%', marginTop: 8 }}>
-        <Text v="tiny" color="rgba(255,255,255,0.85)" style={{ fontWeight: '800' }}>
-          {home.formation ?? ''}
-        </Text>
-      </View>
     </View>
   );
 }
