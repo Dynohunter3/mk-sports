@@ -218,3 +218,18 @@ test('results and the model record come from the published tracker', async () =>
   assert.equal(list.results.items[0].safer_correct, 1);
   assert.equal(list.results.record.last_7_days.strong.n, 6);
 });
+
+test('predictions list: a hanging connection shows the published predictions after the time budget', async () => {
+  const { handleLocal, setFixtureBudgetForTests } = await import('./localApi');
+  const soon = new Date(Date.now() + 2 * 86400e3).toISOString();
+  setRemoteForTests(file({ matches: [{ ...file().matches[0], kickoff: soon }] }));
+  setFetch((() => new Promise(() => undefined)) as unknown as typeof fetch); // never answers
+  setFixtureBudgetForTests(50);
+  const t0 = Date.now();
+  const r: any = await handleLocal('GET', '/predictions?days=7', null);
+  assert.ok(Date.now() - t0 < 5000);
+  assert.equal(r.slow, true);
+  assert.equal(r.offline, true);
+  assert.equal(r.items.length, 1);
+  setFixtureBudgetForTests(20000);
+});

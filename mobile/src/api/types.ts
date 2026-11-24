@@ -91,6 +91,8 @@ export type ModelRecord = { last_7_days: RecordWindow | null; last_30_days: Reco
 export type PredictionsList = {
   days: number;
   offline: boolean;
+  /** the live fixtures were slow, not unreachable */
+  slow?: boolean;
   results: { record: ModelRecord; items: GradedCall[] };
   items: MatchCard[];
   leagues: { slug: string; short_name: string; n: number }[];

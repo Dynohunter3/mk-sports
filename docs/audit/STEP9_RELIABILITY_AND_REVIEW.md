@@ -33,6 +33,11 @@ Step 8's market-history component is an ordered logit on one number, so its draw
 - **The post-match review now appears for model predictions**, and "✓ Called it" uses the call that was shown.
 - **Fresh built-in predictions:** model `fb-2026-11-9e5c31b2`, 267 matches up to 15 Dec, and 28 graded matches.
 
+## Found on the emulator before release
+
+- **Crash on upgrade.** The app keeps each screen's last data. 1.8.0 first showed a copy saved by 1.7.0, which had no results field, and crashed (`Cannot read property 'items' of undefined`). Saved screen data now belongs to the app version that saved it, so an update clears older copies. The new fields are also read defensively. The crash was reproduced and fixed on the emulator.
+- **A connection that hangs** (connected but no internet: weak signal, captive Wi-Fi) kept the Predictions screen loading for over six minutes. Live fixtures now get a 20-second budget. After that, the published predictions show with a notice, and fixtures keep loading in the background (tested).
+
 ## The live record so far
 
 28 matches graded on GitHub. Too few to judge: about ±18 points either way by chance.
@@ -52,4 +57,4 @@ The backtest figures (52.4% at kick-off) remain the honest expectation.
   - finished matches carry their call;
   - graded fields and 7- and 30-day windows;
   - retrain-due rules.
-- App: 45, 2 new: prediction movement; results and the record.
+- App: 46, 3 new: prediction movement; results and the record; the time budget for slow fixtures.

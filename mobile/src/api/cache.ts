@@ -5,6 +5,7 @@
  *  - revalidation sends If-None-Match; unchanged data costs a ~200-byte 304
  *  - polling pauses when the app is backgrounded or the screen isn't focused
  */
+import Constants from 'expo-constants';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { AppState } from 'react-native';
@@ -20,8 +21,18 @@ type Entry = { data?: unknown; etag?: string | null; ts: number; error?: string;
 const mem = new Map<string, Entry>();
 const subs = new Map<string, Set<() => void>>();
 const inflight = new Map<string, Promise<void>>();
-const PREFIX = 'q:';
+// Saved responses belong to the app version that saved them: after an update the screens may expect fields an
+// older version never saved (1.8.0 crashed on a 1.7.0 copy before this), so older copies are never shown.
+const ROOT = 'q:';
+const PREFIX = `${ROOT}${Constants.expoConfig?.version ?? '0'}:`;
 const MAX_PERSISTED = 80;
+let oldCleared = false;
+async function clearOlderVersions() {
+  if (oldCleared) return;
+  oldCleared = true;
+  const stale = (await allKeys()).filter((k) => k.startsWith(ROOT) && !k.startsWith(PREFIX));
+  if (stale.length) await removeKeys(stale);
+}
 const EMPTY: Entry = { ts: 0 };
 
 function emit(key: string) {
@@ -122,6 +133,7 @@ export function useApi<T>(path: string | null, { maxAge = 60, poll = 0, persist 
     (async () => {
       if (!mem.has(key) && persist && hydrated.current !== key) {
         hydrated.current = key;
+        clearOlderVersions().catch(() => {});
         const saved = await readJSON<Entry>(PREFIX + key);
         if (saved && !mem.has(key)) set(key, { data: saved.data, etag: saved.etag, ts: saved.ts });
       }

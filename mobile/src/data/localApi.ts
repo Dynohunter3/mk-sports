@@ -257,6 +257,12 @@ async function feed(q: URLSearchParams) {
   };
 }
 
+let fixtureBudgetMs = 20000;
+/** Tests only. */
+export function setFixtureBudgetForTests(ms: number) {
+  fixtureBudgetMs = ms;
+}
+
 /** The model's live record: graded predictions (the last one before kick-off), from the published tracker. */
 function modelRecord() {
   const a = remoteAccuracy();
@@ -282,18 +288,31 @@ async function predictionsList(q: URLSearchParams) {
   const now = Date.now();
   let items: ReturnType<typeof card>[];
   let offline = false;
+  let slow = false;
+  let all: SEvent[] | null = null;
+  const fetched = fetchLeagues(PREDICTION_LEAGUES, now - DAY, now + (days + 1) * DAY);
   try {
-    const all = await fetchLeagues(PREDICTION_LEAGUES, now - DAY, now + (days + 1) * DAY);
+    // a connection that hangs (weak signal, captive Wi-Fi) can take minutes to fail: after the budget, show the
+    // published predictions and let the fixtures keep loading in the background for the next refresh
+    const first = await Promise.race([fetched, new Promise<null>((r) => setTimeout(() => r(null), fixtureBudgetMs))]);
+    if (first !== null) all = first;
+    else if (remoteFile()) {
+      slow = true;
+      fetched.catch(() => undefined);
+    } else all = await fetched;
+  } catch (e) {
+    if (!remoteFile()) throw e;
+    offline = true;
+  }
+  if (all) {
     const upcoming = [...new Map(all.map((e) => [e.id, e])).values()]
       .filter((e) => e.status === 'scheduled' && Date.parse(e.start) > now - 3 * 3600 * 1000 && Date.parse(e.start) < now + days * DAY)
       .sort((a, b) => a.start.localeCompare(b.start));
     items = upcoming.map((e) => card(e)).filter((c) => c.prediction);
-  } catch (e) {
-    // fixtures can't be loaded: list the published predictions themselves (built in or saved), so the
-    // screen still works offline. Rows are marked so the app doesn't open a match page it can't load.
-    const f = remoteFile();
-    if (!f) throw e;
-    offline = true;
+  } else {
+    // fixtures can't be loaded (or are slow): list the published predictions themselves (built in or saved), so
+    // the screen still works. Rows are marked so the app doesn't open a match page it can't load.
+    const f = remoteFile()!;
     items = f.matches
       .filter((m) => remoteCovers(m.competition) && Date.parse(m.kickoff) > now - 3 * 3600 * 1000 && Date.parse(m.kickoff) < now + days * DAY)
       .sort((a, b) => a.kickoff.localeCompare(b.kickoff))
@@ -305,7 +324,8 @@ async function predictionsList(q: URLSearchParams) {
   const f = remoteFile();
   return {
     days,
-    offline,
+    offline: offline || slow,
+    slow,
     results: { record: modelRecord(), items: (remoteAccuracy()?.live.recent ?? []).slice(0, 120) },
     items,
     leagues: PREDICTION_LEAGUES.filter((l) => counts.has(l)).map((l) => ({ slug: l, short_name: LEAGUE_BY_SLUG[l].shortName, n: counts.get(l)! })),

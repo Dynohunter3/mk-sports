@@ -76,7 +76,7 @@ const ResultRow = memo(function ResultRow({ r }: { r: GradedCall }) {
     <Glass style={{ marginBottom: space.sm }}>
       <Row style={{ justifyContent: 'space-between', marginBottom: 4 }}>
         <Text v="tiny" muted style={{ fontWeight: '700' }}>
-          {new Date(r.kickoff).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })} · {LEAGUE_NAME[r.competition] ?? r.competition}
+          {kickoffTime(r.kickoff)} · {LEAGUE_NAME[r.competition] ?? r.competition}
         </Text>
         {r.tier ? <TierPill tier={r.tier} /> : null}
       </Row>
@@ -94,7 +94,8 @@ const ResultRow = memo(function ResultRow({ r }: { r: GradedCall }) {
           <Row gap={4} style={{ flexShrink: 1 }}>
             <Icon name="shield-half-full" size={14} color={r.safer_correct ? t.win : t.loss} />
             <Text v="tiny" dim numberOfLines={1} style={{ flexShrink: 1 }}>
-              {r.safer_call.replace('home', r.home).replace('away', r.away)} {r.safer_correct ? '✓' : '✗'}
+              {r.safer_call === 'home or away' ? `${r.home} or ${r.away} (no draw)` : r.safer_call === 'home or draw' ? `${r.home} or draw` : `${r.away} or draw`}{' '}
+              {r.safer_correct ? '✓' : '✗'}
             </Text>
           </Row>
         ) : null}
@@ -119,7 +120,7 @@ export default function PredictionsScreen() {
   const sections = useMemo((): { key: string; title: string; data: Item[] }[] => {
     if (filter === 'results') {
       const byDay = new Map<string, GradedCall[]>();
-      for (const r of (d?.results.items ?? []).filter((x) => !league || x.competition === league)) {
+      for (const r of (d?.results?.items ?? []).filter((x) => !league || x.competition === league)) {
         const k = dayLabel(new Date(r.kickoff)) + ' · ' + new Date(r.kickoff).toLocaleDateString([], { day: 'numeric', month: 'short' });
         byDay.set(k, [...(byDay.get(k) ?? []), r]);
       }
@@ -149,14 +150,16 @@ export default function PredictionsScreen() {
     draws: n((m) => m.prediction?.pick === 'draw' || !!m.prediction?.draw_note),
     strong: n((m) => m.prediction?.tier === 'strong'),
     safer: n((m) => (m.prediction?.safer_p ?? 0) >= 0.85),
-    results: (d?.results.items ?? []).filter((x) => !league || x.competition === league).length,
+    results: (d?.results?.items ?? []).filter((x) => !league || x.competition === league).length,
   };
-  const rec = d?.results.record;
+  const rec = d?.results?.record;
   const tr = d?.track.model;
 
   const explainer =
     filter === 'results'
-      ? [windowText('Last 7 days', rec?.last_7_days), windowText('Last 30 days', rec?.last_30_days)].filter(Boolean).join('\n') ||
+      ? [windowText('Last 7 days', rec?.last_7_days), (rec?.last_30_days?.matches.n ?? 0) > (rec?.last_7_days?.matches.n ?? 0) ? windowText('Last 30 days', rec?.last_30_days) : null]
+          .filter(Boolean)
+          .join('\n') ||
         'Results appear here as matches finish. Each match is graded on the last prediction made before kick-off, wins and misses alike.'
       : filter === 'draws'
       ? tr
@@ -186,7 +189,9 @@ export default function PredictionsScreen() {
           <Row gap={space.sm}>
             <Icon name="wifi-off" size={18} color={t.pending} />
             <Text v="small" dim style={{ flex: 1 }}>
-              Can&apos;t load live fixtures, so these are the saved predictions. Kick-off times may have changed; match pages open when you&apos;re back online.
+              {d.slow
+                ? 'Live fixtures are slow to load, so these are the published predictions. Pull down to refresh in a moment; match pages open once fixtures load.'
+                : "Can't load live fixtures, so these are the saved predictions. Kick-off times may have changed; match pages open when you're back online."}
             </Text>
           </Row>
         </Glass>
