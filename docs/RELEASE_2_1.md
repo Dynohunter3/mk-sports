@@ -87,7 +87,10 @@ Code: `mobile/src/data/pleagues.ts` (with tests), `mobile/src/app/private-league
 
 **Limits:**
 - **Not every player has a free photo.** Players without one keep the ESPN photo or the shirt number.
-- **Photos are as current as Wikimedia's.** In the first 128 crops, the median year taken is 2025, and 81 are from 2024 or later. The newest photo of each player is preferred.
+- **Photos are only as current as Wikimedia's, and many are old.**
+  - The first 128 crops (the youngest players with an ESPN ID) had a median year taken of 2025.
+  - Measured again on all 7,046 published by 25 Nov 2026: 21% were taken in 2024 or later and 30% in 2022 or later. Half were taken in 2018 or earlier, and 182 are undated.
+  - The newest photo of each player is always chosen, but for many players Wikimedia has nothing recent.
 
 **Coverage, measured 24 Nov 2026** (players with a Wikimedia photo candidate; a little lower after face detection):
 - **Premier League squads:** 388 of 605 (64%), against 38 (6%) with ESPN photos.
