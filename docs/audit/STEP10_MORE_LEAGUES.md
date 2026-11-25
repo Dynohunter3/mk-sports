@@ -97,7 +97,7 @@ The app's accuracy page shows these figures. The track record shown with each pr
 - **Live RPS:** `accuracy.json` now carries the live record's RPS next to the hit rate.
 - **Record check:**
   - The tested hit rate's 95% chance range is 1.96 × √(p(1−p)/n).
-  - Under 100 graded matches it reports "too early to judge". With 28 matches the range is about ±18 points.
+  - Under 100 graded matches it reports "too early to judge". With 28 matches the range is about ±19 points (1.96 × √(0.504 × 0.496 / 28) = 0.185).
   - From 100 matches on, a live record outside the range is flagged in the app and raised as a `model_drift` warning in the pipeline's health check.
 
 ## Limits
