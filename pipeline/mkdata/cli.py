@@ -83,6 +83,8 @@ def cmd_sync(args) -> int:
         else:
             seasons = args.seasons.split(",") if args.seasons else DEFAULT_SEASONS[style]
         cover = [a for a in adapters if a.covers(comp_id)]
+        if args.missing:  # only seasons the store has no results for (competitions added after the first backfill)
+            seasons = [x for x in seasons if not store.q("SELECT 1 FROM source_matches WHERE competition_id=? AND season=? LIMIT 1", comp_id, x)]
         for season in seasons:
             res = run_chain(store, RESULTS, f"{comp_id}/{season}", cover, lambda a: a.fetch_season(comp_id, season), mode="collect_all")
             _write(store, res, comps)
@@ -249,6 +251,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--seasons")
     s.add_argument("--current", action="store_true", help="only each competition's current season (daily job)")
     s.add_argument("--backfill", action="store_true", help="every season the models use (first run on a new machine)")
+    s.add_argument("--missing", action="store_true", help="with --backfill: only seasons not in the store yet")
     sub.add_parser("upcoming")
     s = sub.add_parser("link")
     s.add_argument("--comps")

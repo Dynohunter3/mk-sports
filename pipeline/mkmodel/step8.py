@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 import numpy as np
 
 from . import experiment as ex
-from .data import APP_LEAGUES, LOWER, in_eval, load
+from .data import APP_LEAGUES_STEP9 as APP_LEAGUES, LOWER_STEP9 as LOWER, in_eval, load
 from .features import FEATURES, Config, EloParams, build
 from .learners import fit_ordered_logit, predict_ordered_logit
 

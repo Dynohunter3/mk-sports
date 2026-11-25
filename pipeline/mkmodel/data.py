@@ -11,10 +11,16 @@ from pathlib import Path
 from mkdata.resolve import devig
 
 STORE = Path(__file__).resolve().parents[1] / "var" / "mkdata.sqlite"
-APP_LEAGUES = ["eng.1", "eng.2", "esp.1", "ita.1", "ger.1", "fra.1", "ned.1", "por.1", "tur.1", "usa.1", "uefa.champions"]
+# the competitions published until Step 10, and the lower divisions that fed their ratings (used by the Step 3-10 experiments)
+APP_LEAGUES_STEP9 = ["eng.1", "eng.2", "esp.1", "ita.1", "ger.1", "fra.1", "ned.1", "por.1", "tur.1", "usa.1", "uefa.champions"]
+LOWER_STEP9 = ["eng.3", "eng.4", "ger.2", "ita.2", "esp.2", "fra.2"]
 LOWER_LEGACY = ["eng.3", "eng.4"]  # what the Step 3-5 runs used
-# lower divisions feed ratings only (promoted and relegated teams arrive with a history); never evaluated
-LOWER = ["eng.3", "eng.4", "ger.2", "ita.2", "esp.2", "fra.2"]
+# Step 10 (audit/results/step10.json): nine more leagues, each better than the on-device engine on the same matches,
+# with no loss on the existing ones
+STEP10_LEAGUES = ["eng.3", "eng.4", "sco.1", "ger.2", "ita.2", "esp.2", "fra.2", "bel.1", "gre.1"]
+APP_LEAGUES = APP_LEAGUES_STEP9 + STEP10_LEAGUES  # published
+# divisions that only feed ratings (none since Step 10: every division in the store is published)
+LOWER: list[str] = [c for c in LOWER_STEP9 if c not in STEP10_LEAGUES]
 DAY = 86400.0
 # Same evaluation windows as Step 1 ([from, to) UTC)
 EU = (datetime(2024, 7, 1, tzinfo=timezone.utc).timestamp(), datetime(2026, 7, 1, tzinfo=timezone.utc).timestamp())

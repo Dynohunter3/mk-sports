@@ -56,7 +56,7 @@ export type Team = TeamMini & { sport: string; country: string | null; venue_nam
 export type CallTier = 'strong' | 'likely' | 'lean' | 'toss-up';
 export type PredictionMini = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome; tier?: CallTier; safer?: string; safer_p?: number; source?: 'model' | 'device'; draw_note?: boolean };
 
-export type MyPick = { pick: Outcome; home_score: number | null; away_score: number | null; status: 'pending' | 'won' | 'lost' | 'void'; points: number };
+export type MyPick = { pick: Outcome; home_score: number | null; away_score: number | null; status: 'pending' | 'won' | 'lost' | 'void'; points: number; banker?: boolean };
 
 export type MatchCard = {
   id: string;
@@ -268,7 +268,22 @@ export type Accuracy = {
     over25?: { n: number; hit_rate: number; confident: { n: number; hit_rate: number; share: number } };
     btts?: { n: number; hit_rate: number; confident: { n: number; hit_rate: number; share: number } };
   } | null;
+  /** probability quality: RPS (backtest, bookmakers, live), calibration of the calls, and the live record's range */
+  football_quality?: FootballQuality | null;
   source_evidence?: Record<string, Record<string, { n: number; delta: number }>>;
+};
+
+export type CalibrationBin = { lo: number; hi: number; n: number; mean_p: number; hit_rate: number };
+export type RecordCheck = { status: 'no_data' | 'too_few' | 'within' | 'below' | 'above'; n: number; live?: number; expected: number | null; band: number | null; min_n: number; message: string };
+export type FootballQuality = {
+  backtest_n: number;
+  rps: number | null;
+  bookmaker_rps: number | null;
+  model_rps_same_matches: number | null;
+  live_rps: number | null;
+  live_n: number;
+  calibration: CalibrationBin[];
+  record: RecordCheck | null;
 };
 
 export type LocalPoints = { current_week: string; season: string; season_points: number; weeks: { key: string; points: number; picks: number; correct: number; exact: number }[] };
@@ -375,7 +390,7 @@ export type CricketMatch = { id: string; competition: string; description: strin
 export type GamePick = {
   match_id: string; sport: string; league: string; kickoff: string; home: string; away: string; home_code: string; away_code: string;
   home_color: string; away_color: string; home_logo: string | null; away_logo: string | null; pick: Outcome; ai_pick: Outcome | null;
-  status: 'pending' | 'won' | 'lost' | 'void'; points: number; final_score: [number, number] | null; exact_score: boolean;
+  status: 'pending' | 'won' | 'lost' | 'void'; points: number; final_score: [number, number] | null; exact_score: boolean; banker?: boolean;
 };
 export type GameSummary = {
   consented: boolean;
@@ -387,7 +402,11 @@ export type GameSummary = {
   unseen: GamePick[];
   recent: GamePick[];
   pending: GamePick[];
+  /** this week's banker pick (double points), if one is set */
+  banker?: GamePick | null;
+  seasons?: SeasonRecord[];
 };
+export type SeasonRecord = { season: string; current: boolean; points: number; picks: number; correct: number; accuracy: number | null; exact: number; best_streak: number; bankers: number; bankers_won: number };
 
 // ------------------------------------------------------------------ private leagues
 export type LeagueCard = { id: string; name: string; avatar: string; points: number; week: number; wk: string; correct: number; settled: number; streak: number; at: number };

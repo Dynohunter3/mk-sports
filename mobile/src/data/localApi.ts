@@ -97,7 +97,7 @@ const leagueMini = (slug: string) => ({ id: slug, slug, short_name: LEAGUE_BY_SL
 
 function myPick(id: string) {
   const p = game.gameState()?.picks[id];
-  return p ? { pick: p.pick, home_score: p.home_score, away_score: p.away_score, status: p.status, points: p.points } : null;
+  return p ? { pick: p.pick, home_score: p.home_score, away_score: p.away_score, status: p.status, points: p.points, banker: !!p.banker } : null;
 }
 
 function predictionFor(ev: SEvent): FullPrediction | null {
@@ -614,7 +614,7 @@ async function gameSummary() {
   const brief = (p: game.LocalPick) => ({
     match_id: p.matchId, sport: p.sport, league: p.league, kickoff: p.kickoff, home: p.homeName, away: p.awayName,
     home_code: p.homeCode, away_code: p.awayCode, home_color: p.homeColor, away_color: p.awayColor, home_logo: p.homeLogo ?? null, away_logo: p.awayLogo ?? null,
-    pick: p.pick, ai_pick: p.ai_pick, status: p.status, points: p.points, final_score: p.final_score, exact_score: p.exact_score,
+    pick: p.pick, ai_pick: p.ai_pick, status: p.status, points: p.points, final_score: p.final_score, exact_score: p.exact_score, banker: !!p.banker,
   });
   const settled = Object.values(st.picks).filter((p) => p.status !== 'pending').sort((a, b) => (b.settled_at ?? b.kickoff).localeCompare(a.settled_at ?? a.kickoff));
   return {
@@ -627,6 +627,11 @@ async function gameSummary() {
     unseen: game.unseenResults(st).map(brief),
     recent: settled.slice(0, 12).map(brief),
     pending: Object.values(st.picks).filter((p) => p.status === 'pending').sort((a, b) => a.kickoff.localeCompare(b.kickoff)).map(brief),
+    banker: (() => {
+      const b = game.bankerOfWeek(st, game.weekKey(new Date()));
+      return b ? brief(b) : null;
+    })(),
+    seasons: game.seasonArchive(st),
   };
 }
 
@@ -670,6 +675,20 @@ export async function settlePending(): Promise<void> {
   const byLeague = new Map<string, number[]>();
   for (const p of pending) byLeague.set(p.league, [...(byLeague.get(p.league) ?? []), Date.parse(p.kickoff)]);
   await Promise.allSettled([...byLeague.entries()].map(([slug, ts]) => fetchLeague(slug, Math.min(...ts) - DAY, Math.max(...ts) + DAY)));
+}
+
+/** Same rule as the pipeline (mkmodel.production.record_check), for files published before it existed. */
+export function recordCheck(n: number, live: number | null, expected: number | null): import('@/api/types').RecordCheck {
+  const MIN = 100;
+  if (!expected || !n || live === null) return { status: 'no_data', n: n ?? 0, expected, band: null, min_n: MIN, message: 'No graded matches yet.' };
+  const band = 1.96 * Math.sqrt((expected * (1 - expected)) / n);
+  const range = `${((expected - band) * 100).toFixed(1)}–${((expected + band) * 100).toFixed(1)}%`;
+  const status = n < MIN ? 'too_few' : live < expected - band ? 'below' : live > expected + band ? 'above' : 'within';
+  const message =
+    status === 'too_few'
+      ? `${n} graded matches: chance alone moves the hit rate by about ±${Math.round(band * 100)} points, so it is too early to judge.`
+      : `Live hit rate ${(live * 100).toFixed(1)}% over ${n} matches is ${status === 'within' ? 'within' : status} the tested range (${range}).`;
+  return { status, n, live, expected, band, min_n: MIN, message };
 }
 
 async function accuracy(q: URLSearchParams) {
@@ -788,6 +807,18 @@ async function accuracy(q: URLSearchParams) {
     football_backtest: footballBacktest,
     football_note: fbRemote ? ra!.note : null,
     football_track: fbRemote ? ra!.track_record ?? null : null,
+    football_quality: fbRemote && ra!.track_record
+      ? {
+          backtest_n: ra!.track_record.all_matches.n,
+          rps: ra!.track_record.rps ?? null,
+          bookmaker_rps: ra!.track_record.bookmaker_rps ?? null,
+          model_rps_same_matches: ra!.track_record.model_rps_same_matches ?? null,
+          live_rps: ra!.live.overall.rps ?? null,
+          live_n: ra!.live.overall.n,
+          calibration: ra!.track_record.pick_calibration ?? [],
+          record: ra!.live.record_check ?? recordCheck(ra!.live.overall.n, ra!.live.overall.hit_rate, ra!.track_record.all_matches.hit_rate),
+        }
+      : null,
     recent: [...fbRecent, ...live.slice(0, 10).map((e) => ({ match_id: e.id, home: e.home, away: e.away, score: e.score, predicted: argmax(e.blended), probability: Math.max(...Object.values(e.blended).map(Number)), correct: argmax(e.blended) === e.outcome, confidence: e.confidence }))].slice(0, 20),
     by_source: [...fbSources, ...Object.entries(perSource).map(([k, v]) => {
       const [src, kind] = k.split(':');
@@ -1045,7 +1076,7 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
       const p = predictEvent(ev);
       const { pick, newBadges } = await game.makePick(ev, body ?? {}, p ? argmax(p.probabilities) : null);
       notify();
-      return { match_id: id, pick: pick.pick, home_score: pick.home_score, away_score: pick.away_score, status: pick.status, points: pick.points, result_correct: null, exact_score: false, locks_at: ev.start, new_badges: newBadges };
+      return { match_id: id, pick: pick.pick, home_score: pick.home_score, away_score: pick.away_score, status: pick.status, points: pick.points, result_correct: null, exact_score: false, locks_at: ev.start, new_badges: newBadges, banker: !!pick.banker };
     } catch (e) {
       if (e instanceof game.PickError) throw new ApiError(e.status, e.code, e.message, { code: e.code, message: e.message });
       throw e;

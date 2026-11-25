@@ -12,13 +12,14 @@ import { kitColors, ShotMap, TeamPitch } from '@/components/pitch';
 import { PlayerPhoto } from '@/components/crest';
 import { Float, PressableScale } from '@/components/motion';
 import { goalsOutlook, goalsRead } from '@/engine/scorelines';
+import { WinProbabilityCard } from '@/components/winprob';
 import { Button, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatusBanner, Text } from '@/components/ui';
 import { confirm, notify } from '@/lib/dialogs';
 import { dayLabel, kickoffTime, outcomeLabel, relative, rulesText } from '@/lib/format';
 import { useNow } from '@/lib/useNow';
 import { NOTIFY_SUPPORTED, requestPermission } from '@/notify/notifications';
 import { usePrefs } from '@/state/prefs';
-import { alpha, LeagueTheme, matchColors, mix, radius, space, TAP, useTheme } from '@/theme/theme';
+import { alpha, forWhiteText, LeagueTheme, matchColors, mix, radius, space, TAP, useTheme } from '@/theme/theme';
 
 type Tab = 'overview' | 'lineups' | 'stats' | 'timeline' | 'table';
 
@@ -111,7 +112,7 @@ function MatchHero({ m, xg }: { m: MatchDetail; xg: MatchCentre['xg'] }) {
     <View style={{ overflow: 'hidden' }}>
       {/* a diagonal split in the two teams' colours */}
       <LinearGradient
-        colors={[mix(hc, '#000000', 0.15), mix(hc, '#000000', 0.5), mix(ac, '#000000', 0.5), mix(ac, '#000000', 0.15)]}
+        colors={[forWhiteText(mix(hc, '#000000', 0.15), 3.5), mix(hc, '#000000', 0.5), mix(ac, '#000000', 0.5), forWhiteText(mix(ac, '#000000', 0.15), 3.5)]}
         locations={[0, 0.49, 0.51, 1]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -473,6 +474,7 @@ function Overview({ m }: { m: MatchDetail }) {
               {p.trigger === 'team_news' ? ' after team news' : ''}
             </Text>
           </Glass>
+          {m.sport === 'football' && p.expected && p.expected[0] > 0 && p.expected[1] > 0 && (m.status === 'live' || m.status === 'finished') ? <WinProbabilityCard m={m} expected={[p.expected[0], p.expected[1]]} /> : null}
           {m.sport === 'football' && p.expected && p.expected[0] > 0 && p.expected[1] > 0 ? <GoalsOutlook m={m} p={p} /> : null}
         </>
       ) : m.status === 'scheduled' ? (

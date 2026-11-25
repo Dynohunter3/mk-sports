@@ -174,3 +174,21 @@ def test_as_of_load_hides_later_results(world):
     ms = load(world["store"], comps=COMPS, as_of=world["now"] - 30 * DAY)
     late = [m for m in ms if m.t > world["now"] - 30 * DAY - 3 * 3600]
     assert late and all(m.outcome is None for m in late)
+
+
+def test_rps_and_live_record_check():
+    from mkmodel.production import RECORD_MIN, _rps, record_check
+
+    assert _rps((1.0, 0.0, 0.0), "home") == 0.0
+    assert abs(_rps((0.0, 0.0, 1.0), "home") - 1.0) < 1e-12  # certain and wrong
+    assert abs(_rps((0.5, 0.3, 0.2), "draw") - ((0.5 - 0) ** 2 + (0.8 - 1) ** 2) / 2) < 1e-12
+    assert _rps((0.5, None, 0.2), "home") is None
+    # 28 matches: too early to judge, band about +-18 points around 52%
+    r = record_check(28, 0.607, 0.52)
+    assert r["status"] == "too_few" and abs(r["band"] - 1.96 * (0.52 * 0.48 / 28) ** 0.5) < 1e-12
+    # enough matches: inside, below and above the band
+    assert record_check(400, 0.53, 0.52)["status"] == "within"
+    assert record_check(400, 0.40, 0.52)["status"] == "below"
+    assert record_check(400, 0.65, 0.52)["status"] == "above"
+    assert record_check(RECORD_MIN - 1, 0.20, 0.52)["status"] == "too_few"
+    assert record_check(0, None, 0.52)["status"] == "no_data"

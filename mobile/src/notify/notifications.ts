@@ -16,11 +16,12 @@ import { Platform } from 'react-native';
 
 import * as espn from '@/data/espn';
 import * as game from '@/data/game';
+import * as pleagues from '@/data/pleagues';
 import { LEAGUE_BY_SLUG } from '@/data/leagues';
 import { readJSON, writeJSON } from '@/lib/storage';
 import type { Prefs } from '@/state/prefs';
 
-import { diffMatches, reminders, Seen } from './alerts';
+import { diffMatches, reminders, Seen, shareReminderAt } from './alerts';
 
 export const ALERT_TASK = 'mk-sports-alerts';
 export const NOTIFY_SUPPORTED = Platform.OS === 'android' || Platform.OS === 'ios';
@@ -77,7 +78,7 @@ export function runAlertCheck(fresh = false): Promise<number> {
 }
 
 /** Keep the scheduled notifications with this prefix exactly matching `want` (exact alarms). */
-async function syncScheduled(prefix: string, want: { id: string; matchId: string; at: number; title: string; body: string }[], channel: 'match' | 'reminders') {
+async function syncScheduled(prefix: string, want: { id: string; matchId: string; at: number; title: string; body: string; url?: string }[], channel: 'match' | 'reminders') {
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
   const have = new Map(scheduled.filter((x) => x.identifier.startsWith(prefix)).map((x) => [x.identifier, x]));
   for (const r of want) {
@@ -88,7 +89,7 @@ async function syncScheduled(prefix: string, want: { id: string; matchId: string
     if (prev) await Notifications.cancelScheduledNotificationAsync(r.id);
     await Notifications.scheduleNotificationAsync({
       identifier: r.id,
-      content: { title: r.title, body: r.body, data: { matchId: r.matchId, at: r.at }, sound: 'default' },
+      content: { title: r.title, body: r.body, data: { matchId: r.matchId, at: r.at, ...(r.url ? { url: r.url } : {}) }, sound: 'default' },
       trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: new Date(r.at), ...(Platform.OS === 'android' ? { channelId: channel } : {}) },
     });
   }
@@ -186,8 +187,19 @@ async function check(fresh = false): Promise<number> {
   } else {
     await syncScheduled('kick:', [], 'reminders');
   }
+  // private leagues: tables change only when members share, so after the last match you picked this week, remind
+  await syncScheduled('plshare:', n?.pickResults ? await leagueShareReminder(picks, now) : [], 'reminders');
   await writeJSON(SENT_KEY, [...sent].slice(-300));
   return count;
+}
+
+async function leagueShareReminder(picks: game.LocalPick[], now: number) {
+  const ls = await pleagues.leagues().catch(() => []);
+  if (!ls.length) return [];
+  const at = shareReminderAt(picks, now);
+  if (at === null) return [];
+  const name = ls.length === 1 ? ls[0].name : `your ${ls.length} leagues`;
+  return [{ id: `plshare:${game.weekKey(new Date(now))}`, matchId: '', at, url: '/private-leagues', title: 'Update your league table 🏆', body: `Your picks this week are in. Tables only change when members share: tap Share & update in ${name}.` }];
 }
 
 /** Background check about every 15 minutes while any alert type is on. */

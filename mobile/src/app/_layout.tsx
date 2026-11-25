@@ -63,6 +63,7 @@ function Navigator() {
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
         <Stack.Screen name="private-leagues" options={{ headerShown: false }} />
         <Stack.Screen name="pl" options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="search" options={{ headerShown: false, animation: 'fade' }} />
       </Stack>
     </NavThemeProvider>
   );

@@ -47,7 +47,7 @@ export function xgFor(x: number, y: number, penalty = false): number {
   return 1 / (1 + Math.exp(-z));
 }
 
-export type ShotEvent = { side: 'home' | 'away'; x: number | null; y: number | null; penalty: boolean; goal: boolean; minute: string | null; player: string | null; type: string };
+export type ShotEvent = { side: 'home' | 'away'; x: number | null; y: number | null; penalty: boolean; goal: boolean; minute: string | null; player: string | null; type: string; playerId?: string | null };
 
 /** Team totals; shots without a recorded position are counted but get no xG. */
 export function teamXg(shots: ShotEvent[]): { home: number; away: number; located: number; total: number } {

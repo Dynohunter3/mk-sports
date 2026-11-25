@@ -6,6 +6,7 @@ import type { Accuracy, AccuracyRow } from '@/api/types';
 import { Card, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatTile, StatusBanner, Text } from '@/components/ui';
 import { pct } from '@/lib/format';
 import { radius, space, SPORT_COLORS, useTheme } from '@/theme/theme';
+import { ProbabilityQuality, RecordBand } from '@/components/quality';
 
 type Source = 'all' | 'live' | 'backtest';
 
@@ -151,6 +152,8 @@ export default function AccuracyScreen() {
               </Row>
             ))}
           </Card>
+          {d.football_quality?.record ? <RecordBand r={d.football_quality.record} /> : null}
+          {source !== 'live' && d.football_quality ? <ProbabilityQuality q={d.football_quality} /> : null}
           {source !== 'live' && d.football_track ? (
             <>
               <SectionHeader title="Football: how often each call is right" />
@@ -169,7 +172,7 @@ export default function AccuracyScreen() {
                         {label}
                       </Text>
                       <Bar value={r.hit_rate} color={color} />
-                      <Text v="small" dim style={{ width: 118, textAlign: 'right' }}>
+                      <Text v="small" dim style={{ width: 132, textAlign: 'right' }} numberOfLines={1}>
                         {pct(r.hit_rate)} · {pct(r.share)} of games
                       </Text>
                     </Row>

@@ -5,6 +5,7 @@
  */
 import type { SEvent } from '@/data/espn';
 import { LEAGUE_BY_SLUG } from '@/data/leagues';
+import { weekKey } from '@/data/game';
 
 export type Seen = { s: SEvent['status']; h: number | null; a: number | null; t: number };
 export type Alert = { id: string; matchId: string; kind: 'kickoff' | 'goal' | 'fulltime'; title: string; body: string };
@@ -78,3 +79,15 @@ export function reminders(events: SEvent[], watched: (ev: SEvent) => boolean, pi
       };
     });
 }
+
+/** Private-league reminder: about two and a half hours after the kick-off of your last pick this week, when it
+ * should be settled. Null when there is nothing to remind about, or the time has passed. */
+export const SHARE_DELAY_MS = 150 * 60 * 1000;
+export function shareReminderAt(picks: { kickoff: string; status: string }[], now: number): number | null {
+  const week = weekKey(new Date(now));
+  const mine = picks.filter((p) => p.status !== 'void' && weekKey(new Date(p.kickoff)) === week);
+  if (!mine.length) return null;
+  const at = Math.max(...mine.map((p) => Date.parse(p.kickoff))) + SHARE_DELAY_MS;
+  return at > now ? at : null;
+}
+

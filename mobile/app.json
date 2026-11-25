@@ -2,7 +2,7 @@
   "expo": {
     "name": "MK Sports",
     "slug": "mk-sports",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "mksports",
@@ -21,7 +21,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "versionCode": 12,
+      "versionCode": 13,
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE"
@@ -44,7 +44,12 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store",
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": false
+        }
+      ],
       "expo-web-browser",
       [
         "expo-splash-screen",
@@ -65,7 +70,28 @@
           "defaultChannel": "match"
         }
       ],
-      "./plugins/withLiveTracking"
+      "./plugins/withLiveTracking",
+      "./plugins/withBackupRules",
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "MyTeam",
+              "label": "MK Sports: my team",
+              "description": "Your team's live score or next match",
+              "minWidth": "250dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 4,
+              "targetCellHeight": 2,
+              "previewImage": "./assets/widget-preview.png",
+              "updatePeriodMillis": 1800000,
+              "resizeMode": "horizontal|vertical",
+              "widgetCategory": "home_screen"
+            }
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": false

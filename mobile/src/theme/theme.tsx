@@ -110,29 +110,8 @@ export const TAP = 48;
 export const TAB_BAR_SPACE = 96;
 
 // ------------------------------------------------------------------ colour helpers
-function rgb(hex: string): [number, number, number] {
-  const h = hex.replace('#', '');
-  const n = parseInt(h.length === 3 ? h.split('').map((c) => c + c).join('') : h.slice(0, 6), 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
-export function luminance(hex: string): number {
-  const [r, g, b] = rgb(hex);
-  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-}
-/** Pick readable text for a coloured badge background. */
-export function onColor(hex: string): string {
-  return luminance(hex) > 0.6 ? '#0B0F14' : '#FFFFFF';
-}
-export function alpha(hex: string, a: number): string {
-  const [r, g, b] = rgb(hex);
-  return `rgba(${r},${g},${b},${a})`;
-}
-export function mix(a: string, b: string, t: number): string {
-  const x = rgb(a);
-  const y = rgb(b);
-  const c = x.map((v, i) => Math.round(v + (y[i] - v) * t));
-  return `#${c.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
-}
+export { alpha, contrastRatio, forWhiteText, luminance, mix, onColor, relLuminance, rgb } from './color';
+import { alpha, contrastRatio, forWhiteText, luminance, mix, onColor, relLuminance, rgb } from './color';
 
 function distance(a: string, b: string): number {
   const x = rgb(a);

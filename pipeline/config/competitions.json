@@ -84,6 +84,33 @@
   "openfootball": "fr.2",
   "_why": "promoted teams arrive rated"
  },
+ "sco.1": {
+  "sport": "football",
+  "country": "sco",
+  "name": "Scottish Premiership",
+  "tz": "Europe/London",
+  "seasons": "split",
+  "footballdata_uk": "SC0",
+  "the_odds_api": "soccer_spl"
+ },
+ "bel.1": {
+  "sport": "football",
+  "country": "bel",
+  "name": "Belgian Pro League",
+  "tz": "Europe/Brussels",
+  "seasons": "split",
+  "footballdata_uk": "B1",
+  "the_odds_api": "soccer_belgium_first_div"
+ },
+ "gre.1": {
+  "sport": "football",
+  "country": "gre",
+  "name": "Greek Super League",
+  "tz": "Europe/Athens",
+  "seasons": "split",
+  "footballdata_uk": "G1",
+  "the_odds_api": "soccer_greece_super_league"
+ },
  "esp.1": {
   "sport": "football",
   "country": "esp",

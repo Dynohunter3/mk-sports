@@ -226,7 +226,9 @@ export function parseShots(data: any, homeName: string, homeEspnId: string): Sho
   const seen = new Set<string>();
   for (const p of src) {
     const t = String(p?.type?.type ?? '');
-    if (!SHOT_TYPES.has(t) || p?.shootout) continue;
+    // goals also come as subtypes such as "goal---free-kick"; own goals are not the scorer's shots
+    const isGoal = t === 'goal' || t.startsWith('goal---') || t === 'penalty---scored';
+    if ((!SHOT_TYPES.has(t) && !isGoal) || p?.shootout || /own/i.test(t)) continue;
     if (p?.id && seen.has(p.id)) continue;
     if (p?.id) seen.add(p.id);
     const teamName = p?.team?.displayName;
@@ -236,9 +238,10 @@ export function parseShots(data: any, homeName: string, homeEspnId: string): Sho
       x: num(p?.fieldPositionX),
       y: num(p?.fieldPositionY),
       penalty: t.startsWith('penalty'),
-      goal: t === 'goal' || t === 'penalty---scored',
+      goal: isGoal,
       minute: p?.clock?.displayValue ?? null,
       player: p?.participants?.[0]?.athlete?.displayName ?? null,
+      playerId: p?.participants?.[0]?.athlete?.id ? String(p.participants[0].athlete.id) : null,
       type: t,
     });
   }

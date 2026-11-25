@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 import lightgbm as lgb
 import numpy as np
 
-from .data import APP_LEAGUES, in_eval, load
+from .data import APP_LEAGUES_STEP9 as APP_LEAGUES, in_eval, load
 from .experiment import FEATURE_START, FEED, RESULTS, RUN, TRAIN_FROM, month_key, split_of
 from .features import FEATURES, Config, EloParams, build
 from .learners import SEED

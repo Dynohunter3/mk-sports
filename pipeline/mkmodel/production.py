@@ -552,11 +552,65 @@ def _agg(rows: list[dict]) -> dict:
     return out
 
 
+def _rps(p, outcome) -> float | None:
+    """Ranked probability score for home < draw < away (lower is better; 0 = certain and right)."""
+    if outcome not in (0, 1, 2, "home", "draw", "away") or any(v is None for v in p):
+        return None
+    o = {"home": 0, "draw": 1, "away": 2}.get(outcome, outcome)
+    c1, c2 = p[0], p[0] + p[1]
+    return ((c1 - (o <= 0)) ** 2 + (c2 - (o <= 1)) ** 2) / 2
+
+
+RECORD_MIN = 100  # graded matches before the live record is compared with the backtest
+
+
+def record_check(n: int, live_hit: float | None, expected: float | None) -> dict:
+    """Is the live hit rate within what chance allows around the backtest's? 95% band: 1.96 x sqrt(p(1-p)/n)."""
+    if not expected or not n or live_hit is None:
+        return {"status": "no_data", "n": n or 0, "expected": expected, "band": None, "min_n": RECORD_MIN, "message": "No graded matches yet."}
+    band = 1.96 * (expected * (1 - expected) / n) ** 0.5
+    if n < RECORD_MIN:
+        status = "too_few"
+        msg = f"{n} graded matches: chance alone moves the hit rate by about ±{band * 100:.0f} points, so it is too early to judge."
+    elif live_hit < expected - band:
+        status = "below"
+        msg = f"Live hit rate {live_hit * 100:.1f}% over {n} matches is below the tested range ({(expected - band) * 100:.1f}–{(expected + band) * 100:.1f}%)."
+    elif live_hit > expected + band:
+        status = "above"
+        msg = f"Live hit rate {live_hit * 100:.1f}% over {n} matches is above the tested range ({(expected - band) * 100:.1f}–{(expected + band) * 100:.1f}%)."
+    else:
+        status = "within"
+        msg = f"Live hit rate {live_hit * 100:.1f}% over {n} matches is within the tested range ({(expected - band) * 100:.1f}–{(expected + band) * 100:.1f}%)."
+    return {"status": status, "n": n, "live": live_hit, "expected": expected, "band": band, "min_n": RECORD_MIN, "message": msg}
+
+
 def track_record() -> dict | None:
-    """Backtest hit rates of each kind of call (two seasons), from the Step 6 picks and goals experiments."""
+    """Backtest hit rates of each kind of call (two seasons). Since Step 10 the calls are scored on every published
+    competition (audit/results/step10.json); over/under 2.5 and the draw note still come from Step 6."""
     fp, fg = AUDIT / "step6_picks.json", AUDIT / "step6_goals.json"
     if not fp.exists():
         return None
+    s10 = AUDIT / "step10.json"
+    if s10.exists():
+        d = json.loads(s10.read_text()).get("deployed", {})
+        if d.get("track_record"):
+            out = dict(d["track_record"])
+            out["source"] = "step10.json"
+            out["rps"] = d["all"]["rps"]
+            out["log_loss"] = d["all"]["log_loss"]
+            out["bookmaker_rps"] = d["bookmaker_closing_same_matches"]["bookmaker"]["rps"]
+            out["model_rps_same_matches"] = d["bookmaker_closing_same_matches"]["model"]["rps"]
+            out["pick_calibration"] = d["pick_calibration"]
+            both6 = json.loads(fp.read_text())["splits"]["both"]
+            if "draw_note" in both6:
+                dn = both6["draw_note"]
+                out["draw_note"] = {"min_draw": dn["min_draw"], "n": dn["n"], "share": dn["share"], "ended_level": dn["ended_level"]}
+            if fg.exists():
+                g = json.loads(fg.read_text())["markets"]["over25"]
+                r = g["candidates"][g["chosen"]]["both"]
+                out["over25"] = {"n": r["n"], "hit_rate": r["accuracy"],
+                                 "confident": {"n": round(r["n"] * r["confident_share"]), "hit_rate": r["confident_accuracy"], "share": r["confident_share"]}}
+            return out
     both = json.loads(fp.read_text())["splits"]["both"]
     rule, top = both["with_draw_rule"], both["double_chance"]["tiers"][0]
     out = {"tiers": {t["tier"]: {"n": t["n"], "hit_rate": t["hit_rate"], "share": t["share"]} for t in both["tiers"]},
@@ -593,6 +647,7 @@ def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | 
                        "home": names.get(r["home_id"], r["home_id"]), "away": names.get(r["away_id"], r["away_id"]),
                        "score": f"{r['home_score']}-{r['away_score']}", "pick": pick, "probability": round(probs[pick], 4),
                        "correct": int(pick == r["outcome"]), "log_loss": r["log_loss"], "brier": r["brier"],
+                       "rps": _rps((r["p_home"], r["p_draw"], r["p_away"]), r["outcome"]),
                        "confidence_label": r["confidence_label"], "model_version": r["model_version"], "tier": r["tier"],
                        "safer_call": r["dc_call"],
                        "safer_correct": None if not r["dc_call"] else int(r["outcome"] in r["dc_call"].replace(" or ", "|").split("|")),
@@ -615,6 +670,17 @@ def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | 
         rows = [g for g in graded if datetime.fromisoformat(g["kickoff"]).timestamp() >= t_now - days * DAY]
         live[f"last_{days}_days"] = {"matches": rate("correct", rows), "safer_call": rate("safer_correct", rows),
                                      "strong": rate("correct", [g for g in rows if g["tier"] == "strong"])}
+    rpss = [g["rps"] for g in graded if g["rps"] is not None]
+    live["overall"]["rps"] = (sum(rpss) / len(rpss)) if rpss else None
+    tr = track_record()
+    live["record_check"] = record_check(live["overall"].get("n", 0), live["overall"].get("hit_rate"), (tr or {}).get("all_matches", {}).get("hit_rate"))
+    if live["record_check"]["status"] in ("below", "above"):
+        try:
+            from mkdata.store import Store
+
+            Store(store).raise_alert("model_drift", "football", "warning", live["record_check"]["message"])
+        except Exception:  # an alert must never stop publishing
+            pass
     backtest = None
     for name in ("step6.json", "step5.json", "step3.json"):
         f = AUDIT / name
@@ -634,7 +700,7 @@ def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | 
             break
     doc = {"schema": 1, "generated_at": datetime.fromtimestamp(now or time.time(), timezone.utc).isoformat(timespec="seconds"),
            "model_version": (current_bundle().version if current_bundle() else None), "live": live, "backtest": backtest,
-           "track_record": track_record(),
+           "track_record": tr,
            "note": "Live = every prediction this service published, graded on its last version before kick-off. "
                    "Backtest = the same model replayed on two past seasons. Hit rate = share where the most likely outcome happened; "
                    "log loss and Brier score measure probability quality (lower is better)."}

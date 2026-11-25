@@ -31,6 +31,7 @@ export default function PickScreen() {
   const now = useNow(1000);
   const [pick, setPick] = useState<Outcome | null>(null);
   const [withScore, setWithScore] = useState(false);
+  const [banker, setBanker] = useState(false);
   const [home, setHome] = useState(0);
   const [away, setAway] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -41,6 +42,7 @@ export default function PickScreen() {
     const p = m.my_pick;
     if (p) {
       setPick(p.pick);
+      setBanker(!!p.banker);
       if (p.home_score !== null && p.away_score !== null) {
         setWithScore(true);
         setHome(p.home_score);
@@ -106,7 +108,7 @@ export default function PickScreen() {
     setSaving(true);
     setError(null);
     try {
-      const res = await api<PickResult>(`/picks/${m.id}`, { method: 'PUT', body: withScore ? { pick, home_score: home, away_score: away } : { pick } });
+      const res = await api<PickResult>(`/picks/${m.id}`, { method: 'PUT', body: withScore ? { pick, home_score: home, away_score: away, banker } : { pick, banker } });
       invalidate((k) => k.startsWith('/feed') || k.startsWith('/matches') || k.startsWith('/me') || k.startsWith('/picks'));
       if (res.new_badges.length) notify('Badge unlocked! 🏅', res.new_badges.map((b) => BADGE_NAMES[b] ?? b).join(', '));
       (router.canGoBack() ? router.back() : router.replace(`/match/${m.id}`));
@@ -221,6 +223,20 @@ export default function PickScreen() {
           </Text>
         ) : null}
       </Card>
+
+      {m.scoring.result_points > 0 ? (
+        <Card style={{ marginTop: space.lg, borderColor: banker ? t.gold : undefined, borderWidth: banker ? 1.5 : undefined }}>
+          <Row style={{ justifyContent: 'space-between' }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: '700' }}>⭐ Make this my banker</Text>
+              <Text v="small" dim>
+                Double points if you're right. One banker a week (by kick-off date): choosing this moves it here, until your current banker's match kicks off.
+              </Text>
+            </View>
+            <Switch value={banker} onValueChange={setBanker} disabled={locked} accessibilityLabel="Make this my banker: double points" />
+          </Row>
+        </Card>
+      ) : null}
 
       {m.prediction ? (
         <Card style={{ marginTop: space.lg }}>

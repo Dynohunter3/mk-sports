@@ -294,9 +294,10 @@ FEATURES = [
     "mr_diff", "mr_h", "mr_a", "mr_draw",
 ]
 TIER = {"eng.1": 1, "esp.1": 1, "ita.1": 1, "ger.1": 1, "fra.1": 1, "ned.1": 1, "por.1": 1, "tur.1": 1, "usa.1": 1,
-        "eng.2": 2, "esp.2": 2, "ita.2": 2, "ger.2": 2, "fra.2": 2, "eng.3": 3, "eng.4": 4}
+        "eng.2": 2, "esp.2": 2, "ita.2": 2, "ger.2": 2, "fra.2": 2, "eng.3": 3, "eng.4": 4,
+        "sco.1": 1, "bel.1": 1, "gre.1": 1}
 DOMESTIC = {"eng.1", "eng.2", "eng.3", "eng.4", "esp.1", "ita.1", "ger.1", "fra.1", "ned.1", "por.1", "tur.1", "usa.1",
-            "esp.2", "ita.2", "ger.2", "fra.2"}
+            "esp.2", "ita.2", "ger.2", "fra.2", "sco.1", "bel.1", "gre.1"}
 
 
 @dataclass

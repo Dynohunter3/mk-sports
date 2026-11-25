@@ -59,3 +59,18 @@ test('kick-off reminders: 30 minutes before, only for upcoming watched matches',
   assert.equal(list[0].title, 'Fenerbahce v Liverpool in 30 minutes');
   assert.ok(list[0].body.includes('Your pick: Liverpool 1-2'));
 });
+
+import { SHARE_DELAY_MS, shareReminderAt } from './alerts';
+
+test('league share reminder: after the last pick of this week, never for past times or other weeks', () => {
+  const now = Date.parse('2030-06-05T10:00:00Z'); // a Wednesday
+  const picks = [
+    { kickoff: '2030-06-05T12:00:00Z', status: 'pending' },
+    { kickoff: '2030-06-08T15:00:00Z', status: 'pending' }, // Saturday: the last one this week
+    { kickoff: '2030-06-12T15:00:00Z', status: 'pending' }, // next week
+    { kickoff: '2030-06-09T18:00:00Z', status: 'void' }, // a void pick is ignored
+  ];
+  assert.equal(shareReminderAt(picks, now), Date.parse('2030-06-08T15:00:00Z') + SHARE_DELAY_MS);
+  assert.equal(shareReminderAt([{ kickoff: '2030-06-12T15:00:00Z', status: 'pending' }], now), null);
+  assert.equal(shareReminderAt([{ kickoff: '2030-06-05T06:00:00Z', status: 'won' }], now), null); // already passed
+});

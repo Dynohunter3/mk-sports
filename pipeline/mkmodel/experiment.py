@@ -24,7 +24,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .data import APP_LEAGUES, LOWER, LOWER_LEGACY, in_eval, load
+from .data import APP_LEAGUES_STEP9 as APP_LEAGUES, LOWER_STEP9 as LOWER, LOWER_LEGACY, in_eval, load
 from .features import FEATURES, Config, EloParams, build
 from .learners import SEED, blend_probs, fit_blend, fit_gbm, fit_ordered_logit, predict_gbm, predict_ordered_logit, to_log
 

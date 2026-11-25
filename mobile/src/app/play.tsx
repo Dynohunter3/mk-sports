@@ -6,7 +6,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, PanResponder, Platform, StyleSheet, View } from 'react-native';
+import { AccessibilityInfo, Animated, Dimensions, PanResponder, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { invalidate, useApi } from '@/api/cache';
@@ -18,10 +18,11 @@ import { TeamBadge } from '@/components/match';
 import { Confetti, Float, haptic, Pop, PressableScale } from '@/components/motion';
 import { Button, EmptyState, Icon, Loading, Row, Text } from '@/components/ui';
 import { dayLabel, kickoffTime, pct } from '@/lib/format';
-import { alpha, matchColors, radius, space, useTheme } from '@/theme/theme';
+import { alpha, forWhiteText, matchColors, mix, radius, space, useTheme } from '@/theme/theme';
 
 const { width: W, height: H } = Dimensions.get('window');
 const THRESH = W * 0.28;
+const CARD_BASE = '#0B1020';
 type Decision = Outcome | 'skip';
 type Reveal = { m: MatchCard; pick: Outcome; saved: boolean; error?: string; badges?: string[] };
 const BADGE_NAMES: Record<string, string> = {
@@ -53,8 +54,13 @@ function DeckCard({ m, drag }: { m: MatchCard; drag?: Animated.ValueXY }) {
     </Animated.View>
   );
   return (
-    <View style={[styles.card, { backgroundColor: t.surface, borderColor: alpha('#FFFFFF', 0.16) }]}>
-      <LinearGradient colors={[alpha(hc, 0.7), alpha(hc, 0.12), alpha(ac, 0.12), alpha(ac, 0.7)]} locations={[0, 0.45, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+    <View
+      style={[styles.card, { backgroundColor: CARD_BASE, borderColor: alpha('#FFFFFF', 0.16) }]}
+      accessible
+      accessibilityLabel={`${m.home.name} versus ${m.away.name}, ${m.league.short_name}, ${dayLabel(new Date(m.start_time))} at ${kickoffTime(m.start_time)}. Who wins? Use the buttons below to pick.`}
+    >
+      {/* a dark base in both themes, team colours darkened as needed, so the white text stays readable */}
+      <LinearGradient colors={[forWhiteText(mix(hc, CARD_BASE, 0.3)), alpha(hc, 0.12), alpha(ac, 0.12), forWhiteText(mix(ac, CARD_BASE, 0.3))]} locations={[0, 0.45, 0.55, 1]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
       <Text v="label" color={alpha('#FFFFFF', 0.85)} style={{ textAlign: 'center' }}>
         {m.league.short_name}
       </Text>
@@ -126,6 +132,10 @@ export default function PlayScreen() {
         const badges = (res?.new_badges ?? []).map((b) => BADGE_NAMES[b] ?? b);
         setMade((x) => [...x, { id: m.id, pick: d, ai: m.prediction?.pick ?? null }]);
         setReveal({ m, pick: d, saved: true, badges });
+        const ai = m.prediction;
+        AccessibilityInfo.announceForAccessibility(
+          `Saved: ${nameOf(m, d)}.` + (ai ? ` The AI picked ${nameOf(m, ai.pick)}.` : '') + (badges?.length ? ` Badge unlocked: ${badges.join(', ')}.` : ''),
+        );
         invalidate((k) => k.startsWith('/feed') || k.startsWith('/matches') || k.startsWith('/me') || k.startsWith('/picks'));
         if (badges.length || index + 1 >= deck.length) {
           haptic.success();
@@ -255,24 +265,24 @@ export default function PlayScreen() {
           </Animated.View>
         </View>
         <Row style={{ justifyContent: 'center', paddingVertical: space.lg }} gap={space.md}>
-          <PressableScale onPress={() => fling('home')} accessibilityLabel={`${current.home.short_name} to win`} style={[styles.choice, { borderColor: matchColors(current.home.color, current.away.color, t)[0] }]}>
+          <PressableScale onPress={() => fling('home')} accessibilityLabel={`Pick ${current.home.name} to win`} accessibilityHint="Saves your pick and shows the AI's call" style={[styles.choice, { borderColor: matchColors(current.home.color, current.away.color, t)[0] }]}>
             <Text v="h2" numberOfLines={1} adjustsFontSizeToFit style={{ fontSize: 18 }}>
               {current.home.code}
             </Text>
           </PressableScale>
           {hasDraw(current) ? (
-            <PressableScale onPress={() => fling('draw')} accessibilityLabel="Draw" style={[styles.choice, { borderColor: t.draw }]}>
+            <PressableScale onPress={() => fling('draw')} accessibilityLabel="Pick a draw" accessibilityHint="Saves your pick and shows the AI's call" style={[styles.choice, { borderColor: t.draw }]}>
               <Text v="h2" style={{ fontSize: 18 }}>
                 DRAW
               </Text>
             </PressableScale>
           ) : null}
-          <PressableScale onPress={() => fling('away')} accessibilityLabel={`${current.away.short_name} to win`} style={[styles.choice, { borderColor: matchColors(current.home.color, current.away.color, t)[1] }]}>
+          <PressableScale onPress={() => fling('away')} accessibilityLabel={`Pick ${current.away.name} to win`} accessibilityHint="Saves your pick and shows the AI's call" style={[styles.choice, { borderColor: matchColors(current.home.color, current.away.color, t)[1] }]}>
             <Text v="h2" numberOfLines={1} adjustsFontSizeToFit style={{ fontSize: 18 }}>
               {current.away.code}
             </Text>
           </PressableScale>
-          <PressableScale onPress={() => fling('skip')} accessibilityLabel="Skip" feedback="select" style={[styles.round, { width: 52, height: 52 }]}>
+          <PressableScale onPress={() => fling('skip')} accessibilityLabel="Skip this match" feedback="select" style={[styles.round, { width: 52, height: 52 }]}>
             <Icon name="debug-step-over" size={22} color={t.textDim} />
           </PressableScale>
         </Row>
@@ -306,7 +316,7 @@ export default function PlayScreen() {
               ) : null}
             </View>
             {reveal.saved ? (
-              <PressableScale onPress={undo} feedback="select" accessibilityLabel="Undo" style={{ paddingHorizontal: space.sm, paddingVertical: 6 }}>
+              <PressableScale onPress={undo} feedback="select" accessibilityLabel="Undo your last pick" style={{ paddingHorizontal: space.sm, paddingVertical: 6 }}>
                 <Text v="small" color={t.brand} style={{ fontWeight: '900' }}>
                   UNDO
                 </Text>

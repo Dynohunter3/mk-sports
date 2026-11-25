@@ -237,6 +237,23 @@ function MyGame() {
             </Row>
           </FadeIn>
 
+          {/* this week's banker */}
+          <Card style={{ marginTop: space.lg, borderColor: d?.banker ? alpha(t.gold, 0.7) : t.glassBorder, borderWidth: 1 }}>
+            <Row gap={space.md}>
+              <Text style={{ fontSize: 26 }}>⭐</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontWeight: '800' }}>{d?.banker ? `Banker: ${d.banker.home} v ${d.banker.away}` : 'No banker this week'}</Text>
+                <Text v="small" dim>
+                  {d?.banker
+                    ? d.banker.status === 'pending'
+                      ? 'Double points if your pick is right.'
+                      : `${d.banker.status === 'won' ? 'Won' : 'Lost'}: ${d.banker.points} points.`
+                    : 'Pick a match you are sure about and switch on "Make this my banker" for double points.'}
+                </Text>
+              </View>
+            </Row>
+          </Card>
+
           {/* badges */}
           <SectionHeader title={`Badges · ${(d?.badges ?? []).filter((b) => b.awarded_at).length}/${d?.badges.length ?? 0}`} icon="medal-outline" color={t.gold} />
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
@@ -315,11 +332,35 @@ function MyGame() {
             </>
           ) : null}
 
+          {/* season archive */}
+          {(d?.seasons ?? []).length ? (
+            <>
+              <SectionHeader title="Season archive" icon="archive-outline" color={t.violet} />
+              {(d?.seasons ?? []).map((s) => (
+                <Glass key={s.season} style={{ marginBottom: space.sm, borderColor: s.current ? alpha(t.violet, 0.6) : undefined }}>
+                  <Row style={{ justifyContent: 'space-between' }}>
+                    <Text v="h2" style={{ fontSize: 20 }}>
+                      {s.season.replace('-', '–')}
+                      {s.current ? ' · this season' : ''}
+                    </Text>
+                    <Text v="h2" style={{ fontSize: 20 }} color={t.gold}>
+                      {s.points} pts
+                    </Text>
+                  </Row>
+                  <Text v="small" dim style={{ marginTop: 2 }}>
+                    {s.correct} of {s.picks} right{s.accuracy !== null ? ` (${Math.round(s.accuracy * 100)}%)` : ''} · {s.exact} exact {s.exact === 1 ? 'score' : 'scores'} · best streak {s.best_streak}
+                    {s.bankers ? ` · bankers ${s.bankers_won}/${s.bankers}` : ''}
+                  </Text>
+                </Glass>
+              ))}
+            </>
+          ) : null}
+
           <Card style={{ marginTop: space.lg }}>
             <Row style={{ alignItems: 'flex-start' }}>
               <Icon name="cellphone-lock" color={t.textDim} />
               <Text v="small" dim style={{ flex: 1 }}>
-                Your picks, points and badges are kept on this phone. Leaderboards with friends need the MK Sports server, which can be connected later.
+                Your picks, points and badges are kept on this phone: back them up in Settings, under Privacy. To play friends, start a private league.
               </Text>
             </Row>
           </Card>

@@ -4,6 +4,7 @@
  * the book is rebuilt from the previous 365 days of finished matches, as the app does on device.
  *
  *   node --import tsx scripts/audit/engine-on-permitted.ts
+ *   POOL=audit/data/permitted/football_new_leagues.json OUT=audit/results/engine_v2_new_leagues.preds.json node --import tsx scripts/audit/engine-on-permitted.ts
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -18,7 +19,7 @@ const EU: [number, number] = [Date.UTC(2024, 6, 1), Date.UTC(2026, 6, 1)];
 const WINDOWS: Record<string, [number, number]> = { 'usa.1': [Date.UTC(2024, 1, 1), Date.UTC(2026, 0, 1)] };
 const win = (l: string) => WINDOWS[l] ?? EU;
 
-const pool = (JSON.parse(readFileSync(join(ROOT, 'audit/data/permitted/football_app_leagues.json'), 'utf8')) as Row[]).sort((a, b) => a.t - b.t || a.id.localeCompare(b.id));
+const pool = (JSON.parse(readFileSync(join(ROOT, process.env.POOL ?? 'audit/data/permitted/football_app_leagues.json'), 'utf8')) as Row[]).sort((a, b) => a.t - b.t || a.id.localeCompare(b.id));
 const lp: Record<string, Record<string, number>> = {};
 for (const l of MATCH_LEAGUES) if (l.sport === 'football' && l.modelParams) lp[l.slug] = l.modelParams;
 const model = getModel('football', {}, lp);
@@ -42,5 +43,5 @@ for (const day of [...days.keys()].sort((a, b) => a - b)) {
     out.push({ id: m.id, p: [p.home, p.draw ?? 0, p.away], minGames: Math.min(inp.home.games, inp.away.games) });
   }
 }
-writeFileSync(join(ROOT, 'audit/results/engine_v2_permitted.preds.json'), JSON.stringify(out));
+writeFileSync(join(ROOT, process.env.OUT ?? 'audit/results/engine_v2_permitted.preds.json'), JSON.stringify(out));
 console.log(`${out.length} predictions`);

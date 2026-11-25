@@ -41,6 +41,12 @@ async function load(): Promise<Store> {
 }
 const save = () => writeKV(KEY, store);
 
+/** Restore from a backup: replaces the private leagues on this phone. */
+export async function replaceAll(list: League[]) {
+  store = { leagues: Object.fromEntries(list.filter((l) => l && validCode(l.code)).map((l) => [l.code, l])) };
+  await save();
+}
+
 /** Tests only. */
 export function resetForTests() {
   store = null;

@@ -53,6 +53,8 @@ jobs:
       - name: First run on this machine - backfill every season the models use
         run: |
           if [ ! -f var/mkdata.sqlite ]; then python -m mkdata sync --backfill; fi
+      - name: History for competitions added since the store was built (nothing to do once fetched)
+        run: python -m mkdata sync --backfill --missing
       - name: Fetch current season from every usable source
         run: python -m mkdata sync --current
       - name: Upcoming fixtures and current odds

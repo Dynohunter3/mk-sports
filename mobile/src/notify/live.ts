@@ -37,6 +37,8 @@ async function loop() {
     idle = ms.length ? 0 : idle + 1;
     if (idle >= 4) break; // two minutes with nothing live: done
     await BackgroundService.updateNotification(texts(ms)).catch(() => undefined);
+    // keep the "My team" home-screen widget's score current while a match is on
+    await import('@/widget/handler').then((w) => w.updateMyTeamWidget()).catch(() => undefined);
     await sleep(EVERY_MS);
   }
   await BackgroundService.stop().catch(() => undefined);

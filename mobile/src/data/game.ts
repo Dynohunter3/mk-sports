@@ -33,6 +33,8 @@ export type LocalPick = {
   created_at: string;
   updated_at: string;
   settled_at: string | null;
+  /** the week's banker: points doubled (one per ISO week of kick-off) */
+  banker?: boolean;
 };
 
 export type Profile = {
@@ -46,7 +48,7 @@ export type Profile = {
   avatar?: string;
 };
 export const AVATARS = ['⚽', '🦁', '🐆', '🦅', '🔥', '⚡', '👑', '🎯', '🚀', '🐐', '🌍', '💎'];
-type State = { profile: Profile; picks: Record<string, LocalPick>; badges: Record<string, string>; seen?: Record<string, string> };
+export type State = { profile: Profile; picks: Record<string, LocalPick>; badges: Record<string, string>; seen?: Record<string, string> };
 
 const KEY = 'game:v1';
 let state: State | null = null;
@@ -123,7 +125,7 @@ export function validatePick(hasDraws: boolean, pick: Outcome | null | undefined
 export const isLocked = (ev: Pick<SEvent, 'status' | 'start'>, now = Date.now()) => ev.status !== 'scheduled' || now >= Date.parse(ev.start);
 
 // ------------------------------------------------------------------ actions
-export async function makePick(ev: SEvent, body: { pick?: Outcome | null; home_score?: number | null; away_score?: number | null }, aiPick: Outcome | null): Promise<{ pick: LocalPick; newBadges: string[] }> {
+export async function makePick(ev: SEvent, body: { pick?: Outcome | null; home_score?: number | null; away_score?: number | null; banker?: boolean }, aiPick: Outcome | null): Promise<{ pick: LocalPick; newBadges: string[] }> {
   const st = await loadGame();
   if (!st.profile.consented_at) throw new PickError('consent_required', 'Please accept the terms first', 403);
   if (isLocked(ev)) throw new PickError('locked', 'Picks for this match locked at kick-off', 409);
@@ -157,11 +159,44 @@ export async function makePick(ev: SEvent, body: { pick?: Outcome | null; home_s
     created_at: prev?.created_at ?? now,
     updated_at: now,
     settled_at: null,
+    banker: prev?.banker ?? false,
   };
+  if (body.banker !== undefined) applyBanker(st, p, body.banker);
   st.picks[ev.id] = p;
   const newBadges = prev ? [] : award(st);
   await save();
   return { pick: p, newBadges };
+}
+
+/** This week's banker (by kick-off week), if any. */
+export function bankerOfWeek(st: State, week: string, except?: string): LocalPick | null {
+  return Object.values(st.picks).find((x) => x.banker && x.matchId !== except && isoWeek(new Date(x.kickoff)) === week) ?? null;
+}
+
+/** One banker per week, worth double points. It can move to another match until its own match kicks off. */
+function applyBanker(st: State, p: LocalPick, on: boolean, now = Date.now()) {
+  if (!on) {
+    p.banker = false;
+    return;
+  }
+  const other = bankerOfWeek(st, isoWeek(new Date(p.kickoff)), p.matchId);
+  if (other) {
+    if (other.status !== 'pending' || now >= Date.parse(other.kickoff)) {
+      throw new PickError('banker_locked', `Your banker this week (${other.homeName} v ${other.awayName}) has already kicked off`, 409);
+    }
+    other.banker = false;
+  }
+  p.banker = true;
+}
+
+export async function setBanker(ev: SEvent, on: boolean) {
+  const st = await loadGame();
+  const p = st.picks[ev.id];
+  if (!p) throw new PickError('not_found', 'Make a pick first', 404);
+  if (isLocked(ev)) throw new PickError('locked', 'Picks for this match locked at kick-off', 409);
+  applyBanker(st, p, on);
+  await save();
+  return p;
 }
 
 export async function deletePick(ev: SEvent) {
@@ -188,7 +223,7 @@ export async function settle(events: SEvent[]): Promise<number> {
       const same = p.final_score && p.final_score[0] === ev.homeScore && p.final_score[1] === ev.awayScore;
       if (p.status !== 'pending' && same) continue;
       const r = scorePick(sportOf(ev.sport)!.scoring, p.pick, ev.homeScore, ev.awayScore, p.home_score, p.away_score);
-      Object.assign(p, { status: r.status, points: r.points, result_correct: r.correct, exact_score: r.exact, final_score: [ev.homeScore, ev.awayScore], settled_at: p.settled_at ?? new Date().toISOString() });
+      Object.assign(p, { status: r.status, points: r.points * (p.banker ? 2 : 1), result_correct: r.correct, exact_score: r.exact, final_score: [ev.homeScore, ev.awayScore], settled_at: p.settled_at ?? new Date().toISOString() });
       n++;
     }
   }
@@ -359,11 +394,51 @@ export function pointsByPeriod(st: State) {
   };
 }
 
+/** Every season played (July to June), newest first: worked out from the saved picks. */
+export function seasonArchive(st: State) {
+  const by = new Map<string, LocalPick[]>();
+  for (const p of settledInOrder(st)) {
+    const k = seasonKey(new Date(p.kickoff));
+    by.set(k, [...(by.get(k) ?? []), p]);
+  }
+  const current = seasonKey(new Date());
+  return [...by.entries()]
+    .map(([season, ps]) => {
+      let best = 0;
+      let run = 0;
+      for (const p of ps) {
+        run = p.status === 'won' ? run + 1 : 0;
+        best = Math.max(best, run);
+      }
+      const correct = ps.filter((p) => p.status === 'won').length;
+      const bankers = ps.filter((p) => p.banker);
+      return {
+        season,
+        current: season === current,
+        points: ps.reduce((s, p) => s + p.points, 0),
+        picks: ps.length,
+        correct,
+        accuracy: ps.length ? correct / ps.length : null,
+        exact: ps.filter((p) => p.exact_score).length,
+        best_streak: best,
+        bankers: bankers.length,
+        bankers_won: bankers.filter((p) => p.status === 'won').length,
+      };
+    })
+    .sort((a, b) => b.season.localeCompare(a.season));
+}
+
 export async function updateProfile(patch: Partial<Profile>) {
   const st = await loadGame();
   st.profile = { ...st.profile, ...patch };
   await save();
   return st.profile;
+}
+
+/** Restore from a backup: replaces the game state on this phone. */
+export async function replaceGame(next: State) {
+  state = { profile: next.profile, picks: next.picks ?? {}, badges: next.badges ?? {}, seen: next.seen ?? {} };
+  await save();
 }
 
 export async function resetGame() {

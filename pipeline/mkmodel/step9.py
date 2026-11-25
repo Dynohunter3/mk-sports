@@ -27,7 +27,7 @@ from sklearn.linear_model import LogisticRegression
 
 from . import experiment as ex
 from . import step8 as s8
-from .data import APP_LEAGUES, LOWER, DAY, load
+from .data import APP_LEAGUES_STEP9 as APP_LEAGUES, LOWER_STEP9 as LOWER, DAY, load
 from .features import FEATURES, Config, EloParams, build
 from .picks import picks
 

@@ -59,7 +59,9 @@ export function PressableScale({
   const to = (v: number) => Animated.spring(s, { toValue: v, useNativeDriver: true, speed: 40, bounciness: v === 1 ? 12 : 0 }).start();
   return (
     <AnimatedPressable
+      accessibilityRole="button"
       {...rest}
+      accessibilityState={{ disabled: !!disabled, ...(rest.accessibilityState ?? {}) }}
       disabled={disabled}
       onPressIn={(e) => {
         if (motionEnabled()) to(scaleTo);

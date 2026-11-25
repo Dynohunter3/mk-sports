@@ -220,9 +220,14 @@ function Home() {
           <Icon name="account" size={22} color={t.text} />
         </PressableScale>
         <Wordmark size={30} />
-        <PressableScale onPress={() => router.push('/settings')} accessibilityRole="button" accessibilityLabel="Settings" hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.text, 0.1), alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="cog-outline" size={22} color={t.text} />
-        </PressableScale>
+        <Row gap={8}>
+          <PressableScale onPress={() => router.push('/search')} accessibilityRole="button" accessibilityLabel="Search teams, players and competitions" hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.text, 0.1), alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="magnify" size={22} color={t.text} />
+          </PressableScale>
+          <PressableScale onPress={() => router.push('/settings')} accessibilityRole="button" accessibilityLabel="Settings" hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: alpha(t.text, 0.1), alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="cog-outline" size={22} color={t.text} />
+          </PressableScale>
+        </Row>
       </Row>
       <FadeIn style={{ marginTop: space.md }}>
         <Text v="label" dim>

@@ -1,7 +1,36 @@
 id,kind,sport,name,country,created_by
 fb-aut-red-bull-salzburg,team,football,FC Red Bull Salzburg,aut,openfootball
 fb-aut-sturm-graz,team,football,SK Sturm Graz,aut,openfootball
+fb-bel-anderlecht,team,football,Anderlecht,bel,footballdata_uk
+fb-bel-antwerp,team,football,Antwerp,bel,footballdata_uk
+fb-bel-beerschot-va,team,football,Beerschot VA,bel,footballdata_uk
+fb-bel-beveren,team,football,Beveren,bel,footballdata_uk
+fb-bel-brugge,team,football,Club Brugge,bel,footballdata_uk
 fb-bel-brugge-kv,team,football,Club Brugge KV,bel,openfootball
+fb-bel-cercle-brugge,team,football,Cercle Brugge,bel,footballdata_uk
+fb-bel-charleroi,team,football,Charleroi,bel,footballdata_uk
+fb-bel-dender,team,football,Dender,bel,footballdata_uk
+fb-bel-eupen,team,football,Eupen,bel,footballdata_uk
+fb-bel-genk,team,football,Genk,bel,footballdata_uk
+fb-bel-gent,team,football,Gent,bel,footballdata_uk
+fb-bel-kortrijk,team,football,Kortrijk,bel,footballdata_uk
+fb-bel-lierse,team,football,Lierse,bel,footballdata_uk
+fb-bel-lokeren,team,football,Lokeren,bel,footballdata_uk
+fb-bel-lommel,team,football,Lommel SK,bel,footballdata_uk
+fb-bel-mechelen,team,football,Mechelen,bel,footballdata_uk
+fb-bel-mouscron,team,football,Mouscron,bel,footballdata_uk
+fb-bel-mouscron-peruwelz,team,football,Mouscron-Peruwelz,bel,footballdata_uk
+fb-bel-oostende,team,football,Oostende,bel,footballdata_uk
+fb-bel-oud-heverlee-leuven,team,football,Oud-Heverlee Leuven,bel,footballdata_uk
+fb-bel-raal-louviere,team,football,RAAL La Louviere,bel,footballdata_uk
+fb-bel-rwd-molenbeek,team,football,RWD Molenbeek,bel,footballdata_uk
+fb-bel-saint-gilloise,team,football,St. Gilloise,bel,footballdata_uk
+fb-bel-saint-truiden,team,football,St Truiden,bel,footballdata_uk
+fb-bel-seraing,team,football,Seraing,bel,footballdata_uk
+fb-bel-standard,team,football,Standard,bel,footballdata_uk
+fb-bel-waasland-beveren,team,football,Waasland-Beveren,bel,footballdata_uk
+fb-bel-waregem,team,football,Waregem,bel,footballdata_uk
+fb-bel-westerlo,team,football,Westerlo,bel,footballdata_uk
 fb-cro-gnk-dinamo-zagreb,team,football,GNK Dinamo Zagreb,cro,openfootball
 fb-cze-sparta-praha,team,football,AC Sparta Praha,cze,openfootball
 fb-eng-accrington,team,football,Accrington,eng,footballdata_uk
@@ -284,6 +313,37 @@ fb-ger-wehen,team,football,Wehen,ger,footballdata_uk
 fb-ger-werder-bremen,team,football,Werder Bremen,ger,footballdata_uk
 fb-ger-wolfsburg,team,football,Wolfsburg,ger,footballdata_uk
 fb-ger-wurzburger-kickers,team,football,Wurzburger Kickers,ger,footballdata_uk
+fb-gre-aek,team,football,AEK,gre,footballdata_uk
+fb-gre-apollon,team,football,Apollon,gre,footballdata_uk
+fb-gre-aris,team,football,Aris,gre,footballdata_uk
+fb-gre-asteras-tripolis,team,football,Asteras Tripolis,gre,footballdata_uk
+fb-gre-athens-kallithea,team,football,Athens Kallithea,gre,footballdata_uk
+fb-gre-atromitos,team,football,Atromitos,gre,footballdata_uk
+fb-gre-ergotelis,team,football,Ergotelis,gre,footballdata_uk
+fb-gre-giannina,team,football,Giannina,gre,footballdata_uk
+fb-gre-ionikos,team,football,Ionikos,gre,footballdata_uk
+fb-gre-iraklis,team,football,Iraklis,gre,footballdata_uk
+fb-gre-kalamata,team,football,Kalamata,gre,footballdata_uk
+fb-gre-kallonis,team,football,Kallonis,gre,footballdata_uk
+fb-gre-kerkyra,team,football,Kerkyra,gre,footballdata_uk
+fb-gre-kifisia,team,football,Kifisia,gre,footballdata_uk
+fb-gre-lamia,team,football,Lamia,gre,footballdata_uk
+fb-gre-larisa,team,football,Larisa,gre,footballdata_uk
+fb-gre-levadeiakos,team,football,Levadeiakos,gre,footballdata_uk
+fb-gre-niki-volos,team,football,Niki Volos,gre,footballdata_uk
+fb-gre-ofi,team,football,OFI,gre,footballdata_uk
+fb-gre-ofi-crete,team,football,OFI Crete,gre,footballdata_uk
+fb-gre-olympiakos,team,football,Olympiakos,gre,footballdata_uk
+fb-gre-panathinaikos,team,football,Panathinaikos,gre,footballdata_uk
+fb-gre-panetolikos,team,football,Panetolikos,gre,footballdata_uk
+fb-gre-panionios,team,football,Panionios,gre,footballdata_uk
+fb-gre-panserraikos,team,football,Panserraikos,gre,footballdata_uk
+fb-gre-panthrakikos,team,football,Panthrakikos,gre,footballdata_uk
+fb-gre-paok,team,football,PAOK,gre,footballdata_uk
+fb-gre-platanias,team,football,Platanias,gre,footballdata_uk
+fb-gre-veria,team,football,Veria,gre,footballdata_uk
+fb-gre-volos-nfc,team,football,Volos NFC,gre,footballdata_uk
+fb-gre-xanthi,team,football,Xanthi,gre,footballdata_uk
 fb-int-algeria,team,football,Algeria,,openfootball
 fb-int-argentina,team,football,Argentina,,openfootball
 fb-int-australia,team,football,Australia,,openfootball
@@ -463,7 +523,24 @@ fb-por-sporting-lisbon,team,football,Sp Lisbon,por,footballdata_uk
 fb-por-tondela,team,football,Tondela,por,footballdata_uk
 fb-por-uniao-madeira,team,football,Uniao Madeira,por,footballdata_uk
 fb-por-vizela,team,football,Vizela,por,footballdata_uk
+fb-sco-aberdeen,team,football,Aberdeen,sco,footballdata_uk
 fb-sco-celtic,team,football,Celtic FC,sco,openfootball
+fb-sco-celtic-2,team,football,Celtic,sco,footballdata_uk
+fb-sco-dundee,team,football,Dundee,sco,footballdata_uk
+fb-sco-dundee-united,team,football,Dundee United,sco,footballdata_uk
+fb-sco-falkirk,team,football,Falkirk,sco,footballdata_uk
+fb-sco-hamilton,team,football,Hamilton,sco,footballdata_uk
+fb-sco-hearts,team,football,Hearts,sco,footballdata_uk
+fb-sco-hibernian,team,football,Hibernian,sco,footballdata_uk
+fb-sco-inverness-c,team,football,Inverness C,sco,footballdata_uk
+fb-sco-kilmarnock,team,football,Kilmarnock,sco,footballdata_uk
+fb-sco-livingston,team,football,Livingston,sco,footballdata_uk
+fb-sco-motherwell,team,football,Motherwell,sco,footballdata_uk
+fb-sco-partick,team,football,Partick,sco,footballdata_uk
+fb-sco-rangers,team,football,Rangers,sco,footballdata_uk
+fb-sco-ross-county,team,football,Ross County,sco,footballdata_uk
+fb-sco-saint-johnstone,team,football,St Johnstone,sco,footballdata_uk
+fb-sco-saint-mirren,team,football,St Mirren,sco,footballdata_uk
 fb-srb-crvena-zvezda,team,football,FK Crvena Zvezda,srb,openfootball
 fb-sui-young-boys,team,football,BSC Young Boys,sui,openfootball
 fb-svk-slovan-bratislava,team,football,ŠK Slovan Bratislava,svk,openfootball

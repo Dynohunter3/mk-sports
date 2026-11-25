@@ -77,7 +77,7 @@ export type RemoteGraded = {
 };
 type Rate = { n: number; hit_rate: number | null };
 export type RemoteWindow = { matches: Rate; safer_call: Rate; strong: Rate };
-export type AccAgg = { n: number; correct: number; hit_rate: number | null; log_loss: number | null; brier: number | null; by_confidence: Partial<Record<'high' | 'medium' | 'low', { n: number; hit_rate: number }>> };
+export type AccAgg = { n: number; correct: number; hit_rate: number | null; log_loss: number | null; brier: number | null; rps?: number | null; by_confidence: Partial<Record<'high' | 'medium' | 'low', { n: number; hit_rate: number }>> };
 type Trio = { accuracy: number; log_loss: number; brier: number };
 export type RemoteAccuracy = {
   schema: number;
@@ -89,6 +89,7 @@ export type RemoteAccuracy = {
     recent: RemoteGraded[];
     last_7_days?: RemoteWindow;
     last_30_days?: RemoteWindow;
+    record_check?: import('@/api/types').RecordCheck;
   };
   backtest: { source: string; period: string; competitions: Record<string, { n: number; new: Trio; previous: Trio | null; bookmaker: Trio | null }> } | null;
   /** Backtest hit rates of the calls the app shows: by strength, draws, double chance, goal markets. */
@@ -102,6 +103,11 @@ export type RemoteAccuracy = {
     draw_note?: { min_draw: number; n: number; share: number; ended_level: number };
     over25?: TrackRecord & { confident: TrackRecord & { share: number } };
     btts?: TrackRecord & { confident: TrackRecord & { share: number } };
+    rps?: number;
+    bookmaker_rps?: number;
+    model_rps_same_matches?: number;
+    pick_calibration?: import('@/api/types').CalibrationBin[];
+    source?: string;
   };
   note: string;
 };

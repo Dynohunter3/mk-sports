@@ -4,6 +4,7 @@ import { ReactNode, useState } from 'react';
 import { Linking, Platform, Pressable, ScrollView, Share, Switch, TextInput, View } from 'react-native';
 
 import { ProfileEditor } from '@/components/profile';
+import { BackupError, makeBackup, parseBackup, restoreBackup, summary as backupSummary } from '@/data/backup';
 import { CONTACT } from '@/data/contact';
 import { PHOTO_CREDITS_URL } from '@/data/photos';
 import { SITE } from '@/data/pleagues';
@@ -76,20 +77,62 @@ export default function Settings() {
 
   async function exportData() {
     try {
-      const data = await api<unknown>('/me/export');
-      const json = JSON.stringify(data, null, 2);
+      if (auth.mode !== 'device') {
+        // server mode: the account's data, as before
+        const json = JSON.stringify(await api<unknown>('/me/export'), null, 2);
+        await Share.share({ message: json, title: 'My MK Sports data' });
+        return;
+      }
+      const json = JSON.stringify(await makeBackup(prefs as unknown as Record<string, unknown>), null, 1);
+      const name = `mk-sports-backup-${new Date().toISOString().slice(0, 10)}.json`;
       if (Platform.OS === 'web') {
         const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'predictpro-data.json';
+        a.download = name;
         a.click();
         URL.revokeObjectURL(url);
-      } else {
-        await Share.share({ message: json, title: 'My MK Sports data' });
+        return;
       }
+      const { File, Paths } = await import('expo-file-system');
+      const Sharing = await import('expo-sharing');
+      const f = new File(Paths.cache, name);
+      if (f.exists) f.delete();
+      f.create();
+      f.write(json);
+      await Sharing.shareAsync(f.uri, { mimeType: 'application/json', dialogTitle: 'Save your MK Sports backup', UTI: 'public.json' });
     } catch {
-      notify('Export failed', 'Check your connection and try again.');
+      notify('Backup failed', 'Please try again.');
+    }
+  }
+
+  async function importData() {
+    try {
+      const DocumentPicker = await import('expo-document-picker');
+      const res = await DocumentPicker.getDocumentAsync({ type: ['application/json', 'text/plain', 'application/octet-stream', '*/*'], copyToCacheDirectory: true, multiple: false });
+      if (res.canceled || !res.assets?.[0]) return;
+      let text: string;
+      if (Platform.OS === 'web') text = await (await fetch(res.assets[0].uri)).text();
+      else {
+        const { File } = await import('expo-file-system');
+        text = await new File(res.assets[0].uri).text();
+      }
+      const b = parseBackup(text);
+      const s = backupSummary(b);
+      const when = s.date ? ` from ${new Date(s.date).toLocaleDateString()}` : '';
+      const ok = await confirm(
+        `Restore this backup${when}?`,
+        `It has ${s.picks} ${s.picks === 1 ? 'pick' : 'picks'}, ${s.leagues} private ${s.leagues === 1 ? 'league' : 'leagues'}${s.settings ? ' and your settings' : ''}. It replaces what is on this phone now.`,
+        'Restore',
+      );
+      if (!ok) return;
+      const restored = await restoreBackup(b);
+      if (restored) update(restored as never);
+      invalidate(() => true);
+      await auth.refreshMe();
+      notify('Backup restored', `${s.picks} ${s.picks === 1 ? 'pick' : 'picks'} and ${s.leagues} ${s.leagues === 1 ? 'league' : 'leagues'} are back.`);
+    } catch (e) {
+      notify('Could not restore', e instanceof BackupError ? e.message : 'That file could not be read.');
     }
   }
 
@@ -137,6 +180,22 @@ export default function Settings() {
             ) : null}
             <Item icon="alarm" title="Kick-off reminders (30 min before)" right={<Switch value={prefs.notify.reminders} onValueChange={(v) => setNotify({ reminders: v })} accessibilityLabel="Kick-off reminders" />} />
             <Item icon="hand-pointing-right" title="Pick results & points" right={<Switch value={prefs.notify.pickResults} onValueChange={(v) => setNotify({ pickResults: v })} accessibilityLabel="Pick results" />} />
+            {Platform.OS === 'android' ? (
+              <Item
+                icon="widgets-outline"
+                title="Add the My team widget"
+                sub="Your team's live score or next match on your home screen"
+                onPress={async () => {
+                  try {
+                    const { requestPinWidget } = await import('react-native-android-widget');
+                    const ok = await requestPinWidget({ widgetName: 'MyTeam' });
+                    if (!ok) notify('Add it from your home screen', 'Long-press an empty spot on your home screen, choose Widgets, then find MK Sports.');
+                  } catch {
+                    notify('Add it from your home screen', 'Long-press an empty spot on your home screen, choose Widgets, then find MK Sports.');
+                  }
+                }}
+              />
+            ) : null}
             <Item
               icon="bell-ring-outline"
               title="Test my alerts"
@@ -251,13 +310,19 @@ export default function Settings() {
 
           <SectionHeader title="Privacy" />
           <Card style={{ paddingVertical: 4 }}>
-            <Item icon="download-outline" title="Export my data" sub="Everything we hold about you, as JSON" onPress={exportData} />
+            <Item icon="download-outline" title={auth.mode === 'device' ? 'Back up my data' : 'Export my data'} sub={auth.mode === 'device' ? 'Picks, points, badges, leagues and settings, as a file you keep' : 'Everything we hold about you, as JSON'} onPress={exportData} />
+            {auth.mode === 'device' ? <Item icon="upload-outline" title="Restore from a backup" sub="On a new phone, or after reinstalling" onPress={importData} /> : null}
             {auth.mode === 'device' ? (
               <Item icon="delete-outline" title="Delete my data" sub="Removes your picks, points, badges and saved forecasts from this phone" onPress={deleteAccount} danger />
             ) : (
               <Item icon="delete-outline" title="Delete my account" sub="Removes your account and all associated data" onPress={deleteAccount} danger />
             )}
           </Card>
+          {auth.mode === 'device' ? (
+            <Text v="tiny" muted style={{ marginTop: space.sm, marginHorizontal: space.xs }}>
+              Android also backs up MK Sports to your Google account when backup is on in your phone's settings, and restores it when you reinstall or set up a new phone. A backup file is the sure way to move your picks and leagues yourself.
+            </Text>
+          ) : null}
         </>
       ) : (
         <>

@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 
 import numpy as np
 
-from .data import APP_LEAGUES, load
+from .data import APP_LEAGUES_STEP9 as APP_LEAGUES, load
 from .experiment import CACHE, FEED, RESULTS, RUN, split_of
 from .picks import PAIRS, TIERS, double_chance, picks
 

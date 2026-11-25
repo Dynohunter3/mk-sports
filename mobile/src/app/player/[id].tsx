@@ -12,6 +12,7 @@ import { Glass } from '@/components/glass';
 import { EmptyState, Icon, Loading, Row, SectionHeader, StatTile, Text } from '@/components/ui';
 import { LEAGUE_BY_SLUG } from '@/data/leagues';
 import { creditLine, usePlayerPhoto, type Who } from '@/data/photos';
+import { usePlayerSeasonXg } from '@/data/playerxg';
 import { alpha, LeagueTheme, space, useTheme } from '@/theme/theme';
 
 const MATCH_KEYS: [string, string][] = [
@@ -122,6 +123,8 @@ function Player({ id, league, match }: { id: string; league: string; match?: str
             </>
           ) : null}
 
+          {lg?.sport === 'football' && p.team ? <PlayerXg league={league} team={p.team.espnId} id={id} /> : null}
+
           {p.recent.length ? (
             <>
               <SectionHeader title="Recent form · last 5" icon="chart-timeline-variant" />
@@ -197,5 +200,42 @@ function PhotoCredit({ who }: { who: Who }) {
     <Text v="tiny" color="rgba(255,255,255,0.7)" style={{ marginTop: space.sm }} numberOfLines={2}>
       {creditLine(photo)}
     </Text>
+  );
+}
+
+/** Season xG from shot positions: MK Sports' own estimate (data/playerxg.ts). */
+function PlayerXg({ league, team, id }: { league: string; team: string; id: string }) {
+  const t = useTheme();
+  const x = usePlayerSeasonXg(league, team, id);
+  const lg = LEAGUE_BY_SLUG[league];
+  if (!x.loading && (!x.data || x.data.matches === 0)) return null;
+  const d = x.data;
+  const diff = d ? d.goals - d.xg : 0;
+  return (
+    <>
+      <SectionHeader title={`Expected goals · ${lg?.shortName ?? 'this season'}`} icon="target" />
+      <Glass>
+        {x.loading || !d ? (
+          <Text v="small" dim>
+            Working out from this season's matches{x.total ? ` (${x.done} of ${x.total})` : ''}…
+          </Text>
+        ) : (
+          <>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
+              <StatTile label="xG" value={d.xg.toFixed(2)} color={t.brand} />
+              <StatTile label="xG per 90" value={d.xgPer90 !== null ? d.xgPer90.toFixed(2) : '-'} />
+              <StatTile label="Non-penalty xG" value={d.npxg.toFixed(2)} />
+              <StatTile label="Goals" value={String(d.goals)} sub={d.shots ? `from ${d.shots} shots` : undefined} />
+              <StatTile label="Goals − xG" value={`${diff >= 0 ? '+' : ''}${diff.toFixed(2)}`} color={Math.abs(diff) < 0.5 ? undefined : diff > 0 ? t.win : t.loss} />
+              <StatTile label="Minutes" value={String(Math.round(d.minutes))} />
+            </View>
+            <Text v="tiny" muted style={{ marginTop: space.sm }}>
+              MK Sports' own estimate from shot positions, not an official figure. From {d.matches} {d.matches === 1 ? 'match' : 'matches'} this season
+              {d.skipped ? `; ${d.skipped} left out because the feed had no shot positions` : ''}. "Goals − xG" above zero means finishing better than the chances suggest.
+            </Text>
+          </>
+        )}
+      </Glass>
+    </>
   );
 }
