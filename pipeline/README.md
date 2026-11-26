@@ -20,3 +20,15 @@ only (CI secrets in production) and are redacted from logs and the cache.
 - `var/` holds the rebuildable database, HTTP cache, snapshots and status files. It is not committed.
 
 Report for this step: `../docs/audit/STEP2_DATA_LAYER.md`.
+
+## mkmodel: the published football model and what is built on it
+
+    python -m mkmodel.production retrain --if-due      # monthly, or when the model code changes
+    python -m mkmodel.production predict               # the next 21 days -> var/publish/football_predictions.json
+    python -m mkmodel.production grade                 # grade finished matches -> var/publish/accuracy.json
+    python -m mkmodel.simulate                         # season simulator -> var/publish/simulations.json
+    python -m mkmodel.elo_history                      # team strength history -> var/publish/elo/<competition>.json
+    python -m mkmodel.sim_backtest                     # Step 11 backtest of the simulator (about 30 minutes)
+
+`mkmodel/proof.py` runs in the workflow after the predictions commit and writes `proof.json` (the commit that
+first published each prediction). Reports: `../docs/audit/` (Steps 3 to 11).

@@ -87,7 +87,7 @@ function LeagueCard({ l, meId, onChanged }: { l: PrivateLeague; meId: string; on
                   </Text>
                   <Text v="tiny" muted numberOfLines={1}>
                     {r.correct}/{r.settled} correct{r.streak >= 2 ? ` · 🔥${r.streak}` : ''}
-                    {me ? '' : ` · updated ${relative(r.at * 1000)}`}
+                    {me || r.at < 1e9 ? '' : ` · updated ${relative(r.at * 1000)}`}
                   </Text>
                 </View>
                 <Text v="h2" color={me ? t.brand : t.text}>

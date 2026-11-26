@@ -93,3 +93,8 @@
   - private leagues (awards);
   - the probability pick screen;
   - the public record page.
+- **Emulator** (x86_64 build of 2.3.0, Android 10):
+  - It installed over 2.2 and kept the saved data (profile and private league).
+  - The matchweek awards showed in the league.
+  - **Share image** produced the PNG from the league card and opened Android's share sheet (Gmail, Messages, Bluetooth). This is the native capture path that can't run on the web.
+  - The emulator has no internet in this environment, so screens that need live data were checked in the web previews instead.
