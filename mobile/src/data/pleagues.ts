@@ -30,6 +30,9 @@ export type Card = {
   streak: number;
   /** when this card was made (epoch seconds) */
   at: number;
+  /** points in the ISO week before `wk` (for the matchweek awards; cards from older versions lack them) */
+  pw?: number;
+  pwk?: string;
 };
 export type League = { code: string; name: string; created_at: string; members: Record<string, Card> };
 type Store = { leagues: Record<string, League> };
@@ -100,10 +103,11 @@ export function fromB64url(s: string): string {
   return decodeURIComponent(bytes.map((x) => '%' + x.toString(16).padStart(2, '0')).join(''));
 }
 
-type Wire = { v: 1; c: string; n: string; m: [string, string, string, number, number, string, number, number, number, number][] };
+// two fields were added at the end in 2.3 (previous week's points and its key); older versions ignore them
+type Wire = { v: 1; c: string; n: string; m: [string, string, string, number, number, string, number, number, number, number, number?, string?][] };
 
 export function encodeLeague(l: Pick<League, 'code' | 'name'>, cards: Card[]): string {
-  const w: Wire = { v: 1, c: l.code, n: l.name, m: cards.slice(0, MAX_MEMBERS).map((x) => [x.id, x.name, x.avatar, x.points, x.week, x.wk, x.correct, x.settled, x.streak, x.at]) };
+  const w: Wire = { v: 1, c: l.code, n: l.name, m: cards.slice(0, MAX_MEMBERS).map((x) => [x.id, x.name, x.avatar, x.points, x.week, x.wk, x.correct, x.settled, x.streak, x.at, x.pw ?? 0, x.pwk ?? '']) };
   return toB64url(JSON.stringify(w));
 }
 
@@ -117,6 +121,7 @@ export function decodeLeague(d: string): { code: string; name: string; cards: Ca
     .map((r) => ({
       id: r[0].slice(0, 24), name: String(r[1] ?? 'Player').slice(0, 30), avatar: String(r[2] ?? '⚽').slice(0, 4), points: num(r[3]), week: num(r[4]),
       wk: String(r[5] ?? '').slice(0, 10), correct: num(r[6]), settled: num(r[7]), streak: num(r[8]), at: num(r[9]),
+      ...(r.length > 10 && r[11] ? { pw: num(r[10]), pwk: String(r[11]).slice(0, 10) } : {}),
     }));
   return { code: w.c, name: String(w.n || w.c).slice(0, 40), cards };
 }
@@ -188,10 +193,65 @@ export async function refreshMine(me: Card) {
   let changed = false;
   for (const l of Object.values(s.leagues)) {
     const cur = l.members[me.id];
-    if (!cur || cur.points !== me.points || cur.week !== me.week || cur.wk !== me.wk || cur.correct !== me.correct || cur.name !== me.name || cur.avatar !== me.avatar || cur.streak !== me.streak) {
+    if (!cur || cur.points !== me.points || cur.week !== me.week || cur.wk !== me.wk || cur.correct !== me.correct || cur.name !== me.name || cur.avatar !== me.avatar || cur.streak !== me.streak || cur.pw !== me.pw || cur.pwk !== me.pwk) {
       l.members[me.id] = me;
       changed = true;
     }
   }
   if (changed) await save();
+}
+
+// ------------------------------------------------------------------ matchweek awards
+export type Award = { key: 'sharpshooter' | 'climber' | 'streak'; emoji: string; title: string; winners: { id: string; name: string; avatar: string }[]; detail: string };
+
+/** A member's points in ISO week `wk`, if their card says (it carries this week and the one before). */
+export function pointsIn(c: Card, wk: string): number | null {
+  if (c.wk === wk) return c.week;
+  if (c.pwk === wk) return c.pw ?? 0;
+  if (c.wk && c.wk < wk) return 0; // no picks settled since that card was made
+  return null;
+}
+
+/** Total points at the end of ISO week `wk`, if the card says. */
+function totalAfter(c: Card, wk: string): number | null {
+  if (!c.wk || c.wk <= wk) return c.points; // nothing scored after wk as far as the card knows
+  if (c.pwk === wk) return c.points - c.week;
+  return null;
+}
+
+/**
+ * Awards for one matchweek from the members' cards: Sharpshooter of the week (most points that week) and
+ * Biggest climber (most places gained in the table during the week). Only members whose cards cover the week
+ * are counted. `streakNow` adds the longest current run of correct picks (from the latest cards).
+ */
+export function weeklyAwards(members: Card[], wk: string, streakNow = false): Award[] {
+  const out: Award[] = [];
+  const who = (c: Card) => ({ id: c.id, name: c.name, avatar: c.avatar });
+  const known = members.map((c) => ({ c, pts: pointsIn(c, wk), end: totalAfter(c, wk) })).filter((x) => x.pts !== null && x.end !== null) as { c: Card; pts: number; end: number }[];
+  const top = Math.max(0, ...known.map((x) => x.pts));
+  if (top > 0) {
+    const w = known.filter((x) => x.pts === top);
+    out.push({ key: 'sharpshooter', emoji: '🎯', title: 'Sharpshooter of the week', winners: w.map((x) => who(x.c)), detail: `${top} point${top === 1 ? '' : 's'}` });
+  }
+  if (known.length >= 3) {
+    const rank = (vals: { id: string; v: number }[]) => {
+      const sorted = [...vals].sort((a, b) => b.v - a.v);
+      const r = new Map<string, number>();
+      sorted.forEach((x, i) => r.set(x.id, i > 0 && sorted[i - 1].v === x.v ? r.get(sorted[i - 1].id)! : i + 1));
+      return r;
+    };
+    const before = rank(known.map((x) => ({ id: x.c.id, v: x.end - x.pts })));
+    const after = rank(known.map((x) => ({ id: x.c.id, v: x.end })));
+    const gains = known.map((x) => ({ x, g: before.get(x.c.id)! - after.get(x.c.id)! }));
+    const best = Math.max(0, ...gains.map((y) => y.g));
+    if (best > 0) {
+      const w = gains.filter((y) => y.g === best);
+      out.push({ key: 'climber', emoji: '📈', title: 'Biggest climber', winners: w.map((y) => who(y.x.c)), detail: `up ${best} place${best === 1 ? '' : 's'}` });
+    }
+  }
+  if (streakNow) {
+    const s = Math.max(0, ...members.map((c) => c.streak));
+    if (s >= 3) out.push({ key: 'streak', emoji: '🔥', title: 'On fire', winners: members.filter((c) => c.streak === s).map(who), detail: `${s} right in a row` });
+  }
+  return out;
 }

@@ -81,10 +81,11 @@ export function LeadersView({ categories, league }: { categories: LeaderCategory
 }
 
 // ------------------------------------------------------------------ tennis
-function TennisRow({ m }: { m: TennisMatch }) {
+function TennisRow({ m, tour }: { m: TennisMatch; tour?: 'atp' | 'wta' }) {
   const t = useTheme();
   const live = m.state === 'in';
-  return (
+  const pickable = !!tour && m.state === 'pre' && Date.parse(m.start) > Date.now() && m.players.every((p) => p.name && p.name !== 'TBD');
+  const body = (
     <Glass style={{ marginBottom: space.sm }} padded={false}>
       <View style={{ padding: space.md, gap: 6 }}>
         <Row style={{ justifyContent: 'space-between' }}>
@@ -111,12 +112,27 @@ function TennisRow({ m }: { m: TennisMatch }) {
             ))}
           </Row>
         ))}
+        {pickable ? (
+          <Row gap={4}>
+            <Icon name="gesture-tap" size={14} color={t.brand} />
+            <Text v="tiny" color={t.brand} style={{ fontWeight: '800' }}>
+              Pick the winner and the sets
+            </Text>
+          </Row>
+        ) : null}
       </View>
     </Glass>
   );
+  return pickable ? (
+    <Pressable onPress={() => router.push({ pathname: '/tennis-pick', params: { tour, id: m.id } })} accessibilityRole="button" accessibilityLabel={`${m.players[0].name} v ${m.players[1].name}: make a pick`}>
+      {body}
+    </Pressable>
+  ) : (
+    body
+  );
 }
 
-export function TennisView({ board }: { board: TennisBoard }) {
+export function TennisView({ board, tour }: { board: TennisBoard; tour?: 'atp' | 'wta' }) {
   const draws = [...new Set(board.matches.map((m) => m.draw))].filter((d) => d);
   const [draw, setDraw] = useState(draws.find((d) => /singles/i.test(d)) ?? draws[0] ?? '');
   const shown = board.matches
@@ -137,7 +153,7 @@ export function TennisView({ board }: { board: TennisBoard }) {
         ))}
       </ChipRow>
       <View style={{ height: space.sm }} />
-      {shown.length ? shown.slice(0, 60).map((m) => <TennisRow key={m.id} m={m} />) : <EmptyState icon="tennis" title="No matches to show" />}
+      {shown.length ? shown.slice(0, 60).map((m) => <TennisRow key={m.id} m={m} tour={tour} />) : <EmptyState icon="tennis" title="No matches to show" />}
     </View>
   );
 }
@@ -172,8 +188,25 @@ export function F1View({ board }: { board: F1Board }) {
   const t = useTheme();
   const now = Date.now();
   const next = board.calendar.find((c) => Date.parse(c.end ?? c.start) >= now);
+  const upcomingRace = board.current.some((w) => w.sessions.some((s) => /race/i.test(s.name) && s.state === 'pre' && Date.parse(s.start) > now));
   return (
     <View style={{ gap: space.md }}>
+      {upcomingRace ? (
+        <Pressable onPress={() => router.push('/f1-pick')} accessibilityRole="button" accessibilityLabel="Predict the podium">
+          <Glass tint={t.brand}>
+            <Row gap={8}>
+              <Icon name="podium-gold" size={22} color={t.brand} />
+              <View style={{ flex: 1 }}>
+                <Text v="h3">Predict the podium</Text>
+                <Text v="small" dim>
+                  Pick the top three for this race: up to 20 points.
+                </Text>
+              </View>
+              <Icon name="chevron-right" size={22} />
+            </Row>
+          </Glass>
+        </Pressable>
+      ) : null}
       {board.current.map((w) => (
         <Glass key={w.id}>
           <Text v="label" dim>

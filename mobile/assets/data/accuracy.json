@@ -1,1 +1,982 @@
-{"schema":1,"generated_at":"2026-11-24T11:42:23+00:00","model_version":"fb-2026-11-9e5c31b2","live":{"overall":{"n":28,"correct":17,"hit_rate":0.6071428571428571,"log_loss":0.8851337455384386,"brier":0.515289147107428,"by_confidence":{"high":{"n":21,"hit_rate":0.6190476190476191},"medium":{"n":7,"hit_rate":0.5714285714285714}}},"competitions":{"eng.1":{"n":2,"correct":1,"hit_rate":0.5,"log_loss":1.2773340887881386,"brier":0.7569829170248802,"by_confidence":{"medium":{"n":2,"hit_rate":0.5}}},"eng.2":{"n":1,"correct":0,"hit_rate":0.0,"log_loss":1.3486306262968775,"brier":0.8519908047873561,"by_confidence":{"high":{"n":1,"hit_rate":0.0}}},"esp.1":{"n":5,"correct":3,"hit_rate":0.6,"log_loss":0.7933055303780716,"brier":0.451980567579399,"by_confidence":{"high":{"n":5,"hit_rate":0.6}}},"fra.1":{"n":3,"correct":1,"hit_rate":0.3333333333333333,"log_loss":1.156683214239311,"brier":0.6914352753616352,"by_confidence":{"high":{"n":3,"hit_rate":0.3333333333333333}}},"ger.1":{"n":2,"correct":1,"hit_rate":0.5,"log_loss":0.810747591525497,"brier":0.46498956413492365,"by_confidence":{"high":{"n":2,"hit_rate":0.5}}},"ita.1":{"n":6,"correct":3,"hit_rate":0.5,"log_loss":1.010644037898815,"brier":0.614528505831564,"by_confidence":{"high":{"n":1,"hit_rate":0.0},"medium":{"n":5,"hit_rate":0.6}}},"ned.1":{"n":4,"correct":3,"hit_rate":0.75,"log_loss":0.6479335251548237,"brier":0.3545802251718891,"by_confidence":{"high":{"n":4,"hit_rate":0.75}}},"tur.1":{"n":5,"correct":5,"hit_rate":1.0,"log_loss":0.6333550531063311,"brier":0.3384919504484363,"by_confidence":{"high":{"n":5,"hit_rate":1.0}}}},"tiers":{"strong":{"n":6,"hit_rate":1.0},"likely":{"n":12,"hit_rate":0.5833333333333334},"lean":{"n":6,"hit_rate":0.3333333333333333},"toss-up":{"n":4,"hit_rate":0.5}},"draw_calls":{"n":0,"hit_rate":null},"safer_call":{"n":28,"hit_rate":0.8214285714285714},"over25":{"n":28,"hit_rate":0.7142857142857143},"recent":[{"match_id":"esp.1/2026-27/fb-esp-levante~fb-esp-elche","competition":"esp.1","kickoff":"2026-11-23T20:00:00+00:00","home":"Levante","away":"Elche","score":"1-1","pick":"home","probability":0.4312,"correct":0,"confidence_label":"high","tier":"lean","safer_call":"home or away","safer_correct":0,"over25_correct":0},{"match_id":"ita.1/2026-27/fb-ita-monza~fb-ita-fiorentina","competition":"ita.1","kickoff":"2026-11-23T19:45:00+00:00","home":"Monza","away":"Fiorentina","score":"3-0","pick":"away","probability":0.4884,"correct":0,"confidence_label":"medium","tier":"lean","safer_call":"home or away","safer_correct":1,"over25_correct":1},{"match_id":"tur.1/2026-27/fb-tur-buyuksehyr~fb-tur-corum","competition":"tur.1","kickoff":"2026-11-23T17:00:00+00:00","home":"Buyuksehyr","away":"Corum","score":"4-2","pick":"home","probability":0.4939,"correct":1,"confidence_label":"high","tier":"lean","safer_call":"home or away","safer_correct":1,"over25_correct":1},{"match_id":"esp.1/2026-27/fb-esp-getafe~fb-esp-ath-madrid","competition":"esp.1","kickoff":"2026-11-22T20:00:00+00:00","home":"Getafe","away":"Ath Madrid","score":"0-3","pick":"away","probability":0.6016,"correct":1,"confidence_label":"high","tier":"likely","safer_call":"away or draw","safer_correct":1,"over25_correct":0},{"match_id":"fra.1/2026-27/fb-fra-marseille~fb-fra-le-mans","competition":"fra.1","kickoff":"2026-11-22T19:45:00+00:00","home":"Marseille","away":"Le Mans","score":"2-3","pick":"home","probability":0.6423,"correct":0,"confidence_label":"high","tier":"likely","safer_call":"home or draw","safer_correct":0,"over25_correct":1},{"match_id":"ita.1/2026-27/fb-ita-atalanta~fb-ita-internazionale","competition":"ita.1","kickoff":"2026-11-22T19:45:00+00:00","home":"Atalanta","away":"Inter","score":"4-4","pick":"away","probability":0.5963,"correct":0,"confidence_label":"high","tier":"likely","safer_call":"away or draw","safer_correct":1,"over25_correct":1},{"match_id":"esp.1/2026-27/fb-esp-osasuna~fb-esp-malaga","competition":"esp.1","kickoff":"2026-11-22T17:30:00+00:00","home":"Osasuna","away":"Malaga","score":"1-0","pick":"home","probability":0.5205,"correct":1,"confidence_label":"high","tier":"likely","safer_call":"home or draw","safer_correct":1,"over25_correct":1},{"match_id":"ita.1/2026-27/fb-ita-milan~fb-ita-frosinone","competition":"ita.1","kickoff":"2026-11-22T17:00:00+00:00","home":"Milan","away":"Frosinone","score":"5-1","pick":"home","probability":0.6111,"correct":1,"confidence_label":"medium","tier":"likely","safer_call":"home or draw","safer_correct":1,"over25_correct":1},{"match_id":"eng.1/2026-27/fb-eng-liverpool~fb-eng-manchester-united","competition":"eng.1","kickoff":"2026-11-22T16:30:00+00:00","home":"Liverpool","away":"Man United","score":"4-0","pick":"home","probability":0.5348,"correct":1,"confidence_label":"medium","tier":"likely","safer_call":"home or away","safer_correct":1,"over25_correct":1},{"match_id":"ger.1/2026-27/fb-ger-werder-bremen~fb-ger-hamburg","competition":"ger.1","kickoff":"2026-11-22T16:30:00+00:00","home":"Werder Bremen","away":"Hamburg","score":"4-0","pick":"home","probability":0.5557,"correct":1,"confidence_label":"high","tier":"likely","safer_call":"home or draw","safer_correct":1,"over25_correct":1},{"match_id":"fra.1/2026-27/fb-fra-lorient~fb-fra-rennes","competition":"fra.1","kickoff":"2026-11-22T16:15:00+00:00","home":"Lorient","away":"Rennes","score":"1-1","pick":"away","probability":0.3982,"correct":0,"confidence_label":"high","tier":"toss-up","safer_call":"home or away","safer_correct":0,"over25_correct":0},{"match_id":"tur.1/2026-27/fb-tur-trabzonspor~fb-tur-eyupspor","competition":"tur.1","kickoff":"2026-11-22T16:00:00+00:00","home":"Trabzonspor","away":"Eyupspor","score":"1-0","pick":"home","probability":0.8076,"correct":1,"confidence_label":"high","tier":"strong","safer_call":"home or draw","safer_correct":1,"over25_correct":0},{"match_id":"ned.1/2026-27/fb-ned-go-ahead-eagles~fb-ned-for-sittard","competition":"ned.1","kickoff":"2026-11-22T15:45:00+00:00","home":"Go Ahead Eagles","away":"For Sittard","score":"0-1","pick":"home","probability":0.5657,"correct":0,"confidence_label":"high","tier":"likely","safer_call":"home or draw","safer_correct":0,"over25_correct":0},{"match_id":"esp.1/2026-27/fb-esp-santander~fb-esp-sociedad","competition":"esp.1","kickoff":"2026-11-22T15:15:00+00:00","home":"Santander","away":"Sociedad","score":"3-2","pick":"away","probability":0.4734,"correct":0,"confidence_label":"high","tier":"lean","safer_call":"home or away","safer_correct":1,"over25_correct":1},{"match_id":"ger.1/2026-27/fb-ger-augsburg~fb-ger-mainz","competition":"ger.1","kickoff":"2026-11-22T14:30:00+00:00","home":"Augsburg","away":"Mainz","score":"3-1","pick":"away","probability":0.3954,"correct":0,"confidence_label":"high","tier":"toss-up","safer_call":"home or away","safer_correct":1,"over25_correct":1},{"match_id":"eng.1/2026-27/fb-eng-hull~fb-eng-brighton","competition":"eng.1","kickoff":"2026-11-22T14:00:00+00:00","home":"Hull","away":"Brighton","score":"2-0","pick":"away","probability":0.6437,"correct":0,"confidence_label":"medium","tier":"likely","safer_call":"away or draw","safer_correct":0,"over25_correct":1},{"match_id":"fra.1/2026-27/fb-fra-paris~fb-fra-angers","competition":"fra.1","kickoff":"2026-11-22T14:00:00+00:00","home":"Paris FC","away":"Angers","score":"4-0","pick":"home","probability":0.718,"correct":1,"confidence_label":"high","tier":"strong","safer_call":"home or draw","safer_correct":1,"over25_correct":0},{"match_id":"ita.1/2026-27/fb-ita-bologna~fb-ita-udinese","competition":"ita.1","kickoff":"2026-11-22T14:00:00+00:00","home":"Bologna","away":"Udinese","score":"1-1","pick":"home","probability":0.5452,"correct":0,"confidence_label":"medium","tier":"likely","safer_call":"home or draw","safer_correct":1,"over25_correct":1},{"match_id":"ita.1/2026-27/fb-ita-sassuolo~fb-ita-genoa","competition":"ita.1","kickoff":"2026-11-22T14:00:00+00:00","home":"Sassuolo","away":"Genoa","score":"0-2","pick":"away","probability":0.3798,"correct":1,"confidence_label":"medium","tier":"toss-up","safer_call":"home or away","safer_correct":1,"over25_correct":1},{"match_id":"ned.1/2026-27/fb-ned-ajax~fb-ned-den-haag","competition":"ned.1","kickoff":"2026-11-22T13:30:00+00:00","home":"Ajax","away":"Den Haag","score":"3-0","pick":"home","probability":0.7849,"correct":1,"confidence_label":"high","tier":"strong","safer_call":"home or draw","safer_correct":1,"over25_correct":1},{"match_id":"ned.1/2026-27/fb-ned-sparta-rotterdam~fb-ned-az-alkmaar","competition":"ned.1","kickoff":"2026-11-22T13:30:00+00:00","home":"Sparta Rotterdam","away":"AZ Alkmaar","score":"1-5","pick":"away","probability":0.5474,"correct":1,"confidence_label":"high","tier":"likely","safer_call":"away or draw","safer_correct":1,"over25_correct":1},{"match_id":"esp.1/2026-27/fb-esp-barcelona~fb-esp-villarreal","competition":"esp.1","kickoff":"2026-11-22T13:00:00+00:00","home":"Barcelona","away":"Villarreal","score":"3-2","pick":"home","probability":0.7851,"correct":1,"confidence_label":"high","tier":"strong","safer_call":"home or draw","safer_correct":1,"over25_correct":1},{"match_id":"tur.1/2026-27/fb-tur-kasimpasa~fb-tur-alanyaspor","competition":"tur.1","kickoff":"2026-11-22T13:00:00+00:00","home":"Kasimpasa","away":"Alanyaspor","score":"2-1","pick":"home","probability":0.4635,"correct":1,"confidence_label":"high","tier":"lean","safer_call":"home or draw","safer_correct":1,"over25_correct":0},{"match_id":"tur.1/2026-27/fb-tur-konyaspor~fb-tur-besiktas","competition":"tur.1","kickoff":"2026-11-22T13:00:00+00:00","home":"Konyaspor","away":"Besiktas","score":"2-4","pick":"away","probability":0.5767,"correct":1,"confidence_label":"high","tier":"likely","safer_call":"away or draw","safer_correct":1,"over25_correct":1},{"match_id":"eng.2/2026-27/fb-eng-burnley~fb-eng-blackburn","competition":"eng.2","kickoff":"2026-11-22T12:00:00+00:00","home":"Burnley","away":"Blackburn","score":"2-2","pick":"home","probability":0.492,"correct":0,"confidence_label":"high","tier":"lean","safer_call":"home or draw","safer_correct":1,"over25_correct":0},{"match_id":"ita.1/2026-27/fb-ita-juventus~fb-ita-venezia","competition":"ita.1","kickoff":"2026-11-22T11:30:00+00:00","home":"Juventus","away":"Venezia","score":"4-0","pick":"home","probability":0.7091,"correct":1,"confidence_label":"medium","tier":"strong","safer_call":"home or draw","safer_correct":1,"over25_correct":1},{"match_id":"ned.1/2026-27/fb-ned-twente~fb-ned-willem-ii","competition":"ned.1","kickoff":"2026-11-22T11:15:00+00:00","home":"Twente","away":"Willem II","score":"2-1","pick":"home","probability":0.8613,"correct":1,"confidence_label":"high","tier":"strong","safer_call":"home or draw","safer_correct":1,"over25_correct":1},{"match_id":"tur.1/2026-27/fb-tur-erzurumspor~fb-tur-goztep","competition":"tur.1","kickoff":"2026-11-22T10:30:00+00:00","home":"Erzurumspor","away":"Goztep","score":"0-1","pick":"away","probability":0.3953,"correct":1,"confidence_label":"high","tier":"toss-up","safer_call":"home or away","safer_correct":1,"over25_correct":1}],"last_7_days":{"matches":{"n":28,"hit_rate":0.6071428571428571},"safer_call":{"n":28,"hit_rate":0.8214285714285714},"strong":{"n":6,"hit_rate":1.0}},"last_30_days":{"matches":{"n":28,"hit_rate":0.6071428571428571},"safer_call":{"n":28,"hit_rate":0.8214285714285714},"strong":{"n":6,"hit_rate":1.0}}},"backtest":{"source":"step6.json","period":"2024-25 and 2025-26 seasons (MLS 2024 and 2025), every match predicted only from earlier data","competitions":{"all":{"n":7740,"new":{"accuracy":0.5249354005167959,"log_loss":0.9819484783468427,"brier":0.585430977741803},"previous":{"accuracy":0.49896640826873384,"log_loss":1.012924017764793,"brier":0.6063757354216365},"bookmaker":{"accuracy":0.5277114823654203,"log_loss":0.9787962873174201,"brier":0.5835270046808125}},"eng.1":{"n":760,"new":{"accuracy":0.5171052631578947,"log_loss":0.9951015638768204,"brier":0.5960860889637165},"previous":{"accuracy":0.49473684210526314,"log_loss":1.0226713687980566,"brier":0.6142842483267943},"bookmaker":{"accuracy":0.5197368421052632,"log_loss":0.9901455542656292,"brier":0.5921507559812579}},"eng.2":{"n":1114,"new":{"accuracy":0.4649910233393178,"log_loss":1.0361720803259014,"brier":0.6241126528751093},"previous":{"accuracy":0.43087971274685816,"log_loss":1.060190354487716,"brier":0.6408898571976775},"bookmaker":{"accuracy":0.47101449275362317,"log_loss":1.0334726724408902,"brier":0.6223442313648556}},"esp.1":{"n":760,"new":{"accuracy":0.5421052631578948,"log_loss":0.9590567843000545,"brier":0.5677174730523448},"previous":{"accuracy":0.5223684210526316,"log_loss":0.9996044503107345,"brier":0.5961814457999187},"bookmaker":{"accuracy":0.5539473684210526,"log_loss":0.9556800965117699,"brier":0.5654249210067064}},"fra.1":{"n":612,"new":{"accuracy":0.5441176470588235,"log_loss":0.9652790362749962,"brier":0.5729399018823402},"previous":{"accuracy":0.5130718954248366,"log_loss":0.9998746139506048,"brier":0.5973690422551746},"bookmaker":{"accuracy":0.5441176470588235,"log_loss":0.9662126460428763,"brier":0.5737920227994066}},"ger.1":{"n":612,"new":{"accuracy":0.5441176470588235,"log_loss":0.9708862772066265,"brier":0.5761201562066488},"previous":{"accuracy":0.5,"log_loss":1.0155768440181374,"brier":0.6066066987971525},"bookmaker":{"accuracy":0.545751633986928,"log_loss":0.9692385740537776,"brier":0.5757395825964648}},"ita.1":{"n":760,"new":{"accuracy":0.5368421052631579,"log_loss":0.9650772455822397,"brier":0.5747201937292952},"previous":{"accuracy":0.5105263157894737,"log_loss":1.0020550142897273,"brier":0.6000262160197962},"bookmaker":{"accuracy":0.5421052631578948,"log_loss":0.9645174243397047,"brier":0.5748324195140635}},"ned.1":{"n":612,"new":{"accuracy":0.5310457516339869,"log_loss":0.9610792793002312,"brier":0.5713950911589355},"previous":{"accuracy":0.5065359477124183,"log_loss":0.9935580271093519,"brier":0.5917502608671183},"bookmaker":{"accuracy":0.5424836601307189,"log_loss":0.9575792014945577,"brier":0.5686414136601657}},"por.1":{"n":612,"new":{"accuracy":0.5669934640522876,"log_loss":0.9216093061644192,"brier":0.545499225668122},"previous":{"accuracy":0.5588235294117647,"log_loss":0.9625441679720771,"brier":0.5713954204154789},"bookmaker":{"accuracy":0.565359477124183,"log_loss":0.9129641747905878,"brier":0.5398318002189423}},"tur.1":{"n":648,"new":{"accuracy":0.5740740740740741,"log_loss":0.939740554504998,"brier":0.5566216172643776},"previous":{"accuracy":0.5200617283950617,"log_loss":0.9835588638997181,"brier":0.5850857572245313},"bookmaker":{"accuracy":0.5817901234567902,"log_loss":0.9397472669187322,"brier":0.5561821079198609}},"uefa.champions":{"n":188,"new":{"accuracy":0.601063829787234,"log_loss":0.9084755464026816,"brier":0.5317749473085605},"previous":{"accuracy":0.5957446808510638,"log_loss":0.928777613009749,"brier":0.5442616566738937},"bookmaker":null},"usa.1":{"n":1062,"new":{"accuracy":0.4792843691148776,"log_loss":1.0456521708724298,"brier":0.6283122810944131},"previous":{"accuracy":0.4708097928436911,"log_loss":1.0526753658170924,"brier":0.633981136467744},"bookmaker":{"accuracy":0.480225988700565,"log_loss":1.0273466191480611,"brier":0.6167208372937745}}}},"track_record":{"tiers":{"strong":{"n":1263,"hit_rate":0.7593032462391133,"share":0.1631782945736434},"likely":{"n":2389,"hit_rate":0.5617413143574718,"share":0.308656330749354},"lean":{"n":2567,"hit_rate":0.4612388001558239,"share":0.33165374677002585},"toss-up":{"n":1521,"hit_rate":0.3780407626561473,"share":0.19651162790697674}},"draw_calls":{"n":427,"hit_rate":0.33489461358313816,"share":0.05516795865633075,"base_rate":0.2543041893278702},"all_matches":{"n":7740,"hit_rate":0.524547803617571},"bookmaker":{"n":7542,"hit_rate":0.5277114823654203},"double_chance":{"n":7740,"hit_rate":0.7886304909560724,"strong":{"n":1403,"hit_rate":0.9144689950106913,"share":0.18126614987080103}},"draw_note":{"min_draw":0.29,"n":1115,"share":0.14405684754521964,"ended_level":0.2878923766816143},"over25":{"n":7614,"hit_rate":0.5717100078802206,"confident":{"n":2320,"hit_rate":0.6409482758620689,"share":0.3047018649855529}}},"note":"Live = every prediction this service published, graded on its last version before kick-off. Backtest = the same model replayed on two past seasons. Hit rate = share where the most likely outcome happened; log loss and Brier score measure probability quality (lower is better)."}
+{
+ "schema": 1,
+ "generated_at": "2026-11-26T08:41:23+00:00",
+ "model_version": "fb-2026-11-e082619a",
+ "live": {
+  "overall": {
+   "n": 28,
+   "correct": 17,
+   "hit_rate": 0.6071428571428571,
+   "log_loss": 0.8851337455384386,
+   "brier": 0.515289147107428,
+   "by_confidence": {
+    "high": {
+     "n": 21,
+     "hit_rate": 0.6190476190476191
+    },
+    "medium": {
+     "n": 7,
+     "hit_rate": 0.5714285714285714
+    }
+   },
+   "rps": 0.18769430005896615
+  },
+  "competitions": {
+   "eng.1": {
+    "n": 2,
+    "correct": 1,
+    "hit_rate": 0.5,
+    "log_loss": 1.2773340887881386,
+    "brier": 0.7569829170248802,
+    "by_confidence": {
+     "medium": {
+      "n": 2,
+      "hit_rate": 0.5
+     }
+    }
+   },
+   "eng.2": {
+    "n": 1,
+    "correct": 0,
+    "hit_rate": 0.0,
+    "log_loss": 1.3486306262968775,
+    "brier": 0.8519908047873561,
+    "by_confidence": {
+     "high": {
+      "n": 1,
+      "hit_rate": 0.0
+     }
+    }
+   },
+   "esp.1": {
+    "n": 5,
+    "correct": 3,
+    "hit_rate": 0.6,
+    "log_loss": 0.7933055303780716,
+    "brier": 0.451980567579399,
+    "by_confidence": {
+     "high": {
+      "n": 5,
+      "hit_rate": 0.6
+     }
+    }
+   },
+   "fra.1": {
+    "n": 3,
+    "correct": 1,
+    "hit_rate": 0.3333333333333333,
+    "log_loss": 1.156683214239311,
+    "brier": 0.6914352753616352,
+    "by_confidence": {
+     "high": {
+      "n": 3,
+      "hit_rate": 0.3333333333333333
+     }
+    }
+   },
+   "ger.1": {
+    "n": 2,
+    "correct": 1,
+    "hit_rate": 0.5,
+    "log_loss": 0.810747591525497,
+    "brier": 0.46498956413492365,
+    "by_confidence": {
+     "high": {
+      "n": 2,
+      "hit_rate": 0.5
+     }
+    }
+   },
+   "ita.1": {
+    "n": 6,
+    "correct": 3,
+    "hit_rate": 0.5,
+    "log_loss": 1.010644037898815,
+    "brier": 0.614528505831564,
+    "by_confidence": {
+     "high": {
+      "n": 1,
+      "hit_rate": 0.0
+     },
+     "medium": {
+      "n": 5,
+      "hit_rate": 0.6
+     }
+    }
+   },
+   "ned.1": {
+    "n": 4,
+    "correct": 3,
+    "hit_rate": 0.75,
+    "log_loss": 0.6479335251548237,
+    "brier": 0.3545802251718891,
+    "by_confidence": {
+     "high": {
+      "n": 4,
+      "hit_rate": 0.75
+     }
+    }
+   },
+   "tur.1": {
+    "n": 5,
+    "correct": 5,
+    "hit_rate": 1.0,
+    "log_loss": 0.6333550531063311,
+    "brier": 0.3384919504484363,
+    "by_confidence": {
+     "high": {
+      "n": 5,
+      "hit_rate": 1.0
+     }
+    }
+   }
+  },
+  "tiers": {
+   "strong": {
+    "n": 6,
+    "hit_rate": 1.0
+   },
+   "likely": {
+    "n": 12,
+    "hit_rate": 0.5833333333333334
+   },
+   "lean": {
+    "n": 6,
+    "hit_rate": 0.3333333333333333
+   },
+   "toss-up": {
+    "n": 4,
+    "hit_rate": 0.5
+   }
+  },
+  "draw_calls": {
+   "n": 0,
+   "hit_rate": null
+  },
+  "safer_call": {
+   "n": 28,
+   "hit_rate": 0.8214285714285714
+  },
+  "over25": {
+   "n": 28,
+   "hit_rate": 0.7142857142857143
+  },
+  "recent": [
+   {
+    "match_id": "esp.1/2026-27/fb-esp-levante~fb-esp-elche",
+    "competition": "esp.1",
+    "kickoff": "2026-11-23T20:00:00+00:00",
+    "home": "Levante",
+    "away": "Elche",
+    "score": "1-1",
+    "pick": "home",
+    "probability": 0.4312,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or away",
+    "safer_correct": 0,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "ita.1/2026-27/fb-ita-monza~fb-ita-fiorentina",
+    "competition": "ita.1",
+    "kickoff": "2026-11-23T19:45:00+00:00",
+    "home": "Monza",
+    "away": "Fiorentina",
+    "score": "3-0",
+    "pick": "away",
+    "probability": 0.4884,
+    "correct": 0,
+    "confidence_label": "medium",
+    "tier": "lean",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "tur.1/2026-27/fb-tur-buyuksehyr~fb-tur-corum",
+    "competition": "tur.1",
+    "kickoff": "2026-11-23T17:00:00+00:00",
+    "home": "Buyuksehyr",
+    "away": "Corum",
+    "score": "4-2",
+    "pick": "home",
+    "probability": 0.4939,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "esp.1/2026-27/fb-esp-getafe~fb-esp-ath-madrid",
+    "competition": "esp.1",
+    "kickoff": "2026-11-22T20:00:00+00:00",
+    "home": "Getafe",
+    "away": "Ath Madrid",
+    "score": "0-3",
+    "pick": "away",
+    "probability": 0.6016,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "away or draw",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "fra.1/2026-27/fb-fra-marseille~fb-fra-le-mans",
+    "competition": "fra.1",
+    "kickoff": "2026-11-22T19:45:00+00:00",
+    "home": "Marseille",
+    "away": "Le Mans",
+    "score": "2-3",
+    "pick": "home",
+    "probability": 0.6423,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 0,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ita.1/2026-27/fb-ita-atalanta~fb-ita-internazionale",
+    "competition": "ita.1",
+    "kickoff": "2026-11-22T19:45:00+00:00",
+    "home": "Atalanta",
+    "away": "Inter",
+    "score": "4-4",
+    "pick": "away",
+    "probability": 0.5963,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "away or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "esp.1/2026-27/fb-esp-osasuna~fb-esp-malaga",
+    "competition": "esp.1",
+    "kickoff": "2026-11-22T17:30:00+00:00",
+    "home": "Osasuna",
+    "away": "Malaga",
+    "score": "1-0",
+    "pick": "home",
+    "probability": 0.5205,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ita.1/2026-27/fb-ita-milan~fb-ita-frosinone",
+    "competition": "ita.1",
+    "kickoff": "2026-11-22T17:00:00+00:00",
+    "home": "Milan",
+    "away": "Frosinone",
+    "score": "5-1",
+    "pick": "home",
+    "probability": 0.6111,
+    "correct": 1,
+    "confidence_label": "medium",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.1/2026-27/fb-eng-liverpool~fb-eng-manchester-united",
+    "competition": "eng.1",
+    "kickoff": "2026-11-22T16:30:00+00:00",
+    "home": "Liverpool",
+    "away": "Man United",
+    "score": "4-0",
+    "pick": "home",
+    "probability": 0.5348,
+    "correct": 1,
+    "confidence_label": "medium",
+    "tier": "likely",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ger.1/2026-27/fb-ger-werder-bremen~fb-ger-hamburg",
+    "competition": "ger.1",
+    "kickoff": "2026-11-22T16:30:00+00:00",
+    "home": "Werder Bremen",
+    "away": "Hamburg",
+    "score": "4-0",
+    "pick": "home",
+    "probability": 0.5557,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "fra.1/2026-27/fb-fra-lorient~fb-fra-rennes",
+    "competition": "fra.1",
+    "kickoff": "2026-11-22T16:15:00+00:00",
+    "home": "Lorient",
+    "away": "Rennes",
+    "score": "1-1",
+    "pick": "away",
+    "probability": 0.3982,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 0,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "tur.1/2026-27/fb-tur-trabzonspor~fb-tur-eyupspor",
+    "competition": "tur.1",
+    "kickoff": "2026-11-22T16:00:00+00:00",
+    "home": "Trabzonspor",
+    "away": "Eyupspor",
+    "score": "1-0",
+    "pick": "home",
+    "probability": 0.8076,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "strong",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "ned.1/2026-27/fb-ned-go-ahead-eagles~fb-ned-for-sittard",
+    "competition": "ned.1",
+    "kickoff": "2026-11-22T15:45:00+00:00",
+    "home": "Go Ahead Eagles",
+    "away": "For Sittard",
+    "score": "0-1",
+    "pick": "home",
+    "probability": 0.5657,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 0,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "esp.1/2026-27/fb-esp-santander~fb-esp-sociedad",
+    "competition": "esp.1",
+    "kickoff": "2026-11-22T15:15:00+00:00",
+    "home": "Santander",
+    "away": "Sociedad",
+    "score": "3-2",
+    "pick": "away",
+    "probability": 0.4734,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ger.1/2026-27/fb-ger-augsburg~fb-ger-mainz",
+    "competition": "ger.1",
+    "kickoff": "2026-11-22T14:30:00+00:00",
+    "home": "Augsburg",
+    "away": "Mainz",
+    "score": "3-1",
+    "pick": "away",
+    "probability": 0.3954,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.1/2026-27/fb-eng-hull~fb-eng-brighton",
+    "competition": "eng.1",
+    "kickoff": "2026-11-22T14:00:00+00:00",
+    "home": "Hull",
+    "away": "Brighton",
+    "score": "2-0",
+    "pick": "away",
+    "probability": 0.6437,
+    "correct": 0,
+    "confidence_label": "medium",
+    "tier": "likely",
+    "safer_call": "away or draw",
+    "safer_correct": 0,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "fra.1/2026-27/fb-fra-paris~fb-fra-angers",
+    "competition": "fra.1",
+    "kickoff": "2026-11-22T14:00:00+00:00",
+    "home": "Paris FC",
+    "away": "Angers",
+    "score": "4-0",
+    "pick": "home",
+    "probability": 0.718,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "strong",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "ita.1/2026-27/fb-ita-bologna~fb-ita-udinese",
+    "competition": "ita.1",
+    "kickoff": "2026-11-22T14:00:00+00:00",
+    "home": "Bologna",
+    "away": "Udinese",
+    "score": "1-1",
+    "pick": "home",
+    "probability": 0.5452,
+    "correct": 0,
+    "confidence_label": "medium",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ita.1/2026-27/fb-ita-sassuolo~fb-ita-genoa",
+    "competition": "ita.1",
+    "kickoff": "2026-11-22T14:00:00+00:00",
+    "home": "Sassuolo",
+    "away": "Genoa",
+    "score": "0-2",
+    "pick": "away",
+    "probability": 0.3798,
+    "correct": 1,
+    "confidence_label": "medium",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ned.1/2026-27/fb-ned-ajax~fb-ned-den-haag",
+    "competition": "ned.1",
+    "kickoff": "2026-11-22T13:30:00+00:00",
+    "home": "Ajax",
+    "away": "Den Haag",
+    "score": "3-0",
+    "pick": "home",
+    "probability": 0.7849,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "strong",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ned.1/2026-27/fb-ned-sparta-rotterdam~fb-ned-az-alkmaar",
+    "competition": "ned.1",
+    "kickoff": "2026-11-22T13:30:00+00:00",
+    "home": "Sparta Rotterdam",
+    "away": "AZ Alkmaar",
+    "score": "1-5",
+    "pick": "away",
+    "probability": 0.5474,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "away or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "esp.1/2026-27/fb-esp-barcelona~fb-esp-villarreal",
+    "competition": "esp.1",
+    "kickoff": "2026-11-22T13:00:00+00:00",
+    "home": "Barcelona",
+    "away": "Villarreal",
+    "score": "3-2",
+    "pick": "home",
+    "probability": 0.7851,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "strong",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "tur.1/2026-27/fb-tur-kasimpasa~fb-tur-alanyaspor",
+    "competition": "tur.1",
+    "kickoff": "2026-11-22T13:00:00+00:00",
+    "home": "Kasimpasa",
+    "away": "Alanyaspor",
+    "score": "2-1",
+    "pick": "home",
+    "probability": 0.4635,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "tur.1/2026-27/fb-tur-konyaspor~fb-tur-besiktas",
+    "competition": "tur.1",
+    "kickoff": "2026-11-22T13:00:00+00:00",
+    "home": "Konyaspor",
+    "away": "Besiktas",
+    "score": "2-4",
+    "pick": "away",
+    "probability": 0.5767,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "away or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-burnley~fb-eng-blackburn",
+    "competition": "eng.2",
+    "kickoff": "2026-11-22T12:00:00+00:00",
+    "home": "Burnley",
+    "away": "Blackburn",
+    "score": "2-2",
+    "pick": "home",
+    "probability": 0.492,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "ita.1/2026-27/fb-ita-juventus~fb-ita-venezia",
+    "competition": "ita.1",
+    "kickoff": "2026-11-22T11:30:00+00:00",
+    "home": "Juventus",
+    "away": "Venezia",
+    "score": "4-0",
+    "pick": "home",
+    "probability": 0.7091,
+    "correct": 1,
+    "confidence_label": "medium",
+    "tier": "strong",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ned.1/2026-27/fb-ned-twente~fb-ned-willem-ii",
+    "competition": "ned.1",
+    "kickoff": "2026-11-22T11:15:00+00:00",
+    "home": "Twente",
+    "away": "Willem II",
+    "score": "2-1",
+    "pick": "home",
+    "probability": 0.8613,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "strong",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "tur.1/2026-27/fb-tur-erzurumspor~fb-tur-goztep",
+    "competition": "tur.1",
+    "kickoff": "2026-11-22T10:30:00+00:00",
+    "home": "Erzurumspor",
+    "away": "Goztep",
+    "score": "0-1",
+    "pick": "away",
+    "probability": 0.3953,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   }
+  ],
+  "last_7_days": {
+   "matches": {
+    "n": 28,
+    "hit_rate": 0.6071428571428571
+   },
+   "safer_call": {
+    "n": 28,
+    "hit_rate": 0.8214285714285714
+   },
+   "strong": {
+    "n": 6,
+    "hit_rate": 1.0
+   }
+  },
+  "last_30_days": {
+   "matches": {
+    "n": 28,
+    "hit_rate": 0.6071428571428571
+   },
+   "safer_call": {
+    "n": 28,
+    "hit_rate": 0.8214285714285714
+   },
+   "strong": {
+    "n": 6,
+    "hit_rate": 1.0
+   }
+  },
+  "record_check": {
+   "status": "too_few",
+   "n": 28,
+   "live": 0.6071428571428571,
+   "expected": 0.5039866879290023,
+   "band": 0.18519670457925472,
+   "min_n": 100,
+   "message": "28 graded matches: chance alone moves the hit rate by about ±19 points, so it is too early to judge."
+  }
+ },
+ "backtest": {
+  "source": "step6.json",
+  "period": "2024-25 and 2025-26 seasons (MLS 2024 and 2025), every match predicted only from earlier data",
+  "competitions": {
+   "all": {
+    "n": 7740,
+    "new": {
+     "accuracy": 0.5249354005167959,
+     "log_loss": 0.9819484783468427,
+     "brier": 0.585430977741803
+    },
+    "previous": {
+     "accuracy": 0.49896640826873384,
+     "log_loss": 1.012924017764793,
+     "brier": 0.6063757354216365
+    },
+    "bookmaker": {
+     "accuracy": 0.5277114823654203,
+     "log_loss": 0.9787962873174201,
+     "brier": 0.5835270046808125
+    }
+   },
+   "eng.1": {
+    "n": 760,
+    "new": {
+     "accuracy": 0.5171052631578947,
+     "log_loss": 0.9951015638768204,
+     "brier": 0.5960860889637165
+    },
+    "previous": {
+     "accuracy": 0.49473684210526314,
+     "log_loss": 1.0226713687980566,
+     "brier": 0.6142842483267943
+    },
+    "bookmaker": {
+     "accuracy": 0.5197368421052632,
+     "log_loss": 0.9901455542656292,
+     "brier": 0.5921507559812579
+    }
+   },
+   "eng.2": {
+    "n": 1114,
+    "new": {
+     "accuracy": 0.4649910233393178,
+     "log_loss": 1.0361720803259014,
+     "brier": 0.6241126528751093
+    },
+    "previous": {
+     "accuracy": 0.43087971274685816,
+     "log_loss": 1.060190354487716,
+     "brier": 0.6408898571976775
+    },
+    "bookmaker": {
+     "accuracy": 0.47101449275362317,
+     "log_loss": 1.0334726724408902,
+     "brier": 0.6223442313648556
+    }
+   },
+   "esp.1": {
+    "n": 760,
+    "new": {
+     "accuracy": 0.5421052631578948,
+     "log_loss": 0.9590567843000545,
+     "brier": 0.5677174730523448
+    },
+    "previous": {
+     "accuracy": 0.5223684210526316,
+     "log_loss": 0.9996044503107345,
+     "brier": 0.5961814457999187
+    },
+    "bookmaker": {
+     "accuracy": 0.5539473684210526,
+     "log_loss": 0.9556800965117699,
+     "brier": 0.5654249210067064
+    }
+   },
+   "fra.1": {
+    "n": 612,
+    "new": {
+     "accuracy": 0.5441176470588235,
+     "log_loss": 0.9652790362749962,
+     "brier": 0.5729399018823402
+    },
+    "previous": {
+     "accuracy": 0.5130718954248366,
+     "log_loss": 0.9998746139506048,
+     "brier": 0.5973690422551746
+    },
+    "bookmaker": {
+     "accuracy": 0.5441176470588235,
+     "log_loss": 0.9662126460428763,
+     "brier": 0.5737920227994066
+    }
+   },
+   "ger.1": {
+    "n": 612,
+    "new": {
+     "accuracy": 0.5441176470588235,
+     "log_loss": 0.9708862772066265,
+     "brier": 0.5761201562066488
+    },
+    "previous": {
+     "accuracy": 0.5,
+     "log_loss": 1.0155768440181374,
+     "brier": 0.6066066987971525
+    },
+    "bookmaker": {
+     "accuracy": 0.545751633986928,
+     "log_loss": 0.9692385740537776,
+     "brier": 0.5757395825964648
+    }
+   },
+   "ita.1": {
+    "n": 760,
+    "new": {
+     "accuracy": 0.5368421052631579,
+     "log_loss": 0.9650772455822397,
+     "brier": 0.5747201937292952
+    },
+    "previous": {
+     "accuracy": 0.5105263157894737,
+     "log_loss": 1.0020550142897273,
+     "brier": 0.6000262160197962
+    },
+    "bookmaker": {
+     "accuracy": 0.5421052631578948,
+     "log_loss": 0.9645174243397047,
+     "brier": 0.5748324195140635
+    }
+   },
+   "ned.1": {
+    "n": 612,
+    "new": {
+     "accuracy": 0.5310457516339869,
+     "log_loss": 0.9610792793002312,
+     "brier": 0.5713950911589355
+    },
+    "previous": {
+     "accuracy": 0.5065359477124183,
+     "log_loss": 0.9935580271093519,
+     "brier": 0.5917502608671183
+    },
+    "bookmaker": {
+     "accuracy": 0.5424836601307189,
+     "log_loss": 0.9575792014945577,
+     "brier": 0.5686414136601657
+    }
+   },
+   "por.1": {
+    "n": 612,
+    "new": {
+     "accuracy": 0.5669934640522876,
+     "log_loss": 0.9216093061644192,
+     "brier": 0.545499225668122
+    },
+    "previous": {
+     "accuracy": 0.5588235294117647,
+     "log_loss": 0.9625441679720771,
+     "brier": 0.5713954204154789
+    },
+    "bookmaker": {
+     "accuracy": 0.565359477124183,
+     "log_loss": 0.9129641747905878,
+     "brier": 0.5398318002189423
+    }
+   },
+   "tur.1": {
+    "n": 648,
+    "new": {
+     "accuracy": 0.5740740740740741,
+     "log_loss": 0.939740554504998,
+     "brier": 0.5566216172643776
+    },
+    "previous": {
+     "accuracy": 0.5200617283950617,
+     "log_loss": 0.9835588638997181,
+     "brier": 0.5850857572245313
+    },
+    "bookmaker": {
+     "accuracy": 0.5817901234567902,
+     "log_loss": 0.9397472669187322,
+     "brier": 0.5561821079198609
+    }
+   },
+   "uefa.champions": {
+    "n": 188,
+    "new": {
+     "accuracy": 0.601063829787234,
+     "log_loss": 0.9084755464026816,
+     "brier": 0.5317749473085605
+    },
+    "previous": {
+     "accuracy": 0.5957446808510638,
+     "log_loss": 0.928777613009749,
+     "brier": 0.5442616566738937
+    },
+    "bookmaker": null
+   },
+   "usa.1": {
+    "n": 1062,
+    "new": {
+     "accuracy": 0.4792843691148776,
+     "log_loss": 1.0456521708724298,
+     "brier": 0.6283122810944131
+    },
+    "previous": {
+     "accuracy": 0.4708097928436911,
+     "log_loss": 1.0526753658170924,
+     "brier": 0.633981136467744
+    },
+    "bookmaker": {
+     "accuracy": 0.480225988700565,
+     "log_loss": 1.0273466191480611,
+     "brier": 0.6167208372937745
+    }
+   }
+  }
+ },
+ "track_record": {
+  "tiers": {
+   "strong": {
+    "n": 1687,
+    "hit_rate": 0.7557794902193242,
+    "share": 0.11696595715177148
+   },
+   "likely": {
+    "n": 4236,
+    "hit_rate": 0.5779036827195467,
+    "share": 0.2936975663870207
+   },
+   "lean": {
+    "n": 5237,
+    "hit_rate": 0.44605690280695054,
+    "share": 0.3631006032032171
+   },
+   "toss-up": {
+    "n": 3263,
+    "hit_rate": 0.3708243947287772,
+    "share": 0.22623587325799072
+   }
+  },
+  "draw_calls": {
+   "n": 1074,
+   "hit_rate": 0.33147113594040967,
+   "share": 0.07446439714345143,
+   "base_rate": 0.2602093877834015
+  },
+  "all_matches": {
+   "n": 14423,
+   "hit_rate": 0.5039866879290023
+  },
+  "bookmaker": {
+   "n": 14205,
+   "hit_rate": 0.5101020767335446
+  },
+  "double_chance": {
+   "n": 14423,
+   "hit_rate": 0.7815988351937877,
+   "strong": {
+    "n": 1687,
+    "hit_rate": 0.921161825726141,
+    "share": 0.11696595715177148
+   }
+  },
+  "source": "step10.json",
+  "rps": 0.2035489656794971,
+  "log_loss": 0.9992364317496467,
+  "bookmaker_rps": 0.20229759062998498,
+  "model_rps_same_matches": 0.20348088951716975,
+  "pick_calibration": [
+   {
+    "lo": 0.3,
+    "hi": 0.4,
+    "n": 2954,
+    "mean_p": 0.37577259026298504,
+    "hit_rate": 0.3849018280297901
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.5,
+    "n": 5546,
+    "mean_p": 0.44607026546504774,
+    "hit_rate": 0.4446447890371439
+   },
+   {
+    "lo": 0.5,
+    "hi": 0.6,
+    "n": 3280,
+    "mean_p": 0.5484947280581489,
+    "hit_rate": 0.5625
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.7,
+    "n": 1524,
+    "mean_p": 0.6421473108230444,
+    "hit_rate": 0.652230971128609
+   },
+   {
+    "lo": 0.7,
+    "hi": 0.8,
+    "n": 818,
+    "mean_p": 0.7439070169873758,
+    "hit_rate": 0.7652811735941321
+   },
+   {
+    "lo": 0.8,
+    "hi": 1.0,
+    "n": 301,
+    "mean_p": 0.8394547580107903,
+    "hit_rate": 0.8571428571428571
+   }
+  ],
+  "draw_note": {
+   "min_draw": 0.29,
+   "n": 1115,
+   "share": 0.14405684754521964,
+   "ended_level": 0.2878923766816143
+  },
+  "over25": {
+   "n": 7614,
+   "hit_rate": 0.5717100078802206,
+   "confident": {
+    "n": 2320,
+    "hit_rate": 0.6409482758620689,
+    "share": 0.3047018649855529
+   }
+  }
+ },
+ "note": "Live = every prediction this service published, graded on its last version before kick-off. Backtest = the same model replayed on two past seasons. Hit rate = share where the most likely outcome happened; log loss and Brier score measure probability quality (lower is better)."
+}

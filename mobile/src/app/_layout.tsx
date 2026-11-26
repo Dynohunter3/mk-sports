@@ -56,6 +56,9 @@ function Navigator() {
         <Stack.Screen name="profile" options={{ title: 'Profile' }} />
         <Stack.Screen name="leaderboard" options={{ headerShown: false }} />
         <Stack.Screen name="pick/[id]" options={{ title: 'Make your pick', presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="f1-pick" options={{ title: 'Predict the podium', presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="tennis-pick" options={{ title: 'Tennis pick', presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="recap" options={{ headerShown: false }} />
         <Stack.Screen name="sign-in" options={{ title: 'Sign in', presentation: 'modal', animation: 'slide_from_bottom' }} />
         <Stack.Screen name="accuracy" options={{ title: 'Model accuracy' }} />
         <Stack.Screen name="predictions" options={{ title: 'Predictions' }} />

@@ -18,7 +18,7 @@ Every competition appears in its own colours and every team with its real crest.
 | | |
 |---|---|
 | **Download page** | https://dynohunter3.github.io/mk-sports/ |
-| **Current version** | 2.2.0 (Android 7.0 or newer, about 55 MB) |
+| **Current version** | 2.3.0 (Android 7.0 or newer, about 56 MB) |
 | **Player photo credits** | https://dynohunter3.github.io/mk-sports/photo-credits.html |
 | **Contact** | [Mksportz26@gmail.com](mailto:Mksportz26@gmail.com) · call +260 97 322 0276 · WhatsApp +260 76 050 8803 |
 
@@ -65,7 +65,7 @@ Every competition appears in its own colours and every team with its real crest.
 
 **Publishing a new version (owner).** The download button points to `releases/latest/download/MKSports.apk` on GitHub, so it works only once a release with that file is published:
 1. On GitHub, open the repository, then **Releases** > **Draft a new release**.
-2. Create a tag such as `v2.2.0` and add the release notes.
+2. Create a tag such as `v2.3.0` and add the release notes.
 3. Attach the APK, named exactly `MKSports.apk`, and click **Publish**.
 
 No release has been published yet; until one is, the download button returns "not found".
@@ -82,12 +82,18 @@ No release has been published yet; until one is, the download button returns "no
 | **Scores** | Any day, any sport: football, basketball, American football, ice hockey and baseball. Tennis (ATP and WTA draws with set scores), Formula 1 (race weekends with session results) and cricket (live, results and upcoming). |
 | **My Team** | The favourite-team hub: next match with prediction, results, form, table position, top players, squad and team news. |
 | **News** | Live matches across the top, then the latest headlines from your competitions and your team. Articles open in the in-app browser. |
-| **Stats** | Pick a competition. **Football:** full table, fixtures, results and player stats (goals, assists, shots, cards, fouls, passes, saves, plus team clean sheets). **US sports:** standings and leaders. **F1:** drivers' and constructors' standings. **Tennis:** rankings. |
+| **Stats** | Pick a competition. **Football:** full table, **Forecast** (the season simulator: title, top four, promotion and relegation chances), **xG table** (who deserved what), fixtures, results and player stats (goals, assists, shots, cards, fouls, passes, saves, plus team clean sheets). **US sports:** standings and leaders. **F1:** drivers' and constructors' standings. **Tennis:** rankings. |
 
 ### Match centre
 
 - **Header:** the score in a split of both teams' colours, with expected goals (xG) for football. The score always fits, even with large text sizes.
-- **Overview:** the AI prediction and its call (see [section 7](#7-ai-predictions)), the goals outlook, form, head-to-head and the table.
+- **Overview:**
+  - the AI prediction and its call (see [section 7](#7-ai-predictions)), the goals outlook, form, head-to-head and the table;
+  - a link to the prediction's entry in the public record on GitHub;
+  - a share button that makes a 9:16 card of the prediction.
+- **Deserved result** (football with shot positions), for example "Arsenal won the xG 2.1–0.7 but lost 0–1":
+  - Each shot is a chance to score with probability equal to its xG, which gives the chance of each result on the shots both sides had.
+  - After a missed call the review says whether the chances favoured the call or the result.
 - **Win probability** (football, live and finished matches): home / draw / away through the match, with goal and red-card markers and the biggest swing.
   - Worked out on the phone from the model's pre-match expected goals, scaled to the minutes left, adjusted for red cards (×0.70 for the side down to ten players, ×1.25 for its opponent) and started from the score.
   - It is a transparent estimate: tactics and injuries are not modelled.
@@ -102,12 +108,15 @@ No release has been published yet; until one is, the download button returns "no
 
 | Screen | What it does |
 |---|---|
+| **Team page** (and My Team) | Next match, last result, the table, the **season forecast** ("Arsenal: 79% title chance, ▲2 since last week", every finishing place's chance, projected points) and **team strength**: the model's own rating since 2016-17 against the league average. |
 | **Player page** | Photo (with its credit), position, number, age, nationality, club, season stats, recent matches and, for football, **season xG**: xG, non-penalty xG, xG per 90 and goals minus xG (MK Sports' own estimate). |
 | **Search** | Teams, players and competitions; opens their pages. |
 | **Predictions** | Every published football prediction for the coming days, with its call, strength and safer call. Filters for draw calls, strong calls, the safest calls and recent results. It works offline from the last saved copy. |
 | **How accurate is the model?** | The live record against the tested range; RPS and a calibration chart; the backtested record by call strength, competition and confidence. |
 | **Quick Picks** | A swipeable deck of upcoming matches (see [section 3](#3-the-game-quick-picks-points-levels-and-badges)). |
-| **My game** | Level ring, you vs the AI, this week's banker, streak, accuracy, exact scores, the badge cabinet, recent results, points by week and the season archive. |
+| **My game** | Level ring, you vs the AI, share my week, probability picks (Brier score against the AI), the season recap, this week's banker, F1 and tennis picks, streak, accuracy, exact scores, the badge cabinet, recent results, points by week and the season archive. |
+| **Season recap** | Best pick, longest streak, the team you call best, and your season against the AI, with a share card. |
+| **F1 podium / tennis pick** | Pick the top three for a race, or a tennis winner and the number of sets. |
 | **Private leagues** | Create, join and share leagues with friends (see [section 4](#4-private-leagues)). |
 | **Settings** | Profile (name and avatar), favourite team, sports and competitions; notifications; dark or light theme; animations and vibration; data saver; data sources; player photo credits; the My team widget; contact us; privacy (back up, restore or delete your data). |
 | **Home-screen widget** | "My team": your team's live score, or its next match and last result. Updated every 30 minutes, and every 30 seconds while live tracking runs during your matches. |
@@ -151,6 +160,28 @@ Details: [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md).
 
 **Season archive:** My game lists every season (July to June) with points, accuracy, exact scores, best streak and bankers won.
 
+**Probability picks:** on any match, switch the pick screen to **Probability pick** and give your own home, draw and away chances.
+- **How you set them:** in 5-point steps; they always add up to 100%, and you can start from the AI's numbers.
+- **Points:** your most likely outcome is your call and earns the usual points.
+- **The Brier score:** each probability pick is also scored against the AI's chances from the same moment, on the same matches.
+  - 0 is perfect, and a third on each result always scores 0.67; lower is better.
+  - My game shows your average against the AI's, and how many matches each of you scored better on.
+- **Quick Picks** stays the simple mode.
+
+**F1 and tennis:**
+- **F1:** predict the podium during a race weekend (Scores > Formula 1, or My game). 5 points for each driver in the right place, 2 for a driver on the podium in another place, 5 more for all three (up to 20).
+- **Tennis:** tap an upcoming match in Scores > Tennis and pick the winner (3 points) and the number of sets (2 more). Men's Grand Slam singles are best of five sets.
+- **Settling:** from ESPN's results. A pick still unresolved 10 days after the start is void.
+- **Points:** they count towards your level. There are no AI predictions for these sports, so they are not part of you vs the AI.
+
+**Season recap:** best pick (the least likely call that came off, by the AI's own numbers when you picked), longest streak, the team you call best (most right on its matches, from at least three picks), and your season against the AI.
+
+**Share cards:** 9:16 images (1080 × 1920) for WhatsApp Status, each with the download QR code:
+- your week against the AI (My game);
+- a match prediction (match page);
+- a private league table;
+- the season recap.
+
 **You vs the AI:** for every settled pick where the AI made a call, My game counts how often each of you was right, and how often one was right when the other was wrong.
 
 **Results are in:** settled picks you haven't seen yet are celebrated once on Home, with confetti when any were right.
@@ -172,6 +203,15 @@ Play against friends without any server or account.
 4. **Tables:** season or this week, medals for the top three, streaks, and "updated 2h ago". Up to 40 members per league.
 
 **Where the data lives:** in the part of the link after `#`, which browsers never send to the web server. Nothing is uploaded. The page `pages/l.html` forwards the link to the app (`mksports://pl?d=…`), or offers the download.
+
+**Matchweek awards:** worked out from members' cards each week:
+- **Sharpshooter of the week:** most points;
+- **Biggest climber:** most places gained;
+- **On fire:** the longest current run of correct picks.
+
+From 2.3, cards also carry the previous week's points, so last week's awards still work after members share again. Links from older versions still open.
+
+**Share the table as an image** with the picture button next to Share & update.
 
 **Reminder:** with "Pick results" alerts on, league members get a reminder to Share & update about two and a half hours after the kick-off of their last pick of the week.
 
@@ -254,6 +294,18 @@ Code: `mobile/src/notify/`.
 - **Movement:** if the prediction changed, from what, when and why (for example, when bookmaker odds were published).
 - **After the match:** the result is graded, and the call is marked right or wrong.
 
+### Proof: a public record before kick-off
+
+- **The record:** every pipeline run adds a commit to the repository's [`predictions` branch](https://github.com/Dynohunter3/mk-sports/commits/predictions) with that run's `football_predictions.json`.
+  - From 26 Nov 2026 the branch is added to and never force-pushed, so every published version stays in its history.
+  - Before that, each run replaced the last one, so earlier predictions have no commit.
+- **The proof index:** `proof.json` records the first commit that published each version of each prediction.
+- **In the app:** the match page links each published prediction to that commit ("In the public record since 25 Nov, 14:25, before kick-off").
+- **The public track record page** (`record.html` on the site) grades every prediction against the result, with the same links.
+- **What it proves:**
+  - A commit's own date is written by whoever makes it. The stronger evidence is the GitHub Actions run linked from each entry, whose time GitHub records.
+  - The repository owner could still rewrite the branch. A rule that blocks force pushes to `predictions` (Settings > Rules) closes that gap; it is not switched on yet.
+
 ### How the football model works
 
 - **Models:**
@@ -317,6 +369,17 @@ That is far too few matches to judge.
 - **Too early under 100 matches:** until then it says it is too early to judge.
 - **From 100 matches:** a record outside the range is flagged in the app and raised as a warning in the pipeline's health check.
 
+### Season forecasts (the simulator)
+
+- **The backtest:** run from 1 December and 1 March of 2024-25 and 2025-26, with the model retrained each time on earlier data only. It covered 52 league tables and 1,036 team forecasts ([Step 11](docs/audit/STEP11_SEASON_SIMULATOR.md)).
+- **Result:** the simulator's chances beat "the table as it stands" for every zone (Brier score, lower is better):
+  - title 0.018 against 0.031;
+  - top four 0.041 against 0.071;
+  - relegation 0.051 against 0.100;
+  - play-off places 0.095 against 0.182.
+- **Calibration:** close. Chances given 10–25% happened 16.4% of the time (average given 16.5%); 75–90% happened 82.6% (82.5%).
+- **Slightly too sure:** long shots (2–10%) happened a little more often than given, the expected effect of keeping each fixture's chances fixed. So the app never shows 0% or 100%, only "<1%" and ">99%".
+
 ### On-device models (other competitions and sports)
 
 Earlier walk-forward backtests. NFL, NHL and MLB settings were tuned on older games and scored on the most recent 30%, which the tuning never saw.
@@ -350,6 +413,11 @@ xG is the probability that a shot is scored, given where it was taken from.
 
 - **Model:** MK Sports' own logistic regression on distance to goal and the angle of the goal mouth, fitted on 22,711 real non-penalty shots from 910 matches (top five leagues, Championship and Champions League). Penalties use the observed 77% conversion rate.
 - **Validation:** on held-out matches, 361 goals against 368.0 xG, log loss 0.262 (0.278 for a constant rate), and well calibrated by decile.
+- **xG table:** Stats > xG table ranks a league by expected points, so you can see who has been lucky and who is due to improve.
+  - Expected points come from each match's shots: the exact chance of each result if every shot scores with probability equal to its xG.
+  - It is worked out on the phone; each finished match is downloaded once and kept.
+  - With data saver on, the app asks before downloading.
+  - Matches without shot positions are left out for both teams, and the table says how many.
 - **Player xG:** the player page adds up each player's shots over their team's league matches this season. Minutes come from the line-ups. Matches without shot positions are left out, and the page says how many.
 - **Free-kick goals:** since 2.2 they count as shots; they come as subtypes such as `goal---free-kick`, which were skipped before. The model itself was fitted on the narrower list (a small effect).
 - **Limits:** it is the app's own estimate. The feed doesn't record the body part, so a header and a shot from the same spot get the same value.
@@ -423,14 +491,18 @@ A GitHub Actions workflow (`.github/workflows/data-pipeline.yml`) runs **every 6
 5. **Retrain** the model on the 1st of the month, or when the model code changes.
 6. **Predict** the next 21 days. Only predictions whose inputs changed are rewritten, and each keeps its history.
 7. **Grade** finished matches.
-8. **Player photos:** the incremental Wikidata and Wikimedia step ([section 9](#player-photos)). It follows Wikimedia's robot policy: a User-Agent with contact details, one request at a time, standard thumbnail sizes, and Retry-After honoured. A failure in this step never fails the job.
-9. **Publish to GitHub Pages:**
-   - `football_predictions.json`, `accuracy.json` and `model.json`;
+8. **Season simulator:** every remaining league fixture, 10,000 times, published as `simulations.json` ([Step 11](docs/audit/STEP11_SEASON_SIMULATOR.md)).
+9. **Team strength history:** each team's rating over the seasons, published as `elo/<competition>.json`.
+10. **Player photos:** the incremental Wikidata and Wikimedia step ([section 9](#player-photos)). It follows Wikimedia's robot policy: a User-Agent with contact details, one request at a time, standard thumbnail sizes, and Retry-After honoured. A failure in this step never fails the job.
+11. **Publish to GitHub Pages:**
+   - `football_predictions.json`, `accuracy.json`, `simulations.json`, `elo/` and `model.json`;
    - the player photos;
-   - the download page (`pages/index.html`), the league-link page (`pages/l.html`) and the photo credits page (`pages/photo-credits.html`).
+   - the download page (`pages/index.html`), the public track record (`pages/record.html`), the league-link page (`pages/l.html`) and the photo credits page (`pages/photo-credits.html`).
 
-   A mirror is kept on the `predictions` branch, without photos, so the app always has a second source.
-10. **Health check:** a critical problem, such as stale results or failing sources, fails the job, and GitHub emails the repository owner.
+   The `predictions` branch keeps the same files, without photos, so the app always has a second source.
+   - **One commit per run:** each run's files are added on top of the last, never force-pushed, so the branch is the public record of every prediction.
+   - **The proof index:** a second commit adds `proof.json`, mapping each prediction to the commit that first published it.
+12. **Health check:** a critical problem, such as stale results or failing sources, fails the job, and GitHub emails the repository owner.
 
 **Keys:** optional keys (`FOOTBALL_DATA_ORG_KEY`, `THE_ODDS_API_KEY`, `BALLDONTLIE_API_KEY`) live only in the repository's Actions secrets and reach the job as environment variables. A source without its key is skipped automatically, and none are set at present.
 
@@ -440,6 +512,7 @@ Run it locally from `pipeline/`:
 python -m pip install -r requirements-model.txt -r requirements-photos.txt pytest
 python -m mkdata sync --current && python -m mkdata upcoming && python -m mkdata link && python -m mkdata elo
 python -m mkmodel.production predict
+python -m mkmodel.simulate && python -m mkmodel.elo_history
 python -m mkdata photos --budget 4000
 python -m pytest -q
 ```
@@ -526,14 +599,14 @@ PREDICTPRO_UPLOAD_KEY_PASSWORD=...
 Counts measured on 25 Nov 2026:
 
 ```bash
-cd mobile   && npm test && npx tsc --noEmit   # 80 tests
-cd pipeline && python -m pytest -q            # 72 tests
+cd mobile   && npm test && npx tsc --noEmit   # 100 tests
+cd pipeline && python -m pytest -q            # 77 tests
 cd engine   && python -m pytest -q            # 37 tests
 cd backend  && python -m pytest -q            # 71 passed, 2 skipped (Redis tests skip without a local Redis)
 ```
 
-- **App tests:** engine parity with Python, the data layer, the game (including bankers and the season archive), private leagues, player photo matching, notifications, scorelines, published predictions, win probability, player xG, search, backup and restore, colour contrast and the widget.
-- **Pipeline tests:** adapters, the HTTP client's politeness rules, linking, models, picks, production (including RPS and the live record check) and photos.
+- **App tests:** engine parity with Python, the data layer, the game (including bankers and the season archive), private leagues, player photo matching, notifications, scorelines, published predictions, win probability, player xG, search, backup and restore, colour contrast, the widget, probability picks, F1 and tennis picks, the season recap, matchweek awards, the xG table and the season forecast.
+- **Pipeline tests:** adapters, the HTTP client's politeness rules, linking, models, picks, production (including RPS and the live record check), the season simulator, the Elo history and the proof index, and photos.
 
 ### Server mode (optional)
 
@@ -568,8 +641,9 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/API.md](docs/API.md
 | 2.0.0 "Matchday" | 24 Nov 2026 | New design; Quick Picks; you vs the AI; levels, badges, celebrations; My game |
 | 2.1.0 | 24–25 Nov 2026 | Private leagues; profiles with avatars; reliable alerts (exact alarms, live tracking); line-ups on a full pitch; goals outlook; player photos from Wikimedia Commons; pulsing favourite-team row; Contact us; download page; fixes (match score cut-off, finished matches failing to open) |
 | 2.2.0 | 25 Nov 2026 | Live win probability; player xG; search; My team home-screen widget; back up and restore, and Android Auto Backup that actually includes the data; weekly banker and season archive; league share reminder; contrast-aware text and TalkBack in Quick Picks; RPS, calibration and the live record band on the accuracy page; nine more leagues on the published model |
+| 2.3.0 | 26 Nov 2026 | Season simulator (title, top four, promotion, relegation chances, with the weekly change); xG table and deserved results; team strength history; public record of every prediction with commit links and a track record page; probability picks (Brier score); F1 podium and tennis picks; share cards with QR code; season recap; matchweek awards in private leagues |
 
-Release notes: [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md), [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md), and the Step reports in [docs/audit](docs/audit/).
+Release notes: [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md), [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md), and the Step reports in [docs/audit](docs/audit/).
 
 ---
 
@@ -583,6 +657,10 @@ Release notes: [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md]
 - **Fixtures for the nine leagues added in 2.2** reach the published model only 2–4 days ahead; further out the app uses its on-device estimate.
 - **The widget** refreshes every 30 minutes, or about every 30 seconds while live tracking runs for your matches; otherwise a live score can lag.
 - **Win probability** ignores tactics, injuries and substitutions, and assumes goals are equally likely in every minute.
+- **Season forecasts** cover the 15 leagues decided by a plain table, not the Scottish Premiership, Belgium, Greece, MLS or the Champions League. They ignore point deductions and head-to-head tie-breakers.
+- **The xG table** downloads every league match report once (cached afterwards), which is a lot of data the first time.
+- **F1 and tennis picks** settle from ESPN's current scoreboards. A match that drops off the scoreboard before the app sees its result is void after 10 days.
+- **The public record starts on 26 Nov 2026.** Force pushes to the `predictions` branch are not blocked by a repository rule yet.
 - **Player photos:** about two-thirds coverage in the Premier League, and many photos are years old (see [section 9](#player-photos)).
 - **The Zambia Super League isn't covered,** because no free source has complete data.
 - **Predictions are probabilities, not certainties.** Even the strongest calls were wrong about a quarter of the time in testing.
@@ -593,11 +671,12 @@ Release notes: [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md]
 
 | Document | What's in it |
 |---|---|
+| [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md) | Everything new in 2.3: season simulator, xG table, team strength, public record, probability picks, F1 and tennis, share cards, recap, awards |
 | [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md) | Everything new in 2.2: win probability, player xG, search, widget, backup, banker, accuracy measures, nine more leagues |
 | [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md) | Everything new in 2.1: sharing, leagues, notifications, line-ups, photos |
 | [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md) | The 2.0 design system and the game |
 | [docs/SOURCE_REGISTRY.md](docs/SOURCE_REGISTRY.md) | Every data source, its terms as read, and whether it is used |
-| [docs/audit/](docs/audit/) | Steps 1–10: how the prediction model was audited, rebuilt, measured and extended to 20 competitions |
+| [docs/audit/](docs/audit/) | Steps 1–11: how the prediction model was audited, rebuilt, measured and extended to 20 competitions, and how the season simulator was tested |
 | [docs/PREDICTION_ENGINE.md](docs/PREDICTION_ENGINE.md) | The original prediction engine (server mode and the phone): models, explanations, versioning, backtests |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Components, data flow, jobs and caching (server mode) |
 | [docs/API.md](docs/API.md) | Server API endpoints |

@@ -9,7 +9,9 @@ import { useApi } from '@/api/cache';
 import { DATA_MODE } from '@/api/client';
 import type { GamePick, GameSummary, Leaderboard, LeaderboardRow, LocalPoints, Outcome } from '@/api/types';
 import { useAuth } from '@/auth/auth';
+import { WeekCard } from '@/components/cards';
 import { Backdrop, Glass } from '@/components/glass';
+import { ShareSheet } from '@/components/sharecard';
 import { CountUp, FadeIn, Pop, PressableScale, useGrow } from '@/components/motion';
 import { Button, Card, Chip, ChipRow, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatTile, StatusBanner, Text } from '@/components/ui';
 import { flag, initials } from '@/lib/format';
@@ -155,6 +157,8 @@ function LevelRing({ level, progress, size = 108, color }: { level: number; prog
 /** Device mode: the player's own game: level, you vs the AI, streaks, badges, results. */
 function MyGame() {
   const t = useTheme();
+  const { me } = useAuth();
+  const [shareWeek, setShareWeek] = useState(false);
   const g = useApi<GameSummary>('/me/game', { maxAge: 10 });
   const pts = useApi<LocalPoints>('/local/points', { maxAge: 30 });
   const d = g.data;
@@ -224,6 +228,9 @@ function MyGame() {
                       : `Dead level after ${vs.matches} matches.`}
               </Text>
               <Button title="Quick Picks" icon="cards-playing-outline" onPress={() => router.push('/play')} style={{ marginTop: space.md }} />
+              {d?.week_report && d.week_report.picks ? (
+                <Button title={`Share my ${d.week_report.current ? 'week' : 'last week'}`} icon="share-variant" kind="secondary" onPress={() => setShareWeek(true)} style={{ marginTop: space.sm }} />
+              ) : null}
               <Button title="Private leagues" icon="account-group" kind="secondary" onPress={() => router.push('/private-leagues')} style={{ marginTop: space.sm }} />
             </Glass>
           </FadeIn>
@@ -236,6 +243,27 @@ function MyGame() {
               <StatTile label="Exact" value={String(d?.stats.exact_scores ?? 0)} sub="scores" color={t.accent2} />
             </Row>
           </FadeIn>
+
+          {/* probability picks: Brier score against the AI */}
+          <ProbabilityRecordCard p={d?.probability} />
+
+          {/* season recap */}
+          {d?.recap && d.recap.picks ? (
+            <PressableScale onPress={() => router.push('/recap')} accessibilityRole="button" accessibilityLabel={`Season ${d.recap.season} recap`} style={{ marginTop: space.md }}>
+              <LinearGradient colors={[alpha(t.violet, 0.85), alpha(t.accent2, 0.6)]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radius.lg, padding: space.md, flexDirection: 'row', alignItems: 'center', gap: space.md }}>
+                <Icon name="movie-open-star-outline" size={28} color="#fff" />
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontWeight: '900' }} color="#fff">
+                    Your {d.recap.season} season so far
+                  </Text>
+                  <Text v="small" color="rgba(255,255,255,0.9)">
+                    Best pick, longest streak, the team you call best, and you against the AI.
+                  </Text>
+                </View>
+                <Icon name="chevron-right" size={24} color="#fff" />
+              </LinearGradient>
+            </PressableScale>
+          ) : null}
 
           {/* this week's banker */}
           <Card style={{ marginTop: space.lg, borderColor: d?.banker ? alpha(t.gold, 0.7) : t.glassBorder, borderWidth: 1 }}>
@@ -253,6 +281,9 @@ function MyGame() {
               </View>
             </Row>
           </Card>
+
+          {/* F1 and tennis */}
+          <OtherSportsPicks specials={d?.specials ?? []} />
 
           {/* badges */}
           <SectionHeader title={`Badges · ${(d?.badges ?? []).filter((b) => b.awarded_at).length}/${d?.badges.length ?? 0}`} icon="medal-outline" color={t.gold} />
@@ -366,6 +397,11 @@ function MyGame() {
           </Card>
           <Disclaimer compact />
         </ScrollView>
+      {d?.week_report ? (
+          <ShareSheet visible={shareWeek} onClose={() => setShareWeek(false)} title="My week on MK Sports">
+            <WeekCard name={d.display_name === 'You' ? me?.display_name ?? 'Me' : d.display_name} avatar={me?.avatar ?? '⚽'} level={d.level.name} r={d.week_report} />
+          </ShareSheet>
+        ) : null}
       </SafeAreaView>
     </View>
   );
@@ -380,5 +416,90 @@ export default function LeaderboardScreen() {
       </SafeAreaView>
       <GlobalLeaderboard />
     </View>
+  );
+}
+
+function ProbabilityRecordCard({ p }: { p: GameSummary['probability'] }) {
+  const t = useTheme();
+  return (
+    <Glass style={{ marginTop: space.md }}>
+      <Row style={{ justifyContent: 'space-between' }}>
+        <Text v="label">Probability picks</Text>
+        <Icon name="percent-outline" size={20} color={t.accent2} />
+      </Row>
+      {p && p.matches && p.you !== null && p.ai !== null ? (
+        <>
+          <Row style={{ justifyContent: 'center', marginTop: space.sm }} gap={space.lg}>
+            <View style={{ alignItems: 'center' }}>
+              <Text v="tiny" dim style={{ fontWeight: '800' }}>
+                YOU
+              </Text>
+              <Text v="display" color={p.leader === 'you' ? t.brand : t.text}>
+                {p.you.toFixed(3)}
+              </Text>
+            </View>
+            <Text v="h2" muted>
+              v
+            </Text>
+            <View style={{ alignItems: 'center' }}>
+              <Text v="tiny" dim style={{ fontWeight: '800' }}>
+                AI
+              </Text>
+              <Text v="display" color={p.leader === 'ai' ? t.hot : t.text}>
+                {p.ai.toFixed(3)}
+              </Text>
+            </View>
+          </Row>
+          <Text v="small" dim style={{ textAlign: 'center' }}>
+            Average Brier score over {p.matches} match{p.matches === 1 ? '' : 'es'} (lower is better).{' '}
+            {p.leader === 'you' ? 'Your percentages are beating the AI\'s.' : p.leader === 'ai' ? 'The AI\'s percentages are ahead.' : 'Dead level.'} Better on {p.better}, worse on {p.worse}.
+          </Text>
+        </>
+      ) : (
+        <Text v="small" dim style={{ marginTop: space.xs }}>
+          Give your own home, draw and away chances on any match (Make your pick, then Probability pick). They&apos;re scored with the Brier score against the AI&apos;s chances on the same matches: it rewards accurate percentages, not just the right winner.
+        </Text>
+      )}
+    </Glass>
+  );
+}
+
+function OtherSportsPicks({ specials }: { specials: NonNullable<GameSummary['specials']> }) {
+  const t = useTheme();
+  const shown = specials.slice(0, 6);
+  return (
+    <>
+      <SectionHeader title="F1 and tennis picks" icon="flag-checkered" color={t.live} />
+      <Glass>
+        {shown.length ? (
+          shown.map((x, i) => (
+            <Row key={x.id} style={{ paddingVertical: 8, borderTopWidth: i ? 1 : 0, borderColor: t.glassBorder, alignItems: 'flex-start' }}>
+              <Icon name={x.kind === 'f1' ? 'flag-checkered' : 'tennis'} size={18} color={t.textDim} />
+              <View style={{ flex: 1 }}>
+                <Text v="small" style={{ fontWeight: '800' }} numberOfLines={1}>
+                  {x.name}
+                </Text>
+                <Text v="tiny" dim numberOfLines={2}>
+                  {x.kind === 'f1'
+                    ? `Podium: ${x.podium.join(', ')}${x.result ? ` · result ${x.result.join(', ')}` : ''}`
+                    : `${x.players[x.winner]} in ${x.sets}${x.result ? ` · ${x.players[x.result.winner]} won in ${x.result.sets}` : ''}`}
+                </Text>
+              </View>
+              <Text v="small" color={x.status === 'won' ? t.win : x.status === 'lost' ? t.loss : t.pending} style={{ fontWeight: '800' }}>
+                {x.status === 'pending' ? 'Pending' : x.status === 'void' ? 'Void' : `+${x.points}`}
+              </Text>
+            </Row>
+          ))
+        ) : (
+          <Text v="small" dim>
+            Predict the podium during an F1 race weekend, or pick a tennis winner and the number of sets from Scores. Points count towards your level.
+          </Text>
+        )}
+        <Row style={{ marginTop: space.sm }}>
+          <Button title="F1 podium" icon="podium-gold" kind="secondary" onPress={() => router.push('/f1-pick')} style={{ flex: 1 }} />
+          <Button title="Tennis" icon="tennis" kind="secondary" onPress={() => router.push({ pathname: '/sports', params: { sport: 'tennis' } })} style={{ flex: 1 }} />
+        </Row>
+      </Glass>
+    </>
   );
 }

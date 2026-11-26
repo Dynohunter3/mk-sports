@@ -644,6 +644,8 @@ def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | 
         pick = r["pick"] or max(probs, key=probs.get)  # the call that was shown (draw rule included)
         total = r["home_score"] + r["away_score"]
         graded.append({"match_id": r["match_id"], "competition": r["competition_id"], "kickoff": datetime.fromtimestamp(r["kickoff_utc"], timezone.utc).isoformat(),
+                       "made_at": datetime.fromtimestamp(r["made_at"], timezone.utc).isoformat(timespec="seconds"),
+                       "p": {"home": round(r["p_home"], 4), "draw": round(r["p_draw"], 4), "away": round(r["p_away"], 4)},
                        "home": names.get(r["home_id"], r["home_id"]), "away": names.get(r["away_id"], r["away_id"]),
                        "score": f"{r['home_score']}-{r['away_score']}", "pick": pick, "probability": round(probs[pick], 4),
                        "correct": int(pick == r["outcome"]), "log_loss": r["log_loss"], "brier": r["brier"],
@@ -661,7 +663,7 @@ def publish_accuracy(store: Path = STORE, publish: Path = PUBLISH, now: float | 
             "tiers": {t: rate("correct", [g for g in graded if g["tier"] == t]) for t in ("strong", "likely", "lean", "toss-up")},
             "draw_calls": rate("correct", [g for g in graded if g["pick"] == "draw"]),
             "safer_call": rate("safer_correct", graded), "over25": rate("over25_correct", graded),
-            "recent": [{k: g[k] for k in ("match_id", "competition", "kickoff", "home", "away", "score", "pick", "probability", "correct",
+            "recent": [{k: g[k] for k in ("match_id", "competition", "kickoff", "made_at", "p", "home", "away", "score", "pick", "probability", "correct",
                                           "confidence_label", "tier", "safer_call", "safer_correct", "over25_correct")}
                        for g in graded[:120]]}
     # rolling windows by kick-off, for the app's results review

@@ -8,7 +8,8 @@ import type { MatchDetail, Outcome, PickResult } from '@/api/types';
 import { useAuth } from '@/auth/auth';
 import { sportOf } from '@/data/leagues';
 import { ProbabilityBar, TeamBadge } from '@/components/match';
-import { Button, Card, Disclaimer, EmptyState, Icon, Loading, Row, Text } from '@/components/ui';
+import { Button, Card, Disclaimer, EmptyState, Icon, Loading, Row, Segmented, Text } from '@/components/ui';
+import { adjustPct, callOf, normalisePct, type Pct } from '@/lib/probs';
 import { notify } from '@/lib/dialogs';
 import { clampScore, outcomeLabel, relative, rulesText } from '@/lib/format';
 import { useNow } from '@/lib/useNow';
@@ -36,10 +37,19 @@ export default function PickScreen() {
   const [away, setAway] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pickMode, setPickMode] = useState<'simple' | 'probability'>('simple');
+  const [pct, setPct] = useState<Pct>({ home: 40, draw: 30, away: 30 });
 
   useEffect(() => {
     if (!m) return;
     const p = m.my_pick;
+    const keys = m.has_draws ? (['home', 'draw', 'away'] as const) : (['home', 'away'] as const);
+    if (m.prediction) setPct(normalisePct({ home: m.prediction.home, draw: m.prediction.draw ?? 0, away: m.prediction.away }, [...keys]));
+    else if (!m.has_draws) setPct({ home: 50, draw: 0, away: 50 });
+    if (p?.probs) {
+      setPickMode('probability');
+      setPct(normalisePct({ home: p.probs.home, draw: p.probs.draw, away: p.probs.away }, [...keys]));
+    }
     if (p) {
       setPick(p.pick);
       setBanker(!!p.banker);
@@ -100,7 +110,23 @@ export default function PickScreen() {
   };
 
   async function submit() {
-    if (!pick || !m) return;
+    if (!m) return;
+    if (pickMode === 'probability') {
+      setSaving(true);
+      setError(null);
+      try {
+        const res = await api<PickResult>(`/picks/${m.id}`, { method: 'PUT', body: { probs: { home: pct.home / 100, draw: pct.draw / 100, away: pct.away / 100 }, banker } });
+        invalidate((k) => k.startsWith('/feed') || k.startsWith('/matches') || k.startsWith('/me') || k.startsWith('/picks'));
+        if (res.new_badges.length) notify('Badge unlocked! 🏅', res.new_badges.map((b) => BADGE_NAMES[b] ?? b).join(', '));
+        (router.canGoBack() ? router.back() : router.replace(`/match/${m.id}`));
+      } catch (e) {
+        setError(e instanceof OfflineError ? "You're offline. Your pick wasn't saved, so try again when you're connected." : e instanceof ApiError ? e.message : 'Could not save your pick');
+      } finally {
+        setSaving(false);
+      }
+      return;
+    }
+    if (!pick) return;
     if (withScore && !m.has_draws && home === away) {
       setError('Basketball has no draws: the scores must differ.');
       return;
@@ -152,6 +178,29 @@ export default function PickScreen() {
         </Text>
       </Row>
 
+      <View style={{ marginTop: space.lg }}>
+        <Segmented
+          options={[
+            { value: 'simple', label: 'Simple pick' },
+            { value: 'probability', label: 'Probability pick' },
+          ]}
+          value={pickMode}
+          onChange={setPickMode}
+        />
+      </View>
+      {pickMode === 'probability' ? (
+        <ProbabilityEditor
+          pct={pct}
+          setPct={setPct}
+          keys={m.has_draws ? ['home', 'draw', 'away'] : ['home', 'away']}
+          names={[m.home.short_name, m.away.short_name]}
+          colors={[m.home.color, m.away.color]}
+          disabled={locked}
+          ai={m.prediction ? normalisePct({ home: m.prediction.home, draw: m.prediction.draw ?? 0, away: m.prediction.away }, m.has_draws ? ['home', 'draw', 'away'] : ['home', 'away']) : null}
+        />
+      ) : null}
+      {pickMode === 'simple' ? (
+      <>
       <Text v="label" dim style={{ marginTop: space.xl, marginBottom: space.sm }}>
         Who wins?
       </Text>
@@ -223,6 +272,8 @@ export default function PickScreen() {
           </Text>
         ) : null}
       </Card>
+      </>
+      ) : null}
 
       {m.scoring.result_points > 0 ? (
         <Card style={{ marginTop: space.lg, borderColor: banker ? t.gold : undefined, borderWidth: banker ? 1.5 : undefined }}>
@@ -262,7 +313,7 @@ export default function PickScreen() {
         </Card>
       ) : null}
 
-      {!pick && !locked ? (
+      {pickMode === 'simple' && !pick && !locked ? (
         <Text v="small" dim style={{ marginTop: space.lg, textAlign: 'center' }}>
           Choose who wins to lock in your pick.
         </Text>
@@ -272,7 +323,7 @@ export default function PickScreen() {
           {error}
         </Text>
       ) : null}
-      <Button title={m.my_pick ? 'Update pick' : 'Lock in pick'} onPress={submit} disabled={!pick || locked || scoreConflict} loading={saving} style={{ marginTop: space.xl }} icon="check" />
+      <Button title={m.my_pick ? 'Update pick' : 'Lock in pick'} onPress={submit} disabled={(pickMode === 'simple' && (!pick || scoreConflict)) || locked} loading={saving} style={{ marginTop: space.xl }} icon="check" />
       {m.my_pick && !locked ? <Button title="Remove pick" kind="ghost" onPress={remove} style={{ marginTop: space.sm }} /> : null}
       <Text v="tiny" muted style={{ textAlign: 'center', marginTop: space.md }}>
         {rulesText(m.scoring, m.has_draws)}. You can change your pick until kick-off.
@@ -317,5 +368,65 @@ function ScoreInput({ label, value, onChange, stepper, step, disabled }: { label
         />
       )}
     </View>
+  );
+}
+
+/** Probability pick: the player's own home/draw/away chances, in 5-point steps, always adding up to 100%. */
+function ProbabilityEditor({ pct, setPct, keys, names, colors, disabled, ai }: { pct: Pct; setPct: (p: Pct) => void; keys: ('home' | 'draw' | 'away')[]; names: [string, string]; colors: [string, string]; disabled: boolean; ai: Pct | null }) {
+  const t = useTheme();
+  const label = (k: 'home' | 'draw' | 'away') => (k === 'home' ? names[0] : k === 'away' ? names[1] : 'Draw');
+  const color = (k: 'home' | 'draw' | 'away') => (k === 'home' ? colors[0] : k === 'away' ? colors[1] : t.draw);
+  const call = callOf(pct);
+  const btn = (k: 'home' | 'draw' | 'away', delta: number) => (
+    <Pressable
+      onPress={() => setPct(adjustPct(pct, k, delta, keys))}
+      disabled={disabled || (delta < 0 ? pct[k] <= 0 : pct[k] >= 100)}
+      accessibilityRole="button"
+      accessibilityLabel={`${delta > 0 ? 'More' : 'Less'} likely: ${label(k)}, now ${pct[k]}%`}
+      style={({ pressed }) => ({ width: TAP, height: TAP, borderRadius: TAP / 2, backgroundColor: t.surface2, alignItems: 'center', justifyContent: 'center', opacity: pressed ? 0.7 : 1 })}
+    >
+      <Icon name={delta > 0 ? 'plus' : 'minus'} size={20} color={t.text} />
+    </Pressable>
+  );
+  return (
+    <Card style={{ marginTop: space.lg }}>
+      <Text style={{ fontWeight: '700' }}>How likely is each result?</Text>
+      <Text v="small" dim style={{ marginTop: 2 }}>
+        Set your own chances. They always add up to 100%.
+      </Text>
+      <View style={{ flexDirection: 'row', height: 14, borderRadius: 7, overflow: 'hidden', marginTop: space.md }} accessible accessibilityLabel={keys.map((k) => `${label(k)} ${pct[k]}%`).join(', ')}>
+        {keys.map((k) => (
+          <View key={k} style={{ flex: Math.max(pct[k], 0.001), backgroundColor: color(k) }} />
+        ))}
+      </View>
+      {keys.map((k) => (
+        <Row key={k} style={{ marginTop: space.md, justifyContent: 'space-between' }}>
+          <Row style={{ flex: 1 }} gap={8}>
+            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: color(k) }} />
+            <Text style={{ fontWeight: '700', flexShrink: 1 }} numberOfLines={1}>
+              {label(k)}
+            </Text>
+          </Row>
+          {btn(k, -5)}
+          <Text v="h2" style={{ width: 66, textAlign: 'center' }}>
+            {pct[k]}%
+          </Text>
+          {btn(k, 5)}
+        </Row>
+      ))}
+      {ai ? (
+        <Pressable onPress={() => setPct(ai)} disabled={disabled} accessibilityRole="button" style={{ marginTop: space.md, minHeight: TAP, justifyContent: 'center' }}>
+          <Text v="small" color={t.brand} style={{ fontWeight: '700' }}>
+            Start from the AI&apos;s numbers ({keys.map((k) => `${ai[k]}%`).join(' · ')})
+          </Text>
+        </Pressable>
+      ) : null}
+      <Text v="small" dim style={{ marginTop: space.sm }}>
+        Your call: {label(call)} ({pct[call]}%). It earns the usual points if it comes off.
+      </Text>
+      <Text v="tiny" muted style={{ marginTop: space.xs }}>
+        Probability picks are also scored with the Brier score, which rewards accurate percentages: 0 is perfect, and a third on each result always scores 0.67. You and the AI are scored on the same matches, using the AI&apos;s numbers at the moment you save. Lower is better.
+      </Text>
+    </Card>
   );
 }

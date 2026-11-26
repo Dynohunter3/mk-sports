@@ -6,12 +6,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useApi } from '@/api/cache';
 import type { FormGame, Injury, LineupPlayer, MatchCentre, MatchDetail, TeamStat, TimelineItem } from '@/api/types';
+import { MatchShareCard } from '@/components/cards';
 import { Glass } from '@/components/glass';
+import { ShareSheet } from '@/components/sharecard';
 import { ConfidencePill, finalLabel, FormPills, ProbabilityBar, StandingsTable, StatusChip, TeamBadge, TierPill } from '@/components/match';
 import { kitColors, ShotMap, TeamPitch } from '@/components/pitch';
 import { PlayerPhoto } from '@/components/crest';
 import { Float, PressableScale } from '@/components/motion';
 import { goalsOutlook, goalsRead } from '@/engine/scorelines';
+import { xgFor } from '@/engine/xg';
+import { chancesVerdict, Deserved, deservedLine, deservedResult } from '@/engine/xgresult';
+import { commitUrl, proofFor, RECORD_PAGE, useProof } from '@/data/published';
 import { WinProbabilityCard } from '@/components/winprob';
 import { Button, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmented, StatusBanner, Text } from '@/components/ui';
 import { confirm, notify } from '@/lib/dialogs';
@@ -65,13 +70,13 @@ function Match({ id }: { id: string }) {
   return (
     <View style={{ flex: 1, backgroundColor: t.bg }}>
       <ScrollView contentContainerStyle={{ paddingBottom: space.xxl }} refreshControl={<RefreshControl refreshing={detail.refreshing} onRefresh={refresh} tintColor="#fff" />} stickyHeaderIndices={[1]}>
-        <MatchHero m={m} xg={c?.xg ?? null} />
+        <MatchHero m={m} xg={c?.xg ?? null} deserved={deservedFor(m, c)} />
         <View style={{ backgroundColor: t.bg, paddingHorizontal: space.lg, paddingTop: space.sm, paddingBottom: 4 }}>
           <Segmented scroll options={tabs} value={tab} onChange={setTab} />
         </View>
         <View style={{ paddingHorizontal: space.lg }}>
           <StatusBanner error={detail.error ?? centre.error} offline={detail.offline} updatedAt={detail.updatedAt} onRetry={refresh} />
-          {tab === 'overview' ? <Overview m={m} /> : null}
+          {tab === 'overview' ? <Overview m={m} deserved={deservedFor(m, c)} /> : null}
           {tab === 'lineups' ? <Lineups m={m} c={c} loading={centre.loading} /> : null}
           {tab === 'stats' ? <Stats m={m} c={c} loading={centre.loading} /> : null}
           {tab === 'timeline' ? <Timeline m={m} c={c} loading={centre.loading} /> : null}
@@ -91,7 +96,19 @@ function Match({ id }: { id: string }) {
 }
 
 // ------------------------------------------------------------------ header
-function MatchHero({ m, xg }: { m: MatchDetail; xg: MatchCentre['xg'] }) {
+/** Whether the result matched the chances: from each shot's xG (finished or live football with shot positions). */
+function deservedFor(m: MatchDetail, c: MatchCentre | undefined): { line: string; d: Deserved } | null {
+  if (!c?.xg || m.sport !== 'football' || (m.status !== 'finished' && m.status !== 'live') || m.home_score === null || m.away_score === null) return null;
+  const hs: number[] = [];
+  const as: number[] = [];
+  for (const s of c.shots) {
+    if ((s.x === null || s.y === null) && !s.penalty) continue;
+    (s.side === 'home' ? hs : as).push(xgFor(s.x ?? 0, s.y ?? 0, s.penalty));
+  }
+  return { line: deservedLine(m.home.short_name, m.away.short_name, c.xg.home, c.xg.away, m.home_score, m.away_score, m.status === 'live'), d: deservedResult(hs, as) };
+}
+
+function MatchHero({ m, xg, deserved }: { m: MatchDetail; xg: MatchCentre['xg']; deserved: { line: string } | null }) {
   const t = useTheme();
   const started = m.status === 'live' || m.status === 'finished';
   const quarters = m.score_detail.quarters;
@@ -172,6 +189,11 @@ function MatchHero({ m, xg }: { m: MatchDetail; xg: MatchCentre['xg'] }) {
             </View>
             {team(m.away, 'away')}
           </Row>
+          {deserved ? (
+            <Text v="small" color="rgba(255,255,255,0.88)" style={{ textAlign: 'center', marginTop: space.sm, fontWeight: '600' }}>
+              {deserved.line}
+            </Text>
+          ) : null}
           {quarters?.length ? (
             <Text v="tiny" color="rgba(255,255,255,0.75)" style={{ textAlign: 'center', marginTop: space.sm }}>
               {quarters.map((q) => `${q[0]}-${q[1]}`).join('  ·  ')}
@@ -355,7 +377,7 @@ function Movement({ mv, pick, now, home, away }: { mv: NonNullable<NonNullable<M
 }
 
 /** After full time: was each call right? (result, safer call, goals) */
-function Review({ m, p, hs, as }: { m: MatchDetail; p: NonNullable<MatchDetail['prediction_full']>; hs: number; as: number }) {
+function Review({ m, p, hs, as, deserved }: { m: MatchDetail; p: NonNullable<MatchDetail['prediction_full']>; hs: number; as: number; deserved?: { line: string; d: Deserved } | null }) {
   const t = useTheme();
   const call = p.call!;
   const o = hs > as ? 'home' : hs < as ? 'away' : 'draw';
@@ -379,20 +401,52 @@ function Review({ m, p, hs, as }: { m: MatchDetail; p: NonNullable<MatchDetail['
           </Text>
         </Row>
       ))}
+      {deserved && pick ? <Text v="small" dim style={{ marginTop: space.xs }}>{chancesVerdict(deserved.d, pick, o, m.home.short_name, m.away.short_name)}</Text> : null}
     </View>
   );
 }
 
+function ProofRow({ p, kickoff }: { p: NonNullable<MatchDetail['prediction_full']>; kickoff: string }) {
+  const t = useTheme();
+  const proof = useProof();
+  const pub = p.call?.published;
+  if (p.call?.source !== 'model' || !pub) return null;
+  const e = proofFor(proof, pub.match_id, pub.made_at);
+  const before = e ? Date.parse(e.at) < Date.parse(kickoff) : false;
+  return (
+    <Pressable
+      onPress={() => void Linking.openURL(e ? commitUrl(e.commit) : RECORD_PAGE)}
+      accessibilityRole="link"
+      accessibilityLabel={e ? 'Open the public record of this prediction on GitHub' : 'Open the public track record'}
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: space.md, padding: space.sm, borderRadius: radius.md, borderWidth: 1, borderColor: t.glassBorder }}
+    >
+      <Icon name="source-commit" size={18} color={t.accent2} />
+      <Text v="small" dim style={{ flex: 1 }}>
+        {e
+          ? `In the public record since ${new Date(e.at).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}${before ? ', before kick-off' : ''}: commit ${e.commit.slice(0, 7)} on GitHub.`
+          : 'Every published prediction goes into a public, timestamped record on GitHub. See the track record.'}
+      </Text>
+      <Icon name="open-in-new" size={16} color={t.textMuted} />
+    </Pressable>
+  );
+}
+
 // ------------------------------------------------------------------ overview (prediction, form, news)
-function Overview({ m }: { m: MatchDetail }) {
+function Overview({ m, deserved }: { m: MatchDetail; deserved?: { line: string; d: Deserved } | null }) {
   const t = useTheme();
   const p = m.prediction_full;
+  const [shareCard, setShareCard] = useState(false);
   return (
     <View>
       <PickCta m={m} />
       {p ? (
         <>
-          <SectionHeader title="AI prediction" icon="robot-outline" />
+          <SectionHeader title="AI prediction" icon="robot-outline" action={m.prediction && m.status === 'scheduled' ? 'Share' : undefined} onAction={() => setShareCard(true)} />
+          {m.prediction && m.status === 'scheduled' ? (
+            <ShareSheet visible={shareCard} onClose={() => setShareCard(false)} title={`${m.home.short_name} v ${m.away.short_name}: AI prediction`}>
+              <MatchShareCard m={m} />
+            </ShareSheet>
+          ) : null}
           <Glass>
             <Row style={{ justifyContent: 'space-between', marginBottom: space.md }}>
               <View style={{ flex: 1 }}>
@@ -440,7 +494,8 @@ function Overview({ m }: { m: MatchDetail }) {
                 ) : null}
               </View>
             ) : null}
-            {p.call && m.status === 'finished' && m.home_score !== null && m.away_score !== null ? <Review m={m} p={p} hs={m.home_score} as={m.away_score} /> : null}
+            {p.call && m.status === 'finished' && m.home_score !== null && m.away_score !== null ? <Review m={m} p={p} hs={m.home_score} as={m.away_score} deserved={deserved} /> : null}
+            <ProofRow p={p} kickoff={m.start_time} />
             <SectionHeader title="Key factors" />
             <Row style={{ marginTop: -space.xs, marginBottom: space.sm, flexWrap: 'wrap' }} gap={space.md}>
               {(

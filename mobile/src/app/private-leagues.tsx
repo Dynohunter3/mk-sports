@@ -12,7 +12,9 @@ import { invalidate, useApi } from '@/api/cache';
 import { api } from '@/api/client';
 import type { PrivateLeague, PrivateLeagues } from '@/api/types';
 import { useAuth } from '@/auth/auth';
+import { LeagueShareCard } from '@/components/cards';
 import { Backdrop, Glass } from '@/components/glass';
+import { ShareSheet } from '@/components/sharecard';
 import { FadeIn, haptic, Pop, PressableScale } from '@/components/motion';
 import { fieldStyle, ProfileEditor } from '@/components/profile';
 import { Button, Disclaimer, Icon, Loading, Row, SectionHeader, Segmented, Text } from '@/components/ui';
@@ -27,6 +29,7 @@ const input = fieldStyle;
 function LeagueCard({ l, meId, onChanged }: { l: PrivateLeague; meId: string; onChanged: () => void }) {
   const t = useTheme();
   const [view, setView] = useState<'season' | 'week'>('season');
+  const [shareImage, setShareImage] = useState(false);
   const rows = view === 'season' ? l.members : l.week_table;
   const share = async () => {
     try {
@@ -95,6 +98,7 @@ function LeagueCard({ l, meId, onChanged }: { l: PrivateLeague; meId: string; on
           );
         })}
       </View>
+      <Awards l={l} />
       {l.members.length === 1 ? (
         <Text v="small" dim style={{ marginTop: space.sm }}>
           Just you so far. Share the link in your group chat: friends who open it join the league and appear here once they share theirs.
@@ -102,11 +106,51 @@ function LeagueCard({ l, meId, onChanged }: { l: PrivateLeague; meId: string; on
       ) : null}
       <Row style={{ marginTop: space.md }} gap={space.sm}>
         <Button title="Share & update" icon="share-variant" onPress={share} style={{ flex: 1 }} />
+        <PressableScale onPress={() => setShareImage(true)} accessibilityLabel="Share the table as an image" style={{ width: TAP, height: TAP, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: alpha(t.brand, 0.12) }}>
+          <Icon name="image-outline" size={22} color={t.brand} />
+        </PressableScale>
         <PressableScale onPress={leave} accessibilityLabel="Leave league" feedback="warn" style={{ width: TAP, height: TAP, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: alpha(t.loss, 0.12) }}>
           <Icon name="exit-run" size={22} color={t.loss} />
         </PressableScale>
       </Row>
+      <ShareSheet visible={shareImage} onClose={() => setShareImage(false)} title={`${l.name} on MK Sports`}>
+        <LeagueShareCard l={l} meId={meId} />
+      </ShareSheet>
     </Glass>
+  );
+}
+
+/** Matchweek awards from the members' score cards: last week's (final) and this week's so far. */
+function Awards({ l }: { l: PrivateLeague }) {
+  const t = useTheme();
+  const last = l.awards?.last_week.items ?? [];
+  const now = l.awards?.this_week.items ?? [];
+  if (!last.length && !now.length) return null;
+  const row = (a: (typeof last)[number], when: string) => (
+    <Row key={`${when}-${a.key}`} style={{ paddingVertical: 6 }} gap={space.sm}>
+      <Text style={{ fontSize: 20 }}>{a.emoji}</Text>
+      <View style={{ flex: 1 }}>
+        <Text v="small" style={{ fontWeight: '800' }}>
+          {a.title}
+          <Text v="tiny" muted>{`  ${when}`}</Text>
+        </Text>
+        <Text v="small" dim numberOfLines={2}>
+          {a.winners.map((w) => `${w.avatar} ${w.name}`).join(', ')} · {a.detail}
+        </Text>
+      </View>
+    </Row>
+  );
+  return (
+    <View style={{ marginTop: space.md, padding: space.sm, borderRadius: radius.md, backgroundColor: alpha(t.gold, 0.08), borderWidth: 1, borderColor: alpha(t.gold, 0.35) }}>
+      <Text v="label" color={t.gold}>
+        Matchweek awards
+      </Text>
+      {last.map((a) => row(a, 'last week'))}
+      {now.map((a) => row(a, a.key === 'streak' ? 'now' : 'this week so far'))}
+      <Text v="tiny" muted>
+        Worked out from members&apos; shared score cards, so they count once everyone has shared after the weekend.
+      </Text>
+    </View>
   );
 }
 

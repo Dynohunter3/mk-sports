@@ -1,5 +1,5 @@
-import { router } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -46,7 +46,7 @@ function OtherSport({ slug }: { slug: string }) {
       ) : null}
       <StatusBanner error={cur.error} offline={cur.offline} updatedAt={cur.updatedAt} onRetry={cur.refresh} />
       {cur.loading ? <ActivityIndicator color={t.brand} style={{ marginTop: space.xl }} /> : null}
-      {slug === 'tennis' && tennis.data ? <TennisView board={tennis.data} /> : null}
+      {slug === 'tennis' && tennis.data ? <TennisView board={tennis.data} tour={tour} /> : null}
       {slug === 'formula1' && f1.data ? <F1View board={f1.data} /> : null}
       {slug === 'cricket' && cricket.data ? <CricketView matches={cricket.data} /> : null}
     </View>
@@ -60,6 +60,11 @@ function Scores({ leagueId, setLeagueId }: { leagueId: string | null; setLeagueI
   const active = (sports.data ?? []).filter((s) => s.is_active);
   const soon = (sports.data ?? []).filter((s) => !s.is_active);
   const [sportSlug, setSportSlug] = useState<string | null>(null);
+  // other screens can open a sport directly (e.g. My game > Tennis)
+  const { sport: wanted } = useLocalSearchParams<{ sport?: string }>();
+  useEffect(() => {
+    if (wanted) setSportSlug(wanted);
+  }, [wanted]);
   const sport = active.find((s) => s.slug === sportSlug) ?? active.find((s) => prefs.sports.includes(s.id)) ?? active[0];
   const [offset, setOffset] = useState(0);
   const [team, setTeam] = useState<Team | null>(null);

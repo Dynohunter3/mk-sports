@@ -66,3 +66,41 @@ test('create, then join from a link: the joiner gets everyone, keeps their own c
   assert.equal((await leagues()).length, 1);
   await assert.rejects(join('bad', null, me));
 });
+
+// ------------------------------------------------------------------ 2.3: previous-week fields and matchweek awards
+import { decodeLeague as decode23, encodeLeague as encode23, pointsIn, weeklyAwards, type Card as Card23 } from './pleagues';
+
+const c23 = (id: string, p: Partial<Card23>): Card23 => ({ id, name: id, avatar: '⚽', points: 0, week: 0, wk: '2026-W48', correct: 0, settled: 0, streak: 0, at: 1, ...p });
+
+test('cards carry last week too, and old-format links still decode', () => {
+  const l = { code: 'ABC234', name: 'L' };
+  const d = decode23(encode23(l, [c23('member01', { points: 20, week: 5, pw: 9, pwk: '2026-W47' })]));
+  assert.equal(d.cards[0].pw, 9);
+  assert.equal(d.cards[0].pwk, '2026-W47');
+  // a 2.2 link: ten fields per member
+  const old = { v: 1, c: 'ABC234', n: 'L', m: [['member02', 'Old', '⚽', 12, 3, '2026-W48', 4, 6, 1, 99]] };
+  const { toB64url } = require('./pleagues');
+  const d2 = decode23(toB64url(JSON.stringify(old)));
+  assert.equal(d2.cards[0].points, 12);
+  assert.equal(d2.cards[0].pw, undefined);
+});
+
+test('matchweek awards: sharpshooter of the week and biggest climber, from cards that cover the week', () => {
+  const wk = '2026-W47';
+  const members = [
+    c23('a', { points: 30, week: 2, wk: '2026-W48', pw: 3, pwk: wk }), // end of W47: 28, start: 25
+    c23('b', { points: 26, week: 0, wk: '2026-W48', pw: 12, pwk: wk }), // end of W47: 26, start: 14 (climbs)
+    c23('c', { points: 20, week: 0, wk: wk }), // end of W47: 20, no points that week
+    c23('d', { points: 99, week: 5, wk: '2026-W50', pw: 1, pwk: '2026-W49' }), // card too new to know W47: left out
+  ];
+  assert.equal(pointsIn(members[3], wk), null);
+  const a = weeklyAwards(members, wk);
+  const sharp = a.find((x) => x.key === 'sharpshooter')!;
+  assert.deepEqual(sharp.winners.map((w) => w.id), ['b']);
+  assert.equal(sharp.detail, '12 points');
+  const climb = a.find((x) => x.key === 'climber')!;
+  assert.deepEqual(climb.winners.map((w) => w.id), ['b']); // 3rd -> 2nd
+  assert.equal(climb.detail, 'up 1 place');
+  const streak = weeklyAwards([c23('x', { streak: 4 }), c23('y', { streak: 2 })], '2026-W48', true).find((x) => x.key === 'streak');
+  assert.deepEqual(streak?.winners.map((w) => w.id), ['x']);
+});

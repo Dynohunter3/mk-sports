@@ -8,14 +8,16 @@ import { qs } from '@/api/client';
 import { usePaged } from '@/api/paged';
 import type { F1Board, F1Standing, Leaders, MatchCard, RankRow, StandingRow } from '@/api/types';
 import { Backdrop, Glass, Hero } from '@/components/glass';
+import { ForecastTable } from '@/components/forecast';
 import { MatchRow, StandingsTable } from '@/components/match';
 import { F1StandingsView, F1View, LeadersView, RankingsView } from '@/components/sportviews';
+import { XgTableView } from '@/components/xgtable';
 import { Chip, ChipRow, EmptyState, Row, Segmented, StatusBanner, Text } from '@/components/ui';
 import { LEAGUE_BY_SLUG, LEAGUES } from '@/data/leagues';
 import { usePrefs } from '@/state/prefs';
 import { LeagueTheme, space, TAB_BAR_SPACE, useTheme } from '@/theme/theme';
 
-type Tab = 'table' | 'fixtures' | 'results' | 'players' | 'drivers' | 'constructors' | 'races' | 'rankings';
+type Tab = 'table' | 'forecast' | 'xg' | 'fixtures' | 'results' | 'players' | 'drivers' | 'constructors' | 'races' | 'rankings';
 
 export default function StatsScreen() {
   const { prefs } = usePrefs();
@@ -42,6 +44,7 @@ function Stats({ league, setLeague }: { league: string; setLeague: (l: string) =
         ? [{ value: 'rankings', label: 'Rankings' }]
         : [
             { value: 'table', label: 'Table' },
+            ...(lg.sport === 'football' && lg.kind !== 'cup' ? [{ value: 'forecast' as Tab, label: 'Forecast' }, { value: 'xg' as Tab, label: 'xG table' }] : []),
             { value: 'fixtures', label: 'Fixtures' },
             { value: 'results', label: 'Results' },
             ...(lg.leaders || lg.sport === 'football' ? [{ value: 'players' as Tab, label: lg.sport === 'football' ? 'Player stats' : 'Leaders' }] : []),
@@ -60,7 +63,7 @@ function Stats({ league, setLeague }: { league: string; setLeague: (l: string) =
     return d.toISOString();
   }, []);
   const isMatch = lg.format === 'match';
-  const table = useApi<StandingRow[]>(isMatch && tab === 'table' ? `/leagues/${league}/standings` : null, { maxAge: 300 });
+  const table = useApi<StandingRow[]>(isMatch && (tab === 'table' || tab === 'forecast') ? `/leagues/${league}/standings` : null, { maxAge: 300 });
   const list = usePaged<MatchCard>(
     isMatch && (tab === 'fixtures' || tab === 'results') ? `/matches${qs(tab === 'fixtures' ? { league_id: league, from, order: 'asc', limit: 30 } : { league_id: league, status: 'finished', order: 'desc', limit: 30 })}` : null,
     { maxAge: 60, poll: tab === 'fixtures' && !prefs.dataSaver ? 60 : 0 },
@@ -74,7 +77,7 @@ function Stats({ league, setLeague }: { league: string; setLeague: (l: string) =
   const err = table.error ?? list.error ?? leaders.error ?? f1s.error ?? f1b.error ?? ranks.error;
 
   const body = () => {
-    if (loading && !list.items.length) return <ActivityIndicator color={t.brand} style={{ marginTop: space.xl }} />;
+    if (loading && !list.items.length && tab !== 'forecast') return <ActivityIndicator color={t.brand} style={{ marginTop: space.xl }} />;
     if (tab === 'table')
       return table.data?.length ? (
         <Glass>
@@ -83,6 +86,8 @@ function Stats({ league, setLeague }: { league: string; setLeague: (l: string) =
       ) : (
         <EmptyState icon="table-large" title="No table" body={lg.kind === 'cup' ? 'Knockout competitions have no league table; see Fixtures and Results.' : 'Standings appear once matches have been played.'} />
       );
+    if (tab === 'forecast') return <ForecastTable league={league} rows={table.data} onTeam={(id) => router.push({ pathname: '/team/[id]', params: { id, league } })} />;
+    if (tab === 'xg') return <XgTableView league={league} onTeam={(id) => router.push({ pathname: '/team/[id]', params: { id: `football:${id}`, league } })} />;
     if (tab === 'fixtures' || tab === 'results')
       return list.items.length ? (
         <View>

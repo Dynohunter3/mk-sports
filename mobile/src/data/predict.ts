@@ -210,6 +210,8 @@ export type FullPrediction = {
     draw_note?: string;
     /** how the published prediction moved since its previous version */
     movement?: { from: { home: number; draw: number; away: number }; from_pick: 'home' | 'draw' | 'away' | null; at: string; reason: string };
+    /** the published version's identity, for its entry in the public record (proof.json) */
+    published?: { match_id: string; made_at: string };
   };
   goals?: { over25: number; btts: number | null };
 };
@@ -301,6 +303,7 @@ export function fromRemote(ev: SEvent, r: RemoteMatch): FullPrediction {
           safer: { label: dcName(call.double_chance.call), pair: call.double_chance.call, probability: call.double_chance.probability, hit_rate: rec?.double_chance?.hit_rate ?? null },
           source: 'model',
           made_on: r.made_at,
+          published: { match_id: r.match_id, made_at: r.made_at },
           movement: r.previous ? { from: r.previous.p, from_pick: r.previous.pick, at: r.previous.made_at, reason: r.last_change } : undefined,
           draw_note: (() => {
             const dn = rec?.draw_note ? { min: rec.draw_note.min_draw, drawn: rec.draw_note.ended_level } : MODEL_DRAW_NOTE;

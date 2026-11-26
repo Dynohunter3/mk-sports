@@ -26,7 +26,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 90 # the first run backfills 13 seasons (about 20 minutes of polite downloads)
+    timeout-minutes: 100 # the first run backfills 13 seasons (about 20 minutes of polite downloads)
     outputs:
       pages: ${{ steps.pages.outputs.enabled }}
     defaults:
@@ -69,6 +69,12 @@ jobs:
         run: python -m mkmodel.production predict
       - name: Grade finished matches
         run: python -m mkmodel.production grade
+      - name: Season simulator (every remaining fixture, 10,000 times per league)
+        continue-on-error: true # the app copes without simulations.json; never block the predictions
+        run: python -m mkmodel.simulate
+      - name: Team strength history (the model's Elo, per competition)
+        continue-on-error: true
+        run: python -m mkmodel.elo_history
       - name: Cross-check and snapshot
         run: |
           python -m mkdata crosscheck --out var/crosscheck.json > /dev/null
@@ -83,20 +89,38 @@ jobs:
         run: |
           rm -rf ../site && mkdir -p ../site
           cp -r ../pages/. ../site/   # the download page, the league-link page and the photo credits page
-          cp var/publish/*.json ../site/
+          cp -r var/publish/. ../site/   # predictions, accuracy, simulations, elo/<competition>.json
           cp var/models/current.json ../site/model.json
           if [ -f var/photos/public/meta.json ]; then   # player photos: index, credits and face crops
             mkdir -p ../site/photos && cp -r var/photos/public/. ../site/photos/
             if [ -d var/photos/i ]; then cp -r var/photos/i ../site/photos/; fi
           fi
-      - name: Publish mirror (predictions branch)
+      # The predictions branch is the public, timestamped record: one commit per run on top of the last one, never
+      # force-pushed, so every published prediction stays in its history. proof.json maps each prediction to the
+      # first commit that published it (a second commit, since a commit cannot contain its own id).
+      - name: Publish mirror (predictions branch, appended, never force-pushed)
         working-directory: site
+        env:
+          REMOTE: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
         run: |
           git init -q -b predictions
           git config user.name "mk-sports-pipeline"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A -- . ':(exclude)photos' && git commit -q -m "Predictions $(date -u +%Y-%m-%dT%H:%MZ)"   # photos: Pages only
-          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:predictions
+          git remote add origin "$REMOTE"
+          echo '{}' > ../proof.previous.json
+          if git fetch -q --depth 1 origin predictions; then
+            git reset -q FETCH_HEAD
+            git show FETCH_HEAD:proof.json > ../proof.previous.json 2>/dev/null || echo '{}' > ../proof.previous.json
+          fi
+          rm -f proof.json
+          git add -A -- . ':(exclude)photos' ':(exclude)proof.json'   # photos: Pages only
+          git commit -q -m "Predictions $(date -u +%Y-%m-%dT%H:%MZ) (run ${{ github.run_id }})" || echo "nothing new to publish"
+          python ../pipeline/mkmodel/proof.py --site . --previous ../proof.previous.json \
+            --commit "$(git rev-parse HEAD)" --at "$(git show -s --format=%cI HEAD)" \
+            --run "${{ github.run_id }}" --repo "${{ github.repository }}"
+          git add proof.json
+          git commit -q -m "Proof index for $(git rev-parse --short HEAD)" || echo "proof index unchanged"
+          git push -q origin HEAD:predictions
       - name: Is GitHub Pages switched on?
         id: pages
         working-directory: .

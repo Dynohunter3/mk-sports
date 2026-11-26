@@ -11,6 +11,10 @@ import { FavouriteTeam, usePrefs } from '@/state/prefs';
 import { alpha, mix, radius, space, SPORT_ICONS, TAB_BAR_SPACE, TAP, useTheme } from '@/theme/theme';
 
 import { Crest, PlayerPhoto } from './crest';
+import { matchTeam, useEloHistory } from '@/data/published';
+
+import { EloHistoryCard } from './elochart';
+import { TeamForecastCard } from './forecast';
 import { ArticleRow } from './feed';
 import { Glass } from './glass';
 import { FormPills, MatchRow, StandingsTable, TeamBadge } from './match';
@@ -30,6 +34,9 @@ export function TeamHubView({ id, leagues, onBack, tab = false }: { id: string; 
   const [section, setSection] = useState<HubTab>('overview');
   const isFav = prefs.favoriteTeam?.id === id;
   const h = hub.data;
+  // the published model's rating, when the team's league has one, so the header and the strength chart agree
+  const eloDoc = useEloHistory(h?.sport === 'football' ? h.league.id : null);
+  const modelRating = h && eloDoc ? matchTeam(eloDoc.teams, [h.team.name, h.team.short_name])?.rating ?? null : null;
   // keep the favourite's competitions complete (e.g. a club that is also in Europe)
   const hubLeagues = h?.leagues.map((l) => l.id).join(',') ?? '';
   useEffect(() => {
@@ -75,7 +82,7 @@ export function TeamHubView({ id, leagues, onBack, tab = false }: { id: string; 
           <Text v="small" color="rgba(255,255,255,0.85)" style={{ marginTop: 2 }}>
             {h.league.name}
             {h.standing ? ` · ${h.standing.position}${['st', 'nd', 'rd'][h.standing.position - 1] ?? 'th'}` : ''}
-            {h.elo ? ` · Elo ${h.elo}` : ''}
+            {modelRating ? ` · Rating ${modelRating}` : h.elo ? ` · Elo ${h.elo}` : ''}
           </Text>
           {h.form ? (
             <View style={{ marginTop: space.sm }}>
@@ -123,6 +130,12 @@ export function TeamHubView({ id, leagues, onBack, tab = false }: { id: string; 
             <Glass>
               <StandingsTable rows={h.table} sport={h.sport} highlight={[h.team.id]} compact onTeam={(tm) => tm.id !== h.team.id && router.push({ pathname: '/team/[id]', params: { id: tm.id } })} />
             </Glass>
+          </>
+        ) : null}
+        {h.sport === 'football' ? (
+          <>
+            <TeamForecastCard league={h.league.id} names={[h.team.name, h.team.short_name]} color={h.team.color} />
+            <EloHistoryCard league={h.league.id} names={[h.team.name, h.team.short_name]} color={h.team.color} leagueName={h.league.short_name} />
           </>
         ) : null}
         {h.leaders.length ? (

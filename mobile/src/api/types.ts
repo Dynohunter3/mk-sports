@@ -56,7 +56,8 @@ export type Team = TeamMini & { sport: string; country: string | null; venue_nam
 export type CallTier = 'strong' | 'likely' | 'lean' | 'toss-up';
 export type PredictionMini = { home: number; draw: number | null; away: number; score: [number, number]; confidence: Confidence; pick: Outcome; tier?: CallTier; safer?: string; safer_p?: number; source?: 'model' | 'device'; draw_note?: boolean };
 
-export type MyPick = { pick: Outcome; home_score: number | null; away_score: number | null; status: 'pending' | 'won' | 'lost' | 'void'; points: number; banker?: boolean };
+export type MyPick = { pick: Outcome; home_score: number | null; away_score: number | null; status: 'pending' | 'won' | 'lost' | 'void'; points: number; banker?: boolean; probs?: Probs3 | null };
+export type Probs3 = { home: number; draw: number; away: number };
 
 export type MatchCard = {
   id: string;
@@ -128,6 +129,7 @@ export type PredictionFull = {
     made_on?: string;
     draw_note?: string;
     movement?: { from: { home: number; draw: number; away: number }; from_pick: Outcome | null; at: string; reason: string };
+    published?: { match_id: string; made_at: string };
   };
   goals?: { over25: number; btts: number | null };
   versions: number;
@@ -405,11 +407,46 @@ export type GameSummary = {
   /** this week's banker pick (double points), if one is set */
   banker?: GamePick | null;
   seasons?: SeasonRecord[];
+  /** probability picks against the AI, by Brier score (lower is better) */
+  probability?: { matches: number; you: number | null; ai: number | null; better: number; worse: number; leader: 'you' | 'ai' | 'level' | 'none' };
+  specials?: SpecialPick[];
+  recap?: SeasonRecap;
+  week_report?: WeekReport;
+};
+export type WeekReport = {
+  week: string;
+  current: boolean;
+  points: number;
+  picks: number;
+  correct: number;
+  exact: number;
+  vs_ai: { matches: number; you: number; ai: number };
+  banker: { match: string; won: boolean; points: number } | null;
+};
+type SpecialBase = { id: string; name: string; start: string; status: 'pending' | 'won' | 'lost' | 'void'; points: number; created_at: string; settled_at: string | null };
+export type SpecialPick =
+  | (SpecialBase & { kind: 'f1'; podium: [string, string, string]; result: [string, string, string] | null })
+  | (SpecialBase & { kind: 'tennis'; tour: 'atp' | 'wta'; players: [string, string]; winner: 0 | 1; sets: number; bestOf: 3 | 5; result: { winner: 0 | 1; sets: number } | null });
+export type SeasonRecap = {
+  season: string;
+  points: number;
+  picks: number;
+  correct: number;
+  accuracy: number | null;
+  exact: number;
+  longest_streak: number;
+  best_pick: { match: string; kickoff: string; pick: Outcome; home: string; away: string; final_score: [number, number] | null; points: number; ai_chance: number | null; against_ai: boolean } | null;
+  best_team: { name: string; code: string; color: string; logo: string | null; picks: number; correct: number } | null;
+  vs_ai: { matches: number; you: number; ai: number };
+  probability: NonNullable<GameSummary['probability']>;
+  bankers: { played: number; won: number };
+  other_sports: { picks: number; points: number };
 };
 export type SeasonRecord = { season: string; current: boolean; points: number; picks: number; correct: number; accuracy: number | null; exact: number; best_streak: number; bankers: number; bankers_won: number };
 
 // ------------------------------------------------------------------ private leagues
-export type LeagueCard = { id: string; name: string; avatar: string; points: number; week: number; wk: string; correct: number; settled: number; streak: number; at: number };
+export type LeagueCard = { id: string; name: string; avatar: string; points: number; week: number; wk: string; correct: number; settled: number; streak: number; at: number; pw?: number; pwk?: string };
+export type LeagueAward = { key: 'sharpshooter' | 'climber' | 'streak'; emoji: string; title: string; winners: { id: string; name: string; avatar: string }[]; detail: string };
 export type LeagueRow = LeagueCard & { rank: number; score: number };
-export type PrivateLeague = { code: string; name: string; created_at: string; members: LeagueRow[]; week_table: LeagueRow[]; my_rank: number | null };
+export type PrivateLeague = { code: string; name: string; created_at: string; members: LeagueRow[]; week_table: LeagueRow[]; my_rank: number | null; awards?: { last_week: { week: string; items: LeagueAward[] }; this_week: { week: string; items: LeagueAward[] } } };
 export type PrivateLeagues = { me: LeagueCard; week: string; leagues: PrivateLeague[] };

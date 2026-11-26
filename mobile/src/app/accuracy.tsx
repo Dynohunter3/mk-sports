@@ -7,6 +7,8 @@ import { Card, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, Segmen
 import { pct } from '@/lib/format';
 import { radius, space, SPORT_COLORS, useTheme } from '@/theme/theme';
 import { ProbabilityQuality, RecordBand } from '@/components/quality';
+import { SimTested } from '@/components/forecast';
+import { useSimulations } from '@/data/published';
 
 type Source = 'all' | 'live' | 'backtest';
 
@@ -56,6 +58,7 @@ function SportCard({ r }: { r: AccuracyRow }) {
 }
 
 export default function AccuracyScreen() {
+  const sims = useSimulations();
   const t = useTheme();
   const [source, setSource] = useState<Source>('all');
   const acc = useApi<Accuracy>(`/accuracy?source=${source}`, { maxAge: 300 });
@@ -154,6 +157,12 @@ export default function AccuracyScreen() {
           </Card>
           {d.football_quality?.record ? <RecordBand r={d.football_quality.record} /> : null}
           {source !== 'live' && d.football_quality ? <ProbabilityQuality q={d.football_quality} /> : null}
+          {source !== 'live' && sims?.tested ? (
+            <>
+              <SectionHeader title="Season forecasts (title, top four, relegation)" />
+              <SimTested tested={sims.tested} />
+            </>
+          ) : null}
           {source !== 'live' && d.football_track ? (
             <>
               <SectionHeader title="Football: how often each call is right" />

@@ -97,7 +97,7 @@ const leagueMini = (slug: string) => ({ id: slug, slug, short_name: LEAGUE_BY_SL
 
 function myPick(id: string) {
   const p = game.gameState()?.picks[id];
-  return p ? { pick: p.pick, home_score: p.home_score, away_score: p.away_score, status: p.status, points: p.points, banker: !!p.banker } : null;
+  return p ? { pick: p.pick, home_score: p.home_score, away_score: p.away_score, status: p.status, points: p.points, banker: !!p.banker, probs: p.probs ?? null } : null;
 }
 
 function predictionFor(ev: SEvent): FullPrediction | null {
@@ -566,6 +566,8 @@ async function myCard(): Promise<pl.Card> {
   const s = game.stats(st);
   const pts = game.pointsByPeriod(st);
   const wk = pts.weeks.find((w) => w.key === pts.current_week);
+  const prevKey = game.weekKey(new Date(Date.now() - 7 * DAY));
+  const prev = pts.weeks.find((w) => w.key === prevKey);
   return {
     id: st.profile.member_id ?? 'unknown0000',
     name: st.profile.display_name === 'You' ? 'Player' : st.profile.display_name,
@@ -577,6 +579,8 @@ async function myCard(): Promise<pl.Card> {
     settled: s.picks_settled,
     streak: s.current_streak,
     at: Math.floor(Date.now() / 1000),
+    pw: prev?.points ?? 0,
+    pwk: prevKey,
   };
 }
 
@@ -589,7 +593,12 @@ async function privateLeagues() {
     week: me.wk,
     leagues: list.map((l) => {
       const season = pl.table(Object.values(l.members), me.wk, 'season');
-      return { code: l.code, name: l.name, created_at: l.created_at, members: season, week_table: pl.table(Object.values(l.members), me.wk, 'week'), my_rank: season.find((r) => r.id === me.id)?.rank ?? null };
+      const cards = Object.values(l.members);
+      const lastWeek = me.pwk ?? game.weekKey(new Date(Date.now() - 7 * DAY));
+      return {
+        code: l.code, name: l.name, created_at: l.created_at, members: season, week_table: pl.table(cards, me.wk, 'week'), my_rank: season.find((r) => r.id === me.id)?.rank ?? null,
+        awards: { last_week: { week: lastWeek, items: pl.weeklyAwards(cards, lastWeek) }, this_week: { week: me.wk, items: pl.weeklyAwards(cards, me.wk, true) } },
+      };
     }),
   };
 }
@@ -632,7 +641,59 @@ async function gameSummary() {
       return b ? brief(b) : null;
     })(),
     seasons: game.seasonArchive(st),
+    probability: game.probabilityRecord(st),
+    specials: Object.values(st.specials ?? {}).sort((a, b) => b.start.localeCompare(a.start)),
+    recap: recapOut(game.seasonRecap(st)),
+    week_report: game.weekReport(st),
   };
+}
+
+function recapOut(r: ReturnType<typeof game.seasonRecap>) {
+  const b = r.best_pick;
+  return {
+    ...r,
+    best_pick: b
+      ? { match: `${b.pick.homeName} v ${b.pick.awayName}`, kickoff: b.pick.kickoff, pick: b.pick.pick, home: b.pick.homeName, away: b.pick.awayName, final_score: b.pick.final_score, points: b.pick.points, ai_chance: b.ai_chance, against_ai: b.against_ai }
+      : null,
+  };
+}
+
+// ------------------------------------------------------------------ F1 and tennis picks
+let specialsTried = 0;
+/** Settle F1 and tennis picks from ESPN's current scoreboards (at most every 10 minutes). */
+async function settleSpecialPicks(force = false) {
+  const st = await game.loadGame();
+  const pending = Object.values(st.specials ?? {}).filter((x) => x.status === 'pending' && Date.parse(x.start) < Date.now());
+  if (!pending.length || (!force && Date.now() - specialsTried < 10 * 60 * 1000)) return;
+  specialsTried = Date.now();
+  const results: game.SpecialResults = { f1: {}, tennis: {} };
+  if (pending.some((x) => x.kind === 'f1')) {
+    try {
+      const board = await more.f1();
+      for (const w of board.current) {
+        const race = [...w.sessions].reverse().find((x) => /race/i.test(x.name)) ?? w.sessions[w.sessions.length - 1];
+        if (race?.state === 'post' && race.results.length >= 3) results.f1![`f1:${w.id}`] = [race.results[0].driver, race.results[1].driver, race.results[2].driver];
+      }
+    } catch {
+      // try again later
+    }
+  }
+  for (const tour of ['atp', 'wta'] as const) {
+    if (!pending.some((x) => x.kind === 'tennis' && x.tour === tour)) continue;
+    try {
+      const board = await more.tennis(tour);
+      for (const m of board.matches) {
+        if (m.state !== 'post') continue;
+        const w = m.players[0].winner ? 0 : m.players[1].winner ? 1 : null;
+        if (w === null) continue;
+        const sets = Math.max(m.players[0].sets.filter((x) => x !== null).length, m.players[1].sets.filter((x) => x !== null).length);
+        if (sets > 0) results.tennis![`tennis:${tour}:${m.id}`] = { winner: w, sets };
+      }
+    } catch {
+      // try again later
+    }
+  }
+  if (await game.settleSpecials(results)) notify();
 }
 
 async function myPicks(q: URLSearchParams) {
@@ -1048,7 +1109,10 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
     if (seg[0] === 'matches' && seg.length === 2) return matchDetail(decodeURIComponent(seg[1]));
     if (path === '/me') return me();
     if (path === '/me/picks') return myPicks(q);
-    if (path === '/me/game') return gameSummary();
+    if (path === '/me/game') {
+      void settleSpecialPicks();
+      return gameSummary();
+    }
     if (path === '/pleagues') return privateLeagues();
     if (seg[0] === 'pleagues' && seg[2] === 'share') return shareLeague(seg[1]);
     if (path === '/me/export') {
@@ -1074,9 +1138,37 @@ export async function handleLocal(method: string, fullPath: string, body: any): 
     }
     try {
       const p = predictEvent(ev);
-      const { pick, newBadges } = await game.makePick(ev, body ?? {}, p ? argmax(p.probabilities) : null);
+      const aiProbs = p ? { home: p.probabilities.home ?? 0, draw: p.probabilities.draw ?? 0, away: p.probabilities.away ?? 0 } : null;
+      const { pick, newBadges } = await game.makePick(ev, body ?? {}, p ? argmax(p.probabilities) : null, aiProbs);
       notify();
-      return { match_id: id, pick: pick.pick, home_score: pick.home_score, away_score: pick.away_score, status: pick.status, points: pick.points, result_correct: null, exact_score: false, locks_at: ev.start, new_badges: newBadges, banker: !!pick.banker };
+      return { match_id: id, pick: pick.pick, home_score: pick.home_score, away_score: pick.away_score, status: pick.status, points: pick.points, result_correct: null, exact_score: false, locks_at: ev.start, new_badges: newBadges, banker: !!pick.banker, probs: pick.probs ?? null };
+    } catch (e) {
+      if (e instanceof game.PickError) throw new ApiError(e.status, e.code, e.message, { code: e.code, message: e.message });
+      throw e;
+    }
+  }
+  if (method === 'PUT' && seg[0] === 'specials' && (seg[1] === 'f1' || seg[1] === 'tennis')) {
+    try {
+      const b = body ?? {};
+      const p =
+        seg[1] === 'f1'
+          ? await game.makeSpecial({ kind: 'f1', id: `f1:${String(b.weekend_id)}`, name: String(b.name ?? 'Grand Prix'), start: String(b.start), podium: (b.podium ?? []).map(String).slice(0, 3) as [string, string, string] })
+          : await game.makeSpecial({
+              kind: 'tennis', id: `tennis:${b.tour}:${String(b.match_id)}`, tour: b.tour === 'wta' ? 'wta' : 'atp', name: String(b.name ?? ''), start: String(b.start),
+              players: [String(b.players?.[0] ?? ''), String(b.players?.[1] ?? '')], winner: b.winner === 1 ? 1 : 0, sets: Number(b.sets), bestOf: b.best_of === 5 ? 5 : 3,
+            });
+      notify();
+      return p;
+    } catch (e) {
+      if (e instanceof game.PickError) throw new ApiError(e.status, e.code, e.message, { code: e.code, message: e.message });
+      throw e;
+    }
+  }
+  if (method === 'DELETE' && seg[0] === 'specials' && seg[1]) {
+    try {
+      await game.deleteSpecial(decodeURIComponent(seg[1]));
+      notify();
+      return null;
     } catch (e) {
       if (e instanceof game.PickError) throw new ApiError(e.status, e.code, e.message, { code: e.code, message: e.message });
       throw e;
