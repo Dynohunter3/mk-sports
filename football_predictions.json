@@ -1,7 +1,7 @@
 {
  "schema": 1,
- "generated_at": "2026-11-26T08:36:56+00:00",
- "model_version": "fb-2026-11-e082619a",
+ "generated_at": "2026-11-26T12:51:27+00:00",
+ "model_version": "fb-2026-11-8beba951",
  "data_version": "f98d6a4073be",
  "attribution": "Data: football-data.co.uk, openfootball (public domain).",
  "horizon_days": 21.0,
@@ -95,9 +95,18 @@
    "confidence_reasons": [
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "first prediction",
-   "versions": 1,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 2,
+   "previous": {
+    "p": {
+     "home": 0.2307,
+     "draw": 0.2326,
+     "away": 0.5367
+    },
+    "pick": "away",
+    "made_at": "2026-11-25T14:25:29+00:00"
+   },
    "home": {
     "id": "fb-eng-doncaster",
     "name": "Doncaster",
@@ -182,17 +191,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.678,
-     "draw": 0.2015,
-     "away": 0.1205
+     "home": 0.6893,
+     "draw": 0.1949,
+     "away": 0.1158
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-groningen",
@@ -277,17 +286,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5364,
-     "draw": 0.261,
-     "away": 0.2026
+     "home": 0.5458,
+     "draw": 0.2581,
+     "away": 0.1961
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-werder-bremen",
@@ -374,17 +383,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.276,
-     "draw": 0.291,
-     "away": 0.4329
+     "home": 0.2793,
+     "draw": 0.2885,
+     "away": 0.4321
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-brest",
@@ -470,17 +479,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2808,
-     "draw": 0.2897,
-     "away": 0.4295
+     "home": 0.2892,
+     "draw": 0.2893,
+     "away": 0.4215
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-southampton",
@@ -566,17 +575,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4603,
-     "draw": 0.28,
-     "away": 0.2598
+     "home": 0.4704,
+     "draw": 0.2808,
+     "away": 0.2488
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-maritimo",
@@ -662,17 +671,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4977,
-     "draw": 0.2768,
-     "away": 0.2255
+     "home": 0.5127,
+     "draw": 0.2692,
+     "away": 0.2181
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-blackburn",
@@ -760,17 +769,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1876,
-     "draw": 0.2555,
-     "away": 0.5569
+     "home": 0.1941,
+     "draw": 0.2551,
+     "away": 0.5507
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-lincoln",
@@ -858,17 +867,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1824,
-     "draw": 0.2515,
-     "away": 0.5661
+     "home": 0.1779,
+     "draw": 0.2465,
+     "away": 0.5756
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-preston",
@@ -955,17 +964,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.0482,
-     "draw": 0.1008,
-     "away": 0.8511
+     "home": 0.0445,
+     "draw": 0.0946,
+     "away": 0.8609
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-hamburg",
@@ -1053,17 +1062,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4753,
-     "draw": 0.2811,
-     "away": 0.2436
+     "home": 0.48,
+     "draw": 0.2784,
+     "away": 0.2416
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-koln",
@@ -1148,17 +1157,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6582,
-     "draw": 0.2104,
-     "away": 0.1314
+     "home": 0.6707,
+     "draw": 0.2039,
+     "away": 0.1254
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-mainz",
@@ -1243,17 +1252,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4048,
-     "draw": 0.2953,
-     "away": 0.2999
+     "home": 0.4157,
+     "draw": 0.2916,
+     "away": 0.2927
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-paderborn",
@@ -1339,17 +1348,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4345,
-     "draw": 0.2926,
-     "away": 0.2729
+     "home": 0.4486,
+     "draw": 0.2857,
+     "away": 0.2657
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-arsenal",
@@ -1438,17 +1447,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5937,
-     "draw": 0.2398,
-     "away": 0.1665
+     "home": 0.6069,
+     "draw": 0.234,
+     "away": 0.1592
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-brighton",
@@ -1535,17 +1544,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5201,
-     "draw": 0.2684,
-     "away": 0.2116
+     "home": 0.5178,
+     "draw": 0.2674,
+     "away": 0.2148
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-crystal-palace",
@@ -1631,17 +1640,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
      "home": 0.2385,
-     "draw": 0.2793,
-     "away": 0.4822
+     "draw": 0.2771,
+     "away": 0.4845
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-everton",
@@ -1727,17 +1736,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3404,
-     "draw": 0.2989,
-     "away": 0.3607
+     "home": 0.34,
+     "draw": 0.2962,
+     "away": 0.3638
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-fulham",
@@ -1822,17 +1831,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2457,
-     "draw": 0.2814,
-     "away": 0.4729
+     "home": 0.2454,
+     "draw": 0.2795,
+     "away": 0.475
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-ipswich",
@@ -1919,17 +1928,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5972,
-     "draw": 0.239,
-     "away": 0.1638
+     "home": 0.6151,
+     "draw": 0.2304,
+     "away": 0.1546
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-leeds",
@@ -2016,17 +2025,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4675,
-     "draw": 0.2821,
-     "away": 0.2504
+     "home": 0.4633,
+     "draw": 0.2825,
+     "away": 0.2542
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-manchester-united",
@@ -2113,17 +2122,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3223,
-     "draw": 0.297,
-     "away": 0.3808
+     "home": 0.3285,
+     "draw": 0.2954,
+     "away": 0.3761
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-nottingham-forest",
@@ -2210,17 +2219,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2762,
-     "draw": 0.2927,
-     "away": 0.4312
+     "home": 0.284,
+     "draw": 0.2894,
+     "away": 0.4267
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-sunderland",
@@ -2308,17 +2317,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6224,
-     "draw": 0.2259,
-     "away": 0.1516
+     "home": 0.6384,
+     "draw": 0.2198,
+     "away": 0.1418
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-birmingham",
@@ -2406,17 +2415,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.409,
-     "draw": 0.2938,
-     "away": 0.2972
+     "home": 0.4229,
+     "draw": 0.2905,
+     "away": 0.2866
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-derby",
@@ -2503,17 +2512,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4342,
-     "draw": 0.2909,
-     "away": 0.2749
+     "home": 0.4481,
+     "draw": 0.286,
+     "away": 0.266
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-millwall",
@@ -2599,17 +2608,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4332,
-     "draw": 0.2899,
-     "away": 0.2769
+     "home": 0.44,
+     "draw": 0.2876,
+     "away": 0.2724
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-queens",
@@ -2697,17 +2706,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5219,
-     "draw": 0.2679,
-     "away": 0.2101
+     "home": 0.5411,
+     "draw": 0.2598,
+     "away": 0.1991
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-west-brom",
@@ -2794,17 +2803,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6191,
-     "draw": 0.229,
-     "away": 0.1519
+     "home": 0.6213,
+     "draw": 0.2276,
+     "away": 0.1511
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-west-ham",
@@ -2892,17 +2901,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4422,
-     "draw": 0.2898,
-     "away": 0.268
+     "home": 0.4554,
+     "draw": 0.2844,
+     "away": 0.2602
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-wrexham",
@@ -2987,17 +2996,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5001,
-     "draw": 0.2723,
-     "away": 0.2276
+     "home": 0.5083,
+     "draw": 0.2704,
+     "away": 0.2213
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-excelsior",
@@ -3083,17 +3092,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5657,
-     "draw": 0.2494,
-     "away": 0.1849
+     "home": 0.5851,
+     "draw": 0.2431,
+     "away": 0.1718
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-arouca",
@@ -3179,17 +3188,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2522,
-     "draw": 0.2854,
-     "away": 0.4624
+     "home": 0.2575,
+     "draw": 0.2827,
+     "away": 0.4598
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-moreirense",
@@ -3274,17 +3283,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.189,
-     "draw": 0.2552,
-     "away": 0.5558
+     "home": 0.1885,
+     "draw": 0.2533,
+     "away": 0.5582
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-angers",
@@ -3370,17 +3379,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5328,
-     "draw": 0.2616,
-     "away": 0.2056
+     "home": 0.541,
+     "draw": 0.2598,
+     "away": 0.1992
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-stuttgart",
@@ -3466,17 +3475,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7453,
-     "draw": 0.1636,
-     "away": 0.0911
+     "home": 0.7673,
+     "draw": 0.1521,
+     "away": 0.0806
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-psv-eindhoven",
@@ -3563,17 +3572,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3938,
+     "home": 0.4058,
      "draw": 0.2929,
-     "away": 0.3133
+     "away": 0.3013
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-academico-viseu",
@@ -3658,17 +3667,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2799,
-     "draw": 0.2896,
-     "away": 0.4305
+     "home": 0.2716,
+     "draw": 0.2871,
+     "away": 0.4413
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-le-havre",
@@ -3755,17 +3764,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2203,
-     "draw": 0.2712,
-     "away": 0.5085
+     "home": 0.2112,
+     "draw": 0.2654,
+     "away": 0.5234
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-le-mans",
@@ -3851,17 +3860,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5609,
-     "draw": 0.2527,
-     "away": 0.1864
+     "home": 0.5835,
+     "draw": 0.2438,
+     "away": 0.1727
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-nice",
@@ -3947,17 +3956,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.8067,
-     "draw": 0.1286,
-     "away": 0.0647
+     "home": 0.8202,
+     "draw": 0.1205,
+     "away": 0.0593
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-paris-sg",
@@ -4045,17 +4054,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4086,
-     "draw": 0.291,
-     "away": 0.3004
+     "home": 0.4091,
+     "draw": 0.2926,
+     "away": 0.2984
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-cambuur",
@@ -4141,17 +4150,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.56,
-     "draw": 0.253,
-     "away": 0.187
+     "home": 0.5705,
+     "draw": 0.2489,
+     "away": 0.1806
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-guimaraes",
@@ -4236,17 +4245,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3296,
-     "draw": 0.2948,
-     "away": 0.3756
+     "home": 0.3283,
+     "draw": 0.2952,
+     "away": 0.3765
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-den-haag",
@@ -4332,17 +4341,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4594,
-     "draw": 0.2823,
-     "away": 0.2583
+     "home": 0.4699,
+     "draw": 0.2811,
+     "away": 0.249
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-swansea",
@@ -4429,17 +4438,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5898,
-     "draw": 0.2397,
-     "away": 0.1705
+     "home": 0.6093,
+     "draw": 0.2329,
+     "away": 0.1578
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-betis",
@@ -4526,17 +4535,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3208,
-     "draw": 0.2967,
-     "away": 0.3825
+     "home": 0.3193,
+     "draw": 0.2949,
+     "away": 0.3858
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-celta",
@@ -4622,17 +4631,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.0797,
-     "draw": 0.1489,
-     "away": 0.7714
+     "home": 0.0709,
+     "draw": 0.1377,
+     "away": 0.7914
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-coruna",
@@ -4719,17 +4728,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1317,
-     "draw": 0.21,
-     "away": 0.6583
+     "home": 0.1251,
+     "draw": 0.2033,
+     "away": 0.6715
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-elche",
@@ -4817,17 +4826,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4168,
-     "draw": 0.2951,
-     "away": 0.2881
+     "home": 0.4247,
+     "draw": 0.2903,
+     "away": 0.285
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-espanol",
@@ -4913,17 +4922,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4691,
-     "draw": 0.2787,
-     "away": 0.2522
+     "home": 0.4738,
+     "draw": 0.2801,
+     "away": 0.2461
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-levante",
@@ -5009,17 +5018,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1742,
-     "draw": 0.2466,
-     "away": 0.5791
+     "home": 0.1744,
+     "draw": 0.2436,
+     "away": 0.582
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-malaga",
@@ -5105,17 +5114,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.8269,
-     "draw": 0.1158,
-     "away": 0.0572
+     "home": 0.8431,
+     "draw": 0.1062,
+     "away": 0.0507
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-real-madrid",
@@ -5203,17 +5212,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4386,
-     "draw": 0.289,
-     "away": 0.2724
+     "home": 0.4486,
+     "draw": 0.2858,
+     "away": 0.2655
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-sociedad",
@@ -5300,17 +5309,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4314,
-     "draw": 0.2923,
-     "away": 0.2763
+     "home": 0.4469,
+     "draw": 0.2862,
+     "away": 0.2669
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-valencia",
@@ -5396,17 +5405,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.176,
-     "draw": 0.2462,
-     "away": 0.5778
+     "home": 0.1692,
+     "draw": 0.2406,
+     "away": 0.5902
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-cagliari",
@@ -5492,17 +5501,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4486,
-     "draw": 0.287,
-     "away": 0.2644
+     "home": 0.4662,
+     "draw": 0.282,
+     "away": 0.2518
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-como",
@@ -5590,17 +5599,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6438,
-     "draw": 0.2158,
-     "away": 0.1404
+     "home": 0.6501,
+     "draw": 0.2142,
+     "away": 0.1357
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-frosinone",
@@ -5686,17 +5695,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7437,
-     "draw": 0.1656,
-     "away": 0.0907
+     "home": 0.7653,
+     "draw": 0.1533,
+     "away": 0.0814
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-internazionale",
@@ -5783,17 +5792,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.224,
-     "draw": 0.2718,
-     "away": 0.5042
+     "home": 0.2221,
+     "draw": 0.2705,
+     "away": 0.5073
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-lecce",
@@ -5880,17 +5889,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7669,
-     "draw": 0.1512,
-     "away": 0.0819
+     "home": 0.7904,
+     "draw": 0.1386,
+     "away": 0.071
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-roma",
@@ -5976,17 +5985,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1879,
-     "draw": 0.2541,
-     "away": 0.5581
+     "home": 0.1855,
+     "draw": 0.2514,
+     "away": 0.5631
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-sassuolo",
@@ -6073,17 +6082,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2719,
-     "draw": 0.2888,
-     "away": 0.4393
+     "home": 0.2661,
+     "draw": 0.2856,
+     "away": 0.4482
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-torino",
@@ -6169,17 +6178,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2682,
-     "draw": 0.2862,
-     "away": 0.4456
+     "home": 0.2696,
+     "draw": 0.2861,
+     "away": 0.4443
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-udinese",
@@ -6264,17 +6273,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.267,
-     "draw": 0.2885,
-     "away": 0.4445
+     "home": 0.2681,
+     "draw": 0.2863,
+     "away": 0.4457
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-venezia",
@@ -6361,17 +6370,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4924,
-     "draw": 0.2747,
-     "away": 0.2329
+     "home": 0.4942,
+     "draw": 0.2746,
+     "away": 0.2313
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-feyenoord",
@@ -6459,17 +6468,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2443,
+     "home": 0.2462,
      "draw": 0.2796,
-     "away": 0.4761
+     "away": 0.4742
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-for-sittard",
@@ -6555,17 +6564,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2107,
-     "draw": 0.2648,
-     "away": 0.5245
+     "home": 0.2086,
+     "draw": 0.264,
+     "away": 0.5274
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-auxerre",
@@ -6651,17 +6660,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.333,
-     "draw": 0.2969,
-     "away": 0.3701
+     "home": 0.3355,
+     "draw": 0.296,
+     "away": 0.3685
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-freiburg",
@@ -6746,17 +6755,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1363,
-     "draw": 0.2159,
-     "away": 0.6478
+     "home": 0.1388,
+     "draw": 0.2157,
+     "away": 0.6455
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-zwolle",
@@ -6841,17 +6850,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3429,
-     "draw": 0.2967,
-     "away": 0.3604
+     "home": 0.3422,
+     "draw": 0.2962,
+     "away": 0.3616
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-toulouse",
@@ -6937,17 +6946,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5564,
-     "draw": 0.2537,
-     "away": 0.19
+     "home": 0.5638,
+     "draw": 0.2513,
+     "away": 0.1849
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-hoffenheim",
@@ -7035,17 +7044,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5065,
-     "draw": 0.271,
-     "away": 0.2225
+     "home": 0.5262,
+     "draw": 0.2647,
+     "away": 0.2091
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-gil-vicente",
@@ -7131,17 +7140,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3997,
-     "draw": 0.2951,
-     "away": 0.3052
+     "home": 0.416,
+     "draw": 0.2909,
+     "away": 0.2932
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-dortmund",
@@ -7230,17 +7239,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2211,
-     "draw": 0.2701,
-     "away": 0.5087
+     "home": 0.2204,
+     "draw": 0.2695,
+     "away": 0.51
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-nec",
@@ -7327,17 +7336,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3459,
-     "draw": 0.2962,
-     "away": 0.3579
+     "home": 0.3545,
+     "draw": 0.2958,
+     "away": 0.3497
     },
-    "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "pick": "home",
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-lyon",
@@ -7426,17 +7435,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5039,
-     "draw": 0.2711,
-     "away": 0.225
+     "home": 0.5194,
+     "draw": 0.267,
+     "away": 0.2136
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-porto",
@@ -7526,17 +7535,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.803,
-     "draw": 0.1299,
-     "away": 0.0671
+     "home": 0.8196,
+     "draw": 0.1209,
+     "away": 0.0596
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-benfica",
@@ -7625,17 +7634,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.138,
-     "draw": 0.2169,
-     "away": 0.6451
+     "home": 0.1364,
+     "draw": 0.214,
+     "away": 0.6496
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-casa-pia",
@@ -7721,17 +7730,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4699,
-     "draw": 0.2825,
-     "away": 0.2476
+     "home": 0.4842,
+     "draw": 0.2774,
+     "away": 0.2384
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-aston-villa",
@@ -7817,17 +7826,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3438,
-     "draw": 0.298,
-     "away": 0.3582
+     "home": 0.3508,
+     "draw": 0.2962,
+     "away": 0.353
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-bournemouth",
@@ -7913,17 +7922,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1836,
-     "draw": 0.2559,
-     "away": 0.5605
+     "home": 0.1843,
+     "draw": 0.2506,
+     "away": 0.565
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-brentford",
@@ -8009,17 +8018,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6289,
-     "draw": 0.2237,
-     "away": 0.1474
+     "home": 0.6432,
+     "draw": 0.2175,
+     "away": 0.1393
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-chelsea",
@@ -8105,17 +8114,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3784,
-     "draw": 0.2974,
-     "away": 0.3242
+     "home": 0.3833,
+     "draw": 0.2949,
+     "away": 0.3217
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-coventry",
@@ -8202,17 +8211,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2119,
-     "draw": 0.2695,
-     "away": 0.5187
+     "home": 0.2194,
+     "draw": 0.2684,
+     "away": 0.5123
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-hull",
@@ -8299,17 +8308,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6572,
-     "draw": 0.212,
-     "away": 0.1308
+     "home": 0.6763,
+     "draw": 0.2015,
+     "away": 0.1222
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-liverpool",
@@ -8395,17 +8404,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6638,
-     "draw": 0.2083,
-     "away": 0.1279
+     "home": 0.6765,
+     "draw": 0.2013,
+     "away": 0.1222
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-manchester-city",
@@ -8494,17 +8503,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2915,
-     "draw": 0.2914,
-     "away": 0.4171
+     "home": 0.2989,
+     "draw": 0.292,
+     "away": 0.4091
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-newcastle",
@@ -8592,17 +8601,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5028,
-     "draw": 0.274,
-     "away": 0.2232
+     "home": 0.5101,
+     "draw": 0.2697,
+     "away": 0.2202
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-tottenham",
@@ -8689,17 +8698,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2962,
-     "draw": 0.2908,
-     "away": 0.4129
+     "home": 0.3048,
+     "draw": 0.2932,
+     "away": 0.402
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-telstar",
@@ -8785,17 +8794,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2951,
-     "draw": 0.2918,
-     "away": 0.4131
+     "home": 0.3014,
+     "draw": 0.2928,
+     "away": 0.4058
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-sheffield-united",
@@ -8882,17 +8891,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6297,
-     "draw": 0.2238,
-     "away": 0.1465
+     "home": 0.6527,
+     "draw": 0.213,
+     "away": 0.1344
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-lens",
@@ -8979,17 +8988,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6297,
-     "draw": 0.2247,
-     "away": 0.1457
+     "home": 0.647,
+     "draw": 0.2158,
+     "away": 0.1372
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-lille",
@@ -9075,17 +9084,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4856,
-     "draw": 0.2759,
-     "away": 0.2385
+     "home": 0.4929,
+     "draw": 0.275,
+     "away": 0.2321
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-marseille",
@@ -9171,17 +9180,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7349,
-     "draw": 0.1706,
-     "away": 0.0946
+     "home": 0.7479,
+     "draw": 0.1632,
+     "away": 0.0889
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-monaco",
@@ -9268,17 +9277,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6878,
-     "draw": 0.1954,
-     "away": 0.1169
+     "home": 0.7081,
+     "draw": 0.185,
+     "away": 0.1069
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-paris",
@@ -9362,17 +9371,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5248,
-     "draw": 0.265,
-     "away": 0.2103
+     "home": 0.5345,
+     "draw": 0.262,
+     "away": 0.2035
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-rennes",
@@ -9459,17 +9468,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4749,
-     "draw": 0.2811,
-     "away": 0.244
+     "home": 0.4814,
+     "draw": 0.2781,
+     "away": 0.2404
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-strasbourg",
@@ -9555,17 +9564,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1489,
-     "draw": 0.2248,
-     "away": 0.6263
+     "home": 0.1417,
+     "draw": 0.219,
+     "away": 0.6393
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-toulouse",
@@ -9653,17 +9662,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2262,
-     "draw": 0.2736,
-     "away": 0.5002
+     "home": 0.2137,
+     "draw": 0.2667,
+     "away": 0.5196
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-troyes",
@@ -9750,17 +9759,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4113,
-     "draw": 0.2927,
-     "away": 0.296
+     "home": 0.4262,
+     "draw": 0.2897,
+     "away": 0.2841
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-augsburg",
@@ -9845,17 +9854,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.9036,
-     "draw": 0.0672,
-     "away": 0.0292
+     "home": 0.9107,
+     "draw": 0.0622,
+     "away": 0.0271
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-bayern-munchen",
@@ -9943,17 +9952,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4228,
-     "draw": 0.2906,
-     "away": 0.2866
+     "home": 0.4287,
+     "draw": 0.2896,
+     "away": 0.2817
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-eintracht-frankfurt",
@@ -10038,17 +10047,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2485,
-     "draw": 0.2807,
-     "away": 0.4708
+     "home": 0.2394,
+     "draw": 0.2775,
+     "away": 0.4832
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-elversberg",
@@ -10134,17 +10143,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4339,
-     "draw": 0.2904,
-     "away": 0.2756
+     "home": 0.4475,
+     "draw": 0.286,
+     "away": 0.2664
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-freiburg",
@@ -10231,17 +10240,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7299,
-     "draw": 0.1725,
-     "away": 0.0976
+     "home": 0.7436,
+     "draw": 0.1657,
+     "away": 0.0908
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-leverkusen",
@@ -10331,17 +10340,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5445,
-     "draw": 0.2581,
-     "away": 0.1973
+     "home": 0.5602,
+     "draw": 0.2527,
+     "away": 0.1871
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-rb-leipzig",
@@ -10426,17 +10435,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1837,
-     "draw": 0.2533,
-     "away": 0.563
+     "home": 0.1731,
+     "draw": 0.2429,
+     "away": 0.5841
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-schalke",
@@ -10523,17 +10532,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4079,
-     "draw": 0.2946,
-     "away": 0.2974
+     "home": 0.4114,
+     "draw": 0.2923,
+     "away": 0.2963
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-union-berlin",
@@ -10619,17 +10628,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.418,
-     "draw": 0.2919,
+     "home": 0.4186,
+     "draw": 0.2912,
      "away": 0.2901
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-bolton",
@@ -10717,17 +10726,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3774,
-     "draw": 0.2971,
-     "away": 0.3255
+     "home": 0.372,
+     "draw": 0.2958,
+     "away": 0.3322
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-bristol-city",
@@ -10814,17 +10823,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7762,
-     "draw": 0.1468,
-     "away": 0.0769
+     "home": 0.789,
+     "draw": 0.1392,
+     "away": 0.0717
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-middlesbrough",
@@ -10910,17 +10919,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5878,
-     "draw": 0.242,
-     "away": 0.1702
+     "home": 0.6112,
+     "draw": 0.2321,
+     "away": 0.1567
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-aston-villa",
@@ -11007,17 +11016,17 @@
     "no bookmaker odds yet",
     "component models disagree strongly"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7002,
-     "draw": 0.1898,
-     "away": 0.11
+     "home": 0.7113,
+     "draw": 0.1833,
+     "away": 0.1054
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-bournemouth",
@@ -11103,17 +11112,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2006,
-     "draw": 0.2625,
-     "away": 0.5369
+     "home": 0.2041,
+     "draw": 0.2615,
+     "away": 0.5345
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-brentford",
@@ -11201,17 +11210,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3222,
-     "draw": 0.2954,
-     "away": 0.3824
+     "home": 0.3198,
+     "draw": 0.2949,
+     "away": 0.3853
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-chelsea",
@@ -11298,17 +11307,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4101,
-     "draw": 0.2954,
-     "away": 0.2945
+     "home": 0.4222,
+     "draw": 0.2907,
+     "away": 0.2871
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-everton",
@@ -11393,17 +11402,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5651,
-     "draw": 0.2523,
-     "away": 0.1827
+     "home": 0.5802,
+     "draw": 0.2451,
+     "away": 0.1747
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-leeds",
@@ -11490,17 +11499,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6589,
-     "draw": 0.2099,
-     "away": 0.1312
+     "home": 0.6668,
+     "draw": 0.2059,
+     "away": 0.1273
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-manchester-united",
@@ -11588,17 +11597,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4244,
-     "draw": 0.2931,
-     "away": 0.2825
+     "home": 0.4365,
+     "draw": 0.2881,
+     "away": 0.2754
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-newcastle",
@@ -11684,17 +11693,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2866,
-     "draw": 0.2935,
-     "away": 0.4199
+     "home": 0.2865,
+     "draw": 0.2904,
+     "away": 0.4231
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-nottingham-forest",
@@ -11781,17 +11790,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2212,
-     "draw": 0.276,
-     "away": 0.5028
+     "home": 0.2134,
+     "draw": 0.2662,
+     "away": 0.5204
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-tottenham",
@@ -11880,17 +11889,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5025,
-     "draw": 0.2717,
-     "away": 0.2257
+     "home": 0.4982,
+     "draw": 0.2734,
+     "away": 0.2283
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-cardiff",
@@ -11978,17 +11987,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1902,
-     "draw": 0.2571,
-     "away": 0.5527
+     "home": 0.187,
+     "draw": 0.2522,
+     "away": 0.5608
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-charlton",
@@ -12076,17 +12085,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5294,
-     "draw": 0.2649,
-     "away": 0.2058
+     "home": 0.533,
+     "draw": 0.2625,
+     "away": 0.2045
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-norwich",
@@ -12173,17 +12182,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3142,
-     "draw": 0.2987,
-     "away": 0.3871
+     "home": 0.3213,
+     "draw": 0.295,
+     "away": 0.3837
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-portsmouth",
@@ -12270,17 +12279,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3479,
-     "draw": 0.2988,
-     "away": 0.3532
+     "home": 0.3571,
+     "draw": 0.2962,
+     "away": 0.3467
     },
-    "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "pick": "home",
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-stoke",
@@ -12368,17 +12377,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2947,
-     "draw": 0.2941,
-     "away": 0.4112
+     "home": 0.2904,
+     "draw": 0.2911,
+     "away": 0.4186
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-watford",
@@ -12464,17 +12473,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5135,
-     "draw": 0.269,
-     "away": 0.2175
+     "home": 0.517,
+     "draw": 0.2671,
+     "away": 0.2159
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-wolverhampton",
@@ -12560,17 +12569,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.0693,
-     "draw": 0.1373,
-     "away": 0.7934
+     "home": 0.0663,
+     "draw": 0.1308,
+     "away": 0.8029
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-willem-ii",
@@ -12657,17 +12666,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.314,
-     "draw": 0.2937,
-     "away": 0.3923
+     "home": 0.3152,
+     "draw": 0.2945,
+     "away": 0.3903
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-sparta-rotterdam",
@@ -12752,17 +12761,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3224,
-     "draw": 0.2947,
-     "away": 0.3828
+     "home": 0.3126,
+     "draw": 0.2937,
+     "away": 0.3937
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-az-alkmaar",
@@ -12849,17 +12858,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4532,
-     "draw": 0.2855,
-     "away": 0.2613
+     "home": 0.4641,
+     "draw": 0.2825,
+     "away": 0.2535
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-for-sittard",
@@ -12944,17 +12953,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5703,
-     "draw": 0.2472,
-     "away": 0.1824
+     "home": 0.5957,
+     "draw": 0.2386,
+     "away": 0.1657
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-heerenveen",
@@ -13042,17 +13051,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6014,
-     "draw": 0.2375,
-     "away": 0.1611
+     "home": 0.6131,
+     "draw": 0.2312,
+     "away": 0.1557
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-burnley",
@@ -13138,17 +13147,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5323,
-     "draw": 0.2643,
-     "away": 0.2035
+     "home": 0.5327,
+     "draw": 0.2626,
+     "away": 0.2047
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-alaves",
@@ -13235,17 +13244,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1824,
-     "draw": 0.2496,
-     "away": 0.568
+     "home": 0.1715,
+     "draw": 0.2423,
+     "away": 0.5862
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-ath-bilbao",
@@ -13333,17 +13342,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5884,
-     "draw": 0.241,
-     "away": 0.1706
+     "home": 0.5942,
+     "draw": 0.2393,
+     "away": 0.1665
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-ath-madrid",
@@ -13432,17 +13441,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.8462,
-     "draw": 0.1039,
-     "away": 0.0499
+     "home": 0.862,
+     "draw": 0.0942,
+     "away": 0.0438
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-barcelona",
@@ -13529,17 +13538,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4154,
-     "draw": 0.2972,
-     "away": 0.2875
+     "home": 0.4215,
+     "draw": 0.2908,
+     "away": 0.2878
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-getafe",
@@ -13625,17 +13634,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4665,
-     "draw": 0.2833,
-     "away": 0.2502
+     "home": 0.4708,
+     "draw": 0.2808,
+     "away": 0.2485
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-osasuna",
@@ -13720,17 +13729,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3588,
-     "draw": 0.2937,
-     "away": 0.3475
+     "home": 0.3647,
+     "draw": 0.2959,
+     "away": 0.3394
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-santander",
@@ -13817,17 +13826,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6607,
-     "draw": 0.2099,
-     "away": 0.1294
+     "home": 0.6704,
+     "draw": 0.2043,
+     "away": 0.1253
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-sevilla",
@@ -13913,17 +13922,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5081,
-     "draw": 0.2707,
-     "away": 0.2212
+     "home": 0.507,
+     "draw": 0.2709,
+     "away": 0.2221
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-vallecano",
@@ -14009,17 +14018,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5132,
-     "draw": 0.2692,
-     "away": 0.2176
+     "home": 0.5219,
+     "draw": 0.2663,
+     "away": 0.2118
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-villarreal",
@@ -14105,17 +14114,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2237,
-     "draw": 0.2718,
-     "away": 0.5045
+     "home": 0.2131,
+     "draw": 0.2664,
+     "away": 0.5205
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-bologna",
@@ -14203,17 +14212,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5763,
-     "draw": 0.2465,
-     "away": 0.1772
+     "home": 0.584,
+     "draw": 0.2433,
+     "away": 0.1728
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-fiorentina",
@@ -14298,17 +14307,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1491,
-     "draw": 0.2213,
-     "away": 0.6297
+     "home": 0.1398,
+     "draw": 0.2174,
+     "away": 0.6429
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-frosinone",
@@ -14395,17 +14404,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4025,
-     "draw": 0.2956,
-     "away": 0.3019
+     "home": 0.4123,
+     "draw": 0.2921,
+     "away": 0.2956
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-genoa",
@@ -14490,17 +14499,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6885,
-     "draw": 0.1955,
-     "away": 0.116
+     "home": 0.7033,
+     "draw": 0.1876,
+     "away": 0.1091
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-juventus",
@@ -14587,17 +14596,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4455,
-     "draw": 0.2856,
-     "away": 0.2688
+     "home": 0.4637,
+     "draw": 0.2823,
+     "away": 0.254
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-lazio",
@@ -14685,17 +14694,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7704,
-     "draw": 0.1499,
-     "away": 0.0797
+     "home": 0.7906,
+     "draw": 0.1384,
+     "away": 0.071
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-milan",
@@ -14782,17 +14791,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1196,
-     "draw": 0.1979,
-     "away": 0.6825
+     "home": 0.1151,
+     "draw": 0.1932,
+     "away": 0.6917
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-monza",
@@ -14878,17 +14887,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.7104,
-     "draw": 0.1845,
-     "away": 0.1051
+     "home": 0.7287,
+     "draw": 0.1739,
+     "away": 0.0974
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-napoli",
@@ -14974,17 +14983,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3924,
-     "draw": 0.2936,
-     "away": 0.314
+     "home": 0.3988,
+     "draw": 0.2938,
+     "away": 0.3074
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-venezia",
@@ -15071,17 +15080,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5386,
-     "draw": 0.2606,
-     "away": 0.2008
+     "home": 0.5462,
+     "draw": 0.2577,
+     "away": 0.1961
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-alverca",
@@ -15167,17 +15176,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2664,
-     "draw": 0.2853,
-     "away": 0.4484
+     "home": 0.2683,
+     "draw": 0.286,
+     "away": 0.4456
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-estoril",
@@ -15264,17 +15273,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3227,
-     "draw": 0.2971,
-     "away": 0.3802
+     "home": 0.3225,
+     "draw": 0.2951,
+     "away": 0.3825
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-estrela",
@@ -15360,17 +15369,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4826,
-     "draw": 0.2769,
-     "away": 0.2405
+     "home": 0.4892,
+     "draw": 0.2761,
+     "away": 0.2347
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-famalicao",
@@ -15456,17 +15465,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.0529,
-     "draw": 0.1069,
-     "away": 0.8402
+     "home": 0.0473,
+     "draw": 0.0997,
+     "away": 0.853
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-nacional",
@@ -15555,17 +15564,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4267,
-     "draw": 0.2895,
-     "away": 0.2838
+     "home": 0.4301,
+     "draw": 0.2894,
+     "away": 0.2805
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-rio-ave",
@@ -15651,17 +15660,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1124,
-     "draw": 0.1925,
-     "away": 0.6952
+     "home": 0.1058,
+     "draw": 0.1829,
+     "away": 0.7113
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-santa-clara",
@@ -15748,17 +15757,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.594,
-     "draw": 0.2391,
-     "away": 0.1669
+     "home": 0.6035,
+     "draw": 0.2354,
+     "away": 0.1611
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-sporting-braga",
@@ -15845,17 +15854,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.8086,
-     "draw": 0.1271,
-     "away": 0.0643
+     "home": 0.823,
+     "draw": 0.1187,
+     "away": 0.0582
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-sporting-lisbon",
@@ -15943,17 +15952,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6785,
-     "draw": 0.1991,
-     "away": 0.1223
+     "home": 0.6969,
+     "draw": 0.1909,
+     "away": 0.1122
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-ajax",
@@ -16039,17 +16048,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1729,
-     "draw": 0.2433,
-     "away": 0.5838
+     "home": 0.1706,
+     "draw": 0.2416,
+     "away": 0.5879
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-go-ahead-eagles",
@@ -16134,17 +16143,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3648,
-     "draw": 0.2969,
-     "away": 0.3383
+     "home": 0.3657,
+     "draw": 0.2961,
+     "away": 0.3382
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-den-haag",
@@ -16230,17 +16239,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6365,
-     "draw": 0.2206,
-     "away": 0.1429
+     "home": 0.6597,
+     "draw": 0.2097,
+     "away": 0.1306
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-birmingham",
@@ -16327,17 +16336,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.237,
-     "draw": 0.2794,
-     "away": 0.4836
+     "home": 0.239,
+     "draw": 0.2768,
+     "away": 0.4842
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-blackburn",
@@ -16425,17 +16434,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.374,
-     "draw": 0.2981,
-     "away": 0.3279
+     "home": 0.3798,
+     "draw": 0.2954,
+     "away": 0.3248
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-millwall",
@@ -16522,17 +16531,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.309,
-     "draw": 0.296,
-     "away": 0.3949
+     "home": 0.3113,
+     "draw": 0.294,
+     "away": 0.3946
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-queens",
@@ -16620,17 +16629,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5561,
-     "draw": 0.253,
-     "away": 0.1909
+     "home": 0.5722,
+     "draw": 0.2483,
+     "away": 0.1796
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-swansea",
@@ -16718,17 +16727,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5175,
-     "draw": 0.2674,
-     "away": 0.2151
+     "home": 0.5268,
+     "draw": 0.2646,
+     "away": 0.2085
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-west-brom",
@@ -16816,17 +16825,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5982,
-     "draw": 0.2389,
-     "away": 0.1629
+     "home": 0.6197,
+     "draw": 0.2284,
+     "away": 0.152
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-wrexham",
@@ -16913,17 +16922,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
      "home": 0.3667,
-     "draw": 0.2958,
-     "away": 0.3375
+     "draw": 0.2959,
+     "away": 0.3374
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-west-ham",
@@ -17010,17 +17019,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3104,
-     "draw": 0.2962,
-     "away": 0.3935
+     "home": 0.3189,
+     "draw": 0.2945,
+     "away": 0.3866
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-derby",
@@ -17107,17 +17116,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3364,
-     "draw": 0.2991,
-     "away": 0.3645
+     "home": 0.3481,
+     "draw": 0.2961,
+     "away": 0.3558
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-lincoln",
@@ -17205,17 +17214,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2755,
-     "draw": 0.2921,
-     "away": 0.4324
+     "home": 0.2715,
+     "draw": 0.2871,
+     "away": 0.4414
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-preston",
@@ -17302,17 +17311,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5228,
-     "draw": 0.2665,
-     "away": 0.2107
+     "home": 0.5451,
+     "draw": 0.258,
+     "away": 0.1969
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-southampton",
@@ -17398,17 +17407,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3248,
-     "draw": 0.2949,
-     "away": 0.3804
+     "home": 0.3171,
+     "draw": 0.2947,
+     "away": 0.3881
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-bolton",
@@ -17494,17 +17503,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.242,
-     "draw": 0.2796,
-     "away": 0.4784
+     "home": 0.2431,
+     "draw": 0.2787,
+     "away": 0.4782
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-angers",
@@ -17590,17 +17599,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.25,
-     "draw": 0.2833,
-     "away": 0.4667
+     "home": 0.2536,
+     "draw": 0.2818,
+     "away": 0.4646
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-auxerre",
@@ -17685,17 +17694,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5351,
-     "draw": 0.2633,
-     "away": 0.2015
+     "home": 0.5584,
+     "draw": 0.2535,
+     "away": 0.1881
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-brest",
@@ -17782,17 +17791,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4099,
-     "draw": 0.2929,
-     "away": 0.2972
+     "home": 0.4138,
+     "draw": 0.2919,
+     "away": 0.2943
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-le-havre",
@@ -17878,17 +17887,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2783,
-     "draw": 0.293,
-     "away": 0.4286
+     "home": 0.2805,
+     "draw": 0.2892,
+     "away": 0.4304
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-lorient",
@@ -17974,17 +17983,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3555,
-     "draw": 0.2957,
-     "away": 0.3489
+     "home": 0.3594,
+     "draw": 0.2963,
+     "away": 0.3444
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-nice",
@@ -18070,17 +18079,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6432,
-     "draw": 0.2175,
-     "away": 0.1394
+     "home": 0.661,
+     "draw": 0.2091,
+     "away": 0.13
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-paris-sg",
@@ -18167,17 +18176,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3706,
-     "draw": 0.2953,
-     "away": 0.334
+     "home": 0.3743,
+     "draw": 0.2957,
+     "away": 0.33
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-rennes",
@@ -18265,17 +18274,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6646,
-     "draw": 0.2074,
-     "away": 0.128
+     "home": 0.6893,
+     "draw": 0.1948,
+     "away": 0.1159
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-dortmund",
@@ -18361,17 +18370,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3745,
-     "draw": 0.2963,
-     "away": 0.3293
+     "home": 0.3772,
+     "draw": 0.2952,
+     "away": 0.3276
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-hamburg",
@@ -18457,17 +18466,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1152,
-     "draw": 0.1932,
-     "away": 0.6915
+     "home": 0.1097,
+     "draw": 0.1874,
+     "away": 0.7028
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-hoffenheim",
@@ -18557,17 +18566,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2324,
-     "draw": 0.2741,
-     "away": 0.4935
+     "home": 0.2188,
+     "draw": 0.269,
+     "away": 0.5122
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-koln",
@@ -18652,17 +18661,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4049,
-     "draw": 0.2952,
-     "away": 0.2999
+     "home": 0.4021,
+     "draw": 0.2931,
+     "away": 0.3048
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-mainz",
@@ -18747,17 +18756,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3261,
-     "draw": 0.2946,
-     "away": 0.3793
+     "home": 0.3238,
+     "draw": 0.2953,
+     "away": 0.3809
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-monchengladbach",
@@ -18844,17 +18853,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3929,
-     "draw": 0.2969,
-     "away": 0.3101
+     "home": 0.4102,
+     "draw": 0.2924,
+     "away": 0.2973
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-paderborn",
@@ -18939,17 +18948,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6979,
-     "draw": 0.1902,
-     "away": 0.1118
+     "home": 0.7144,
+     "draw": 0.1817,
+     "away": 0.1039
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-stuttgart",
@@ -19035,17 +19044,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2417,
-     "draw": 0.2781,
-     "away": 0.4802
+     "home": 0.238,
+     "draw": 0.2768,
+     "away": 0.4852
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ger-werder-bremen",
@@ -19134,17 +19143,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1092,
-     "draw": 0.1884,
-     "away": 0.7024
+     "home": 0.1053,
+     "draw": 0.1819,
+     "away": 0.7127
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-preston",
@@ -19231,17 +19240,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.616,
-     "draw": 0.2298,
-     "away": 0.1542
+     "home": 0.6351,
+     "draw": 0.2213,
+     "away": 0.1435
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-queens",
@@ -19328,17 +19337,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3359,
-     "draw": 0.2999,
-     "away": 0.3642
+     "home": 0.3438,
+     "draw": 0.2962,
+     "away": 0.3599
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-stoke",
@@ -19425,17 +19434,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6448,
-     "draw": 0.2185,
-     "away": 0.1367
+     "home": 0.6634,
+     "draw": 0.2079,
+     "away": 0.1288
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-arsenal",
@@ -19521,17 +19530,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5531,
-     "draw": 0.2568,
-     "away": 0.1901
+     "home": 0.5669,
+     "draw": 0.2503,
+     "away": 0.1828
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-brighton",
@@ -19617,17 +19626,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2219,
-     "draw": 0.2721,
-     "away": 0.506
+     "home": 0.2196,
+     "draw": 0.269,
+     "away": 0.5114
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-coventry",
@@ -19714,17 +19723,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.231,
-     "draw": 0.2748,
-     "away": 0.4943
+     "home": 0.2304,
+     "draw": 0.2738,
+     "away": 0.4958
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-crystal-palace",
@@ -19811,17 +19820,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3753,
-     "draw": 0.2985,
-     "away": 0.3262
+     "home": 0.3726,
+     "draw": 0.2959,
+     "away": 0.3315
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-fulham",
@@ -19906,17 +19915,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.1601,
-     "draw": 0.2366,
-     "away": 0.6033
+     "home": 0.1677,
+     "draw": 0.2373,
+     "away": 0.5951
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-hull",
@@ -20004,17 +20013,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.328,
-     "draw": 0.2967,
-     "away": 0.3752
+     "home": 0.3343,
+     "draw": 0.296,
+     "away": 0.3697
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-ipswich",
@@ -20101,17 +20110,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.58,
-     "draw": 0.2459,
-     "away": 0.1741
+     "home": 0.5903,
+     "draw": 0.2409,
+     "away": 0.1688
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-liverpool",
@@ -20198,17 +20207,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5954,
-     "draw": 0.2389,
-     "away": 0.1657
+     "home": 0.6143,
+     "draw": 0.2307,
+     "away": 0.155
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-manchester-city",
@@ -20297,17 +20306,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.349,
-     "draw": 0.3011,
-     "away": 0.3499
+     "home": 0.3564,
+     "draw": 0.2964,
+     "away": 0.3472
     },
-    "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "pick": "home",
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-sunderland",
@@ -20394,17 +20403,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4498,
-     "draw": 0.2885,
-     "away": 0.2616
+     "home": 0.4634,
+     "draw": 0.2826,
+     "away": 0.254
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-blackburn",
@@ -20492,17 +20501,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3186,
-     "draw": 0.2931,
-     "away": 0.3883
+     "home": 0.315,
+     "draw": 0.2944,
+     "away": 0.3906
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-cardiff",
@@ -20589,17 +20598,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.2361,
-     "draw": 0.2791,
-     "away": 0.4849
+     "home": 0.2334,
+     "draw": 0.2751,
+     "away": 0.4916
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-charlton",
@@ -20687,17 +20696,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.247,
-     "draw": 0.2822,
-     "away": 0.4709
+     "home": 0.256,
+     "draw": 0.2823,
+     "away": 0.4617
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-lincoln",
@@ -20785,17 +20794,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3068,
-     "draw": 0.2965,
-     "away": 0.3967
+     "home": 0.3104,
+     "draw": 0.294,
+     "away": 0.3956
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-portsmouth",
@@ -20882,17 +20891,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.4824,
-     "draw": 0.2788,
-     "away": 0.2388
+     "home": 0.4971,
+     "draw": 0.2739,
+     "away": 0.229
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-sheffield-united",
@@ -20979,17 +20988,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.6339,
-     "draw": 0.2217,
-     "away": 0.1444
+     "home": 0.6458,
+     "draw": 0.2164,
+     "away": 0.1379
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-west-ham",
@@ -21076,17 +21085,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.598,
-     "draw": 0.2388,
-     "away": 0.1632
+     "home": 0.6119,
+     "draw": 0.2317,
+     "away": 0.1564
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-eng-wolverhampton",
@@ -21172,17 +21181,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.532,
-     "draw": 0.2625,
-     "away": 0.2055
+     "home": 0.5347,
+     "draw": 0.2619,
+     "away": 0.2034
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-utrecht",
@@ -21267,17 +21276,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.5081,
-     "draw": 0.2694,
-     "away": 0.2225
+     "home": 0.5269,
+     "draw": 0.2645,
+     "away": 0.2086
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-heerenveen",
@@ -21362,17 +21371,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 4,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 5,
    "previous": {
     "p": {
-     "home": 0.3327,
-     "draw": 0.2973,
-     "away": 0.3699
+     "home": 0.3429,
+     "draw": 0.2958,
+     "away": 0.3613
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-zwolle",
@@ -21457,17 +21466,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.8324,
-     "draw": 0.1122,
-     "away": 0.0554
+     "home": 0.8475,
+     "draw": 0.1035,
+     "away": 0.049
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-psv-eindhoven",
@@ -21554,17 +21563,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.7708,
-     "draw": 0.1505,
-     "away": 0.0787
+     "home": 0.7839,
+     "draw": 0.1423,
+     "away": 0.0738
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-ath-madrid",
@@ -21653,17 +21662,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.6903,
-     "draw": 0.1921,
-     "away": 0.1176
+     "home": 0.7017,
+     "draw": 0.1884,
+     "away": 0.1099
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-betis",
@@ -21750,17 +21759,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.2742,
-     "draw": 0.2896,
-     "away": 0.4363
+     "home": 0.2745,
+     "draw": 0.2876,
+     "away": 0.4379
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-coruna",
@@ -21847,17 +21856,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.2863,
-     "draw": 0.2923,
-     "away": 0.4213
+     "home": 0.29,
+     "draw": 0.2904,
+     "away": 0.4196
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-elche",
@@ -21943,17 +21952,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.3192,
-     "draw": 0.2971,
-     "away": 0.3838
+     "home": 0.3257,
+     "draw": 0.2953,
+     "away": 0.379
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-espanol",
@@ -22040,17 +22049,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.3589,
-     "draw": 0.2979,
-     "away": 0.3432
+     "home": 0.3679,
+     "draw": 0.296,
+     "away": 0.3361
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-levante",
@@ -22136,17 +22145,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.0457,
-     "draw": 0.0968,
-     "away": 0.8575
+     "home": 0.0407,
+     "draw": 0.0879,
+     "away": 0.8714
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-malaga",
@@ -22232,17 +22241,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.8628,
-     "draw": 0.0933,
-     "away": 0.0439
+     "home": 0.8761,
+     "draw": 0.085,
+     "away": 0.0388
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-real-madrid",
@@ -22329,17 +22338,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.5799,
-     "draw": 0.2471,
-     "away": 0.173
+     "home": 0.589,
+     "draw": 0.2414,
+     "away": 0.1696
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-sociedad",
@@ -22425,17 +22434,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.5832,
-     "draw": 0.2434,
-     "away": 0.1735
+     "home": 0.5987,
+     "draw": 0.2374,
+     "away": 0.1638
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-esp-villarreal",
@@ -22521,17 +22530,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.4891,
-     "draw": 0.2764,
-     "away": 0.2346
+     "home": 0.4979,
+     "draw": 0.2736,
+     "away": 0.2285
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-atalanta",
@@ -22618,17 +22627,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.3706,
-     "draw": 0.2968,
-     "away": 0.3326
+     "home": 0.3803,
+     "draw": 0.295,
+     "away": 0.3247
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-cagliari",
@@ -22713,17 +22722,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.5994,
-     "draw": 0.238,
-     "away": 0.1626
+     "home": 0.6179,
+     "draw": 0.2291,
+     "away": 0.1529
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-como",
@@ -22811,17 +22820,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.7483,
-     "draw": 0.1628,
-     "away": 0.0889
+     "home": 0.7699,
+     "draw": 0.1506,
+     "away": 0.0795
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-internazionale",
@@ -22908,17 +22917,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.7243,
-     "draw": 0.1762,
-     "away": 0.0995
+     "home": 0.7354,
+     "draw": 0.1702,
+     "away": 0.0944
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-juventus",
@@ -23005,17 +23014,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.2571,
-     "draw": 0.2828,
-     "away": 0.4601
+     "home": 0.2558,
+     "draw": 0.2826,
+     "away": 0.4616
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-lazio",
@@ -23102,17 +23111,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.3362,
-     "draw": 0.2966,
-     "away": 0.3672
+     "home": 0.3416,
+     "draw": 0.296,
+     "away": 0.3624
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-lecce",
@@ -23198,17 +23207,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.4144,
-     "draw": 0.2931,
-     "away": 0.2925
+     "home": 0.4127,
+     "draw": 0.2921,
+     "away": 0.2952
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-napoli",
@@ -23295,17 +23304,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.1646,
-     "draw": 0.2377,
-     "away": 0.5976
+     "home": 0.1673,
+     "draw": 0.237,
+     "away": 0.5957
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-parma",
@@ -23391,17 +23400,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.3157,
-     "draw": 0.2913,
-     "away": 0.3929
+     "home": 0.3158,
+     "draw": 0.2946,
+     "away": 0.3895
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ita-udinese",
@@ -23487,17 +23496,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.3393,
-     "draw": 0.2946,
-     "away": 0.3661
+     "home": 0.3451,
+     "draw": 0.2962,
+     "away": 0.3587
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-academico-viseu",
@@ -23583,17 +23592,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.6569,
-     "draw": 0.2096,
-     "away": 0.1335
+     "home": 0.6788,
+     "draw": 0.2002,
+     "away": 0.121
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-benfica",
@@ -23683,17 +23692,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.4159,
-     "draw": 0.2906,
-     "away": 0.2935
+     "home": 0.429,
+     "draw": 0.2896,
+     "away": 0.2814
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-casa-pia",
@@ -23779,17 +23788,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.3229,
-     "draw": 0.2968,
-     "away": 0.3803
+     "home": 0.3185,
+     "draw": 0.2948,
+     "away": 0.3867
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-estoril",
@@ -23876,17 +23885,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.1609,
-     "draw": 0.2358,
-     "away": 0.6033
+     "home": 0.1557,
+     "draw": 0.2307,
+     "away": 0.6136
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-gil-vicente",
@@ -23975,17 +23984,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.5219,
-     "draw": 0.2662,
-     "away": 0.2118
+     "home": 0.5249,
+     "draw": 0.2651,
+     "away": 0.21
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-guimaraes",
@@ -24071,17 +24080,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.4351,
-     "draw": 0.2857,
-     "away": 0.2793
+     "home": 0.443,
+     "draw": 0.287,
+     "away": 0.27
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-maritimo",
@@ -24167,17 +24176,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.2438,
-     "draw": 0.2805,
-     "away": 0.4757
+     "home": 0.2466,
+     "draw": 0.2795,
+     "away": 0.4739
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-moreirense",
@@ -24263,17 +24272,17 @@
     "no bookmaker odds yet",
     "latest league results not confirmed yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.8393,
-     "draw": 0.1083,
-     "away": 0.0524
+     "home": 0.8611,
+     "draw": 0.0948,
+     "away": 0.0441
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-por-porto",
@@ -24359,17 +24368,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.1794,
-     "draw": 0.2465,
-     "away": 0.5741
+     "home": 0.1738,
+     "draw": 0.2437,
+     "away": 0.5825
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-groningen",
@@ -24456,17 +24465,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.2985,
-     "draw": 0.2943,
-     "away": 0.4072
+     "home": 0.3046,
+     "draw": 0.2932,
+     "away": 0.4023
     },
     "pick": "away",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-willem-ii",
@@ -24551,17 +24560,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.5788,
-     "draw": 0.2452,
-     "away": 0.176
+     "home": 0.59,
+     "draw": 0.241,
+     "away": 0.169
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-az-alkmaar",
@@ -24647,17 +24656,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.7182,
-     "draw": 0.1782,
-     "away": 0.1036
+     "home": 0.7433,
+     "draw": 0.1658,
+     "away": 0.0909
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-ned-ajax",
@@ -24744,17 +24753,17 @@
    "confidence_reasons": [
     "no bookmaker odds yet"
    ],
-   "made_at": "2026-11-25T14:25:29+00:00",
-   "last_change": "new model version (fb-2026-11-9e5c31b2 -> fb-2026-11-e082619a); new results updated the ratings",
-   "versions": 3,
+   "made_at": "2026-11-26T12:51:27+00:00",
+   "last_change": "new model version (fb-2026-11-e082619a -> fb-2026-11-8beba951)",
+   "versions": 4,
    "previous": {
     "p": {
-     "home": 0.4015,
-     "draw": 0.2923,
-     "away": 0.3063
+     "home": 0.4111,
+     "draw": 0.2922,
+     "away": 0.2967
     },
     "pick": "home",
-    "made_at": "2026-11-24T11:38:18+00:00"
+    "made_at": "2026-11-25T14:25:29+00:00"
    },
    "home": {
     "id": "fb-fra-lyon",

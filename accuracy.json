@@ -1,7 +1,7 @@
 {
  "schema": 1,
- "generated_at": "2026-11-26T08:41:23+00:00",
- "model_version": "fb-2026-11-e082619a",
+ "generated_at": "2026-11-26T12:55:45+00:00",
+ "model_version": "fb-2026-11-8beba951",
  "live": {
   "overall": {
    "n": 28,
@@ -166,6 +166,12 @@
     "match_id": "esp.1/2026-27/fb-esp-levante~fb-esp-elche",
     "competition": "esp.1",
     "kickoff": "2026-11-23T20:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.4312,
+     "draw": 0.2648,
+     "away": 0.304
+    },
     "home": "Levante",
     "away": "Elche",
     "score": "1-1",
@@ -182,6 +188,12 @@
     "match_id": "ita.1/2026-27/fb-ita-monza~fb-ita-fiorentina",
     "competition": "ita.1",
     "kickoff": "2026-11-23T19:45:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.2632,
+     "draw": 0.2484,
+     "away": 0.4884
+    },
     "home": "Monza",
     "away": "Fiorentina",
     "score": "3-0",
@@ -198,6 +210,12 @@
     "match_id": "tur.1/2026-27/fb-tur-buyuksehyr~fb-tur-corum",
     "competition": "tur.1",
     "kickoff": "2026-11-23T17:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.4939,
+     "draw": 0.247,
+     "away": 0.2591
+    },
     "home": "Buyuksehyr",
     "away": "Corum",
     "score": "4-2",
@@ -214,6 +232,12 @@
     "match_id": "esp.1/2026-27/fb-esp-getafe~fb-esp-ath-madrid",
     "competition": "esp.1",
     "kickoff": "2026-11-22T20:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.1535,
+     "draw": 0.2449,
+     "away": 0.6016
+    },
     "home": "Getafe",
     "away": "Ath Madrid",
     "score": "0-3",
@@ -230,6 +254,12 @@
     "match_id": "fra.1/2026-27/fb-fra-marseille~fb-fra-le-mans",
     "competition": "fra.1",
     "kickoff": "2026-11-22T19:45:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.6423,
+     "draw": 0.2008,
+     "away": 0.1569
+    },
     "home": "Marseille",
     "away": "Le Mans",
     "score": "2-3",
@@ -246,6 +276,12 @@
     "match_id": "ita.1/2026-27/fb-ita-atalanta~fb-ita-internazionale",
     "competition": "ita.1",
     "kickoff": "2026-11-22T19:45:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.1936,
+     "draw": 0.21,
+     "away": 0.5963
+    },
     "home": "Atalanta",
     "away": "Inter",
     "score": "4-4",
@@ -262,6 +298,12 @@
     "match_id": "esp.1/2026-27/fb-esp-osasuna~fb-esp-malaga",
     "competition": "esp.1",
     "kickoff": "2026-11-22T17:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5205,
+     "draw": 0.2682,
+     "away": 0.2112
+    },
     "home": "Osasuna",
     "away": "Malaga",
     "score": "1-0",
@@ -278,6 +320,12 @@
     "match_id": "ita.1/2026-27/fb-ita-milan~fb-ita-frosinone",
     "competition": "ita.1",
     "kickoff": "2026-11-22T17:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.6111,
+     "draw": 0.2064,
+     "away": 0.1825
+    },
     "home": "Milan",
     "away": "Frosinone",
     "score": "5-1",
@@ -294,6 +342,12 @@
     "match_id": "eng.1/2026-27/fb-eng-liverpool~fb-eng-manchester-united",
     "competition": "eng.1",
     "kickoff": "2026-11-22T16:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5348,
+     "draw": 0.2291,
+     "away": 0.236
+    },
     "home": "Liverpool",
     "away": "Man United",
     "score": "4-0",
@@ -310,6 +364,12 @@
     "match_id": "ger.1/2026-27/fb-ger-werder-bremen~fb-ger-hamburg",
     "competition": "ger.1",
     "kickoff": "2026-11-22T16:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5557,
+     "draw": 0.2336,
+     "away": 0.2108
+    },
     "home": "Werder Bremen",
     "away": "Hamburg",
     "score": "4-0",
@@ -326,6 +386,12 @@
     "match_id": "fra.1/2026-27/fb-fra-lorient~fb-fra-rennes",
     "competition": "fra.1",
     "kickoff": "2026-11-22T16:15:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.3256,
+     "draw": 0.2762,
+     "away": 0.3982
+    },
     "home": "Lorient",
     "away": "Rennes",
     "score": "1-1",
@@ -342,6 +408,12 @@
     "match_id": "tur.1/2026-27/fb-tur-trabzonspor~fb-tur-eyupspor",
     "competition": "tur.1",
     "kickoff": "2026-11-22T16:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.8076,
+     "draw": 0.1231,
+     "away": 0.0693
+    },
     "home": "Trabzonspor",
     "away": "Eyupspor",
     "score": "1-0",
@@ -358,6 +430,12 @@
     "match_id": "ned.1/2026-27/fb-ned-go-ahead-eagles~fb-ned-for-sittard",
     "competition": "ned.1",
     "kickoff": "2026-11-22T15:45:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5657,
+     "draw": 0.2319,
+     "away": 0.2024
+    },
     "home": "Go Ahead Eagles",
     "away": "For Sittard",
     "score": "0-1",
@@ -374,6 +452,12 @@
     "match_id": "esp.1/2026-27/fb-esp-santander~fb-esp-sociedad",
     "competition": "esp.1",
     "kickoff": "2026-11-22T15:15:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.2909,
+     "draw": 0.2357,
+     "away": 0.4734
+    },
     "home": "Santander",
     "away": "Sociedad",
     "score": "3-2",
@@ -390,6 +474,12 @@
     "match_id": "ger.1/2026-27/fb-ger-augsburg~fb-ger-mainz",
     "competition": "ger.1",
     "kickoff": "2026-11-22T14:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.3556,
+     "draw": 0.249,
+     "away": 0.3954
+    },
     "home": "Augsburg",
     "away": "Mainz",
     "score": "3-1",
@@ -406,6 +496,12 @@
     "match_id": "eng.1/2026-27/fb-eng-hull~fb-eng-brighton",
     "competition": "eng.1",
     "kickoff": "2026-11-22T14:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.1453,
+     "draw": 0.211,
+     "away": 0.6437
+    },
     "home": "Hull",
     "away": "Brighton",
     "score": "2-0",
@@ -422,6 +518,12 @@
     "match_id": "fra.1/2026-27/fb-fra-paris~fb-fra-angers",
     "competition": "fra.1",
     "kickoff": "2026-11-22T14:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.718,
+     "draw": 0.1788,
+     "away": 0.1032
+    },
     "home": "Paris FC",
     "away": "Angers",
     "score": "4-0",
@@ -438,6 +540,12 @@
     "match_id": "ita.1/2026-27/fb-ita-bologna~fb-ita-udinese",
     "competition": "ita.1",
     "kickoff": "2026-11-22T14:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5452,
+     "draw": 0.2556,
+     "away": 0.1992
+    },
     "home": "Bologna",
     "away": "Udinese",
     "score": "1-1",
@@ -454,6 +562,12 @@
     "match_id": "ita.1/2026-27/fb-ita-sassuolo~fb-ita-genoa",
     "competition": "ita.1",
     "kickoff": "2026-11-22T14:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.3441,
+     "draw": 0.2761,
+     "away": 0.3798
+    },
     "home": "Sassuolo",
     "away": "Genoa",
     "score": "0-2",
@@ -470,6 +584,12 @@
     "match_id": "ned.1/2026-27/fb-ned-ajax~fb-ned-den-haag",
     "competition": "ned.1",
     "kickoff": "2026-11-22T13:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.7849,
+     "draw": 0.1359,
+     "away": 0.0792
+    },
     "home": "Ajax",
     "away": "Den Haag",
     "score": "3-0",
@@ -486,6 +606,12 @@
     "match_id": "ned.1/2026-27/fb-ned-sparta-rotterdam~fb-ned-az-alkmaar",
     "competition": "ned.1",
     "kickoff": "2026-11-22T13:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.2224,
+     "draw": 0.2302,
+     "away": 0.5474
+    },
     "home": "Sparta Rotterdam",
     "away": "AZ Alkmaar",
     "score": "1-5",
@@ -502,6 +628,12 @@
     "match_id": "esp.1/2026-27/fb-esp-barcelona~fb-esp-villarreal",
     "competition": "esp.1",
     "kickoff": "2026-11-22T13:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.7851,
+     "draw": 0.125,
+     "away": 0.0899
+    },
     "home": "Barcelona",
     "away": "Villarreal",
     "score": "3-2",
@@ -518,6 +650,12 @@
     "match_id": "tur.1/2026-27/fb-tur-kasimpasa~fb-tur-alanyaspor",
     "competition": "tur.1",
     "kickoff": "2026-11-22T13:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.4635,
+     "draw": 0.2798,
+     "away": 0.2567
+    },
     "home": "Kasimpasa",
     "away": "Alanyaspor",
     "score": "2-1",
@@ -534,6 +672,12 @@
     "match_id": "tur.1/2026-27/fb-tur-konyaspor~fb-tur-besiktas",
     "competition": "tur.1",
     "kickoff": "2026-11-22T13:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.1881,
+     "draw": 0.2353,
+     "away": 0.5767
+    },
     "home": "Konyaspor",
     "away": "Besiktas",
     "score": "2-4",
@@ -550,6 +694,12 @@
     "match_id": "eng.2/2026-27/fb-eng-burnley~fb-eng-blackburn",
     "competition": "eng.2",
     "kickoff": "2026-11-22T12:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.492,
+     "draw": 0.2596,
+     "away": 0.2484
+    },
     "home": "Burnley",
     "away": "Blackburn",
     "score": "2-2",
@@ -566,6 +716,12 @@
     "match_id": "ita.1/2026-27/fb-ita-juventus~fb-ita-venezia",
     "competition": "ita.1",
     "kickoff": "2026-11-22T11:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.7091,
+     "draw": 0.1803,
+     "away": 0.1105
+    },
     "home": "Juventus",
     "away": "Venezia",
     "score": "4-0",
@@ -582,6 +738,12 @@
     "match_id": "ned.1/2026-27/fb-ned-twente~fb-ned-willem-ii",
     "competition": "ned.1",
     "kickoff": "2026-11-22T11:15:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.8613,
+     "draw": 0.093,
+     "away": 0.0457
+    },
     "home": "Twente",
     "away": "Willem II",
     "score": "2-1",
@@ -598,6 +760,12 @@
     "match_id": "tur.1/2026-27/fb-tur-erzurumspor~fb-tur-goztep",
     "competition": "tur.1",
     "kickoff": "2026-11-22T10:30:00+00:00",
+    "made_at": "2026-11-22T04:37:52+00:00",
+    "p": {
+     "home": 0.3208,
+     "draw": 0.2839,
+     "away": 0.3953
+    },
     "home": "Erzurumspor",
     "away": "Goztep",
     "score": "0-1",

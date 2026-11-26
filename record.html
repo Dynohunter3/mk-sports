@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MK Sports: the AI's public track record</title>
+<meta name="description" content="Every MK Sports football prediction, published before kick-off in a public, timestamped record, and how each one turned out." />
+<meta name="theme-color" content="#060A16" />
+<link rel="icon" href="icon.png" />
+<style>
+  :root { --bg: #060A16; --card: rgba(255,255,255,0.06); --line: rgba(255,255,255,0.12); --text: #EEF3FA; --dim: #A6B3C6; --green: #2CF59A; --cyan: #16C6FF; --hot: #FF3D81; --amber: #F5A524; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: radial-gradient(900px 500px at 80% -10%, #14245A 0%, var(--bg) 60%); color: var(--text); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 28px 20px 48px; }
+  header { display: flex; align-items: center; gap: 14px; }
+  header img { width: 52px; height: 52px; border-radius: 14px; }
+  header a { color: inherit; text-decoration: none; }
+  .brand { font-weight: 900; font-style: italic; font-size: 24px; letter-spacing: .5px; }
+  .brand b { color: var(--green); }
+  h1 { font-size: clamp(32px, 7vw, 52px); line-height: 1.02; margin: 24px 0 8px; font-weight: 900; font-style: italic; text-transform: uppercase; }
+  h1 span { color: var(--green); }
+  .lead { color: var(--dim); font-size: 17px; max-width: 680px; }
+  h2 { font-size: 20px; text-transform: uppercase; letter-spacing: 1px; margin: 36px 0 10px; font-weight: 900; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+  .big { font-size: 34px; font-weight: 900; line-height: 1.1; }
+  .lab { color: var(--dim); font-size: 13px; text-transform: uppercase; letter-spacing: .6px; }
+  .dim { color: var(--dim); font-size: 14px; }
+  .band { margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: rgba(22,198,255,.08); border-left: 3px solid var(--cyan); color: var(--dim); font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; color: var(--dim); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; padding: 6px 6px; border-bottom: 1px solid var(--line); }
+  td { padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,.06); vertical-align: top; }
+  td.ok { color: var(--green); font-weight: 800; }
+  td.no { color: var(--hot); font-weight: 800; }
+  a { color: var(--cyan); }
+  .scroll { overflow-x: auto; }
+  .bar { height: 8px; background: rgba(255,255,255,.08); border-radius: 4px; position: relative; min-width: 80px; }
+  .bar i { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 4px; background: var(--green); }
+  .bar b { position: absolute; top: -3px; width: 2px; height: 14px; background: #fff; }
+  ol { padding-left: 22px; color: var(--dim); }
+  ol li { margin: 6px 0; }
+  ol b { color: var(--text); }
+  .note { border-left: 3px solid var(--amber); padding: 10px 14px; background: rgba(245,165,36,.08); border-radius: 8px; color: var(--dim); font-size: 14px; margin-top: 30px; }
+  #err { display: none; color: var(--hot); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a href="./"><img src="icon.png" alt="MK Sports logo" /></a><a href="./" class="brand">MK <b>SPORTS</b></a></header>
+
+  <h1>The AI's record, <span>in public</span></h1>
+  <p class="lead">Every football prediction MK Sports publishes goes into a public, timestamped record on GitHub before kick-off. This page grades them against what happened, wins and losses alike.</p>
+  <p id="err">The record could not be loaded. Try again in a minute.</p>
+
+  <h2>Live record</h2>
+  <div class="grid" id="live"></div>
+  <div class="band" id="check"></div>
+
+  <h2>How it was tested</h2>
+  <p class="dim" id="tested"></p>
+  <div class="grid" id="tiers"></div>
+  <h2 style="font-size:16px">Does 70% mean 70%?</h2>
+  <p class="dim">Calls grouped by the chance the model gave them, against how often they happened, in the two-season test. The white mark is the chance given.</p>
+  <div class="scroll"><table id="cal"><thead><tr><th>Chance given</th><th>Matches</th><th>Happened</th><th></th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Graded predictions</h2>
+  <p class="dim">The last version of each prediction before kick-off. "Published" links to the commit that first put that version in the public record.</p>
+  <div class="scroll"><table id="graded"><thead><tr><th>Kick-off</th><th>Match</th><th>Call</th><th>Result</th><th></th><th>Published</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Coming up</h2>
+  <div class="scroll"><table id="upcoming"><thead><tr><th>Kick-off</th><th>Match</th><th>Home · Draw · Away</th><th>Call</th><th>Published</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>How to check it yourself</h2>
+  <ol>
+    <li>Open a <b>Published</b> link. The commit's <b>football_predictions.json</b> holds the prediction exactly as it was published, with the time it was made.</li>
+    <li>The <b>run</b> link opens the GitHub Actions run that published it; GitHub records when that run happened. A commit's own date is written by whoever makes it, so the run is the stronger evidence.</li>
+    <li>The <a href="https://github.com/Dynohunter3/mk-sports/commits/predictions">predictions branch history</a> keeps every run's file. It is added to, never rewritten.</li>
+  </ol>
+  <p class="dim">The public history starts on 26 November 2026. Predictions graded before then were published too, but each run used to replace the previous one, so they have no commit to link.</p>
+
+  <div class="note">Predictions are for information and entertainment only and are not betting advice. Even the strongest calls were wrong about a quarter of the time in testing.</div>
+</div>
+<script>
+(function () {
+  var REPO = 'https://github.com/Dynohunter3/mk-sports';
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function pct(x, d) { return x == null ? '–' : (100 * x).toFixed(d == null ? 1 : d) + '%'; }
+  function when(iso) {
+    var d = new Date(iso);
+    return d.toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+  var OUT = { home: 'Home win', draw: 'Draw', away: 'Away win' };
+  function stat(box, label, value, sub) {
+    var c = el('div', { class: 'card' });
+    c.appendChild(el('div', { class: 'lab' }, label));
+    c.appendChild(el('div', { class: 'big' }, value));
+    if (sub) c.appendChild(el('div', { class: 'dim' }, sub));
+    box.appendChild(c);
+  }
+  function proofCell(proof, matchId, madeAt) {
+    var td = el('td');
+    var e = proof && madeAt ? proof[matchId + '@' + madeAt] : null;
+    if (!e) { td.appendChild(el('span', { class: 'dim' }, madeAt ? 'before the public record began' : '–')); return td; }
+    var a = el('a', { href: REPO + '/commit/' + e.commit, rel: 'noopener' }, when(e.at) + ' · ' + e.commit.slice(0, 7));
+    td.appendChild(a);
+    if (e.run) {
+      td.appendChild(document.createTextNode(' · '));
+      td.appendChild(el('a', { href: REPO + '/actions/runs/' + e.run, rel: 'noopener' }, 'run'));
+    }
+    return td;
+  }
+  function get(u) { return fetch(u, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(u); return r.json(); }); }
+  Promise.all([get('accuracy.json'), get('football_predictions.json'), get('proof.json').catch(function () { return { entries: {} }; })])
+    .then(function (res) {
+      var acc = res[0], preds = res[1], proof = res[2].entries || {};
+      var live = acc.live || {}, ov = live.overall || {}, tr = acc.track_record || {};
+      var box = document.getElementById('live');
+      stat(box, 'Graded', String(ov.n || 0), 'matches since the pipeline went live');
+      stat(box, 'Calls right', pct(ov.hit_rate), (ov.correct || 0) + ' of ' + (ov.n || 0));
+      stat(box, 'Safer calls right', pct((live.safer_call || {}).hit_rate), 'two of the three outcomes');
+      stat(box, 'RPS', ov.rps == null ? '–' : ov.rps.toFixed(3), 'ranked probability score, lower is better');
+      var rc = live.record_check;
+      document.getElementById('check').textContent = rc ? rc.message + (tr.all_matches ? ' Tested hit rate: ' + pct(tr.all_matches.hit_rate) + '.' : '') : '';
+      var all = tr.all_matches || {}, bk = tr.bookmaker || {};
+      document.getElementById('tested').textContent =
+        'Two past seasons (2024-25 and 2025-26), every match predicted only from earlier data: ' + (all.n || 0).toLocaleString() +
+        ' matches, calls right ' + pct(all.hit_rate) + ' (the bookmakers’ favourite ' + pct(bk.hit_rate) + ').' +
+        (tr.rps ? ' RPS ' + tr.rps.toFixed(4) + ' against ' + (tr.bookmaker_rps || 0).toFixed(4) + ' for the closing odds.' : '');
+      var tiers = document.getElementById('tiers');
+      var names = { strong: 'Strong', likely: 'Likely', lean: 'Lean', 'toss-up': 'Toss-up' };
+      Object.keys(names).forEach(function (k) {
+        var t = (tr.tiers || {})[k];
+        if (t) stat(tiers, names[k] + ' calls', pct(t.hit_rate), pct(t.share, 0) + ' of matches');
+      });
+      var cal = document.querySelector('#cal tbody');
+      (tr.pick_calibration || []).forEach(function (b) {
+        var tr_ = el('tr');
+        tr_.appendChild(el('td', null, pct(b.lo, 0) + '–' + pct(Math.min(b.hi, 1), 0)));
+        tr_.appendChild(el('td', null, (b.n || 0).toLocaleString()));
+        tr_.appendChild(el('td', null, pct(b.hit_rate)));
+        var td = el('td'), bar = el('div', { class: 'bar' }), fill = el('i'), mark = el('b');
+        fill.style.width = (100 * b.hit_rate) + '%';
+        mark.style.left = (100 * b.mean_p) + '%';
+        bar.appendChild(fill); bar.appendChild(mark); td.appendChild(bar); tr_.appendChild(td);
+        cal.appendChild(tr_);
+      });
+      var g = document.querySelector('#graded tbody');
+      (live.recent || []).forEach(function (r) {
+        var row = el('tr');
+        row.appendChild(el('td', null, when(r.kickoff)));
+        row.appendChild(el('td', null, r.home + ' v ' + r.away));
+        row.appendChild(el('td', null, (OUT[r.pick] || r.pick) + ' (' + pct(r.probability, 0) + ')'));
+        row.appendChild(el('td', null, r.score));
+        row.appendChild(el('td', { class: r.correct ? 'ok' : 'no' }, r.correct ? '✓' : '✗'));
+        row.appendChild(proofCell(proof, r.match_id, r.made_at));
+        g.appendChild(row);
+      });
+      var u = document.querySelector('#upcoming tbody');
+      (preds.matches || []).slice().sort(function (a, b) { return a.kickoff < b.kickoff ? -1 : 1; }).slice(0, 60).forEach(function (m) {
+        var row = el('tr');
+        row.appendChild(el('td', null, when(m.kickoff)));
+        row.appendChild(el('td', null, m.home.name + ' v ' + m.away.name));
+        row.appendChild(el('td', null, pct(m.p.home, 0) + ' · ' + pct(m.p.draw, 0) + ' · ' + pct(m.p.away, 0)));
+        row.appendChild(el('td', null, OUT[m.call.pick] + ' (' + m.call.tier + ')'));
+        row.appendChild(proofCell(proof, m.match_id, m.made_at));
+        u.appendChild(row);
+      });
+    })
+    .catch(function () { document.getElementById('err').style.display = 'block'; });
+})();
+</script>
+</body>
+</html>
