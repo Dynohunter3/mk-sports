@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Join my MK Sports league</title>
+<meta name="theme-color" content="#060A16" />
+<link rel="icon" href="icon.png" />
+<style>
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(700px 400px at 70% -10%, #3B2A7A 0%, #060A16 65%); color: #EEF3FA; font: 16px/1.5 system-ui, -apple-system, Roboto, Arial, sans-serif; text-align: center; }
+  .box { max-width: 420px; padding: 28px 22px; }
+  img { width: 72px; height: 72px; border-radius: 18px; }
+  h1 { font-weight: 900; font-style: italic; text-transform: uppercase; font-size: 34px; line-height: 1.05; margin: 16px 0 6px; }
+  p { color: #A6B3C6; }
+  a.btn { display: block; margin-top: 14px; padding: 15px 22px; border-radius: 999px; font-weight: 900; text-transform: uppercase; letter-spacing: .5px; text-decoration: none; }
+  .open { background: linear-gradient(135deg, #2CF59A, #16C6FF); color: #04120B; }
+  .get { border: 2px solid rgba(255,255,255,.25); color: #EEF3FA; }
+  .small { font-size: 13px; color: #6E7B90; margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <img src="icon.png" alt="MK Sports" />
+  <h1 id="title">Join the league</h1>
+  <p id="sub">Opening MK Sports…</p>
+  <a class="btn open" id="open" href="#">Open in MK Sports</a>
+  <a class="btn get" href="./">Don't have it? Get the app</a>
+  <div class="small">The league table travels inside this link: nothing is uploaded. Free to play, no money involved.</div>
+</div>
+<script>
+  // the league data is in the part after '#', which browsers never send to the web server
+  var h = location.hash.slice(1);
+  var d = new URLSearchParams(h).get('d') || '';
+  try {
+    var b = d.replace(/-/g, '+').replace(/_/g, '/');
+    var json = decodeURIComponent(Array.prototype.map.call(atob(b + '==='.slice((b.length + 3) % 4)), function (c) { return '%' + ('0' + c.charCodeAt(0).toString(16)).slice(-2); }).join(''));
+    var w = JSON.parse(json);
+    document.getElementById('title').textContent = w.n || 'Join the league';
+    document.getElementById('sub').textContent = (w.m ? w.m.length : 0) + ' player(s) · code ' + w.c;
+  } catch (e) { document.getElementById('sub').textContent = 'Tap the button to open the league in MK Sports.'; }
+  // Android: an intent link opens the app (or this page offers the download)
+  var intent = 'intent://pl?d=' + encodeURIComponent(d) + '#Intent;scheme=mksports;package=app.predictpro.mobile;S.browser_fallback_url=' + encodeURIComponent(location.origin + location.pathname.replace(/l\.html$/, '')) + ';end';
+  var deep = 'mksports://pl?d=' + encodeURIComponent(d);
+  var link = /Android/i.test(navigator.userAgent) ? intent : deep;
+  document.getElementById('open').href = link;
+  if (d) setTimeout(function () { location.href = link; }, 300);
+</script>
+</body>
+</html>
