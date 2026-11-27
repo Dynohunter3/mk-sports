@@ -1,4 +1,4 @@
-// Port of predictpro_engine/football.py, basketball.py and confidence.py
+// Port of predictpro_engine/football.py, basketball.py and confidence.py (the NBA's opponent-adjusted ratings, engine/ridge.ts, are app-only)
 import {
   Absence,
   absenceWeight,
@@ -23,6 +23,7 @@ import {
   TeamState,
 } from './core';
 import { absenceFactors, dataFactor, formFactors, h2hFactor, homeAdvantageFactor, ratingFactor, selectFactors, venueFactor } from './factors';
+import { RidgeStore } from './ridge';
 
 // ------------------------------------------------------------------ confidence
 const LEVELS: Confidence[] = ['low', 'medium', 'high'];
@@ -342,6 +343,14 @@ export type BasketballParams = {
   highConfidence: number;
   mediumConfidence: number;
   minGames: number;
+  /** Share of the margin from opponent-adjusted ratings (engine/ridge.ts); 0 = the original model only. */
+  ridgeWeight: number;
+  ridgeHalfLife: number;
+  ridgeLambda: number;
+  ridgeCap: number;
+  ridgePrevSeason: number;
+  /** 1 = learn the back-to-back effect inside the ratings */
+  ridgeBackToBack: number;
 };
 
 export const BASKETBALL_DEFAULTS: BasketballParams = {
@@ -363,6 +372,12 @@ export const BASKETBALL_DEFAULTS: BasketballParams = {
   highConfidence: 0.75,
   mediumConfidence: 0.6,
   minGames: 5,
+  ridgeWeight: 0,
+  ridgeHalfLife: 60,
+  ridgeLambda: 2,
+  ridgeCap: 20,
+  ridgePrevSeason: 1,
+  ridgeBackToBack: 1,
 };
 
 export class BasketballBook extends RatingBook {
@@ -370,6 +385,7 @@ export class BasketballBook extends RatingBook {
   pf = new Map<string, number>();
   pa = new Map<string, number>();
   avg = new Map<string, number>();
+  ridge = new RidgeStore();
 
   constructor(public p: BasketballParams) {
     super({ k: p.k, homeAdvantage: p.homeAdvantageElo, initial: p.initialElo, seasonGapDays: 60, seasonRegression: 0.25 });
@@ -385,6 +401,9 @@ export class BasketballBook extends RatingBook {
   }
 
   protected updateStats(m: FinishedMatch) {
+    // every game also goes into the opponent-adjusted ratings (rest from the previous game, before this one is recorded)
+    const b2b = (team: string) => (restDays(this.lastPlayed.get(team) ?? null, m.date) === 0 ? 1 : 0);
+    this.ridge.add(m.date.getTime(), m.home, m.away, m.homeScore - m.awayScore, m.neutral, b2b(m.home) - b2b(m.away), m.competition);
     const a = this.p.pointsAlpha;
     const base = this.avgFor(m.competition);
     for (const [team, scored, conceded] of [
@@ -412,6 +431,10 @@ export class BasketballBook extends RatingBook {
     st.pointsFor = this.pf.get(team) ?? null;
     st.pointsAgainst = this.pa.get(team) ?? null;
     return st;
+  }
+
+  buildInput(o: Parameters<RatingBook['buildInput']>[0]): MatchInput {
+    return { ...super.buildInput(o), ridge: this.ridge };
   }
 }
 
@@ -476,7 +499,24 @@ export class BasketballModel {
     const restAdj = this.restEffect(restH, p) - this.restEffect(restA, p);
     const absH = Math.min(p.maxAbsencePts, inp.homeAbsences.reduce((s, a) => s + p.starAbsencePts * absenceWeight(a), 0));
     const absA = Math.min(p.maxAbsencePts, inp.awayAbsences.reduce((s, a) => s + p.starAbsencePts * absenceWeight(a), 0));
-    const margin = base + hca + restAdj - absH + absA;
+    const engineMargin = base + hca + restAdj;
+    // opponent-adjusted ratings, blended in where the competition's settings ask for it (NBA: Step 12)
+    const b2b = (d: number | null) => (d === 0 ? 1 : 0);
+    const rid =
+      p.ridgeWeight > 0 && inp.ridge
+        ? inp.ridge.margin(
+            { halfLife: p.ridgeHalfLife, lambda: p.ridgeLambda, cap: p.ridgeCap, prevSeason: p.ridgePrevSeason, backToBack: p.ridgeBackToBack > 0 },
+            inp.competition,
+            home.team,
+            away.team,
+            inp.neutral,
+            b2b(restH) - b2b(restA),
+            inp.kickoff.getTime(),
+          )
+        : null;
+    const w = rid ? p.ridgeWeight : 0;
+    // absences stay a full adjustment on top of the blend (they come from today's team news, not past results)
+    const margin = w * (rid?.margin ?? 0) + (1 - w) * engineMargin - absH + absA;
     const total = (pfH + paA) / 2 + (pfA + paH) / 2 - 0.3 * (absH + absA);
     const pHome = normalCdf(margin / p.sigma);
     const pAway = 1 - pHome;
@@ -515,6 +555,14 @@ export class BasketballModel {
         steps: [
           { title: 'Team strength (Elo)', detail: `${home.name} ${fmt0(home.elo)} vs ${away.name} ${fmt0(away.elo)} -> ${signed(eloMargin)} ${this.unitShort}` },
           { title: `Net rating (${this.unit} scored minus allowed, recent games weighted)`, detail: `${home.name} ${signed(pfH - paH)}, ${away.name} ${signed(pfA - paA)} -> ${signed(netMargin)} ${this.unitShort}` },
+          ...(rid
+            ? [
+                {
+                  title: 'Opponent-adjusted ratings (who they beat counts, recent games weighted)',
+                  detail: `${home.name} ${signed(rid.home)}, ${away.name} ${signed(rid.away)}${rid.homeAdvantage ? `, home ${signed(rid.homeAdvantage)}` : ''}${rid.rest ? `, rest ${signed(rid.rest)}` : ''} -> ${signed(rid.margin)} ${this.unitShort}; blended ${Math.round(w * 100)}% with the Elo + net rating view (${signed(engineMargin)})`,
+                },
+              ]
+            : []),
           {
             title: 'Adjustments',
             detail: (inp.neutral ? (this.sport === 'basketball' ? 'neutral court' : 'neutral venue') : `home ${this.sport === 'basketball' ? 'court' : 'advantage'} +${hca.toFixed(this.unitShort === 'pts' ? 1 : 2)}`) + `; rest ${signed(restAdj)} (${restText(restH)} vs ${restText(restA)})` + (absH || absA ? `; absences ${signed(absA - absH)}` : ''),
@@ -531,6 +579,7 @@ export class BasketballModel {
           rest_days_home: restH,
           rest_days_away: restA,
           expected_margin: pyRound(margin, 2),
+          ...(rid ? { ridge_margin: pyRound(rid.margin, 2), engine_margin: pyRound(engineMargin, 2), ridge_weight: w } : {}),
           expected_total: pyRound(total, 1),
           total_points: total,
           games_home: home.games,

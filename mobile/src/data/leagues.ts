@@ -74,7 +74,8 @@ export const LEAGUES: LeagueDef[] = [
   // ---------------------------------------------------------------- US team sports
   {
     slug: 'nba', sport: 'basketball', espnSport: 'basketball', format: 'match', name: 'NBA', shortName: 'NBA', country: 'USA', region: 'North America', kind: 'league', featured: true, theme: T('#1D428A', '#0A1A3D', '#E0313F'), leaders: true,
-    modelParams: { homeCourtPts: 2.5, sigma: 12.5, defaultPoints: 114 },
+    // Step 12: opponent-adjusted ratings blended 70/30 with Elo + net rating; spread refitted (docs/audit/STEP12_US_SPORTS.md)
+    modelParams: { homeCourtPts: 2.5, sigma: 10.81, defaultPoints: 114, ridgeWeight: 0.7, ridgeHalfLife: 60, ridgeLambda: 2, ridgeCap: 20, ridgePrevSeason: 1, ridgeBackToBack: 1 },
   },
   { slug: 'nfl', sport: 'american-football', espnSport: 'football', format: 'match', name: 'NFL', shortName: 'NFL', country: 'USA', region: 'North America', kind: 'league', featured: false, theme: T('#013369', '#00142B', '#E3242B'), historyDays: 730, yearly: true, leaders: true },
   { slug: 'nhl', sport: 'ice-hockey', espnSport: 'hockey', format: 'match', name: 'NHL', shortName: 'NHL', country: 'USA / Canada', region: 'North America', kind: 'league', featured: false, theme: T('#1B1F24', '#0A0C0F', '#C9D1D9'), leaders: true },

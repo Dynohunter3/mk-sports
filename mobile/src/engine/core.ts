@@ -54,6 +54,8 @@ export type MatchInput = {
   h2h: FinishedMatch[]; // newest first
   leagueAvgHome: number | null;
   leagueAvgAway: number | null;
+  /** Margin sports: the book's games for opponent-adjusted ratings (engine/ridge.ts), when the book keeps them. */
+  ridge?: import('./ridge').RidgeStore;
 };
 
 export type KeyFactor = { text: string; impact: number; favours: Favours; category: string };

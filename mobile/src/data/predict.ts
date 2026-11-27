@@ -30,6 +30,7 @@ import {
   SourceId,
   SourceStats,
   sourceWeights,
+  SOURCE_PRIORS_BY_SPORT,
   SportModel,
 } from '@/engine';
 
@@ -349,6 +350,8 @@ export function predictEvent(ev: SEvent, opts: PredictOptions = {}): FullPredict
   const weights = sourceWeights(
     forecasts.map((f) => f.source),
     sourceStats(sport),
+    2,
+    SOURCE_PRIORS_BY_SPORT[sport] ?? {},
   );
   const blended = blend(forecasts, weights, hasDraws);
   const fav = argmax(blended);

@@ -1,25 +1,25 @@
 {
  "schema": 1,
- "generated_at": "2026-11-26T08:41:23+00:00",
- "model_version": "fb-2026-11-e082619a",
+ "generated_at": "2026-11-26T21:45:47+00:00",
+ "model_version": "fb-2026-11-8beba951",
  "live": {
   "overall": {
-   "n": 28,
-   "correct": 17,
-   "hit_rate": 0.6071428571428571,
-   "log_loss": 0.8851337455384386,
-   "brier": 0.515289147107428,
+   "n": 44,
+   "correct": 24,
+   "hit_rate": 0.5454545454545454,
+   "log_loss": 0.9457204789301006,
+   "brier": 0.556590557354424,
    "by_confidence": {
     "high": {
-     "n": 21,
-     "hit_rate": 0.6190476190476191
+     "n": 37,
+     "hit_rate": 0.5405405405405406
     },
     "medium": {
      "n": 7,
      "hit_rate": 0.5714285714285714
     }
    },
-   "rps": 0.18769430005896615
+   "rps": 0.20073380194839777
   },
   "competitions": {
    "eng.1": {
@@ -36,15 +36,15 @@
     }
    },
    "eng.2": {
-    "n": 1,
-    "correct": 0,
-    "hit_rate": 0.0,
-    "log_loss": 1.3486306262968775,
-    "brier": 0.8519908047873561,
+    "n": 13,
+    "correct": 5,
+    "hit_rate": 0.38461538461538464,
+    "log_loss": 1.0723143665560808,
+    "brier": 0.6450828073084752,
     "by_confidence": {
      "high": {
-      "n": 1,
-      "hit_rate": 0.0
+      "n": 13,
+      "hit_rate": 0.38461538461538464
      }
     }
    },
@@ -104,6 +104,19 @@
      }
     }
    },
+   "ita.2": {
+    "n": 4,
+    "correct": 2,
+    "hit_rate": 0.5,
+    "log_loss": 1.0591250147289935,
+    "brier": 0.6319506785909625,
+    "by_confidence": {
+     "high": {
+      "n": 4,
+      "hit_rate": 0.5
+     }
+    }
+   },
    "ned.1": {
     "n": 4,
     "correct": 3,
@@ -133,20 +146,20 @@
   },
   "tiers": {
    "strong": {
-    "n": 6,
+    "n": 7,
     "hit_rate": 1.0
    },
    "likely": {
-    "n": 12,
-    "hit_rate": 0.5833333333333334
+    "n": 16,
+    "hit_rate": 0.5625
    },
    "lean": {
-    "n": 6,
-    "hit_rate": 0.3333333333333333
+    "n": 11,
+    "hit_rate": 0.36363636363636365
    },
    "toss-up": {
-    "n": 4,
-    "hit_rate": 0.5
+    "n": 10,
+    "hit_rate": 0.4
    }
   },
   "draw_calls": {
@@ -154,18 +167,376 @@
    "hit_rate": null
   },
   "safer_call": {
-   "n": 28,
-   "hit_rate": 0.8214285714285714
+   "n": 44,
+   "hit_rate": 0.7272727272727273
   },
   "over25": {
-   "n": 28,
-   "hit_rate": 0.7142857142857143
+   "n": 44,
+   "hit_rate": 0.6363636363636364
   },
   "recent": [
+   {
+    "match_id": "eng.2/2026-27/fb-eng-stoke~fb-eng-millwall",
+    "competition": "eng.2",
+    "kickoff": "2026-11-25T20:00:00+00:00",
+    "made_at": "2026-11-25T14:25:29+00:00",
+    "p": {
+     "home": 0.4315,
+     "draw": 0.2782,
+     "away": 0.2903
+    },
+    "home": "Stoke",
+    "away": "Millwall",
+    "score": "2-1",
+    "pick": "home",
+    "probability": 0.4315,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-bolton~fb-eng-west-brom",
+    "competition": "eng.2",
+    "kickoff": "2026-11-25T19:45:00+00:00",
+    "made_at": "2026-11-25T14:25:29+00:00",
+    "p": {
+     "home": 0.2664,
+     "draw": 0.2579,
+     "away": 0.4757
+    },
+    "home": "Bolton",
+    "away": "West Brom",
+    "score": "1-3",
+    "pick": "away",
+    "probability": 0.4757,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-burnley~fb-eng-birmingham",
+    "competition": "eng.2",
+    "kickoff": "2026-11-25T19:45:00+00:00",
+    "made_at": "2026-11-25T14:25:29+00:00",
+    "p": {
+     "home": 0.3545,
+     "draw": 0.2645,
+     "away": 0.3809
+    },
+    "home": "Burnley",
+    "away": "Birmingham",
+    "score": "0-2",
+    "pick": "away",
+    "probability": 0.3809,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-watford~fb-eng-blackburn",
+    "competition": "eng.2",
+    "kickoff": "2026-11-25T19:45:00+00:00",
+    "made_at": "2026-11-25T14:25:29+00:00",
+    "p": {
+     "home": 0.3689,
+     "draw": 0.2787,
+     "away": 0.3524
+    },
+    "home": "Watford",
+    "away": "Blackburn",
+    "score": "0-1",
+    "pick": "home",
+    "probability": 0.3689,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "ita.2/2026-27/fb-ita-mantova~fb-ita-arezzo",
+    "competition": "ita.2",
+    "kickoff": "2026-11-25T19:00:00+00:00",
+    "made_at": "2026-11-25T14:25:29+00:00",
+    "p": {
+     "home": 0.5541,
+     "draw": 0.2535,
+     "away": 0.1923
+    },
+    "home": "Mantova",
+    "away": "Arezzo",
+    "score": "3-0",
+    "pick": "home",
+    "probability": 0.5541,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "ita.2/2026-27/fb-ita-padova~fb-ita-sampdoria",
+    "competition": "ita.2",
+    "kickoff": "2026-11-25T19:00:00+00:00",
+    "made_at": "2026-11-25T14:25:29+00:00",
+    "p": {
+     "home": 0.3228,
+     "draw": 0.3014,
+     "away": 0.3759
+    },
+    "home": "Padova",
+    "away": "Sampdoria",
+    "score": "1-2",
+    "pick": "away",
+    "probability": 0.3759,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "ita.2/2026-27/fb-ita-pisa~fb-ita-modena",
+    "competition": "ita.2",
+    "kickoff": "2026-11-25T19:00:00+00:00",
+    "made_at": "2026-11-25T14:25:29+00:00",
+    "p": {
+     "home": 0.4058,
+     "draw": 0.2824,
+     "away": 0.3118
+    },
+    "home": "Pisa",
+    "away": "Modena",
+    "score": "1-1",
+    "pick": "home",
+    "probability": 0.4058,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or away",
+    "safer_correct": 0,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "ita.2/2026-27/fb-ita-cremonese~fb-ita-avellino",
+    "competition": "ita.2",
+    "kickoff": "2026-11-25T18:00:00+00:00",
+    "made_at": "2026-11-25T14:25:29+00:00",
+    "p": {
+     "home": 0.4581,
+     "draw": 0.2961,
+     "away": 0.2458
+    },
+    "home": "Cremonese",
+    "away": "Avellino",
+    "score": "0-1",
+    "pick": "home",
+    "probability": 0.4581,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or draw",
+    "safer_correct": 0,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-wolverhampton~fb-eng-derby",
+    "competition": "eng.2",
+    "kickoff": "2026-11-24T20:00:00+00:00",
+    "made_at": "2026-11-24T11:38:18+00:00",
+    "p": {
+     "home": 0.7199,
+     "draw": 0.1799,
+     "away": 0.1002
+    },
+    "home": "Wolves",
+    "away": "Derby",
+    "score": "3-0",
+    "pick": "home",
+    "probability": 0.7199,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "strong",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-bristol-city~fb-eng-wrexham",
+    "competition": "eng.2",
+    "kickoff": "2026-11-24T19:45:00+00:00",
+    "made_at": "2026-11-24T11:38:18+00:00",
+    "p": {
+     "home": 0.388,
+     "draw": 0.2898,
+     "away": 0.3222
+    },
+    "home": "Bristol City",
+    "away": "Wrexham",
+    "score": "1-1",
+    "pick": "home",
+    "probability": 0.388,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 0,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-cardiff~fb-eng-preston",
+    "competition": "eng.2",
+    "kickoff": "2026-11-24T19:45:00+00:00",
+    "made_at": "2026-11-24T11:38:18+00:00",
+    "p": {
+     "home": 0.6365,
+     "draw": 0.1978,
+     "away": 0.1657
+    },
+    "home": "Cardiff",
+    "away": "Preston",
+    "score": "0-4",
+    "pick": "home",
+    "probability": 0.6365,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 0,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-charlton~fb-eng-lincoln",
+    "competition": "eng.2",
+    "kickoff": "2026-11-24T19:45:00+00:00",
+    "made_at": "2026-11-24T11:38:18+00:00",
+    "p": {
+     "home": 0.3462,
+     "draw": 0.2945,
+     "away": 0.3593
+    },
+    "home": "Charlton",
+    "away": "Lincoln",
+    "score": "4-0",
+    "pick": "away",
+    "probability": 0.3593,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 1,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-middlesbrough~fb-eng-swansea",
+    "competition": "eng.2",
+    "kickoff": "2026-11-24T19:45:00+00:00",
+    "made_at": "2026-11-24T11:38:18+00:00",
+    "p": {
+     "home": 0.6459,
+     "draw": 0.2013,
+     "away": 0.1528
+    },
+    "home": "Middlesbrough",
+    "away": "Swansea",
+    "score": "2-1",
+    "pick": "home",
+    "probability": 0.6459,
+    "correct": 1,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "home or draw",
+    "safer_correct": 1,
+    "over25_correct": 1
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-norwich~fb-eng-queens",
+    "competition": "eng.2",
+    "kickoff": "2026-11-24T19:45:00+00:00",
+    "made_at": "2026-11-24T11:38:18+00:00",
+    "p": {
+     "home": 0.4782,
+     "draw": 0.2552,
+     "away": 0.2665
+    },
+    "home": "Norwich",
+    "away": "QPR",
+    "score": "1-1",
+    "pick": "home",
+    "probability": 0.4782,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "lean",
+    "safer_call": "home or away",
+    "safer_correct": 0,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-portsmouth~fb-eng-west-ham",
+    "competition": "eng.2",
+    "kickoff": "2026-11-24T19:45:00+00:00",
+    "made_at": "2026-11-24T11:38:18+00:00",
+    "p": {
+     "home": 0.2335,
+     "draw": 0.2554,
+     "away": 0.5111
+    },
+    "home": "Portsmouth",
+    "away": "West Ham",
+    "score": "1-0",
+    "pick": "away",
+    "probability": 0.5111,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "likely",
+    "safer_call": "away or draw",
+    "safer_correct": 0,
+    "over25_correct": 0
+   },
+   {
+    "match_id": "eng.2/2026-27/fb-eng-sheffield-united~fb-eng-southampton",
+    "competition": "eng.2",
+    "kickoff": "2026-11-24T19:45:00+00:00",
+    "made_at": "2026-11-24T11:38:18+00:00",
+    "p": {
+     "home": 0.3661,
+     "draw": 0.2679,
+     "away": 0.366
+    },
+    "home": "Sheffield United",
+    "away": "Southampton",
+    "score": "1-1",
+    "pick": "home",
+    "probability": 0.3661,
+    "correct": 0,
+    "confidence_label": "high",
+    "tier": "toss-up",
+    "safer_call": "home or away",
+    "safer_correct": 0,
+    "over25_correct": 0
+   },
    {
     "match_id": "esp.1/2026-27/fb-esp-levante~fb-esp-elche",
     "competition": "esp.1",
     "kickoff": "2026-11-23T20:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.4312,
+     "draw": 0.2648,
+     "away": 0.304
+    },
     "home": "Levante",
     "away": "Elche",
     "score": "1-1",
@@ -182,6 +553,12 @@
     "match_id": "ita.1/2026-27/fb-ita-monza~fb-ita-fiorentina",
     "competition": "ita.1",
     "kickoff": "2026-11-23T19:45:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.2632,
+     "draw": 0.2484,
+     "away": 0.4884
+    },
     "home": "Monza",
     "away": "Fiorentina",
     "score": "3-0",
@@ -198,6 +575,12 @@
     "match_id": "tur.1/2026-27/fb-tur-buyuksehyr~fb-tur-corum",
     "competition": "tur.1",
     "kickoff": "2026-11-23T17:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.4939,
+     "draw": 0.247,
+     "away": 0.2591
+    },
     "home": "Buyuksehyr",
     "away": "Corum",
     "score": "4-2",
@@ -214,6 +597,12 @@
     "match_id": "esp.1/2026-27/fb-esp-getafe~fb-esp-ath-madrid",
     "competition": "esp.1",
     "kickoff": "2026-11-22T20:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.1535,
+     "draw": 0.2449,
+     "away": 0.6016
+    },
     "home": "Getafe",
     "away": "Ath Madrid",
     "score": "0-3",
@@ -230,6 +619,12 @@
     "match_id": "fra.1/2026-27/fb-fra-marseille~fb-fra-le-mans",
     "competition": "fra.1",
     "kickoff": "2026-11-22T19:45:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.6423,
+     "draw": 0.2008,
+     "away": 0.1569
+    },
     "home": "Marseille",
     "away": "Le Mans",
     "score": "2-3",
@@ -246,6 +641,12 @@
     "match_id": "ita.1/2026-27/fb-ita-atalanta~fb-ita-internazionale",
     "competition": "ita.1",
     "kickoff": "2026-11-22T19:45:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.1936,
+     "draw": 0.21,
+     "away": 0.5963
+    },
     "home": "Atalanta",
     "away": "Inter",
     "score": "4-4",
@@ -262,6 +663,12 @@
     "match_id": "esp.1/2026-27/fb-esp-osasuna~fb-esp-malaga",
     "competition": "esp.1",
     "kickoff": "2026-11-22T17:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5205,
+     "draw": 0.2682,
+     "away": 0.2112
+    },
     "home": "Osasuna",
     "away": "Malaga",
     "score": "1-0",
@@ -278,6 +685,12 @@
     "match_id": "ita.1/2026-27/fb-ita-milan~fb-ita-frosinone",
     "competition": "ita.1",
     "kickoff": "2026-11-22T17:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.6111,
+     "draw": 0.2064,
+     "away": 0.1825
+    },
     "home": "Milan",
     "away": "Frosinone",
     "score": "5-1",
@@ -294,6 +707,12 @@
     "match_id": "eng.1/2026-27/fb-eng-liverpool~fb-eng-manchester-united",
     "competition": "eng.1",
     "kickoff": "2026-11-22T16:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5348,
+     "draw": 0.2291,
+     "away": 0.236
+    },
     "home": "Liverpool",
     "away": "Man United",
     "score": "4-0",
@@ -310,6 +729,12 @@
     "match_id": "ger.1/2026-27/fb-ger-werder-bremen~fb-ger-hamburg",
     "competition": "ger.1",
     "kickoff": "2026-11-22T16:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5557,
+     "draw": 0.2336,
+     "away": 0.2108
+    },
     "home": "Werder Bremen",
     "away": "Hamburg",
     "score": "4-0",
@@ -326,6 +751,12 @@
     "match_id": "fra.1/2026-27/fb-fra-lorient~fb-fra-rennes",
     "competition": "fra.1",
     "kickoff": "2026-11-22T16:15:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.3256,
+     "draw": 0.2762,
+     "away": 0.3982
+    },
     "home": "Lorient",
     "away": "Rennes",
     "score": "1-1",
@@ -342,6 +773,12 @@
     "match_id": "tur.1/2026-27/fb-tur-trabzonspor~fb-tur-eyupspor",
     "competition": "tur.1",
     "kickoff": "2026-11-22T16:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.8076,
+     "draw": 0.1231,
+     "away": 0.0693
+    },
     "home": "Trabzonspor",
     "away": "Eyupspor",
     "score": "1-0",
@@ -358,6 +795,12 @@
     "match_id": "ned.1/2026-27/fb-ned-go-ahead-eagles~fb-ned-for-sittard",
     "competition": "ned.1",
     "kickoff": "2026-11-22T15:45:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5657,
+     "draw": 0.2319,
+     "away": 0.2024
+    },
     "home": "Go Ahead Eagles",
     "away": "For Sittard",
     "score": "0-1",
@@ -374,6 +817,12 @@
     "match_id": "esp.1/2026-27/fb-esp-santander~fb-esp-sociedad",
     "competition": "esp.1",
     "kickoff": "2026-11-22T15:15:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.2909,
+     "draw": 0.2357,
+     "away": 0.4734
+    },
     "home": "Santander",
     "away": "Sociedad",
     "score": "3-2",
@@ -390,6 +839,12 @@
     "match_id": "ger.1/2026-27/fb-ger-augsburg~fb-ger-mainz",
     "competition": "ger.1",
     "kickoff": "2026-11-22T14:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.3556,
+     "draw": 0.249,
+     "away": 0.3954
+    },
     "home": "Augsburg",
     "away": "Mainz",
     "score": "3-1",
@@ -406,6 +861,12 @@
     "match_id": "eng.1/2026-27/fb-eng-hull~fb-eng-brighton",
     "competition": "eng.1",
     "kickoff": "2026-11-22T14:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.1453,
+     "draw": 0.211,
+     "away": 0.6437
+    },
     "home": "Hull",
     "away": "Brighton",
     "score": "2-0",
@@ -422,6 +883,12 @@
     "match_id": "fra.1/2026-27/fb-fra-paris~fb-fra-angers",
     "competition": "fra.1",
     "kickoff": "2026-11-22T14:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.718,
+     "draw": 0.1788,
+     "away": 0.1032
+    },
     "home": "Paris FC",
     "away": "Angers",
     "score": "4-0",
@@ -438,6 +905,12 @@
     "match_id": "ita.1/2026-27/fb-ita-bologna~fb-ita-udinese",
     "competition": "ita.1",
     "kickoff": "2026-11-22T14:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.5452,
+     "draw": 0.2556,
+     "away": 0.1992
+    },
     "home": "Bologna",
     "away": "Udinese",
     "score": "1-1",
@@ -454,6 +927,12 @@
     "match_id": "ita.1/2026-27/fb-ita-sassuolo~fb-ita-genoa",
     "competition": "ita.1",
     "kickoff": "2026-11-22T14:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.3441,
+     "draw": 0.2761,
+     "away": 0.3798
+    },
     "home": "Sassuolo",
     "away": "Genoa",
     "score": "0-2",
@@ -470,6 +949,12 @@
     "match_id": "ned.1/2026-27/fb-ned-ajax~fb-ned-den-haag",
     "competition": "ned.1",
     "kickoff": "2026-11-22T13:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.7849,
+     "draw": 0.1359,
+     "away": 0.0792
+    },
     "home": "Ajax",
     "away": "Den Haag",
     "score": "3-0",
@@ -486,6 +971,12 @@
     "match_id": "ned.1/2026-27/fb-ned-sparta-rotterdam~fb-ned-az-alkmaar",
     "competition": "ned.1",
     "kickoff": "2026-11-22T13:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.2224,
+     "draw": 0.2302,
+     "away": 0.5474
+    },
     "home": "Sparta Rotterdam",
     "away": "AZ Alkmaar",
     "score": "1-5",
@@ -502,6 +993,12 @@
     "match_id": "esp.1/2026-27/fb-esp-barcelona~fb-esp-villarreal",
     "competition": "esp.1",
     "kickoff": "2026-11-22T13:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.7851,
+     "draw": 0.125,
+     "away": 0.0899
+    },
     "home": "Barcelona",
     "away": "Villarreal",
     "score": "3-2",
@@ -518,6 +1015,12 @@
     "match_id": "tur.1/2026-27/fb-tur-kasimpasa~fb-tur-alanyaspor",
     "competition": "tur.1",
     "kickoff": "2026-11-22T13:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.4635,
+     "draw": 0.2798,
+     "away": 0.2567
+    },
     "home": "Kasimpasa",
     "away": "Alanyaspor",
     "score": "2-1",
@@ -534,6 +1037,12 @@
     "match_id": "tur.1/2026-27/fb-tur-konyaspor~fb-tur-besiktas",
     "competition": "tur.1",
     "kickoff": "2026-11-22T13:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.1881,
+     "draw": 0.2353,
+     "away": 0.5767
+    },
     "home": "Konyaspor",
     "away": "Besiktas",
     "score": "2-4",
@@ -550,6 +1059,12 @@
     "match_id": "eng.2/2026-27/fb-eng-burnley~fb-eng-blackburn",
     "competition": "eng.2",
     "kickoff": "2026-11-22T12:00:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.492,
+     "draw": 0.2596,
+     "away": 0.2484
+    },
     "home": "Burnley",
     "away": "Blackburn",
     "score": "2-2",
@@ -566,6 +1081,12 @@
     "match_id": "ita.1/2026-27/fb-ita-juventus~fb-ita-venezia",
     "competition": "ita.1",
     "kickoff": "2026-11-22T11:30:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.7091,
+     "draw": 0.1803,
+     "away": 0.1105
+    },
     "home": "Juventus",
     "away": "Venezia",
     "score": "4-0",
@@ -582,6 +1103,12 @@
     "match_id": "ned.1/2026-27/fb-ned-twente~fb-ned-willem-ii",
     "competition": "ned.1",
     "kickoff": "2026-11-22T11:15:00+00:00",
+    "made_at": "2026-11-22T11:13:00+00:00",
+    "p": {
+     "home": 0.8613,
+     "draw": 0.093,
+     "away": 0.0457
+    },
     "home": "Twente",
     "away": "Willem II",
     "score": "2-1",
@@ -598,6 +1125,12 @@
     "match_id": "tur.1/2026-27/fb-tur-erzurumspor~fb-tur-goztep",
     "competition": "tur.1",
     "kickoff": "2026-11-22T10:30:00+00:00",
+    "made_at": "2026-11-22T04:37:52+00:00",
+    "p": {
+     "home": 0.3208,
+     "draw": 0.2839,
+     "away": 0.3953
+    },
     "home": "Erzurumspor",
     "away": "Goztep",
     "score": "0-1",
@@ -613,40 +1146,40 @@
   ],
   "last_7_days": {
    "matches": {
-    "n": 28,
-    "hit_rate": 0.6071428571428571
+    "n": 44,
+    "hit_rate": 0.5454545454545454
    },
    "safer_call": {
-    "n": 28,
-    "hit_rate": 0.8214285714285714
+    "n": 44,
+    "hit_rate": 0.7272727272727273
    },
    "strong": {
-    "n": 6,
+    "n": 7,
     "hit_rate": 1.0
    }
   },
   "last_30_days": {
    "matches": {
-    "n": 28,
-    "hit_rate": 0.6071428571428571
+    "n": 44,
+    "hit_rate": 0.5454545454545454
    },
    "safer_call": {
-    "n": 28,
-    "hit_rate": 0.8214285714285714
+    "n": 44,
+    "hit_rate": 0.7272727272727273
    },
    "strong": {
-    "n": 6,
+    "n": 7,
     "hit_rate": 1.0
    }
   },
   "record_check": {
    "status": "too_few",
-   "n": 28,
-   "live": 0.6071428571428571,
+   "n": 44,
+   "live": 0.5454545454545454,
    "expected": 0.5039866879290023,
-   "band": 0.18519670457925472,
+   "band": 0.14773586248593998,
    "min_n": 100,
-   "message": "28 graded matches: chance alone moves the hit rate by about ±19 points, so it is too early to judge."
+   "message": "44 graded matches: chance alone moves the hit rate by about ±15 points, so it is too early to judge."
   }
  },
  "backtest": {

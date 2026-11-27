@@ -1,0 +1,1305 @@
+{
+ "generated_at": "2026-11-27T07:10:58.590Z",
+ "protocol": "see the header of scripts/audit/us-sports.ts",
+ "nba": {
+  "games": {
+   "selection": 1324,
+   "test": 1326,
+   "fresh": 121
+  },
+  "chosen": {
+   "retuned": {
+    "homeCourtPts": 1.5,
+    "sigma": 11.5,
+    "defaultPoints": 114,
+    "eloWeight": 0.3,
+    "pointsAlpha": 0.05,
+    "backToBackPts": -2
+   },
+   "ridge": {
+    "halfLife": 60,
+    "lambda": 2,
+    "cap": 20,
+    "prevSeason": 1,
+    "rest": "b2b",
+    "sigma": 10.601
+   },
+   "blend": {
+    "w": 0.7,
+    "sigma": 10.813
+   }
+  },
+  "selection": {
+   "engine": {
+    "n": 1324,
+    "log_loss": 0.6081,
+    "brier": 0.4209,
+    "hit_rate": 0.6684
+   },
+   "retuned": {
+    "n": 1324,
+    "log_loss": 0.6052,
+    "brier": 0.4186,
+    "hit_rate": 0.6654
+   },
+   "ridge": {
+    "n": 1324,
+    "log_loss": 0.6046,
+    "brier": 0.4188,
+    "hit_rate": 0.6677
+   },
+   "blend": {
+    "n": 1324,
+    "log_loss": 0.6039,
+    "brier": 0.4179,
+    "hit_rate": 0.6639
+   },
+   "always_home": {
+    "n": 1324,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.5453
+   },
+   "same_games_as_market": {
+    "n": 1323,
+    "market": {
+     "n": 1323,
+     "log_loss": 0.5853,
+     "brier": 0.4017,
+     "hit_rate": 0.6871
+    },
+    "engine": {
+     "n": 1323,
+     "log_loss": 0.6079,
+     "brier": 0.4207,
+     "hit_rate": 0.6689
+    },
+    "ridge": {
+     "n": 1323,
+     "log_loss": 0.6045,
+     "brier": 0.4187,
+     "hit_rate": 0.6682
+    },
+    "blend": {
+     "n": 1323,
+     "log_loss": 0.6037,
+     "brier": 0.4177,
+     "hit_rate": 0.6644
+    }
+   },
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 451,
+      "given": 0.5512,
+      "happened": 0.5676
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 417,
+      "given": 0.6472,
+      "happened": 0.6403
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 292,
+      "given": 0.7481,
+      "happened": 0.7534
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 136,
+      "given": 0.8392,
+      "happened": 0.8529
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 28,
+      "given": 0.9242,
+      "happened": 0.9286
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 413,
+      "given": 0.5487,
+      "happened": 0.5327
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 422,
+      "given": 0.6479,
+      "happened": 0.6327
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 286,
+      "given": 0.7472,
+      "happened": 0.7517
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 168,
+      "given": 0.8428,
+      "happened": 0.8512
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 35,
+      "given": 0.9297,
+      "happened": 0.9714
+     }
+    ]
+   }
+  },
+  "test": {
+   "engine": {
+    "n": 1326,
+    "log_loss": 0.6017,
+    "brier": 0.4143,
+    "hit_rate": 0.6787
+   },
+   "retuned": {
+    "n": 1326,
+    "log_loss": 0.6015,
+    "brier": 0.414,
+    "hit_rate": 0.6833
+   },
+   "ridge": {
+    "n": 1326,
+    "log_loss": 0.5991,
+    "brier": 0.412,
+    "hit_rate": 0.687
+   },
+   "blend": {
+    "n": 1326,
+    "log_loss": 0.5979,
+    "brier": 0.4109,
+    "hit_rate": 0.6848
+   },
+   "always_home": {
+    "n": 1326,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.5558
+   },
+   "same_games_as_market": {
+    "n": 1322,
+    "market": {
+     "n": 1322,
+     "log_loss": 0.5767,
+     "brier": 0.3948,
+     "hit_rate": 0.6861
+    },
+    "engine": {
+     "n": 1322,
+     "log_loss": 0.6016,
+     "brier": 0.4142,
+     "hit_rate": 0.6785
+    },
+    "ridge": {
+     "n": 1322,
+     "log_loss": 0.5989,
+     "brier": 0.4119,
+     "hit_rate": 0.6868
+    },
+    "blend": {
+     "n": 1322,
+     "log_loss": 0.5978,
+     "brier": 0.4108,
+     "hit_rate": 0.6846
+    }
+   },
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 471,
+      "given": 0.5507,
+      "happened": 0.5605
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 381,
+      "given": 0.6454,
+      "happened": 0.6693
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 295,
+      "given": 0.7458,
+      "happened": 0.7898
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 153,
+      "given": 0.843,
+      "happened": 0.817
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 26,
+      "given": 0.9221,
+      "happened": 0.8846
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 458,
+      "given": 0.5506,
+      "happened": 0.5764
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 383,
+      "given": 0.6487,
+      "happened": 0.671
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 285,
+      "given": 0.7492,
+      "happened": 0.7684
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 166,
+      "given": 0.8419,
+      "happened": 0.8313
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 34,
+      "given": 0.9211,
+      "happened": 0.8824
+     }
+    ]
+   }
+  },
+  "fresh": {
+   "engine": {
+    "n": 121,
+    "log_loss": 0.6476,
+    "brier": 0.4589,
+    "hit_rate": 0.6033
+   },
+   "retuned": {
+    "n": 121,
+    "log_loss": 0.6413,
+    "brier": 0.4543,
+    "hit_rate": 0.6033
+   },
+   "ridge": {
+    "n": 121,
+    "log_loss": 0.6096,
+    "brier": 0.424,
+    "hit_rate": 0.6446
+   },
+   "blend": {
+    "n": 121,
+    "log_loss": 0.6192,
+    "brier": 0.4334,
+    "hit_rate": 0.6446
+   },
+   "always_home": {
+    "n": 121,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.5124
+   },
+   "same_games_as_market": null,
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 43,
+      "given": 0.5547,
+      "happened": 0.5349
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 38,
+      "given": 0.6444,
+      "happened": 0.5263
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 26,
+      "given": 0.7451,
+      "happened": 0.6538
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 13,
+      "given": 0.8463,
+      "happened": 0.9231
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 1,
+      "given": 0.9154,
+      "happened": 1
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 42,
+      "given": 0.5611,
+      "happened": 0.5238
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 31,
+      "given": 0.6452,
+      "happened": 0.6129
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 30,
+      "given": 0.7503,
+      "happened": 0.7333
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 14,
+      "given": 0.8353,
+      "happened": 0.7857
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 4,
+      "given": 0.9105,
+      "happened": 1
+     }
+    ]
+   }
+  },
+  "market_pool": {
+   "engine": {
+    "chosen_market_weight": 0.95,
+    "test_current_weight_2_3": {
+     "n": 1322,
+     "log_loss": 0.5798,
+     "brier": 0.3964,
+     "hit_rate": 0.6868
+    },
+    "test_chosen_weight": {
+     "n": 1322,
+     "log_loss": 0.5768,
+     "brier": 0.3947,
+     "hit_rate": 0.6853
+    },
+    "test_market_only": {
+     "n": 1322,
+     "log_loss": 0.5767,
+     "brier": 0.3948,
+     "hit_rate": 0.6861
+    }
+   },
+   "blend": {
+    "chosen_market_weight": 0.9,
+    "test_current_weight_2_3": {
+     "n": 1322,
+     "log_loss": 0.5791,
+     "brier": 0.3961,
+     "hit_rate": 0.6891
+    },
+    "test_chosen_weight": {
+     "n": 1322,
+     "log_loss": 0.5769,
+     "brier": 0.3947,
+     "hit_rate": 0.6846
+    },
+    "test_market_only": {
+     "n": 1322,
+     "log_loss": 0.5767,
+     "brier": 0.3948,
+     "hit_rate": 0.6861
+    }
+   }
+  }
+ },
+ "nhl": {
+  "games": {
+   "selection": 1405,
+   "test": 1394,
+   "fresh": 252
+  },
+  "chosen": {
+   "retuned": {
+    "k": 12,
+    "homeAdvantageElo": 0,
+    "eloPointsPerPoint": 90,
+    "eloWeight": 1,
+    "netShrink": 0.3,
+    "pointsAlpha": 0.02,
+    "leagueAvgAlpha": 0.02,
+    "defaultPoints": 3.05,
+    "homeCourtPts": 0.2,
+    "sigma": 2.2,
+    "backToBackPts": -0.2,
+    "restedBonusPts": 0,
+    "starAbsencePts": 0.25,
+    "maxAbsencePts": 0.6,
+    "highConfidence": 0.65,
+    "mediumConfidence": 0.56,
+    "minGames": 5
+   },
+   "ridge": {
+    "halfLife": 300,
+    "lambda": 40,
+    "cap": 99,
+    "prevSeason": 1,
+    "rest": "b2b",
+    "sigma": 1.777
+   },
+   "blend": {
+    "w": 1,
+    "sigma": 1.777
+   }
+  },
+  "selection": {
+   "engine": {
+    "n": 1405,
+    "log_loss": 0.6708,
+    "brier": 0.4782,
+    "hit_rate": 0.5822
+   },
+   "retuned": {
+    "n": 1405,
+    "log_loss": 0.6666,
+    "brier": 0.4741,
+    "hit_rate": 0.5943
+   },
+   "ridge": {
+    "n": 1405,
+    "log_loss": 0.6637,
+    "brier": 0.4714,
+    "hit_rate": 0.595
+   },
+   "blend": {
+    "n": 1405,
+    "log_loss": 0.6637,
+    "brier": 0.4714,
+    "hit_rate": 0.595
+   },
+   "always_home": {
+    "n": 1405,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.5623
+   },
+   "same_games_as_market": {
+    "n": 1405,
+    "market": {
+     "n": 1405,
+     "log_loss": 0.6568,
+     "brier": 0.4648,
+     "hit_rate": 0.6121
+    },
+    "engine": {
+     "n": 1405,
+     "log_loss": 0.6708,
+     "brier": 0.4782,
+     "hit_rate": 0.5822
+    },
+    "ridge": {
+     "n": 1405,
+     "log_loss": 0.6637,
+     "brier": 0.4714,
+     "hit_rate": 0.595
+    },
+    "blend": {
+     "n": 1405,
+     "log_loss": 0.6637,
+     "brier": 0.4714,
+     "hit_rate": 0.595
+    }
+   },
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 945,
+      "given": 0.5459,
+      "happened": 0.5503
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 399,
+      "given": 0.6379,
+      "happened": 0.6266
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 60,
+      "given": 0.7255,
+      "happened": 0.7833
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 1,
+      "given": 0.8299,
+      "happened": 1
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 822,
+      "given": 0.5481,
+      "happened": 0.5389
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 448,
+      "given": 0.6421,
+      "happened": 0.654
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 126,
+      "given": 0.7369,
+      "happened": 0.7381
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 9,
+      "given": 0.8329,
+      "happened": 0.7778
+     }
+    ]
+   }
+  },
+  "test": {
+   "engine": {
+    "n": 1394,
+    "log_loss": 0.6863,
+    "brier": 0.4933,
+    "hit_rate": 0.5459
+   },
+   "retuned": {
+    "n": 1394,
+    "log_loss": 0.6866,
+    "brier": 0.4934,
+    "hit_rate": 0.5545
+   },
+   "ridge": {
+    "n": 1394,
+    "log_loss": 0.69,
+    "brier": 0.4966,
+    "hit_rate": 0.533
+   },
+   "blend": {
+    "n": 1394,
+    "log_loss": 0.69,
+    "brier": 0.4966,
+    "hit_rate": 0.533
+   },
+   "always_home": {
+    "n": 1394,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.5194
+   },
+   "same_games_as_market": {
+    "n": 1394,
+    "market": {
+     "n": 1394,
+     "log_loss": 0.6808,
+     "brier": 0.4879,
+     "hit_rate": 0.5545
+    },
+    "engine": {
+     "n": 1394,
+     "log_loss": 0.6863,
+     "brier": 0.4933,
+     "hit_rate": 0.5459
+    },
+    "ridge": {
+     "n": 1394,
+     "log_loss": 0.69,
+     "brier": 0.4966,
+     "hit_rate": 0.533
+    },
+    "blend": {
+     "n": 1394,
+     "log_loss": 0.69,
+     "brier": 0.4966,
+     "hit_rate": 0.533
+    }
+   },
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 1106,
+      "given": 0.5441,
+      "happened": 0.5208
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 268,
+      "given": 0.6359,
+      "happened": 0.6343
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 20,
+      "given": 0.7219,
+      "happened": 0.75
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 916,
+      "given": 0.5465,
+      "happened": 0.4902
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 396,
+      "given": 0.6378,
+      "happened": 0.6061
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 78,
+      "given": 0.7286,
+      "happened": 0.6538
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 4,
+      "given": 0.8125,
+      "happened": 0.75
+     }
+    ]
+   }
+  },
+  "fresh": {
+   "engine": {
+    "n": 252,
+    "log_loss": 0.6586,
+    "brier": 0.4665,
+    "hit_rate": 0.619
+   },
+   "retuned": {
+    "n": 252,
+    "log_loss": 0.6551,
+    "brier": 0.463,
+    "hit_rate": 0.6349
+   },
+   "ridge": {
+    "n": 252,
+    "log_loss": 0.6533,
+    "brier": 0.4616,
+    "hit_rate": 0.619
+   },
+   "blend": {
+    "n": 252,
+    "log_loss": 0.6533,
+    "brier": 0.4616,
+    "hit_rate": 0.619
+   },
+   "always_home": {
+    "n": 252,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.5714
+   },
+   "same_games_as_market": null,
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 179,
+      "given": 0.5451,
+      "happened": 0.581
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 66,
+      "given": 0.6358,
+      "happened": 0.6818
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 7,
+      "given": 0.7362,
+      "happened": 1
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 166,
+      "given": 0.5457,
+      "happened": 0.5663
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 71,
+      "given": 0.6352,
+      "happened": 0.6901
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 15,
+      "given": 0.734,
+      "happened": 0.8667
+     }
+    ]
+   }
+  },
+  "market_pool": {
+   "engine": {
+    "chosen_market_weight": 1,
+    "test_current_weight_2_3": {
+     "n": 1394,
+     "log_loss": 0.6815,
+     "brier": 0.4885,
+     "hit_rate": 0.5581
+    },
+    "test_chosen_weight": {
+     "n": 1394,
+     "log_loss": 0.6808,
+     "brier": 0.4879,
+     "hit_rate": 0.5545
+    },
+    "test_market_only": {
+     "n": 1394,
+     "log_loss": 0.6808,
+     "brier": 0.4879,
+     "hit_rate": 0.5545
+    }
+   },
+   "blend": {
+    "chosen_market_weight": 0.85,
+    "test_current_weight_2_3": {
+     "n": 1394,
+     "log_loss": 0.6823,
+     "brier": 0.4894,
+     "hit_rate": 0.5366
+    },
+    "test_chosen_weight": {
+     "n": 1394,
+     "log_loss": 0.6813,
+     "brier": 0.4884,
+     "hit_rate": 0.5509
+    },
+    "test_market_only": {
+     "n": 1394,
+     "log_loss": 0.6808,
+     "brier": 0.4879,
+     "hit_rate": 0.5545
+    }
+   }
+  }
+ },
+ "nfl": {
+  "games": {
+   "selection": 286,
+   "test": 285,
+   "fresh": 120
+  },
+  "chosen": {
+   "retuned": {
+    "k": 40,
+    "homeAdvantageElo": 75,
+    "eloPointsPerPoint": 15,
+    "eloWeight": 0.8,
+    "netShrink": 0.5,
+    "pointsAlpha": 0.2,
+    "leagueAvgAlpha": 0.02,
+    "defaultPoints": 22.5,
+    "homeCourtPts": 1.6,
+    "sigma": 14.5,
+    "backToBackPts": 0,
+    "restedBonusPts": 0,
+    "starAbsencePts": 3,
+    "maxAbsencePts": 8,
+    "highConfidence": 0.75,
+    "mediumConfidence": 0.6,
+    "minGames": 3
+   },
+   "ridge": {
+    "halfLife": 240,
+    "lambda": 1,
+    "cap": 14,
+    "prevSeason": 0.5,
+    "rest": "nfl",
+    "sigma": 9.093
+   },
+   "blend": {
+    "w": 0.5,
+    "sigma": 11.24
+   }
+  },
+  "selection": {
+   "engine": {
+    "n": 286,
+    "log_loss": 0.616,
+    "brier": 0.4259,
+    "hit_rate": 0.6713
+   },
+   "retuned": {
+    "n": 286,
+    "log_loss": 0.6127,
+    "brier": 0.4222,
+    "hit_rate": 0.6818
+   },
+   "ridge": {
+    "n": 286,
+    "log_loss": 0.6173,
+    "brier": 0.428,
+    "hit_rate": 0.6853
+   },
+   "blend": {
+    "n": 286,
+    "log_loss": 0.6141,
+    "brier": 0.4245,
+    "hit_rate": 0.6678
+   },
+   "always_home": {
+    "n": 286,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.549
+   },
+   "same_games_as_market": {
+    "n": 284,
+    "market": {
+     "n": 284,
+     "log_loss": 0.5892,
+     "brier": 0.4022,
+     "hit_rate": 0.7113
+    },
+    "engine": {
+     "n": 284,
+     "log_loss": 0.616,
+     "brier": 0.4259,
+     "hit_rate": 0.669
+    },
+    "ridge": {
+     "n": 284,
+     "log_loss": 0.6172,
+     "brier": 0.4279,
+     "hit_rate": 0.6831
+    },
+    "blend": {
+     "n": 284,
+     "log_loss": 0.614,
+     "brier": 0.4245,
+     "hit_rate": 0.6655
+    }
+   },
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 91,
+      "given": 0.5513,
+      "happened": 0.5385
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 106,
+      "given": 0.6456,
+      "happened": 0.7358
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 48,
+      "given": 0.744,
+      "happened": 0.6458
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 32,
+      "given": 0.8399,
+      "happened": 0.8438
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 9,
+      "given": 0.9237,
+      "happened": 0.7778
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 88,
+      "given": 0.5507,
+      "happened": 0.5341
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 115,
+      "given": 0.6463,
+      "happened": 0.7043
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 45,
+      "given": 0.7467,
+      "happened": 0.6889
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 32,
+      "given": 0.8398,
+      "happened": 0.8438
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 6,
+      "given": 0.9209,
+      "happened": 0.8333
+     }
+    ]
+   }
+  },
+  "test": {
+   "engine": {
+    "n": 285,
+    "log_loss": 0.6255,
+    "brier": 0.4368,
+    "hit_rate": 0.6421
+   },
+   "retuned": {
+    "n": 285,
+    "log_loss": 0.6315,
+    "brier": 0.4406,
+    "hit_rate": 0.6491
+   },
+   "ridge": {
+    "n": 285,
+    "log_loss": 0.6397,
+    "brier": 0.4476,
+    "hit_rate": 0.6211
+   },
+   "blend": {
+    "n": 285,
+    "log_loss": 0.6294,
+    "brier": 0.4396,
+    "hit_rate": 0.6351
+   },
+   "always_home": {
+    "n": 285,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.5333
+   },
+   "same_games_as_market": {
+    "n": 284,
+    "market": {
+     "n": 284,
+     "log_loss": 0.6094,
+     "brier": 0.4239,
+     "hit_rate": 0.6479
+    },
+    "engine": {
+     "n": 284,
+     "log_loss": 0.6258,
+     "brier": 0.4371,
+     "hit_rate": 0.6408
+    },
+    "ridge": {
+     "n": 284,
+     "log_loss": 0.6404,
+     "brier": 0.4483,
+     "hit_rate": 0.6197
+    },
+    "blend": {
+     "n": 284,
+     "log_loss": 0.6299,
+     "brier": 0.4401,
+     "hit_rate": 0.6338
+    }
+   },
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 111,
+      "given": 0.5457,
+      "happened": 0.5405
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 65,
+      "given": 0.6518,
+      "happened": 0.6
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 65,
+      "given": 0.7487,
+      "happened": 0.7692
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 37,
+      "given": 0.8472,
+      "happened": 0.7297
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 7,
+      "given": 0.9207,
+      "happened": 1
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 109,
+      "given": 0.546,
+      "happened": 0.5321
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 74,
+      "given": 0.6472,
+      "happened": 0.5946
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 59,
+      "given": 0.7467,
+      "happened": 0.7797
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 38,
+      "given": 0.8453,
+      "happened": 0.7368
+     },
+     {
+      "from": 0.9,
+      "to": 1,
+      "n": 5,
+      "given": 0.9151,
+      "happened": 1
+     }
+    ]
+   }
+  },
+  "fresh": {
+   "engine": {
+    "n": 120,
+    "log_loss": 0.6578,
+    "brier": 0.4675,
+    "hit_rate": 0.6
+   },
+   "retuned": {
+    "n": 120,
+    "log_loss": 0.6576,
+    "brier": 0.4673,
+    "hit_rate": 0.5917
+   },
+   "ridge": {
+    "n": 120,
+    "log_loss": 0.6436,
+    "brier": 0.4549,
+    "hit_rate": 0.5833
+   },
+   "blend": {
+    "n": 120,
+    "log_loss": 0.6504,
+    "brier": 0.4611,
+    "hit_rate": 0.5917
+   },
+   "always_home": {
+    "n": 120,
+    "log_loss": 0.6931,
+    "brier": 0.5,
+    "hit_rate": 0.5167
+   },
+   "same_games_as_market": null,
+   "calibration": {
+    "engine": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 31,
+      "given": 0.5466,
+      "happened": 0.4839
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 48,
+      "given": 0.6475,
+      "happened": 0.5625
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 22,
+      "given": 0.7397,
+      "happened": 0.6364
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 19,
+      "given": 0.8346,
+      "happened": 0.8421
+     }
+    ],
+    "blend": [
+     {
+      "from": 0.5,
+      "to": 0.6,
+      "n": 38,
+      "given": 0.5488,
+      "happened": 0.4474
+     },
+     {
+      "from": 0.6,
+      "to": 0.7,
+      "n": 43,
+      "given": 0.6478,
+      "happened": 0.5349
+     },
+     {
+      "from": 0.7,
+      "to": 0.8,
+      "n": 24,
+      "given": 0.7458,
+      "happened": 0.75
+     },
+     {
+      "from": 0.8,
+      "to": 0.9,
+      "n": 15,
+      "given": 0.838,
+      "happened": 0.8667
+     }
+    ]
+   }
+  },
+  "market_pool": {
+   "engine": {
+    "chosen_market_weight": 0.95,
+    "test_current_weight_2_3": {
+     "n": 284,
+     "log_loss": 0.6108,
+     "brier": 0.4246,
+     "hit_rate": 0.6585
+    },
+    "test_chosen_weight": {
+     "n": 284,
+     "log_loss": 0.6094,
+     "brier": 0.4237,
+     "hit_rate": 0.6655
+    },
+    "test_market_only": {
+     "n": 284,
+     "log_loss": 0.6094,
+     "brier": 0.4239,
+     "hit_rate": 0.6479
+    }
+   },
+   "blend": {
+    "chosen_market_weight": 0.95,
+    "test_current_weight_2_3": {
+     "n": 284,
+     "log_loss": 0.6125,
+     "brier": 0.4258,
+     "hit_rate": 0.6514
+    },
+    "test_chosen_weight": {
+     "n": 284,
+     "log_loss": 0.6097,
+     "brier": 0.4239,
+     "hit_rate": 0.6655
+    },
+    "test_market_only": {
+     "n": 284,
+     "log_loss": 0.6094,
+     "brier": 0.4239,
+     "hit_rate": 0.6479
+    }
+   }
+  }
+ }
+}

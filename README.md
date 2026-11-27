@@ -18,7 +18,7 @@ Every competition appears in its own colours and every team with its real crest.
 | | |
 |---|---|
 | **Download page** | https://dynohunter3.github.io/mk-sports/ |
-| **Current version** | 2.3.0 (Android 7.0 or newer, about 56 MB) |
+| **Current version** | 2.3.1 (Android 7.0 or newer, about 55 MB) |
 | **Player photo credits** | https://dynohunter3.github.io/mk-sports/photo-credits.html |
 | **Contact** | [Mksportz26@gmail.com](mailto:Mksportz26@gmail.com) · call +260 97 322 0276 · WhatsApp +260 76 050 8803 |
 
@@ -65,7 +65,7 @@ Every competition appears in its own colours and every team with its real crest.
 
 **Publishing a new version (owner).** The download button points to `releases/latest/download/MKSports.apk` on GitHub, so it works only once a release with that file is published:
 1. On GitHub, open the repository, then **Releases** > **Draft a new release**.
-2. Create a tag such as `v2.3.0` and add the release notes.
+2. Create a tag such as `v2.3.1` and add the release notes.
 3. Attach the APK, named exactly `MKSports.apk`, and click **Publish**.
 
 No release has been published yet; until one is, the download button returns "not found".
@@ -394,6 +394,12 @@ Earlier walk-forward backtests. NFL, NHL and MLB settings were tuned on older ga
 
 For the two-outcome sports a coin flip scores 50% (log loss 0.693), and always picking the home side scores 52–54%.
 
+**Step 12 (2.3.1), NBA, NHL and NFL** ([report](docs/audit/STEP12_US_SPORTS.md)): settings chosen on 2024-25 and tested on 2025-26.
+- **NBA:** a new model blends opponent-adjusted ratings (who you beat counts, recent games weighted) 70/30 with the old one. On 1,326 test games, log loss went from 0.602 to 0.598 and the hit rate from 67.9% to 68.5%.
+- **NHL and NFL:** none of the candidates beat the current models on the test season, so they are unchanged.
+- **Bookmaker lines:** when ESPN lists one, the app now puts 90% of the weight on it for these three sports instead of two-thirds. That was better on both seasons.
+- **Still behind the bookmakers:** test-season log loss NBA 0.598 against 0.577, NHL 0.686 against 0.681, NFL 0.626 against 0.609.
+
 ---
 
 ## 9. Match data, expected goals and player photos
@@ -599,7 +605,7 @@ PREDICTPRO_UPLOAD_KEY_PASSWORD=...
 Counts measured on 25 Nov 2026:
 
 ```bash
-cd mobile   && npm test && npx tsc --noEmit   # 100 tests
+cd mobile   && npm test && npx tsc --noEmit   # 104 tests
 cd pipeline && python -m pytest -q            # 77 tests
 cd engine   && python -m pytest -q            # 37 tests
 cd backend  && python -m pytest -q            # 71 passed, 2 skipped (Redis tests skip without a local Redis)
@@ -641,6 +647,7 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/API.md](docs/API.md
 | 2.0.0 "Matchday" | 24 Nov 2026 | New design; Quick Picks; you vs the AI; levels, badges, celebrations; My game |
 | 2.1.0 | 24–25 Nov 2026 | Private leagues; profiles with avatars; reliable alerts (exact alarms, live tracking); line-ups on a full pitch; goals outlook; player photos from Wikimedia Commons; pulsing favourite-team row; Contact us; download page; fixes (match score cut-off, finished matches failing to open) |
 | 2.2.0 | 25 Nov 2026 | Live win probability; player xG; search; My team home-screen widget; back up and restore, and Android Auto Backup that actually includes the data; weekly banker and season archive; league share reminder; contrast-aware text and TalkBack in Quick Picks; RPS, calibration and the live record band on the accuracy page; nine more leagues on the published model |
+| 2.3.1 | 27 Nov 2026 | NBA predictions: opponent-adjusted ratings (Step 12); 90% weight on bookmaker lines when listed for NBA, NHL and NFL |
 | 2.3.0 | 26 Nov 2026 | Season simulator (title, top four, promotion, relegation chances, with the weekly change); xG table and deserved results; team strength history; public record of every prediction with commit links and a track record page; probability picks (Brier score); F1 podium and tennis picks; share cards with QR code; season recap; matchweek awards in private leagues |
 
 Release notes: [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md), [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md), and the Step reports in [docs/audit](docs/audit/).
@@ -676,7 +683,7 @@ Release notes: [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md]
 | [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md) | Everything new in 2.1: sharing, leagues, notifications, line-ups, photos |
 | [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md) | The 2.0 design system and the game |
 | [docs/SOURCE_REGISTRY.md](docs/SOURCE_REGISTRY.md) | Every data source, its terms as read, and whether it is used |
-| [docs/audit/](docs/audit/) | Steps 1–11: how the prediction model was audited, rebuilt, measured and extended to 20 competitions, and how the season simulator was tested |
+| [docs/audit/](docs/audit/) | Steps 1–12: how the prediction model was audited, rebuilt, measured and extended to 20 competitions, and how the season simulator was tested |
 | [docs/PREDICTION_ENGINE.md](docs/PREDICTION_ENGINE.md) | The original prediction engine (server mode and the phone): models, explanations, versioning, backtests |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Components, data flow, jobs and caching (server mode) |
 | [docs/API.md](docs/API.md) | Server API endpoints |

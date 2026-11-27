@@ -64,12 +64,22 @@ export type SourceStats = Partial<Record<SourceId, { n: number; delta: number }>
 const MIN_EVIDENCE = 20;
 const MAX_EVIDENCE = 300;
 
-export function sourceWeights(sources: SourceId[], stats: SourceStats, temperature = 2): Record<string, number> {
+/**
+ * Sport-specific priors where a backtest showed the defaults are wrong. NBA, NHL, NFL (Step 12): with ESPN's listed
+ * line available, 90% on the market beat the default two-thirds on both the selection and the test season.
+ */
+export const SOURCE_PRIORS_BY_SPORT: Record<string, Partial<Record<SourceId, number>>> = {
+  basketball: { market: 9 },
+  'ice-hockey': { market: 9 },
+  'american-football': { market: 9 },
+};
+
+export function sourceWeights(sources: SourceId[], stats: SourceStats, temperature = 2, priors: Partial<Record<SourceId, number>> = {}): Record<string, number> {
   const withEvidence = sources.filter((s) => s === 'model' || (stats[s]?.n ?? 0) >= MIN_EVIDENCE);
   const ref = Math.min(0, ...withEvidence.map((s) => (s === 'model' ? 0 : stats[s]!.delta)));
   const raw: Record<string, number> = {};
   for (const s of sources) {
-    let w = SOURCE_INFO[s].prior;
+    let w = priors[s] ?? SOURCE_INFO[s].prior;
     const st = s === 'model' ? { n: Math.max(...withEvidence.map((x) => (x === 'model' ? 0 : stats[x]!.n)), 0), delta: 0 } : stats[s];
     if (st && withEvidence.length > 1 && withEvidence.includes(s)) w *= Math.exp(-(Math.min(st.n, MAX_EVIDENCE) * (st.delta - ref)) / temperature);
     raw[s] = w;
