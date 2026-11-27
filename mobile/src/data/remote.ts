@@ -116,7 +116,6 @@ let accuracyDoc: RemoteAccuracy | null = null;
 // The newest predictions file at build time, shipped inside the app: the new model's calls (draws
 // included) are available from the first launch and while the live file can't be reached. It is used
 // for matches inside its own horizon only, and anything newer (saved or downloaded) replaces it.
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 let bundled: { predictions: unknown; accuracy: unknown } | null = { predictions: require('../../assets/data/football_predictions.json'), accuracy: require('../../assets/data/accuracy.json') };
 /** Tests only: run without the built-in snapshot. */
 export function setBundledForTests(b: { predictions: unknown; accuracy: unknown } | null) {

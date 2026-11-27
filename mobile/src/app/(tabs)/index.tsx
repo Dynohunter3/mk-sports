@@ -14,7 +14,7 @@ import { Backdrop, Glass } from '@/components/glass';
 import { GameChips, PlayHero, ResultsCelebration } from '@/components/game';
 import { Confetti, FadeIn, PressableScale, Skeleton, stagger } from '@/components/motion';
 import { MatchRow, StatusChip, TeamBadge } from '@/components/match';
-import { Chip, ChipRow, Disclaimer, EmptyState, Icon, Loading, Row, SectionHeader, StatusBanner, Text } from '@/components/ui';
+import { Chip, ChipRow, Disclaimer, EmptyState, Icon, Row, SectionHeader, StatusBanner, Text } from '@/components/ui';
 import { LEAGUE_BY_SLUG, MATCH_LEAGUES } from '@/data/leagues';
 import { dayLabel, deviceTimeZone, kickoffTime, pct } from '@/lib/format';
 import { FavouriteTeam, usePrefs } from '@/state/prefs';
@@ -401,3 +401,5 @@ function HomeSkeleton() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

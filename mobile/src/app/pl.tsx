@@ -27,3 +27,5 @@ export default function LeagueLink() {
   if (error) return <EmptyState icon="link-variant-off" title="Couldn't open the league" body={error} action="My leagues" onAction={() => router.replace('/private-leagues')} />;
   return <Loading label="Opening your league…" />;
 }
+
+export { ErrorBoundary } from '@/components/route-error';

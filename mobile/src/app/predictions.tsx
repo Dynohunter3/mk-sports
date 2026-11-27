@@ -5,7 +5,7 @@
  */
 import { router } from 'expo-router';
 import { memo, useMemo, useState } from 'react';
-import { Pressable, RefreshControl, SectionList, View } from 'react-native';
+import { RefreshControl, SectionList, View } from 'react-native';
 
 import { useApi } from '@/api/cache';
 import type { GradedCall, MatchCard, PredictionsList, RecordWindow } from '@/api/types';
@@ -281,3 +281,5 @@ export default function PredictionsScreen() {
     />
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

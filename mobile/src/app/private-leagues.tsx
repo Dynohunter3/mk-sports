@@ -311,3 +311,5 @@ export default function PrivateLeaguesScreen() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

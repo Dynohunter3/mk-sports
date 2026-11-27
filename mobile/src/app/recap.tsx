@@ -127,3 +127,5 @@ export default function RecapScreen() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

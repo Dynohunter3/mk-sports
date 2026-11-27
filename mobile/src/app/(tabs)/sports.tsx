@@ -79,6 +79,7 @@ function Scores({ leagueId, setLeagueId }: { leagueId: string | null; setLeagueI
     const d = addDays(new Date(), -3);
     d.setHours(0, 0, 0, 0);
     return d.toISOString();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- recomputed when the selected day changes (e.g. after midnight)
   }, [day]);
   const path = sport && !isOther
     ? '/matches' + qs(team ? { team_id: team.id, from: teamFrom, limit: 30 } : { date: day, tz: deviceTimeZone(), sport: sport.slug, league_id: leagueId, limit: 40 })
@@ -201,3 +202,5 @@ function Scores({ leagueId, setLeagueId }: { leagueId: string | null; setLeagueI
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

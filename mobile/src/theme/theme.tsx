@@ -111,7 +111,7 @@ export const TAB_BAR_SPACE = 96;
 
 // ------------------------------------------------------------------ colour helpers
 export { alpha, contrastRatio, forWhiteText, luminance, mix, onColor, relLuminance, rgb } from './color';
-import { alpha, contrastRatio, forWhiteText, luminance, mix, onColor, relLuminance, rgb } from './color';
+import { alpha, luminance, mix, onColor, rgb } from './color';
 
 function distance(a: string, b: string): number {
   const x = rgb(a);

@@ -18,7 +18,7 @@ Every competition appears in its own colours and every team with its real crest.
 | | |
 |---|---|
 | **Download page** | https://dynohunter3.github.io/mk-sports/ |
-| **Current version** | 2.3.2 (Android 7.0 or newer, about 55 MB) |
+| **Current version** | 2.4.0 (Android 7.0 or newer, about 55 MB) |
 | **Player photo credits** | https://dynohunter3.github.io/mk-sports/photo-credits.html |
 | **Contact** | [Mksportz26@gmail.com](mailto:Mksportz26@gmail.com) · call +260 97 322 0276 · WhatsApp +260 76 050 8803 |
 
@@ -65,7 +65,7 @@ Every competition appears in its own colours and every team with its real crest.
 
 **Publishing a new version (owner).** The download button points to `releases/latest/download/MKSports.apk` on GitHub, so it works only once a release with that file is published:
 1. On GitHub, open the repository, then **Releases** > **Draft a new release**.
-2. Create a tag such as `v2.3.2` and add the release notes.
+2. Create a tag such as `v2.4.0` and add the release notes.
 3. Attach the APK, named exactly `MKSports.apk`, and click **Publish**.
 
 No release has been published yet; until one is, the download button returns "not found".
@@ -112,7 +112,7 @@ No release has been published yet; until one is, the download button returns "no
 | Screen | What it does |
 |---|---|
 | **Team page** (and My Team) | Next match, last result, the table, the **season forecast** ("Arsenal: 79% title chance, ▲2 since last week", every finishing place's chance, projected points) and **team strength**: the model's own rating since 2016-17 against the league average. |
-| **Player page** | Photo (with its credit), position, number, age, nationality, club, season stats, recent matches and, for football, **season xG**: xG, non-penalty xG, xG per 90 and goals minus xG (MK Sports' own estimate). |
+| **Player page** | Photo (with its credit), position, number, club, age, height, nation and place of birth; season stats in plain words, goals and assists first; recent matches; for football, **season xG** (xG, non-penalty xG, xG per 90 and goals minus xG, MK Sports' own estimate); **career** (senior clubs with loans, and the current national team, from Wikidata, see [section 9](#player-facts-from-wikidata)); and a table of every competition this season. |
 | **Search** | Teams, players and competitions; opens their pages. |
 | **Predictions** | Every published football prediction for the coming days, with its call, strength and safer call. Filters for draw calls, strong calls, the safest calls and recent results. It works offline from the last saved copy. |
 | **How accurate is the model?** | The live record against the tested range; RPS and a calibration chart; the backtested record by call strength, competition and confidence. |
@@ -465,6 +465,23 @@ Photos are only as current as Wikimedia's, so many are years old even though the
 
 Code: `pipeline/mkdata/photos.py`, `mobile/src/data/photos.ts`.
 
+### Player facts from Wikidata
+
+ESPN's player feed has no height for most footballers, and no place of birth or career. Since 2.4 these come from **Wikidata** (CC0, no key) for every player with a published photo, since those players are already linked to Wikidata.
+
+- **What:** height, place of birth, senior clubs (loans marked) and the current national team.
+- **How:** a few queries each pipeline run, one a minute, under the same robot policy as the photos. Each player is refreshed every two weeks. Published as `photos/f/<wikidata id>.json`.
+- **Cleaning** (Wikidata is edited by volunteers):
+  - youth sides are left out;
+  - a club spell that runs past the next permanent club's start is cut there;
+  - an open spell followed by another club shows "?" as its end;
+  - the national team is shown only while its spell is open;
+  - implausible heights and conflicting birthplaces are dropped.
+- **Coverage, measured on the first 250 players in the photo map (27 Nov 2026):** height 244, place of birth 247, club career 241, current national team 102.
+- **Rejected:** captains, because Wikidata's captain statements are missing or years out of date (details in [docs/RELEASE_2_4.md](docs/RELEASE_2_4.md)).
+
+Code: `pipeline/mkdata/wikifacts.py`, `usePlayerFacts` in `mobile/src/data/photos.ts`.
+
 ---
 
 ## 10. Competitions covered
@@ -502,7 +519,7 @@ A GitHub Actions workflow (`.github/workflows/data-pipeline.yml`) runs **every 6
 7. **Grade** finished matches.
 8. **Season simulator:** every remaining league fixture, 10,000 times, published as `simulations.json` ([Step 11](docs/audit/STEP11_SEASON_SIMULATOR.md)).
 9. **Team strength history:** each team's rating over the seasons, published as `elo/<competition>.json`.
-10. **Player photos:** the incremental Wikidata and Wikimedia step ([section 9](#player-photos)). It follows Wikimedia's robot policy: a User-Agent with contact details, one request at a time, standard thumbnail sizes, and Retry-After honoured. A failure in this step never fails the job.
+10. **Player photos and facts:** the incremental Wikidata and Wikimedia step ([section 9](#player-photos)), then player facts ([section 9](#player-facts-from-wikidata)). It follows Wikimedia's robot policy: a User-Agent with contact details, one request at a time, standard thumbnail sizes, and Retry-After honoured. A failure in this step never fails the job.
 11. **Publish to GitHub Pages:**
    - `football_predictions.json`, `accuracy.json`, `simulations.json`, `elo/` and `model.json`;
    - the player photos;
@@ -539,7 +556,7 @@ The terms and robots.txt of every candidate source were read before use. A sourc
 | football-data.co.uk | Results, shots, odds (history and current) | **On** |
 | openfootball (GitHub) | Fixtures and results | **On** |
 | MK Sports Elo | Ratings | **On** |
-| Wikidata | Player dates of birth, photos, ESPN IDs | **On** (CC0) |
+| Wikidata | Player dates of birth, photos, ESPN IDs; height, place of birth, clubs, national team | **On** (CC0) |
 | Wikimedia Commons | Player photos | **On** (each photo's free licence, credited) |
 | football-data.org (free tier) | Fixtures, results, standings | Off until a key is added |
 | The Odds API (free plan) | Current odds | Off until a key is added |
@@ -605,17 +622,18 @@ PREDICTPRO_UPLOAD_KEY_PASSWORD=...
 
 ### Tests
 
-Counts measured on 25 Nov 2026:
+Counts measured on 27 Nov 2026:
 
 ```bash
-cd mobile   && npm test && npx tsc --noEmit   # 104 tests
-cd pipeline && python -m pytest -q            # 77 tests
+cd mobile   && npm test && npx tsc --noEmit   # 106 tests
+cd mobile   && npm run lint                   # ESLint (Expo rules): 0 errors
+cd pipeline && python -m pytest -q            # 81 tests
 cd engine   && python -m pytest -q            # 37 tests
 cd backend  && python -m pytest -q            # 71 passed, 2 skipped (Redis tests skip without a local Redis)
 ```
 
 - **App tests:** engine parity with Python, the data layer, the game (including bankers and the season archive), private leagues, player photo matching, notifications, scorelines, published predictions, win probability, player xG, search, backup and restore, colour contrast, the widget, probability picks, F1 and tennis picks, the season recap, matchweek awards, the xG table and the season forecast.
-- **Pipeline tests:** adapters, the HTTP client's politeness rules, linking, models, picks, production (including RPS and the live record check), the season simulator, the Elo history and the proof index, and photos.
+- **Pipeline tests:** adapters, the HTTP client's politeness rules, linking, models, picks, production (including RPS and the live record check), the season simulator, the Elo history and the proof index, photos, and player facts (Wikidata cleaning).
 
 ### Server mode (optional)
 
@@ -650,11 +668,12 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/API.md](docs/API.md
 | 2.0.0 "Matchday" | 24 Nov 2026 | New design; Quick Picks; you vs the AI; levels, badges, celebrations; My game |
 | 2.1.0 | 24–25 Nov 2026 | Private leagues; profiles with avatars; reliable alerts (exact alarms, live tracking); line-ups on a full pitch; goals outlook; player photos from Wikimedia Commons; pulsing favourite-team row; Contact us; download page; fixes (match score cut-off, finished matches failing to open) |
 | 2.2.0 | 25 Nov 2026 | Live win probability; player xG; search; My team home-screen widget; back up and restore, and Android Auto Backup that actually includes the data; weekly banker and season archive; league share reminder; contrast-aware text and TalkBack in Quick Picks; RPS, calibration and the live record band on the accuracy page; nine more leagues on the published model |
+| 2.4.0 | 27 Nov 2026 | Player pages redesigned, with height, place of birth, career and national team from Wikidata; stats in plain words; news images that fail to load show the competition's colours, and repeated headline prefixes are removed; error screens so one broken screen can't crash the app; ESLint |
 | 2.3.2 | 27 Nov 2026 | Line-ups redesigned: both teams on one pitch with full markings; player cards with photo or kit shirt in the colours actually worn, number, goals, assists, cards, substitution minute, saves and each player's xG; substitutes side by side with who they replaced |
 | 2.3.1 | 27 Nov 2026 | NBA predictions: opponent-adjusted ratings (Step 12); 90% weight on bookmaker lines when listed for NBA, NHL and NFL |
 | 2.3.0 | 26 Nov 2026 | Season simulator (title, top four, promotion, relegation chances, with the weekly change); xG table and deserved results; team strength history; public record of every prediction with commit links and a track record page; probability picks (Brier score); F1 podium and tennis picks; share cards with QR code; season recap; matchweek awards in private leagues |
 
-Release notes: [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md), [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md), and the Step reports in [docs/audit](docs/audit/).
+Release notes: [docs/RELEASE_2_4.md](docs/RELEASE_2_4.md), [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md), [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md), and the Step reports in [docs/audit](docs/audit/).
 
 ---
 
@@ -673,6 +692,7 @@ Release notes: [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md]
 - **F1 and tennis picks** settle from ESPN's current scoreboards. A match that drops off the scoreboard before the app sees its result is void after 10 days.
 - **The public record starts on 26 Nov 2026.** Force pushes to the `predictions` branch are not blocked by a repository rule yet.
 - **Player photos:** about two-thirds coverage in the Premier League, and many photos are years old (see [section 9](#player-photos)).
+- **Player facts** (height, birthplace, career) exist only for players with a photo, and come from volunteer-edited Wikidata: cleaned, but a recent transfer can take a while to appear.
 - **The Zambia Super League isn't covered,** because no free source has complete data.
 - **Predictions are probabilities, not certainties.** Even the strongest calls were wrong about a quarter of the time in testing.
 
@@ -682,6 +702,7 @@ Release notes: [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md]
 
 | Document | What's in it |
 |---|---|
+| [docs/RELEASE_2_4.md](docs/RELEASE_2_4.md) | Everything new in 2.4: player pages with Wikidata facts, news fixes, error screens, lint; also 2.3.1 and 2.3.2 |
 | [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md) | Everything new in 2.3: season simulator, xG table, team strength, public record, probability picks, F1 and tennis, share cards, recap, awards |
 | [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md) | Everything new in 2.2: win probability, player xG, search, widget, backup, banker, accuracy measures, nine more leagues |
 | [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md) | Everything new in 2.1: sharing, leagues, notifications, line-ups, photos |

@@ -270,8 +270,11 @@ REGISTRY: dict[str, SourceSpec] = {
             reliability=0.7,
             min_interval_s=61.0,
             notes=(
-                "Player photos only (mkdata/photos.py): footballers' dates of birth, photos (P18) and ESPN FC IDs (P3681). "
-                "Club memberships are often out of date, so they are not used for matching."
+                "Player photos and player facts. Photos (mkdata/photos.py): footballers' dates of birth, photos (P18) and ESPN FC "
+                "IDs (P3681). Facts (mkdata/wikifacts.py, since 2.4): height (P2048), place of birth (P19) and senior clubs and "
+                "national team (P54 with start, end and loan qualifiers), cleaned before publishing and credited on the player "
+                "page. Club memberships are often out of date, so they are never used for matching, and captain statements "
+                "(P634) were checked and rejected as too stale to show."
             ),
             implemented=True,
         ),

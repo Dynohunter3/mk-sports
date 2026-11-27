@@ -167,3 +167,5 @@ export default function ProfileScreen() {
     </SafeAreaView>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

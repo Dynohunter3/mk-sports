@@ -156,3 +156,5 @@ function Stats({ league, setLeague }: { league: string; setLeague: (l: string) =
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

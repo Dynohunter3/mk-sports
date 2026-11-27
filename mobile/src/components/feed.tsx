@@ -1,12 +1,13 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import { memo } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import { memo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import type { Article, MatchCard } from '@/api/types';
 import { LEAGUE_BY_SLUG } from '@/data/leagues';
-import { alpha, leagueColors, radius, space, useTheme } from '@/theme/theme';
+import { alpha, leagueColors, mix, radius, space, useTheme } from '@/theme/theme';
 
 import { Glass } from './glass';
 import { StatusChip, TeamBadge } from './match';
@@ -84,11 +85,22 @@ export function MatchStrip({ items }: { items: MatchCard[] }) {
 export const ArticleRow = memo(function ArticleRow({ a, big }: { a: Article; big?: boolean }) {
   const t = useTheme();
   const lg = LEAGUE_BY_SLUG[a.league];
-  if (big && a.image) {
+  const [broken, setBroken] = useState(false); // an image that fails to load shows the competition's colours instead
+  const fallback = (style: object, size: number) => (
+    <LinearGradient colors={[lg?.theme.primary ?? t.brand, mix(lg?.theme.primary ?? t.brand, '#000000', 0.45)]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[style, { alignItems: 'center', justifyContent: 'center' }]}>
+      <Icon name="newspaper-variant-outline" color="rgba(255,255,255,0.9)" size={size} />
+      {lg ? (
+        <Text v="tiny" color="rgba(255,255,255,0.85)" style={{ fontWeight: '800', marginTop: 2 }} numberOfLines={1}>
+          {lg.shortName}
+        </Text>
+      ) : null}
+    </LinearGradient>
+  );
+  if (big && a.image && !broken) {
     return (
       <Pressable onPress={() => openArticle(a)} accessibilityRole="link" accessibilityLabel={a.headline} style={({ pressed }) => [{ marginBottom: space.md }, pressed && { opacity: 0.8 }]}>
         <View style={[s.bigWrap, { borderColor: t.glassBorder }]}>
-          <Image source={{ uri: a.image }} style={s.bigImg} contentFit="cover" cachePolicy="disk" transition={150} />
+          <Image source={{ uri: a.image }} style={s.bigImg} contentFit="cover" cachePolicy="disk" transition={150} onError={() => setBroken(true)} />
           <View style={[s.bigText, { backgroundColor: alpha('#000000', 0.55) }]}>
             <Text v="tiny" color="#E2E8F0" style={{ fontWeight: '700' }}>
               {[lg?.shortName, timeAgo(a.published)].filter(Boolean).join(' · ')}
@@ -103,12 +115,10 @@ export const ArticleRow = memo(function ArticleRow({ a, big }: { a: Article; big
   }
   return (
     <Pressable onPress={() => openArticle(a)} accessibilityRole="link" accessibilityLabel={a.headline} style={({ pressed }) => [s.row, { borderColor: t.glassBorder }, pressed && { opacity: 0.75 }]}>
-      {a.image ? (
-        <Image source={{ uri: a.image }} style={[s.thumb, { backgroundColor: t.surface2 }]} contentFit="cover" cachePolicy="disk" transition={150} />
+      {a.image && !broken ? (
+        <Image source={{ uri: a.image }} style={[s.thumb, { backgroundColor: t.surface2 }]} contentFit="cover" cachePolicy="disk" transition={150} onError={() => setBroken(true)} />
       ) : (
-        <View style={[s.thumb, { backgroundColor: alpha(lg?.theme.primary ?? t.brand, 0.6), alignItems: 'center', justifyContent: 'center' }]}>
-          <Icon name="newspaper-variant-outline" color="#FFFFFF" size={28} />
-        </View>
+        fallback(s.thumb, 26)
       )}
       <View style={{ flex: 1, justifyContent: 'space-between', minHeight: 84 }}>
         <Text style={{ fontWeight: '800', fontSize: 15, lineHeight: 20 }} numberOfLines={3}>

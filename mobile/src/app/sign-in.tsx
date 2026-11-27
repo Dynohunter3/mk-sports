@@ -178,3 +178,5 @@ export default function SignIn() {
     </ScrollView>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

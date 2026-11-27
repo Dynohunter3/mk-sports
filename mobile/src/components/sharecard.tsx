@@ -50,7 +50,6 @@ export function CardFrame({ children, accent = GREEN, kicker }: { children: Reac
     <LinearGradient colors={['#14245A', INK, INK]} locations={[0, 0.55, 1]} style={st.card}>
       <View style={[st.glow, { backgroundColor: alpha(accent, 0.22) }]} />
       <View style={st.head}>
-        {/* eslint-disable-next-line @typescript-eslint/no-require-imports */}
         <Image source={require('../../assets/icon.png')} style={{ width: 34, height: 34, borderRadius: 9 }} />
         <Text style={st.brand}>
           MK <Text style={[st.brand, { color: GREEN }]}>SPORTS</Text>

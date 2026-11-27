@@ -108,3 +108,5 @@ export default function TennisPickScreen() {
     </ScrollView>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

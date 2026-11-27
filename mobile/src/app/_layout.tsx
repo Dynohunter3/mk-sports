@@ -85,3 +85,5 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

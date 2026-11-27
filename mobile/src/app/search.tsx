@@ -138,3 +138,5 @@ export default function SearchScreen() {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

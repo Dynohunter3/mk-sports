@@ -96,7 +96,10 @@ def test_run_end_to_end(tmp_path):
                _row("Q1", "Bukayo Saka", "2001-09-05", "Saka%202019.jpg", "296466"),
                _row("Q2", "Declan Rice", "1999-01-14", "Rice.jpg"),
                _row("Q3", "Non Free", "2000-02-02", "Nonfree.jpg")]
-    wd = FakeWdqs([clubs, players])
+    # the third answer: Wikidata facts for the players with a photo (mkdata/wikifacts.py)
+    facts = [{"p": {"value": "http://www.wikidata.org/entity/Q1"}, "h": {"value": "1.78"}, "club": {"value": "http://www.wikidata.org/entity/QA"},
+              "clubL": {"value": "Arsenal F.C."}, "start": {"value": "2018-01-01T00:00:00Z"}}]
+    wd = FakeWdqs([clubs, players, facts])
     clock = FakeClock()
     t = FakeTransport({
         "https://commons.wikimedia.org/": [(200, _commons([("Saka 2024.jpg", 2024, "CC BY-SA 4.0"), ("Saka 2019.jpg", 2019, "CC BY 2.0"),
@@ -118,6 +121,7 @@ def test_run_end_to_end(tmp_path):
     assert json.loads((tmp_path / "index.json").read_text())["players"]["Q1"]["crop"]["file"] == "Saka 2024.jpg"
     assert sum(1 for u, _ in t.calls if "upload.wikimedia.org" in u) == 2
     assert rep["players_with_photo"] == 2 and rep["cropped"] == 2
+    assert rep["players_with_facts"] == 1 and json.loads((pub / "f" / "Q1.json").read_text())["h"] == 178
 
     # a second run the same day asks Wikidata nothing and downloads nothing
     wd2 = FakeWdqs([])

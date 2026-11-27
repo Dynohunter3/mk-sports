@@ -430,3 +430,5 @@ function ProbabilityEditor({ pct, setPct, keys, names, colors, disabled, ai }: {
     </Card>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

@@ -338,3 +338,5 @@ const styles = StyleSheet.create({
   round: { width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.08)' },
   toast: { position: 'absolute', left: space.lg, right: space.lg, bottom: 96, flexDirection: 'row', alignItems: 'center', gap: space.sm, padding: space.md, borderRadius: radius.lg, borderWidth: 1.5 },
 });
+
+export { ErrorBoundary } from '@/components/route-error';

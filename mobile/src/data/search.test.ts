@@ -23,3 +23,11 @@ test('search results keep only competitions the app has, with app ids', () => {
   ] });
   assert.deepEqual(players.map((p) => [p.id, p.league]), [['280555', 'eng.1']]);
 });
+
+test('feed headlines lose a repeated section prefix', async () => {
+  const { cleanHeadline } = await import('./more');
+  assert.equal(cleanHeadline('Transfer rumors, news:Transfer rumors, news: Nico Paz open to Madrid'), 'Transfer rumors, news: Nico Paz open to Madrid');
+  assert.equal(cleanHeadline('Transfer rumors, news:Nico Paz open to Madrid'), 'Transfer rumors, news: Nico Paz open to Madrid');
+  assert.equal(cleanHeadline('  Arsenal   beat Chelsea 2:1 '), 'Arsenal beat Chelsea 2:1');
+  assert.equal(cleanHeadline('Kick-off at 20:00 for the derby'), 'Kick-off at 20:00 for the derby');
+});

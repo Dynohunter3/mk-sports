@@ -503,3 +503,5 @@ function OtherSportsPicks({ specials }: { specials: NonNullable<GameSummary['spe
     </>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

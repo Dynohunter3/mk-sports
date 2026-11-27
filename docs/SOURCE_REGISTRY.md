@@ -78,7 +78,7 @@ Keys are never stored in the app, the repository or logs.
 
 - **Terms status:** Permitted ([source](https://wikitech.wikimedia.org/wiki/Robot_policy))
 - **What we read:** Structured data is CC0 (public domain). Wikimedia's robot policy asks bots for a User-Agent with contact details, to honour Retry-After on a 429, and to keep request rates low; the query service currently limits clients to one request a minute.
-- **Notes:** Player photos only (mkdata/photos.py): footballers' dates of birth, photos (P18) and ESPN FC IDs (P3681). Club memberships are often out of date, so they are not used for matching.
+- **Notes:** Player photos and player facts. Photos (mkdata/photos.py): footballers' dates of birth, photos (P18) and ESPN FC IDs (P3681). Facts (mkdata/wikifacts.py, since 2.4): height (P2048), place of birth (P19) and senior clubs and national team (P54 with start, end and loan qualifiers), cleaned before publishing and credited on the player page. Club memberships are often out of date, so they are never used for matching, and captain statements (P634) were checked and rejected as too stale to show.
 
 ### Wikimedia Commons (photos)
 

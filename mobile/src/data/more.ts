@@ -79,13 +79,24 @@ export async function leaders(slug: string, perCategory = 5): Promise<LeaderCate
 // ------------------------------------------------------------------ news
 export type Article = { id: string; headline: string; description: string | null; published: string; image: string | null; url: string | null; byline: string | null; league: string; teamIds: string[]; type: string };
 
+/**
+ * Tidy a feed headline: collapse whitespace, drop a section prefix the feed sometimes repeats
+ * ("Transfer rumors, news:Transfer rumors, news: Nico Paz…") and add the missing space after its colon.
+ */
+export function cleanHeadline(h: string): string {
+  let s = h.replace(/\s+/g, ' ').trim();
+  s = s.replace(/^(.{4,60}?):\s*\1:\s*/i, '$1: ');
+  s = s.replace(/^([^:]{4,60}[a-z]):(?=[A-Z])/, '$1: ');
+  return s;
+}
+
 export function parseArticles(data: any, league: string): Article[] {
   return (data?.articles ?? [])
     .map((a: any) => {
       const img = (a?.images ?? []).find((i: any) => typeof i?.url === 'string');
       return {
         id: String(a?.id ?? a?.dataSourceIdentifier ?? a?.headline ?? ''),
-        headline: String(a?.headline ?? '').trim(),
+        headline: cleanHeadline(String(a?.headline ?? '')),
         description: a?.description ?? null,
         published: a?.published ?? a?.lastModified ?? '',
         image: img?.url ?? null,

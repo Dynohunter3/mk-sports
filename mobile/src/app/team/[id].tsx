@@ -19,3 +19,5 @@ export default function TeamScreen() {
     </LeagueTheme>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

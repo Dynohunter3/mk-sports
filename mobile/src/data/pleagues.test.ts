@@ -79,7 +79,6 @@ test('cards carry last week too, and old-format links still decode', () => {
   assert.equal(d.cards[0].pwk, '2026-W47');
   // a 2.2 link: ten fields per member
   const old = { v: 1, c: 'ABC234', n: 'L', m: [['member02', 'Old', '⚽', 12, 3, '2026-W48', 4, 6, 1, 99]] };
-  const { toB64url } = require('./pleagues');
   const d2 = decode23(toB64url(JSON.stringify(old)));
   assert.equal(d2.cards[0].points, 12);
   assert.equal(d2.cards[0].pw, undefined);

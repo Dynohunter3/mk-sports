@@ -285,3 +285,5 @@ export default function AccuracyScreen() {
     </ScrollView>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

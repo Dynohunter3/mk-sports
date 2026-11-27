@@ -122,3 +122,5 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

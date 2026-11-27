@@ -1,7 +1,7 @@
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
-import { ReactNode, useState } from 'react';
-import { Linking, Platform, Pressable, ScrollView, Share, Switch, TextInput, View } from 'react-native';
+import { ReactNode } from 'react';
+import { Linking, Platform, Pressable, ScrollView, Share, Switch, View } from 'react-native';
 
 import { ProfileEditor } from '@/components/profile';
 import { BackupError, makeBackup, parseBackup, restoreBackup, summary as backupSummary } from '@/data/backup';
@@ -18,7 +18,7 @@ import { confirm, notify } from '@/lib/dialogs';
 import { startLiveTracking } from '@/notify/live';
 import { NOTIFY_SUPPORTED, requestPermission, sendTestAlerts } from '@/notify/notifications';
 import { usePrefs } from '@/state/prefs';
-import { radius, space, TAP, useTheme } from '@/theme/theme';
+import { space, TAP, useTheme } from '@/theme/theme';
 
 function Item({ icon, title, sub, right, onPress, danger }: { icon: string; title: string; sub?: string; right?: ReactNode; onPress?: () => void; danger?: boolean }) {
   const t = useTheme();
@@ -67,8 +67,6 @@ export default function Settings() {
   const { prefs, update } = usePrefs();
   const auth = useAuth();
   const me = auth.me;
-  const [name, setName] = useState(me?.display_name ?? '');
-  const [savingName, setSavingName] = useState(false);
 
   async function setNotif(key: string, value: boolean) {
     await api<Me>('/me', { method: 'PATCH', body: { notification_prefs: { [key]: value } } }).catch(() => notify('Could not save', 'Check your connection and try again.'));
@@ -361,3 +359,5 @@ export default function Settings() {
     </ScrollView>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

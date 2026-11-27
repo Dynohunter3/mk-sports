@@ -400,7 +400,7 @@ CROP_CHECK = 2  # crops made before this check version are verified again (from 
 def run(http: HttpClient, root: Path, *, budget: int = 1200, max_seconds: float = 2400, leagues=None,
         wdqs: Wdqs | None = None, crop: Callable[[bytes], tuple[bytes | None, str]] = face_crop_jpeg,
         verify: Callable[[bytes], bool] = verify_crop,
-        now: float | None = None, clock: Callable[[], float] = time.time, only: set[str] | None = None) -> dict:
+        now: float | None = None, clock: Callable[[], float] = time.time, only: set[str] | None = None, facts_chunks: int = 6) -> dict:
     """One incremental pass. `only`: Wikidata ids to describe and crop (a targeted run, e.g. for a preview)."""
     paths = Paths(root)
     now = now if now is not None else clock()
@@ -516,7 +516,16 @@ def run(http: HttpClient, root: Path, *, budget: int = 1200, max_seconds: float 
         del idx["players"][q]
     _save(paths.index, idx)
 
+    # 5. player facts from Wikidata for the players with a photo (a few queries a run, while time allows)
+    from . import wikifacts
+    with_photo = {q for q, p in idx["players"].items() if p.get("crop") and paths.image(q).exists() and p.get("dob")}
+    if only is None and clock() - start < max_seconds:
+        facts = wikifacts.refresh(wdqs, root, now, sorted(with_photo), stats, max_chunks=facts_chunks)
+    else:
+        facts = _load(root / "facts.json", {})
+
     report = publish(idx, paths, now)
+    report["players_with_facts"] = wikifacts.publish(paths.public, facts, with_photo)
     report.update(dict(stats))
     report["wdqs_requests"] = wdqs.requests
     report["seconds"] = round(clock() - start)

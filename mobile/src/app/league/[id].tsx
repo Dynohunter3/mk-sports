@@ -111,3 +111,5 @@ function LeagueView({ id }: { id: string }) {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

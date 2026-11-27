@@ -1090,3 +1090,5 @@ function Sources({ p, home, away, hasDraws }: { p: NonNullable<MatchDetail['pred
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

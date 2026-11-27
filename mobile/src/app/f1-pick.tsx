@@ -123,3 +123,5 @@ export default function F1PickScreen() {
     </ScrollView>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

@@ -97,3 +97,5 @@ function News({ tab, setTab }: { tab: string; setTab: (t: string) => void }) {
     </View>
   );
 }
+
+export { ErrorBoundary } from '@/components/route-error';

@@ -161,3 +161,42 @@ export function resetPhotos() {
   dobs.clear();
   downUntil = 0;
 }
+
+// ------------------------------------------------------------------ facts from Wikidata (pipeline/mkdata/wikifacts.py)
+/** [club, first year, last year (null = still there, "?" = unknown), 1 = on loan] */
+export type CareerSpell = [string, number, number | null | '?', 0 | 1];
+export type PlayerFacts = { v: 1; src: string; h: number | null; born: string | null; clubs: CareerSpell[]; nt: [string, number] | null };
+const factsCache = new Map<string, PlayerFacts | null>();
+
+/** Height, place of birth and career from Wikidata, for players the photo index has identified. */
+export function usePlayerFacts(w?: Who | null): PlayerFacts | null | undefined {
+  const photo = usePlayerPhoto(w);
+  const qid = photo?.qid ?? null;
+  const [facts, setFacts] = useState<PlayerFacts | null | undefined>(() => (qid ? factsCache.get(qid) : undefined));
+  useEffect(() => {
+    if (photo === undefined) return setFacts(undefined);
+    if (!qid) return setFacts(null);
+    if (factsCache.has(qid)) return setFacts(factsCache.get(qid) ?? null);
+    let alive = true;
+    get<PlayerFacts>(`${PHOTO_BASE}/f/${qid}.json`, { ttl: 24 * 3600, timeoutMs: 12000, retries: 1 })
+      .then((f) => (f && f.v === 1 ? f : null))
+      .catch(() => null)
+      .then((f) => {
+        factsCache.set(qid, f);
+        if (alive) setFacts(f);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [qid, photo]);
+  return facts;
+}
+
+/** "2023–", "2019–21", "2020–?" */
+export function spellYears(s: CareerSpell): string {
+  const [, a, b] = s;
+  if (b === null) return `${a}–`;
+  if (b === '?') return `${a}–?`;
+  if (b === a) return String(a);
+  return `${a}–${String(b).slice(Math.floor(a / 100) === Math.floor(b / 100) ? 2 : 0)}`;
+}
