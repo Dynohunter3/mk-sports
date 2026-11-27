@@ -2,10 +2,12 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider as NavThemeProvider } fro
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider, useAuth } from '@/auth/auth';
+import { IntroSplash } from '@/components/intro';
 import { setFeedback } from '@/components/motion';
 import { useAlerts } from '@/notify/useAlerts';
 import { PrefsProvider, usePrefs } from '@/state/prefs';
@@ -24,20 +26,24 @@ function Navigator() {
   useEffect(() => setFeedback({ haptics: prefs.haptics !== false, motion: prefs.motion !== false }), [prefs.haptics, prefs.motion]);
   useAlerts(ready);
 
+  // the intro takes over from the system splash and hides it; this is a fallback if it never draws
   useEffect(() => {
     if (ready) SplashScreen.hideAsync().catch(() => undefined);
   }, [ready]);
+  const [introDone, setIntroDone] = useState(false);
+  const endIntro = useCallback(() => setIntroDone(true), []);
 
   const navTheme = useMemo(() => {
     const base = t.mode === 'dark' ? DarkTheme : DefaultTheme;
     return { ...base, colors: { ...base.colors, background: t.bg, card: t.bg, text: t.text, border: t.border, primary: t.brand } };
   }, [t]);
 
-  if (!ready) return null;
   return (
-    <NavThemeProvider value={navTheme}>
-      <StatusBar style={t.mode === 'dark' ? 'light' : 'dark'} />
-      <Stack
+    <View style={{ flex: 1, backgroundColor: t.bg }}>
+      {ready ? (
+        <NavThemeProvider value={navTheme}>
+          <StatusBar style={!introDone || t.mode === 'dark' ? 'light' : 'dark'} />
+          <Stack
         screenOptions={{
           headerStyle: { backgroundColor: t.bg },
           headerTintColor: t.text,
@@ -67,8 +73,11 @@ function Navigator() {
         <Stack.Screen name="private-leagues" options={{ headerShown: false }} />
         <Stack.Screen name="pl" options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="search" options={{ headerShown: false, animation: 'fade' }} />
-      </Stack>
-    </NavThemeProvider>
+          </Stack>
+        </NavThemeProvider>
+      ) : null}
+      {introDone ? null : <IntroSplash start={prefsReady && (fontsLoaded || !!fontError)} ready={ready} animate={prefs.motion !== false} onDone={endIntro} />}
+    </View>
   );
 }
 

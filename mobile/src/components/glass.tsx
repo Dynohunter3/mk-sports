@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ReactNode } from 'react';
 import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { alpha, radius as R, useTheme } from '@/theme/theme';
+import { alpha, cardShadow, DarkSurface, mix, radius as R, useTheme } from '@/theme/theme';
 
 import { PressableScale } from './motion';
 
@@ -34,7 +34,8 @@ export function Glass({
   padded?: boolean;
 }) {
   const t = useTheme();
-  const fill = tint ? alpha(tint, t.mode === 'dark' ? 0.22 : 0.12) : strong ? t.glassStrong : t.glass;
+  // light mode cards are opaque (a see-through card shows its own shadow on Android)
+  const fill = tint ? (t.mode === 'dark' ? alpha(tint, 0.22) : mix(tint, '#FFFFFF', 0.9)) : strong ? t.glassStrong : t.glass;
   const body = (
     <>
       <LinearGradient
@@ -49,6 +50,7 @@ export function Glass({
   );
   const base: StyleProp<ViewStyle> = [
     { borderRadius: radius, borderWidth: StyleSheet.hairlineWidth * 2, borderColor: t.glassBorder, backgroundColor: fill, overflow: 'hidden' },
+    cardShadow(t),
     padded && { padding: 16 },
     style,
   ];
@@ -82,8 +84,14 @@ export function Backdrop({ height = 420 }: { height?: number }) {
   const t = useTheme();
   return (
     <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: t.bg }]}>
-      <LinearGradient colors={[alpha(t.heroFrom, t.mode === 'dark' ? 0.95 : 0.9), alpha(t.heroFrom, 0)]} start={{ x: 0.2, y: 0 }} end={{ x: 0.5, y: 1 }} style={{ height }} />
-      <View style={{ position: 'absolute', top: -120, right: -80, width: 260, height: 260, borderRadius: 130, backgroundColor: alpha(t.brand, t.mode === 'dark' ? 0.12 : 0.1) }} />
+      {/* vertical, so the wash is fully clear by the bottom edge everywhere (a diagonal one left a visible line) */}
+      {t.mode === 'dark' ? (
+        <LinearGradient colors={[alpha(t.heroFrom, 0.95), alpha(t.heroFrom, 0)]} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }} style={{ height }} />
+      ) : (
+        // light: a soft tint of the competition's colour, so dark text on it stays crisp (a deep wash turns muddy)
+        <LinearGradient colors={[alpha(t.heroFrom, 0.2), alpha(t.heroFrom, 0.07), alpha(t.heroFrom, 0)]} locations={[0, 0.55, 1]} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }} style={{ height }} />
+      )}
+      <View style={{ position: 'absolute', top: -120, right: -80, width: 260, height: 260, borderRadius: 130, backgroundColor: alpha(t.brand, t.mode === 'dark' ? 0.12 : 0.07) }} />
     </View>
   );
 }
@@ -94,7 +102,7 @@ export function Hero({ children, style }: { children: ReactNode; style?: StylePr
   return (
     <LinearGradient colors={[t.heroFrom, t.heroTo]} start={{ x: 0, y: 0 }} end={{ x: 0.4, y: 1 }} style={[{ borderRadius: R.xl, padding: 16, overflow: 'hidden' }, style]}>
       <View pointerEvents="none" style={{ position: 'absolute', right: -40, top: -40, width: 160, height: 160, borderRadius: 80, backgroundColor: alpha(t.brand, 0.16) }} />
-      {children}
+      <DarkSurface>{children}</DarkSurface>
     </LinearGradient>
   );
 }

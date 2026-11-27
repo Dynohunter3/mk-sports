@@ -1,80 +1,13 @@
 import { createContext, ReactNode, useContext, useMemo } from 'react';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, type ViewStyle } from 'react-native';
 
 import { LEAGUE_BY_SLUG, type LeagueTheme as LeagueColors } from '@/data/leagues';
 import { usePrefs } from '@/state/prefs';
 
-/** MK Sports brand: electric green -> cyan on deep navy. */
-export const BRAND = { green: '#2CF59A', cyan: '#16C6FF', navy: '#0B1430', ink: '#060A16' };
+import { alpha, luminance, mix, onColor, rgb } from './color';
+import { dark, light, type Palette } from './palette';
 
-export const dark = {
-  mode: 'dark' as const,
-  bg: '#060A16',
-  surface: '#0F1628',
-  surface2: '#18223A',
-  border: '#24304A',
-  text: '#EEF3FA',
-  textDim: '#A6B3C6',
-  textMuted: '#6E7B90',
-  brand: BRAND.green,
-  brandText: '#04120B',
-  accent2: BRAND.cyan,
-  live: '#FF4D5E',
-  win: '#22C55E',
-  loss: '#F87171',
-  draw: '#94A3B8',
-  pending: '#F5A524',
-  // expressive accents (celebrations, game, highlights)
-  hot: '#FF3D81',
-  violet: '#9B6BFF',
-  gold: '#FFC93C',
-  overlay: 'rgba(0,0,0,0.6)',
-  // glass
-  glass: 'rgba(255,255,255,0.055)',
-  glassStrong: 'rgba(20,28,48,0.82)',
-  glassBorder: 'rgba(255,255,255,0.10)',
-  glassHighlight: 'rgba(255,255,255,0.09)',
-  // hero gradient (top of screens)
-  heroFrom: '#14245A',
-  heroTo: '#060A16',
-  onHero: '#FFFFFF',
-  pitch: '#1E7A46',
-  pitchLine: 'rgba(255,255,255,0.35)',
-};
-
-export type Palette = Omit<typeof dark, 'mode'> & { mode: 'dark' | 'light' };
-
-export const light: Palette = {
-  mode: 'light',
-  bg: '#EEF2F8',
-  surface: '#FFFFFF',
-  surface2: '#E6ECF5',
-  border: '#D3DCE8',
-  text: '#0B1222',
-  textDim: '#46556B',
-  textMuted: '#7A879A',
-  brand: '#0A9F63',
-  brandText: '#FFFFFF',
-  accent2: '#0090C7',
-  live: '#E11D48',
-  win: '#16A34A',
-  loss: '#DC2626',
-  draw: '#64748B',
-  pending: '#B45309',
-  hot: '#E11D74',
-  violet: '#7C3AED',
-  gold: '#B7791F',
-  overlay: 'rgba(15,23,42,0.45)',
-  glass: 'rgba(255,255,255,0.72)',
-  glassStrong: 'rgba(255,255,255,0.9)',
-  glassBorder: 'rgba(15,23,42,0.08)',
-  glassHighlight: 'rgba(255,255,255,0.9)',
-  heroFrom: '#1B3A8A',
-  heroTo: '#EEF2F8',
-  onHero: '#FFFFFF',
-  pitch: '#2E8B57',
-  pitchLine: 'rgba(255,255,255,0.45)',
-};
+export { BRAND, dark, light, type Palette } from './palette';
 
 /** Fallback sport colours (the API sends the authoritative ones). */
 export const SPORT_COLORS: Record<string, string> = {
@@ -111,7 +44,6 @@ export const TAB_BAR_SPACE = 96;
 
 // ------------------------------------------------------------------ colour helpers
 export { alpha, contrastRatio, forWhiteText, luminance, mix, onColor, relLuminance, rgb } from './color';
-import { alpha, luminance, mix, onColor, rgb } from './color';
 
 function distance(a: string, b: string): number {
   const x = rgb(a);
@@ -146,7 +78,7 @@ export function leaguePalette(base: Palette, th: LeagueColors): Palette {
     brandText: onColor(brand),
     accent2: base.mode === 'dark' ? mix(th.primary, '#FFFFFF', 0.35) : th.primary,
     heroFrom: th.primary,
-    heroTo: base.mode === 'dark' ? mix(th.secondary, base.bg, 0.35) : mix(th.primary, base.bg, 0.82),
+    heroTo: base.mode === 'dark' ? mix(th.secondary, base.bg, 0.35) : mix(th.primary, '#0B1222', 0.45),
     glass: base.mode === 'dark' ? alpha(mix(th.primary, '#FFFFFF', 0.2), 0.1) : base.glass,
     glassBorder: base.mode === 'dark' ? alpha(mix(th.primary, '#FFFFFF', 0.6), 0.16) : base.glassBorder,
   };
@@ -154,6 +86,7 @@ export function leaguePalette(base: Palette, th: LeagueColors): Palette {
 
 const ThemeCtx = createContext<Palette>(dark);
 const BaseCtx = createContext<Palette>(dark);
+const LeagueCtx = createContext<string | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const system = useColorScheme();
@@ -176,7 +109,36 @@ export function LeagueTheme({ league, children }: { league: string | null | unde
     const th = league ? LEAGUE_BY_SLUG[league]?.theme : null;
     return th ? leaguePalette(base, th) : base;
   }, [base, league]);
-  return <ThemeCtx.Provider value={value}>{children}</ThemeCtx.Provider>;
+  return (
+    <LeagueCtx.Provider value={league ?? null}>
+      <ThemeCtx.Provider value={value}>{children}</ThemeCtx.Provider>
+    </LeagueCtx.Provider>
+  );
+}
+
+/** Content on a deep, competition-coloured header: uses the dark palette in both modes, so its text stays light. */
+export function DarkSurface({ children }: { children: ReactNode }) {
+  const t = useContext(ThemeCtx);
+  const value = useDarkPalette();
+  return value === t ? <>{children}</> : <ThemeCtx.Provider value={value}>{children}</ThemeCtx.Provider>;
+}
+
+/** The palette `DarkSurface` gives its content: the current one in dark mode, its dark twin in light mode. */
+export function useDarkPalette(): Palette {
+  const t = useContext(ThemeCtx);
+  const base = useContext(BaseCtx);
+  const league = useContext(LeagueCtx);
+  return useMemo(() => {
+    if (base.mode === 'dark') return t;
+    const th = league ? LEAGUE_BY_SLUG[league]?.theme : null;
+    return th ? leaguePalette(dark, th) : dark;
+  }, [t, base.mode, league]);
+}
+
+/** The soft shadow that gives light-mode cards their depth (none in dark mode, where the glass edge does that). */
+export function cardShadow(t: Palette, lift = 1): ViewStyle | null {
+  if (t.mode === 'dark') return null;
+  return { shadowColor: '#0B1A3A', shadowOpacity: 0.07 * lift, shadowRadius: 10 * lift, shadowOffset: { width: 0, height: 3 * lift }, elevation: 2 * lift };
 }
 
 export const useTheme = () => useContext(ThemeCtx);

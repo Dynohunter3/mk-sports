@@ -24,7 +24,7 @@ import { dayLabel, kickoffTime, outcomeLabel, relative, rulesText } from '@/lib/
 import { useNow } from '@/lib/useNow';
 import { NOTIFY_SUPPORTED, requestPermission } from '@/notify/notifications';
 import { usePrefs } from '@/state/prefs';
-import { alpha, forWhiteText, LeagueTheme, matchColors, mix, onColor, radius, space, TAP, useTheme } from '@/theme/theme';
+import { alpha, forWhiteText, LeagueTheme, matchColors, mix, onColor, radius, space, TAP, useDarkPalette, useTheme } from '@/theme/theme';
 
 type Tab = 'overview' | 'lineups' | 'stats' | 'timeline' | 'table';
 
@@ -135,7 +135,8 @@ function MatchHero({ m, xg, deserved }: { m: MatchDetail; xg: MatchCentre['xg'];
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}
       />
-      <LinearGradient colors={['rgba(0,0,0,0)', alpha(t.bg, 0.85)]} start={{ x: 0, y: 0.55 }} end={{ x: 0, y: 1 }} style={StyleSheet.absoluteFill} />
+      {/* dark mode: the hero melts into the page; light mode keeps it deep to the edge, so the white names stay readable */}
+      <LinearGradient colors={['rgba(0,0,0,0)', t.mode === 'dark' ? alpha(t.bg, 0.85) : 'rgba(0,0,0,0.28)']} start={{ x: 0, y: 0.55 }} end={{ x: 0, y: 1 }} style={StyleSheet.absoluteFill} />
       <Text v="hero" color="rgba(255,255,255,0.07)" style={{ position: 'absolute', alignSelf: 'center', top: 70, fontSize: 170, lineHeight: 180 }}>
         VS
       </Text>
@@ -907,6 +908,7 @@ function Timeline({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefine
 // ------------------------------------------------------------------ pieces kept from the prediction view
 function PickCta({ m }: { m: MatchDetail }) {
   const t = useTheme();
+  const dk = useDarkPalette(); // the card keeps its bright colours (with dark text) in light mode too
   const now = useNow(m.status === 'scheduled' ? 1000 : 0);
   const p = m.my_pick;
   const locksIn = new Date(m.start_time).getTime() - now;
@@ -916,7 +918,7 @@ function PickCta({ m }: { m: MatchDetail }) {
   if (!locked && !p) {
     return (
       <PressableScale onPress={() => router.push(`/pick/${m.id}`)} accessibilityLabel="Make your pick" scaleTo={0.97} feedback="thud" style={{ marginTop: space.md }}>
-        <LinearGradient colors={[t.brand, t.accent2]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radius.xl, padding: space.lg, flexDirection: 'row', alignItems: 'center', gap: space.md, overflow: 'hidden' }}>
+        <LinearGradient colors={[dk.brand, dk.accent2]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: radius.xl, padding: space.lg, flexDirection: 'row', alignItems: 'center', gap: space.md, overflow: 'hidden' }}>
           <View style={{ position: 'absolute', right: -24, top: -30, width: 120, height: 120, borderRadius: 60, backgroundColor: 'rgba(255,255,255,0.16)' }} />
           <View style={{ flex: 1 }}>
             <Text v="hero" color="#04120B" style={{ fontSize: 38, lineHeight: 40 }}>
@@ -927,7 +929,7 @@ function PickCta({ m }: { m: MatchDetail }) {
             </Text>
           </View>
           <View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: '#04120B', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="hand-pointing-right" size={26} color={t.brand} />
+            <Icon name="hand-pointing-right" size={26} color={dk.brand} />
           </View>
         </LinearGradient>
       </PressableScale>

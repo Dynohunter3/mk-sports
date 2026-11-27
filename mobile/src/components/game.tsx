@@ -7,7 +7,7 @@ import { View } from 'react-native';
 import { invalidate } from '@/api/cache';
 import { api } from '@/api/client';
 import type { GamePick, GameSummary, MatchCard } from '@/api/types';
-import { alpha, matchColors, radius, space, useTheme } from '@/theme/theme';
+import { alpha, matchColors, radius, space, useDarkPalette, useTheme } from '@/theme/theme';
 
 import { TeamBadge } from './match';
 import { Float, haptic, Pop, PressableScale } from './motion';
@@ -97,7 +97,7 @@ export function ResultsCelebration({ game, onCelebrate }: { game: GameSummary | 
 
 /** The Quick Picks hero: a fanned stack of the next matches and the you-vs-AI score. */
 export function PlayHero({ game, next }: { game: GameSummary | undefined; next: MatchCard[] }) {
-  const t = useTheme();
+  const t = useDarkPalette(); // the card is bright with dark text in both modes
   const vs = game?.vs_ai;
   const fan = next.slice(0, 3);
   return (

@@ -8,7 +8,7 @@ import { qs } from '@/api/client';
 import type { Team, TeamHub } from '@/api/types';
 import { LEAGUE_BY_SLUG, MATCH_LEAGUES } from '@/data/leagues';
 import { FavouriteTeam, usePrefs } from '@/state/prefs';
-import { alpha, mix, radius, space, SPORT_ICONS, TAB_BAR_SPACE, TAP, useTheme } from '@/theme/theme';
+import { alpha, DarkSurface, forWhiteText, mix, radius, space, SPORT_ICONS, TAB_BAR_SPACE, TAP, useTheme } from '@/theme/theme';
 
 import { Crest, PlayerPhoto } from './crest';
 import { matchTeam, useEloHistory } from '@/data/published';
@@ -51,7 +51,8 @@ export function TeamHubView({ id, leagues, onBack, tab = false }: { id: string; 
   if (hub.loading) return <ActivityIndicator color={t.brand} style={{ marginTop: 120 }} />;
   if (!h) return <EmptyState icon="shield-off-outline" title="Team not available" body={hub.error ?? undefined} action="Try again" onAction={hub.refresh} />;
   const color = h.team.color;
-  const top = mix(color, '#000000', 0.15);
+  // deep enough for the white name on it, even for white or sky-blue kits
+  const top = forWhiteText(mix(color, '#000000', 0.15), 4.5);
   const next = h.upcoming[0];
   const setFav = () => {
     update({ favoriteTeam: toFavourite(h.team, h.sport, h.leagues.map((l) => l.id)), leagues: [...new Set([...prefs.leagues, ...h.leagues.map((l) => l.id)])] });
@@ -59,7 +60,12 @@ export function TeamHubView({ id, leagues, onBack, tab = false }: { id: string; 
 
   const header = (
     <View>
-      <LinearGradient colors={[top, alpha(color, 0.35), alpha(color, 0)]} style={{ paddingTop: space.md, paddingHorizontal: space.lg, paddingBottom: space.lg }}>
+      <LinearGradient
+        // dark mode fades into the page; light mode ends solid (a fade to white would wash out the white text)
+        colors={t.mode === 'dark' ? [top, alpha(color, 0.35), alpha(color, 0)] : [top, mix(top, '#0B1222', 0.35)]}
+        style={[{ paddingTop: space.md, paddingHorizontal: space.lg, paddingBottom: space.lg }, t.mode === 'light' && { borderBottomLeftRadius: radius.xl, borderBottomRightRadius: radius.xl, marginBottom: space.md }]}
+      >
+        <DarkSurface>
         <Row style={{ justifyContent: 'space-between', minHeight: 40 }}>
           {onBack ? (
             <Pressable onPress={onBack} accessibilityRole="button" accessibilityLabel="Back" hitSlop={10} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.25)', alignItems: 'center', justifyContent: 'center' }}>
@@ -90,6 +96,7 @@ export function TeamHubView({ id, leagues, onBack, tab = false }: { id: string; 
             </View>
           ) : null}
         </View>
+        </DarkSurface>
       </LinearGradient>
       <View style={{ paddingHorizontal: space.lg }}>
         <Segmented

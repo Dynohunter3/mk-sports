@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,7 +14,7 @@ import { EmptyState, Icon, Loading, Row, SectionHeader, StatTile, Text } from '@
 import { LEAGUE_BY_SLUG } from '@/data/leagues';
 import { creditLine, type PlayerFacts, spellYears, usePlayerFacts, usePlayerPhoto, type Who } from '@/data/photos';
 import { usePlayerSeasonXg } from '@/data/playerxg';
-import { alpha, LeagueTheme, radius, space, useTheme } from '@/theme/theme';
+import { alpha, DarkSurface, LeagueTheme, radius, space, useDarkPalette, useTheme } from '@/theme/theme';
 
 const MATCH_KEYS: [string, string][] = [
   ['G', 'Goals'],
@@ -46,6 +47,7 @@ const ordered = (labels: string[]) => labels.map((l, i) => ({ l, i })).sort((a, 
 
 function Player({ id, league, match }: { id: string; league: string; match?: string }) {
   const t = useTheme();
+  const ht = useDarkPalette(); // the header's palette (deep in both modes)
   const page = useApi<PlayerPage>(`/players/${id}${qs({ league, match })}`, { maxAge: 600, poll: match ? 30 : 0 });
   const p = page.data;
   const who: Who | null = p ? { id, name: p.name, team: p.team?.espnId ?? null, league } : null;
@@ -71,7 +73,10 @@ function Player({ id, league, match }: { id: string; league: string; match?: str
   return (
     <View style={{ flex: 1, backgroundColor: t.bg }}>
       <ScrollView contentContainerStyle={{ paddingBottom: space.xxl }}>
+        {/* a deep header in both modes, with light text, so the status bar icons are light too */}
+        <StatusBar style="light" />
         <LinearGradient colors={[t.heroFrom, t.heroTo]} start={{ x: 0, y: 0 }} end={{ x: 0.3, y: 1 }}>
+          <DarkSurface>
           {p.jersey ? (
             <Text v="hero" color="rgba(255,255,255,0.07)" style={{ position: 'absolute', right: -6, top: 30, fontSize: 190, lineHeight: 200 }} accessibilityElementsHidden importantForAccessibility="no">
               {p.jersey}
@@ -83,14 +88,14 @@ function Player({ id, league, match }: { id: string; league: string; match?: str
                 <Icon name="chevron-down" size={26} color="#fff" />
               </Pressable>
               <Row gap={space.lg} style={{ marginTop: space.md, alignItems: 'center' }}>
-                <PlayerPhoto url={p.headshot} jersey={p.jersey} color={t.brand} size={104} ring={t.brand} ringWidth={3} badge who={who} />
+                <PlayerPhoto url={p.headshot} jersey={p.jersey} color={ht.brand} size={104} ring={ht.brand} ringWidth={3} badge who={who} />
                 <View style={{ flex: 1 }}>
                   <Text v="title" color="#FFFFFF" numberOfLines={2} adjustsFontSizeToFit minimumFontScale={0.7}>
                     {p.name}
                   </Text>
                   <Row gap={6} style={{ marginTop: 4, flexWrap: 'wrap' }}>
                     {p.position ? (
-                      <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 999, backgroundColor: alpha(t.brand, 0.22), borderWidth: 1, borderColor: alpha(t.brand, 0.6) }}>
+                      <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 999, backgroundColor: alpha(ht.brand, 0.22), borderWidth: 1, borderColor: alpha(ht.brand, 0.6) }}>
                         <Text v="tiny" color="#FFFFFF" style={{ fontWeight: '800' }}>
                           {p.position}
                         </Text>
@@ -136,6 +141,7 @@ function Player({ id, league, match }: { id: string; league: string; match?: str
               <PhotoCredit who={who} />
             </View>
           </SafeAreaView>
+          </DarkSurface>
         </LinearGradient>
 
         <View style={{ paddingHorizontal: space.lg }}>

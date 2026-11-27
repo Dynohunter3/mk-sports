@@ -18,7 +18,7 @@ Every competition appears in its own colours and every team with its real crest.
 | | |
 |---|---|
 | **Download page** | https://dynohunter3.github.io/mk-sports/ |
-| **Current version** | 2.4.0 (Android 7.0 or newer, about 55 MB) |
+| **Current version** | 2.5.0 (Android 7.0 or newer, about 55 MB) |
 | **Player photo credits** | https://dynohunter3.github.io/mk-sports/photo-credits.html |
 | **Contact** | [Mksportz26@gmail.com](mailto:Mksportz26@gmail.com) · call +260 97 322 0276 · WhatsApp +260 76 050 8803 |
 
@@ -65,7 +65,7 @@ Every competition appears in its own colours and every team with its real crest.
 
 **Publishing a new version (owner).** The download button points to `releases/latest/download/MKSports.apk` on GitHub, so it works only once a release with that file is published:
 1. On GitHub, open the repository, then **Releases** > **Draft a new release**.
-2. Create a tag such as `v2.4.0` and add the release notes.
+2. Create a tag such as `v2.5.0` and add the release notes.
 3. Attach the APK, named exactly `MKSports.apk`, and click **Publish**.
 
 No release has been published yet; until one is, the download button returns "not found".
@@ -131,6 +131,8 @@ The 2.0 "Matchday" design:
 - **Colours:** each team's own colours on match cards and headers, with bold gradients for big moments.
 - **Motion:** cards dip and spring back with a light haptic tap; lists rise into place; skeleton loaders instead of spinners; confetti for wins.
 - **League tables:** your team's row pulses in its own colours.
+- **Opening animation (2.5):** a 1.5-second intro picks up from the system splash screen: the MK mark pops with a shockwave, the ball over the K hops, and "MK SPORTS" rises before the app zooms in. It plays once per launch and is skipped (a plain fade) when animations are off.
+- **Light mode (2.5):** white cards with soft shadows on a cool off-white; headers with white text (team, match, player, competition) stay deep in the team's or competition's colour; every text colour reaches WCAG AA contrast (4.5:1), checked by a test.
 - **Accessibility:**
   - Settings has **Animations** and **Vibration** switches, and the phone's reduce-motion setting is respected.
   - Text on team colours is black or white by WCAG contrast ratio, so yellow and light kits get dark text, and white headlines sit on colours darkened just enough to stay readable.
@@ -625,7 +627,7 @@ PREDICTPRO_UPLOAD_KEY_PASSWORD=...
 Counts measured on 27 Nov 2026:
 
 ```bash
-cd mobile   && npm test && npx tsc --noEmit   # 106 tests
+cd mobile   && npm test && npx tsc --noEmit   # 107 tests
 cd mobile   && npm run lint                   # ESLint (Expo rules): 0 errors
 cd pipeline && python -m pytest -q            # 81 tests
 cd engine   && python -m pytest -q            # 37 tests
@@ -668,12 +670,13 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/API.md](docs/API.md
 | 2.0.0 "Matchday" | 24 Nov 2026 | New design; Quick Picks; you vs the AI; levels, badges, celebrations; My game |
 | 2.1.0 | 24–25 Nov 2026 | Private leagues; profiles with avatars; reliable alerts (exact alarms, live tracking); line-ups on a full pitch; goals outlook; player photos from Wikimedia Commons; pulsing favourite-team row; Contact us; download page; fixes (match score cut-off, finished matches failing to open) |
 | 2.2.0 | 25 Nov 2026 | Live win probability; player xG; search; My team home-screen widget; back up and restore, and Android Auto Backup that actually includes the data; weekly banker and season archive; league share reminder; contrast-aware text and TalkBack in Quick Picks; RPS, calibration and the live record band on the accuracy page; nine more leagues on the published model |
+| 2.5.0 | 27 Nov 2026 | Opening animation; light mode redone (white cards with soft shadows, deep headers that keep white text readable, AA contrast for all text, crisp tinted backdrops); a visible line at the bottom of screen backdrops removed in both themes |
 | 2.4.0 | 27 Nov 2026 | Player pages redesigned, with height, place of birth, career and national team from Wikidata; stats in plain words; news images that fail to load show the competition's colours, and repeated headline prefixes are removed; error screens so one broken screen can't crash the app; ESLint |
 | 2.3.2 | 27 Nov 2026 | Line-ups redesigned: both teams on one pitch with full markings; player cards with photo or kit shirt in the colours actually worn, number, goals, assists, cards, substitution minute, saves and each player's xG; substitutes side by side with who they replaced |
 | 2.3.1 | 27 Nov 2026 | NBA predictions: opponent-adjusted ratings (Step 12); 90% weight on bookmaker lines when listed for NBA, NHL and NFL |
 | 2.3.0 | 26 Nov 2026 | Season simulator (title, top four, promotion, relegation chances, with the weekly change); xG table and deserved results; team strength history; public record of every prediction with commit links and a track record page; probability picks (Brier score); F1 podium and tennis picks; share cards with QR code; season recap; matchweek awards in private leagues |
 
-Release notes: [docs/RELEASE_2_4.md](docs/RELEASE_2_4.md), [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md), [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md), and the Step reports in [docs/audit](docs/audit/).
+Release notes: [docs/RELEASE_2_5.md](docs/RELEASE_2_5.md), [docs/RELEASE_2_4.md](docs/RELEASE_2_4.md), [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md), [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md), [docs/RELEASE_2_1.md](docs/RELEASE_2_1.md), [docs/DESIGN_2_0.md](docs/DESIGN_2_0.md), and the Step reports in [docs/audit](docs/audit/).
 
 ---
 
@@ -702,6 +705,7 @@ Release notes: [docs/RELEASE_2_4.md](docs/RELEASE_2_4.md), [docs/RELEASE_2_3.md]
 
 | Document | What's in it |
 |---|---|
+| [docs/RELEASE_2_5.md](docs/RELEASE_2_5.md) | 2.5: the opening animation and the light mode redesign |
 | [docs/RELEASE_2_4.md](docs/RELEASE_2_4.md) | Everything new in 2.4: player pages with Wikidata facts, news fixes, error screens, lint; also 2.3.1 and 2.3.2 |
 | [docs/RELEASE_2_3.md](docs/RELEASE_2_3.md) | Everything new in 2.3: season simulator, xG table, team strength, public record, probability picks, F1 and tennis, share cards, recap, awards |
 | [docs/RELEASE_2_2.md](docs/RELEASE_2_2.md) | Everything new in 2.2: win probability, player xG, search, widget, backup, banker, accuracy measures, nine more leagues |
