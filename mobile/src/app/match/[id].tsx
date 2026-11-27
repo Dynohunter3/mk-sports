@@ -10,7 +10,7 @@ import { MatchShareCard } from '@/components/cards';
 import { Glass } from '@/components/glass';
 import { ShareSheet } from '@/components/sharecard';
 import { ConfidencePill, finalLabel, FormPills, ProbabilityBar, StandingsTable, StatusChip, TeamBadge, TierPill } from '@/components/match';
-import { kitColors, ShotMap, TeamPitch } from '@/components/pitch';
+import { kitColors, MatchPitch, ShotMap } from '@/components/pitch';
 import { PlayerPhoto } from '@/components/crest';
 import { Float, PressableScale } from '@/components/motion';
 import { goalsOutlook, goalsRead } from '@/engine/scorelines';
@@ -24,7 +24,7 @@ import { dayLabel, kickoffTime, outcomeLabel, relative, rulesText } from '@/lib/
 import { useNow } from '@/lib/useNow';
 import { NOTIFY_SUPPORTED, requestPermission } from '@/notify/notifications';
 import { usePrefs } from '@/state/prefs';
-import { alpha, forWhiteText, LeagueTheme, matchColors, mix, radius, space, TAP, useTheme } from '@/theme/theme';
+import { alpha, forWhiteText, LeagueTheme, matchColors, mix, onColor, radius, space, TAP, useTheme } from '@/theme/theme';
 
 type Tab = 'overview' | 'lineups' | 'stats' | 'timeline' | 'table';
 
@@ -611,87 +611,87 @@ function Overview({ m, deserved }: { m: MatchDetail; deserved?: { line: string; 
 }
 
 // ------------------------------------------------------------------ line-ups
+/** The worn kit's main colour and a trim colour that stands out on it. */
+function kitOf(l: { kit?: { color: string; alt: string | null } | null; color: string | null }, fallback: string): [string, string] {
+  const c = l.kit?.color ?? l.color ?? fallback;
+  const alt = l.kit?.alt && l.kit.alt.toLowerCase() !== c.toLowerCase() ? l.kit.alt : onColor(c) === '#FFFFFF' ? '#FFFFFF' : '#0B1430';
+  return [c, alt];
+}
+
 function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined; loading: boolean }) {
   const t = useTheme();
-  const [side, setSide] = useState<'home' | 'away'>('home');
   if (!c?.lineups) {
     return <EmptyState icon="tshirt-crew-outline" title={loading ? 'Loading line-ups…' : 'Line-ups not announced yet'} body={loading ? undefined : 'Teams usually publish them about an hour before kick-off.'} />;
   }
   const { home, away } = c.lineups;
-  const [hc, ac] = kitColors(home.color ?? m.home.color, away.color ?? m.away.color);
+  const [hk0, ht] = kitOf(home, m.home.color);
+  const [ak0, at] = kitOf(away, m.away.color);
+  const [hk, ak] = kitColors(hk0, ak0);
   const open = (p: LineupPlayer) => p.id && router.push({ pathname: '/player/[id]', params: { id: p.id, league: m.league.id, match: m.id } });
-  const bench = (l: typeof home, color: string, team: MatchDetail['home']) => (
-    <Glass padded={false}>
-      <Row gap={6} style={{ padding: space.md, paddingBottom: space.sm }}>
-        <TeamBadge team={team} size={18} />
-        <Text v="small" style={{ fontWeight: '800', flex: 1 }} numberOfLines={1}>
-          {team.short_name}
-        </Text>
-      </Row>
-      {l.bench.map((p, i) => (
-        <Pressable key={p.id || p.name} onPress={() => open(p)} accessibilityRole="button" style={{ borderTopWidth: i ? 1 : 0, borderColor: t.glassBorder }}>
-          <Row gap={8} style={{ paddingHorizontal: space.md, paddingVertical: 8 }}>
-            <PlayerPhoto url={p.headshot} jersey={p.jersey} color={color} size={34} who={{ id: p.id, name: p.name, team: l.teamId, league: m.league.id }} />
-            <View style={{ flex: 1 }}>
-              <Text v="small" style={{ fontWeight: p.subbedIn !== null ? '800' : '500' }} numberOfLines={1}>
-                {p.short}
-              </Text>
-              {p.subbedIn !== null ? (
-                <Row gap={3}>
-                  <Icon name="arrow-up-bold" size={11} color={t.win} />
-                  <Text v="tiny" color={t.win}>
-                    {p.subbedIn || 'on'}
-                  </Text>
-                </Row>
-              ) : null}
-            </View>
-            {p.goals ? <Icon name="soccer" size={13} color={t.text} /> : null}
-            {p.yellow || p.red ? <View style={{ width: 8, height: 11, borderRadius: 2, backgroundColor: p.red ? '#EF4444' : '#FACC15' }} /> : null}
-          </Row>
-        </Pressable>
-      ))}
-    </Glass>
-  );
-  const lu = side === 'home' ? home : away;
-  const team = side === 'home' ? m.home : m.away;
-  const kit = side === 'home' ? hc : ac;
-  return (
-    <View style={{ marginTop: space.md }}>
-      {/* one team at a time on a full pitch: pick the side */}
-      <Row gap={space.sm} style={{ marginBottom: space.sm }}>
-        {(
-          [
-            ['home', m.home, home, hc],
-            ['away', m.away, away, ac],
-          ] as const
-        ).map(([k, tm, l, col]) => {
-          const on = side === k;
+  const bench = (l: typeof home, kit: string, trim: string, team: MatchDetail['home']) => {
+    // who each substitute replaced: the starter taken off at the same minute (when only one was)
+    const off = l.rows.flat().filter((p) => p.subbedOut);
+    const replaced = (p: LineupPlayer) => {
+      const same = off.filter((o) => o.subbedOut === p.subbedIn);
+      return same.length === 1 ? same[0] : null;
+    };
+    return (
+      <Glass padded={false} style={{ flex: 1 }}>
+        <Row gap={6} style={{ padding: space.md, paddingBottom: space.sm }}>
+          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: kit, borderWidth: 2, borderColor: trim }} />
+          <Text v="label" style={{ flex: 1, fontSize: 13 }} numberOfLines={1}>
+            {team.short_name}
+          </Text>
+        </Row>
+        {l.bench.map((p, i) => {
+          const r = p.subbedIn !== null ? replaced(p) : null;
           return (
-            <PressableScale
-              key={k}
-              onPress={() => setSide(k)}
-              feedback="select"
-              accessibilityRole="tab"
-              accessibilityState={{ selected: on }}
-              style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, padding: space.sm, borderRadius: radius.md, borderWidth: 1.5, borderColor: on ? col : t.glassBorder, backgroundColor: on ? alpha(col, 0.18) : t.glass }}
-            >
-              <TeamBadge team={tm} size={26} />
-              <View style={{ flex: 1 }}>
-                <Text v="h2" style={{ fontSize: 17, lineHeight: 19 }} numberOfLines={1}>
-                  {tm.short_name.toUpperCase()}
-                </Text>
-                <Text v="tiny" dim style={{ fontWeight: '700' }}>
-                  {l.formation ?? 'Line-up'}
-                </Text>
-              </View>
-            </PressableScale>
+            <Pressable key={p.id || p.name} onPress={() => open(p)} accessibilityRole="button" accessibilityLabel={`${p.name}${p.subbedIn !== null ? `, came on ${p.subbedIn}${r ? ` for ${r.name}` : ''}` : ', unused substitute'}`} style={{ borderTopWidth: i ? 1 : 0, borderColor: t.glassBorder }}>
+              <Row gap={8} style={{ paddingHorizontal: space.sm, paddingVertical: 7, opacity: p.subbedIn !== null ? 1 : 0.62 }}>
+                <PlayerPhoto
+                  url={p.headshot}
+                  jersey={p.jersey}
+                  color={kit}
+                  size={32}
+                  ring={kit}
+                  who={{ id: p.id, name: p.name, team: l.teamId, league: m.league.id }}
+                  fallback={
+                    <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: kit, borderWidth: 2, borderColor: trim, alignItems: 'center', justifyContent: 'center' }}>
+                      <Text style={{ fontSize: 12, fontWeight: '900' }} color={onColor(kit)}>
+                        {p.jersey ?? ''}
+                      </Text>
+                    </View>
+                  }
+                />
+                <View style={{ flex: 1 }}>
+                  <Text v="small" style={{ fontWeight: p.subbedIn !== null ? '800' : '500' }} numberOfLines={1}>
+                    {p.short}
+                  </Text>
+                  {p.subbedIn !== null ? (
+                    <Row gap={3}>
+                      <Icon name="arrow-up-bold" size={11} color={t.win} />
+                      <Text v="tiny" color={t.win} numberOfLines={1} style={{ flexShrink: 1 }}>
+                        {p.subbedIn || 'on'}
+                        {r ? ` for ${r.short.split(' ').slice(-1)[0]}` : ''}
+                      </Text>
+                    </Row>
+                  ) : null}
+                </View>
+                {p.goals ? <Icon name="soccer" size={13} color={t.text} /> : null}
+                {p.yellow || p.red ? <View style={{ width: 8, height: 11, borderRadius: 2, backgroundColor: p.red ? '#EF4444' : '#FACC15' }} /> : null}
+              </Row>
+            </Pressable>
           );
         })}
-      </Row>
-      <TeamPitch key={side} lineup={lu} color={kit} onPlayer={open} league={m.league.id} />
+      </Glass>
+    );
+  };
+  return (
+    <View style={{ marginTop: space.md }}>
+      <MatchPitch home={{ lineup: home, team: m.home, kit: hk, trim: ht }} away={{ lineup: away, team: m.away, kit: ak, trim: at }} onPlayer={open} league={m.league.id} />
       <Row style={{ justifyContent: 'space-between', marginTop: space.xs }}>
         <Text v="tiny" muted style={{ flex: 1 }}>
-          Tap a player for this match, season stats and recent form.
+          Tap a player for this match, season stats and recent form.{c.xg ? ' xG: MK Sports’ estimate from his shots.' : ''}
         </Text>
         {c.referee ? (
           <Row gap={4}>
@@ -702,13 +702,19 @@ function Lineups({ m, c, loading }: { m: MatchDetail; c: MatchCentre | undefined
           </Row>
         ) : null}
       </Row>
-      <SectionHeader title={`${team.short_name} substitutes`} icon="swap-vertical" />
-      {bench(lu, kit, team)}
+      {home.bench.length || away.bench.length ? (
+        <>
+          <SectionHeader title="Substitutes" icon="swap-vertical" />
+          <View style={{ flexDirection: 'row', gap: space.sm, alignItems: 'flex-start' }}>
+            {bench(home, hk, ht, m.home)}
+            {bench(away, ak, at, m.away)}
+          </View>
+        </>
+      ) : null}
     </View>
   );
 }
 
-// ------------------------------------------------------------------ live stats
 function StatBar({ s, homeColor, awayColor }: { s: TeamStat; homeColor: string; awayColor: string }) {
   const t = useTheme();
   const h = Math.max(0, s.homeValue ?? 0);

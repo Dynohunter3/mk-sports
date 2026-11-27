@@ -18,7 +18,7 @@ Every competition appears in its own colours and every team with its real crest.
 | | |
 |---|---|
 | **Download page** | https://dynohunter3.github.io/mk-sports/ |
-| **Current version** | 2.3.1 (Android 7.0 or newer, about 55 MB) |
+| **Current version** | 2.3.2 (Android 7.0 or newer, about 55 MB) |
 | **Player photo credits** | https://dynohunter3.github.io/mk-sports/photo-credits.html |
 | **Contact** | [Mksportz26@gmail.com](mailto:Mksportz26@gmail.com) · call +260 97 322 0276 · WhatsApp +260 76 050 8803 |
 
@@ -65,7 +65,7 @@ Every competition appears in its own colours and every team with its real crest.
 
 **Publishing a new version (owner).** The download button points to `releases/latest/download/MKSports.apk` on GitHub, so it works only once a release with that file is published:
 1. On GitHub, open the repository, then **Releases** > **Draft a new release**.
-2. Create a tag such as `v2.3.1` and add the release notes.
+2. Create a tag such as `v2.3.2` and add the release notes.
 3. Attach the APK, named exactly `MKSports.apk`, and click **Publish**.
 
 No release has been published yet; until one is, the download button returns "not found".
@@ -98,9 +98,12 @@ No release has been published yet; until one is, the download button returns "no
   - Worked out on the phone from the model's pre-match expected goals, scaled to the minutes left, adjusted for red cards (×0.70 for the side down to ten players, ×1.25 for its opponent) and started from the score.
   - It is a transparent estimate: tactics and injuries are not modelled.
 - **Line-ups:**
-  - One team at a time on a full pitch, with a team switcher showing crest, name and formation.
-  - Player photos, goals, cards and substitution minutes, plus that team's substitutes and the referee.
+  - Both teams on one pitch, home attacking down and away attacking up, with each side's formation at the halfway line.
+  - Each player card shows the photo, or a shirt in the colours actually worn in that match, with the shirt number, goals, assists, cards and the substitution minute.
+  - Below the name: the goalkeeper's saves, and the player's own xG from his shots.
+  - Substitutes for both sides, with who each one replaced, and the referee.
   - Tap any player for their match, season and last five games.
+  - There are no 0-10 player ratings: the free data has none, and the app doesn't invent them.
 - **Stats:** possession, xG, shots, shots on target, corners, fouls, passes, pass accuracy, offsides, saves, cards and tackles. Also a shot map.
 - **Timeline and commentary.**
 
@@ -647,6 +650,7 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/API.md](docs/API.md
 | 2.0.0 "Matchday" | 24 Nov 2026 | New design; Quick Picks; you vs the AI; levels, badges, celebrations; My game |
 | 2.1.0 | 24–25 Nov 2026 | Private leagues; profiles with avatars; reliable alerts (exact alarms, live tracking); line-ups on a full pitch; goals outlook; player photos from Wikimedia Commons; pulsing favourite-team row; Contact us; download page; fixes (match score cut-off, finished matches failing to open) |
 | 2.2.0 | 25 Nov 2026 | Live win probability; player xG; search; My team home-screen widget; back up and restore, and Android Auto Backup that actually includes the data; weekly banker and season archive; league share reminder; contrast-aware text and TalkBack in Quick Picks; RPS, calibration and the live record band on the accuracy page; nine more leagues on the published model |
+| 2.3.2 | 27 Nov 2026 | Line-ups redesigned: both teams on one pitch with full markings; player cards with photo or kit shirt in the colours actually worn, number, goals, assists, cards, substitution minute, saves and each player's xG; substitutes side by side with who they replaced |
 | 2.3.1 | 27 Nov 2026 | NBA predictions: opponent-adjusted ratings (Step 12); 90% weight on bookmaker lines when listed for NBA, NHL and NFL |
 | 2.3.0 | 26 Nov 2026 | Season simulator (title, top four, promotion, relegation chances, with the weekly change); xG table and deserved results; team strength history; public record of every prediction with commit links and a track record page; probability picks (Brier score); F1 podium and tennis picks; share cards with QR code; season recap; matchweek awards in private leagues |
 

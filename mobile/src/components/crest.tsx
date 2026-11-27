@@ -4,7 +4,7 @@
  * team's colours and initials, so a slow network never leaves a blank hole.
  */
 import { Image } from 'expo-image';
-import { memo, useEffect, useState } from 'react';
+import { memo, ReactNode, useEffect, useState } from 'react';
 import { PixelRatio, View } from 'react-native';
 
 import { usePlayerPhoto, type Who } from '@/data/photos';
@@ -71,15 +71,16 @@ export const Crest = memo(function Crest({ team, size = 28 }: { team: CrestTeam;
  * Round player photo. For football players (`who` given) a current face crop from Wikimedia Commons
  * (data/photos.ts) comes first; then the data source's photo; then the shirt number.
  */
-export const PlayerPhoto = memo(function PlayerPhoto({ url, jersey, color, size = 44, ring, badge, who }: { url: string | null; jersey: string | null; color: string; size?: number; ring?: string; badge?: boolean; who?: Who | null }) {
+export const PlayerPhoto = memo(function PlayerPhoto({ url, jersey, color, size = 44, ring, ringWidth = 2, badge, who, fallback }: { url: string | null; jersey: string | null; color: string; size?: number; ring?: string; ringWidth?: number; badge?: boolean; who?: Who | null; fallback?: ReactNode }) {
   const t = useTheme();
   const own = usePlayerPhoto(who);
   const [failed, setFailed] = useState(0); // 1: the Commons crop failed to load, 2: the source photo too
   useEffect(() => setFailed(0), [url, own?.uri]);
-  const border = { borderWidth: 2, borderColor: ring ?? t.glassBorder };
+  const border = { borderWidth: ringWidth, borderColor: ring ?? t.glassBorder };
   // while a football player's crop is being looked up, show the number rather than flash the old photo
   const src = own && failed < 1 ? own.uri : own === undefined && who ? null : url && failed < 2 ? sizedImage(url, pxFor(size)) : null;
   if (!src) {
+    if (fallback) return <>{fallback}</>;
     return (
       <View style={[{ width: size, height: size, borderRadius: size / 2, backgroundColor: color, alignItems: 'center', justifyContent: 'center' }, border]}>
         <Text style={{ fontSize: size * 0.4, fontWeight: '900', color: onColor(color) }}>{jersey ?? ''}</Text>

@@ -149,3 +149,29 @@ test('NFL / NHL / MLB margin models produce sensible, sport-worded forecasts', (
     assert.ok(p.explanation.steps.some((s) => s.detail.includes(unit)), `${sport} wording uses ${unit}`);
   }
 });
+
+test('each player gets the xG of his own shots; the worn kit is read from the roster', async () => {
+  const { attachPlayerXg, parseLineups } = await import('./centre');
+  const player = (id: string, name: string, place: number, pos: string, starter = true) => ({ starter, jersey: String(place), formationPlace: String(place), position: { abbreviation: pos }, athlete: { id, displayName: name, shortName: name } });
+  const data = {
+    rosters: [
+      { homeAway: 'home', team: { id: '1', color: 'd11317' }, uniform: { type: 'home', color: 'ff0000' }, formation: '4-4-2', roster: [player('h1', 'Keeper Home', 1, 'G'), ...Array.from({ length: 10 }, (_, i) => player(`h${i + 2}`, `Home Player ${i + 2}`, i + 2, i < 4 ? 'CD' : i < 8 ? 'CM' : 'F'))] },
+      { homeAway: 'away', team: { id: '2', color: 'da020e' }, uniform: { type: 'third', color: 'ffffff', alternateColor: '000000' }, formation: '4-4-2', roster: [player('a1', 'Keeper Away', 1, 'G'), ...Array.from({ length: 10 }, (_, i) => player(`a${i + 2}`, `Away Player ${i + 2}`, i + 2, i < 4 ? 'CD' : i < 8 ? 'CM' : 'F'))] },
+    ],
+  };
+  const lu = parseLineups(data, '1')!;
+  assert.deepEqual(lu.away.kit, { color: '#ffffff', alt: '#000000' });
+  assert.deepEqual(lu.home.kit, { color: '#ff0000', alt: null });
+  attachPlayerXg(lu, [
+    { side: 'home', x: 90, y: 50, penalty: false, goal: true, minute: "10'", player: 'Home Player 11', type: 'goal' },
+    { side: 'home', x: null, y: null, penalty: true, goal: true, minute: "20'", player: 'Home Player 11', type: 'penalty---scored' },
+    { side: 'away', x: 80, y: 40, penalty: false, goal: false, minute: "30'", player: 'Away Player 10', type: 'shot' },
+    { side: 'away', x: null, y: null, penalty: false, goal: false, minute: "40'", player: 'Away Player 9', type: 'shot' }, // no position: left out
+  ]);
+  const all = [...lu.home.rows.flat(), ...lu.away.rows.flat()];
+  const xg = (id: string) => all.find((p) => p.id === id)?.xg;
+  assert.ok((xg('h11') ?? 0) > 0.766); // the penalty (0.766) plus an open-play shot
+  assert.ok((xg('a10') ?? 0) > 0 && (xg('a10') ?? 0) < 0.3);
+  assert.equal(xg('a9'), undefined);
+  assert.equal(xg('h2'), undefined);
+});

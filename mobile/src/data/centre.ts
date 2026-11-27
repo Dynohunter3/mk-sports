@@ -3,7 +3,7 @@
  * positions), the match timeline and per-player numbers, all from ESPN's match summary.
  * Player pages: season statistics by competition, the last five matches and bio.
  */
-import { ShotEvent, teamXg } from '@/engine/xg';
+import { ShotEvent, teamXg, xgFor } from '@/engine/xg';
 
 import { get } from './http';
 import { LEAGUE_BY_SLUG, SportSlug } from './leagues';
@@ -41,9 +41,12 @@ export type LineupPlayer = {
   yellow: boolean;
   red: boolean;
   stats: Record<string, number>; // this match: G, A, SHOT, SOG, FC, FA, YC, RC, SV, GA, OFF...
+  /** this match's expected goals from the player's shots (MK Sports' model), when shot positions are recorded */
+  xg?: number;
 };
 
-export type Lineup = { side: 'home' | 'away'; teamId: string; formation: string | null; rows: LineupPlayer[][]; bench: LineupPlayer[]; color: string | null };
+/** `kit`: the colours of the strip worn in this match (ESPN's uniform), when listed. */
+export type Lineup = { side: 'home' | 'away'; teamId: string; formation: string | null; rows: LineupPlayer[][]; bench: LineupPlayer[]; color: string | null; kit?: { color: string; alt: string | null } | null };
 
 function depthOf(pos: string): number {
   const p = pos.toUpperCase();
@@ -134,6 +137,8 @@ export function parseLineups(data: any, homeEspnId: string): { home: Lineup; awa
     const starters = players.filter((p) => p.starter);
     if (!starters.length) return null; // line-ups not announced yet
     const color = typeof r?.team?.color === 'string' && /^[0-9a-f]{6}$/i.test(r.team.color) ? `#${r.team.color}` : null;
+    const hex = (v: unknown) => (typeof v === 'string' && /^[0-9a-f]{6}$/i.test(v) ? `#${v}` : null);
+    const kitColor = hex(r?.uniform?.color);
     out[side] = {
       side,
       teamId: String(r?.team?.id ?? ''),
@@ -141,6 +146,7 @@ export function parseLineups(data: any, homeEspnId: string): { home: Lineup; awa
       rows: formationRows(starters, r?.formation ?? null),
       bench: players.filter((p) => !p.starter).sort((a, b) => Number(!!b.subbedIn) - Number(!!a.subbedIn)),
       color,
+      kit: kitColor ? { color: kitColor, alt: hex(r?.uniform?.alternateColor) } : null,
     };
   }
   return out.home && out.away ? { home: out.home, away: out.away } : null;
@@ -320,8 +326,10 @@ export function parseCentre(data: any, sport: SportSlug, homeEspnId: string, hom
     .reverse()
     .slice(0, 40);
   const officials: any[] = data?.gameInfo?.officials ?? [];
+  const lineups = sport === 'football' ? parseLineups(data, homeEspnId) : null;
+  if (lineups && x) attachPlayerXg(lineups, shots);
   return {
-    lineups: sport === 'football' ? parseLineups(data, homeEspnId) : null,
+    lineups,
     stats: parseTeamStats(data, sport, homeEspnId, x ? { home: x.home, away: x.away } : null),
     xg: x ? { home: x.home, away: x.away, shots: x.total, located: x.located } : null,
     shots,
@@ -406,4 +414,30 @@ export async function playerPage(league: string, id: string): Promise<PlayerPage
   const base = `${WEB}/${lg.espnSport}/${lg.slug}/athletes/${id}`;
   const [bio, overview] = await Promise.all([get(base, { ttl: 6 * 3600 }), get(`${base}/overview`, { ttl: 1800 }).catch(() => null)]);
   return parsePlayerPage(bio, overview, id);
+}
+
+/**
+ * Each player's xG in this match. The commentary names the shooter without an id, so names are matched to that
+ * side's line-up (then the other side's, for mislabelled events). Shots without a position count only if penalties.
+ */
+export function attachPlayerXg(lineups: { home: Lineup; away: Lineup }, shots: ShotEvent[]) {
+  const norm = (n: string) => n.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const all = (l: Lineup) => [...l.rows.flat(), ...l.bench];
+  const byId = new Map<string, LineupPlayer>();
+  const byName: Record<'home' | 'away', Map<string, LineupPlayer>> = { home: new Map(), away: new Map() };
+  for (const side of ['home', 'away'] as const)
+    for (const p of all(lineups[side])) {
+      if (p.id) byId.set(p.id, p);
+      byName[side].set(norm(p.name), p);
+      if (p.short) byName[side].set(norm(p.short), p);
+    }
+  const sums = new Map<LineupPlayer, number>();
+  for (const s of shots) {
+    if ((s.x === null || s.y === null) && !s.penalty) continue;
+    const other = s.side === 'home' ? 'away' : 'home';
+    const p = (s.playerId ? byId.get(s.playerId) : undefined) ?? (s.player ? byName[s.side].get(norm(s.player)) ?? byName[other].get(norm(s.player)) : undefined);
+    if (!p) continue;
+    sums.set(p, (sums.get(p) ?? 0) + xgFor(s.x ?? 0, s.y ?? 0, s.penalty));
+  }
+  for (const [p, v] of sums) p.xg = Math.round(v * 100) / 100;
 }

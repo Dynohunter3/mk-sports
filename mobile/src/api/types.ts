@@ -311,8 +311,10 @@ export type LineupPlayer = {
   yellow: boolean;
   red: boolean;
   stats: Record<string, number>;
+  /** this match's expected goals from the player's shots (MK Sports' model) */
+  xg?: number;
 };
-export type Lineup = { side: 'home' | 'away'; teamId: string; formation: string | null; rows: LineupPlayer[][]; bench: LineupPlayer[]; color: string | null };
+export type Lineup = { side: 'home' | 'away'; teamId: string; formation: string | null; rows: LineupPlayer[][]; bench: LineupPlayer[]; color: string | null; kit?: { color: string; alt: string | null } | null };
 export type TeamStat = { key: string; label: string; home: string; away: string; homeValue: number | null; awayValue: number | null; percent?: boolean; note?: string };
 export type TimelineItem = { minute: string; type: string; side: 'home' | 'away' | null; player: string | null; detail: string | null; text: string };
 export type Shot = { side: 'home' | 'away'; x: number | null; y: number | null; penalty: boolean; goal: boolean; minute: string | null; player: string | null; type: string };
