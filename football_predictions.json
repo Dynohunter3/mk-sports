@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generated_at": "2026-11-27T21:28:48+00:00",
+ "generated_at": "2026-11-28T08:03:38+00:00",
  "model_version": "fb-2026-11-8beba951",
  "data_version": "f98d6a4073be",
  "attribution": "Data: football-data.co.uk, openfootball (public domain).",
@@ -627,9 +627,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -709,9 +711,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -2973,9 +2977,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -3057,9 +3063,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -3143,9 +3151,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -3230,9 +3240,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -3315,9 +3327,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -3399,9 +3413,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -3482,9 +3498,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -3568,9 +3586,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
@@ -3651,9 +3671,11 @@
     "btts": null
    },
    "variant": "with odds",
-   "confidence": 1.0,
+   "confidence": 0.85,
    "confidence_label": "high",
-   "confidence_reasons": [],
+   "confidence_reasons": [
+    "latest league results not confirmed yet"
+   ],
    "made_at": "2026-11-27T21:28:48+00:00",
    "last_change": "first prediction",
    "versions": 1,
